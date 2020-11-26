@@ -1,7 +1,6 @@
 const { stripIndents } = require('common-tags');
 const { Listener } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
-const { Message } = require('discord.js');
 const Enmap = require('enmap');
 
 module.exports = class ListenerGuildCreate extends Listener
