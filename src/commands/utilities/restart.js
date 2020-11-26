@@ -20,7 +20,7 @@ module.exports = class CommandRestart extends Command
     {
         const args = message.content.split(/ +/g);
         var restartReport = args.slice(1).join(' ');
-        if (!restartReport) restartReport = 'Just refreshing... nothing serious. (☞ﾟヮﾟ)☞ ¯\\_(ツ)_/¯';
+        if (!restartReport) restartReport = 'Just refreshing... nothing serious. (☞ﾟヮﾟ)☞';
         const errChannel = this.client.channels.cache.find(val => val.id == '603735567733227531');
         await message.react('🔄');
         await errChannel.send(new MessageEmbed()
@@ -30,6 +30,8 @@ module.exports = class CommandRestart extends Command
             .setTimestamp()
         );
 
+        console.log(this.client.infolog + `[Restarting Client] ${restartReport}`);
+        this.client.destroy();
         process.exit(0);
     }
 };

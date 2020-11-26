@@ -16,6 +16,8 @@ module.exports = class ListenerGuildCreate extends Listener
 
     async exec(guild)
     {
+        const serverSize = this.client.guilds.cache.size == '1' ? `${this.client.guilds.cache.size} server` : `${this.client.guilds.cache.size} servers`;
+        this.client.user.setActivity(`${this.client.config.prefix}help | Getting turnt in ${serverSize}.`)
 		const defaults = {
 			djMode: false,
 			djRole: null,
