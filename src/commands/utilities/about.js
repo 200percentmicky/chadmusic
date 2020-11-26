@@ -24,7 +24,7 @@ module.exports = class CommandAbout extends Command
     {
         const owner = this.client.users.cache.get(this.client.ownerID);
         const aboutembed = new MessageEmbed()
-            .setColor(0x187229)
+            .setColor(this.client.color.ok)
             .setAuthor('Deejay - The Chad Music Bot!', this.client.user.avatarURL({ dynamic: true }))
             .setDescription(`A music bot that supports over 700+ websites and has filters!`)
             .addField(`${this.client.emoji.info} Info`, stripIndents`
@@ -33,7 +33,7 @@ module.exports = class CommandAbout extends Command
             **Akairo:** \`${akairoversion.version}\`
             **DisTube:** \`${distubeversion.version}\`
             `, true)
-            .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/618705968934551592/pokitaru_bot_2019-1-22.png?width=568&height=560')
+            .setThumbnail('https://cdn.discordapp.com/attachments/781326596538892308/781326652004761610/deejaytreefiddy.png')
             .addField('🔗 Links', stripIndents`
             **[Support Server](${this.client.config.invite})**
             **[Invite me!](${this.client.config.botinvite})**
