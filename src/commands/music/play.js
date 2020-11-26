@@ -46,12 +46,20 @@ module.exports = class CommandPlay extends Command
             const urlRegex = new RegExp(urlPattern);
             if (!text.match(urlRegex))
             {
-                try {
-                    const result = await YouTube.search(text, { limit: 1 });
-                    await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
-                    message.react(this.client.emoji.okReact);
-                } catch(err) {
-                    return message.error(`No results found for \`${text}\``, 'Track Error');
+                const playlistPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b\/(playlist)([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+                const playlistRegex = new RegExp(playlistPattern);
+                if (text.match(playlistRegex))
+                {
+                    await this.client.player.play(message, text);
+                    message.react(this.client.emoji.okReact);    
+                } else {
+                    try {
+                        const result = await YouTube.search(text, { limit: 1 });
+                        await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
+                        message.react(this.client.emoji.okReact);
+                    } catch(err) {
+                        return message.error(`No results found for \`${text}\``, 'Track Error');
+                    }
                 }
             } else {
                 await this.client.player.play(message, text);
