@@ -46,6 +46,14 @@ module.exports = class CommandPlay extends Command
             const urlRegex = new RegExp(urlPattern);
             if (!text.match(urlRegex))
             {
+                try {
+                    const result = await YouTube.search(text, { limit: 1 });
+                    await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
+                    message.react(this.client.emoji.okReact);
+                } catch(err) {
+                    return message.error(`No results found for \`${text}\``, 'Track Error');
+                }
+            } else {
                 const playlistPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b\/(playlist)([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
                 const playlistRegex = new RegExp(playlistPattern);
                 if (text.match(playlistRegex))
@@ -53,17 +61,9 @@ module.exports = class CommandPlay extends Command
                     await this.client.player.play(message, text);
                     message.react(this.client.emoji.okReact);    
                 } else {
-                    try {
-                        const result = await YouTube.search(text, { limit: 1 });
-                        await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
-                        message.react(this.client.emoji.okReact);
-                    } catch(err) {
-                        return message.error(`No results found for \`${text}\``, 'Track Error');
-                    }
+                    await this.client.player.play(message, text);
+                    message.react(this.client.emoji.okReact);
                 }
-            } else {
-                await this.client.player.play(message, text);
-                message.react(this.client.emoji.okReact);
             }
         } catch(err) {
             message.error(err.message, 'Track Error');
