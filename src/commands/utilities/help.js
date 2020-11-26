@@ -70,7 +70,7 @@ module.exports = class CommandHelp extends Command
 
                 let commandEmbed = new MessageEmbed()
                     .setColor(this.client.utils.randColor())
-                    .setAuthor(`${this.client.user.username} - Surf's up!`, this.client.user.avatarURL({ dynamic: true }))
+                    .setAuthor(`${this.client.user.username} - The Chad Music Bot!`, this.client.user.avatarURL({ dynamic: true }))
                     .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
                     .setDescription(`${command.description.text}\n${command.description.details ? command.description.details : ''}`)
                     .setTimestamp()
@@ -104,7 +104,7 @@ module.exports = class CommandHelp extends Command
 
         const helpEmbed = new MessageEmbed()
             .setColor(this.client.color.ok)
-            .setAuthor(`${this.client.user.username} - The Chad Music Bot`, this.client.user.avatarURL())
+            .setAuthor(`${this.client.user.username} - The Chad Music Bot!`, this.client.user.avatarURL())
             .setTimestamp()
             .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`);
 
