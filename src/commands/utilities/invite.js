@@ -7,7 +7,7 @@ module.exports = class CommandInvite extends Command
     {
         super('invite', {
             aliases: ['invite'],
-            category: '⚙ Utilities',
+            category: '🛠 Utilities',
             description: {
                 text: 'Sends a link to invite the bot to a server.'
             },

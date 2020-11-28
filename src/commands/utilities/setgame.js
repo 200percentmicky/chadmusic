@@ -7,7 +7,7 @@ module.exports = class CommandSetGame extends Command
     {
         super('setgame', {
             aliases: ['setgame'],
-            category: '⚙ Utilities',
+            category: '🛠 Utilities',
             description: {
                 text: 'Changes the bot\'s playing status.',
                 usage: '|--clear|--reset| <type> <status>',

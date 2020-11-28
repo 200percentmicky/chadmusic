@@ -12,7 +12,7 @@ module.exports = class CommandHelp extends Command
                 usage: '[command]',
                 details: '`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires to operate.'
             },
-            category: '⚙ Utilities',
+            category: '🛠 Utilities',
             args: [
                 {
                     id: 'string',
@@ -69,7 +69,7 @@ module.exports = class CommandHelp extends Command
                 };
 
                 let commandEmbed = new MessageEmbed()
-                    .setColor(this.client.utils.ok)
+                    .setColor(this.client.color.ok)
                     .setAuthor(`${this.client.user.username} - The Chad Music Bot!`, this.client.user.avatarURL({ dynamic: true }))
                     .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
                     .setDescription(`${command.description.text}\n${command.description.details ? command.description.details : ''}`)

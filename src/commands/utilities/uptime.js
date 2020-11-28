@@ -8,8 +8,10 @@ module.exports = class CommandUptime extends Command
     {
         super('uptime', {
             aliases: ['uptime'],
-            category: '⚙ Utilities',
-            description: 'Displays how long I\'ve been online for.'
+            category: '🛠 Utilities',
+            description: {
+                text: 'Displays how long I\'ve been online for.'
+            }
         });
     }
 

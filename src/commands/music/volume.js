@@ -20,6 +20,13 @@ module.exports = class CommandVolume extends Command
 
     async exec(message)
     {
+        const settings = this.client.settings.get(message.guild.id);
+        const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+        if (settings.djMode)
+        {
+            if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+        }
+
         const args = message.content.split(/ +/g);
 
         const vc = message.member.voice.channel;
@@ -32,6 +39,7 @@ module.exports = class CommandVolume extends Command
         if (!args[1]) return message.say('🔊', this.client.color.info, `Current Volume: **${volume}%**`);
 
         var newVolume = parseInt(args[1]);
+        if (settings.allowFreeVolume == false) newVolume = 200;
         this.client.player.setVolume(message.guild.id, newVolume);
 
         if (newVolume >= 201) 

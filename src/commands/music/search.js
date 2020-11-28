@@ -21,6 +21,12 @@ module.exports = class CommandSearch extends Command
     {
         const args = message.content.split(/ +/g);
         const search = args.slice(1).join(' ');
+        const settings = this.client.settings.get(message.guild.id);
+        const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+        if (settings.djMode)
+        {
+            if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+        }
 
         const vc = message.member.voice.channel;
         if (!vc) return message.error('You are not in a voice channel.');
@@ -34,6 +40,26 @@ module.exports = class CommandSearch extends Command
             vc.join();
         } else {
             if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.');
+        }
+
+        message.channel.startTyping();
+        const queue = this.client.player.getQueue(message.guild.id);
+
+        // These limitations should not affect a member with DJ permissions.
+        if (!dj)
+        {
+            if (queue)
+            {
+                if (settings.maxQueueLimit)
+                {
+                    const queueMemberSize = queue.songs.filter(entries => entries.user.id == message.member.user.id).length;
+                    if (queueMemberSize >= settings.maxQueueLimit) 
+                    {
+                        message.forbidden(`You are only allowed to add a max of ${settings.maxQueueLimit} entr${settings.maxQueueLimit == 1 ? 'y' : 'ies'} to the queue.`);
+                        return message.channel.stopTyping(true);
+                    }    
+                }
+            }
         }
 
         message.channel.startTyping();

@@ -7,7 +7,7 @@ module.exports = class CommandTest extends Command
     {
         super('test', {
             aliases: ['test'],
-            category: '⚙ Utilities',
+            category: '🛠 Utilities',
             description: {
                 text: 'Test command. Does I do work????'
             }

@@ -18,6 +18,7 @@ module.exports = class CommandGrab extends Command
 
     async exec(message)
     {
+        // Grab will not be affected by DJ Mode.
         const queue = this.client.player.getQueue(message);
         const song = queue.songs[0];
         try {

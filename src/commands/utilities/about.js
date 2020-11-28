@@ -13,7 +13,7 @@ module.exports = class CommandAbout extends Command
     {
         super('about', {
             aliases: ['about'],
-            category: '⚙ Utilities',
+            category: '🛠 Utilities',
             description: {
                 text: 'Information about Deejay.'
             }

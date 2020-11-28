@@ -255,6 +255,7 @@ class Deejay extends AkairoClient
 			leaveOnEmpty: true,
 			leaveOnFinish: true,
 			youtubeCookie: config.ytCookie,
+			highWaterMark: 1<<25,
 			youtubeDL: true,
 			updateYouTubeDL: false,
 			customFilters: {
@@ -268,6 +269,7 @@ class Deejay extends AkairoClient
 		this.settings = new Enmap({
 			name: 'settings'
 		});
+		this.joined = new Enmap('joined');
 
 		this.commands = new CommandHandler(this, {
 			directory: './src/commands',

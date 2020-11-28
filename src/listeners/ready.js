@@ -11,8 +11,13 @@ module.exports = class SurferReady extends Listener {
 	}
 
 	async exec() {
-		const serverSize = this.client.guilds.cache.size == '1' ? `${this.client.guilds.cache.size} server` : `${this.client.guilds.cache.size} servers`;
-		await this.client.user.setActivity(`${this.client.config.prefix}help | Getting turnt in ${serverSize}`);
+
+		const activity = async () => {
+			const serverSize = this.client.guilds.cache.size == '1' ? `${this.client.guilds.cache.size} server` : `${this.client.guilds.cache.size} servers`;
+			await this.client.user.setActivity(`${this.client.config.prefix}help | Getting turnt in ${serverSize}.`);	
+		}
+		setInterval(activity, 120000);
+
 		var timestamp = `[${this.client.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `;
 		console.log(stripIndents`
 			${timestamp}${chalk.black.magenta('[Ready!<3♪]')} It's ya boy, D.J. Tree Fiddy!
@@ -22,6 +27,8 @@ module.exports = class SurferReady extends Listener {
 			${timestamp}${this.client.infolog}Channels: ${this.client.channels.cache.size}
 			${timestamp}${this.client.infolog}Users: ${this.client.users.cache.size}
 		`);
+
+		return activity();
 
 	}
 };

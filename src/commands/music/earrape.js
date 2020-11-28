@@ -9,7 +9,8 @@ module.exports = class CommandEarrape extends Command
             aliases: ['earrape'],
             category: '🎶 Player',
             description: {
-                text: 'Changes the volume of the player to 42069%. The ratio that no man can ever withstand.'
+                text: 'Changes the volume of the player to 42069%. The ratio that no man can ever withstand.',
+                details: 'Only works if Unlimited Volume is On.'
             },
             channel: 'guild',
             clientPermissions: ['EMBED_LINKS']
@@ -18,7 +19,16 @@ module.exports = class CommandEarrape extends Command
 
     async exec(message)
     {
+        const settings = this.client.settings.get(message.guild.id);
+        const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+        if (settings.djMode)
+        {
+            if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+        }
 
+        if (settings.allowFreeVolume == false) return message.forbidden('This command cannot be used because **Unlimited Volume** is currently disabled.');
+
+        // This command should not be limited by the DJ Role. Must be a toggable setting.
         const vc = message.member.voice.channel;
         if (!vc) return message.error('You are not in a voice channel.')
 

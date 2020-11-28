@@ -7,7 +7,7 @@ module.exports = class PingCommand extends Command {
             description: {
                 text: 'Tests the bot\'s connection to Discord.'
             },
-            category: '⚙ Utilities'
+            category: '🛠 Utilities'
         });
     }
 

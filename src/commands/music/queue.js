@@ -19,6 +19,13 @@ module.exports = class CommandQueue extends Command
 
     async exec(message)
     {
+        const settings = this.client.settings.get(message.guild.id);
+        const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+        if (settings.djMode)
+        {
+            if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+        }
+
         const queue = this.client.player.getQueue(message);
         const vc = message.member.voice.channel;
         const currentVc = this.client.voice.connections.get(message.guild.id);

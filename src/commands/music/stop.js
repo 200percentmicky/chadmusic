@@ -17,6 +17,13 @@ module.exports = class CommandStop extends Command
 
     async exec(message)
     {
+        const settings = this.client.settings.get(message.guild.id);
+        const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+        if (settings.djMode)
+        {
+            if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+        }
+
         const vc = message.member.voice.channel;
         if (!vc) return message.error('You are not in a voice channel.');
 
