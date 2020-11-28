@@ -18,6 +18,7 @@ module.exports = class CommandSkip extends Command
 
     async exec(message)
     {
+        const args = message.content.split(/ +/g);
         const settings = this.client.settings.get(message.guild.id);
         const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
         if (settings.djMode)
