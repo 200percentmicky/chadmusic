@@ -28,6 +28,8 @@ module.exports = class CommandSearch extends Command
             if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
         }
 
+        if (!search) return message.warn('C\'mon, I can\'t really play literally nothing. Provide me a song to search, and lets get this party started!')
+
         const vc = message.member.voice.channel;
         if (!vc) return message.error('You are not in a voice channel.');
 

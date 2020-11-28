@@ -31,6 +31,8 @@ module.exports = class CommandPlay extends Command
             if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
         }
 
+        if (!text) return message.warn('C\'mon, I can\'t really play literally nothing. Provide me a song to search or a valid URL to play, and lets get this party started!')
+
         const vc = message.member.voice.channel;
         if (!vc) return message.error('You are not in a voice channel.');
 
@@ -85,7 +87,6 @@ module.exports = class CommandPlay extends Command
                 const playlistRegex = new RegExp(playlistPattern);
                 if (text.match(playlistRegex))
                 {
-                    message.warn('There is an currently an ongoing issue when attempting to load a playlist from YouTube, as it may error out saying `Unsupported playlist` or `Unable to find JSON`. I\'m currently looking into the issue and I do apologize for the inconvenience.', 'Important Message from the Bot Owner')
                     await this.client.player.play(message, text);
                     message.react(this.client.emoji.okReact);    
                 } else {

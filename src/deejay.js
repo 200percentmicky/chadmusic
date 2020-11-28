@@ -1,5 +1,7 @@
 const { black } = require('chalk');
-console.log(`${black.cyan('[ii]')} Loading libraries...`);
+const moment = require('moment');
+var timestamp = `[${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `;
+console.log(timestamp + `${black.cyan('[ii]')} Loading libraries...`);
 
 const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo');
 const prefix = require('discord-prefix');
@@ -246,7 +248,7 @@ class Deejay extends AkairoClient
 
 		// Packages
 		this.utils = require('bot-utils');
-		this.moment = require('moment');
+		this.moment = moment
 		this.prefix = prefix;
 		this.si = require('systeminformation');
 		this.player = new DisTube(this, {
@@ -265,7 +267,7 @@ class Deejay extends AkairoClient
 		});
 
 	
-		console.log(this.infolog + 'Loading settings...');
+		console.log(timestamp + this.infolog + 'Loading settings...');
 		this.settings = new Enmap({
 			name: 'settings'
 		});

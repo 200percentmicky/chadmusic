@@ -29,6 +29,7 @@ module.exports = class CommandAbout extends Command
             .setDescription(`A music bot that supports over 700+ websites and has filters!`)
             .addField(`${this.client.emoji.info} Info`, stripIndents`
             **Bot Version:** \`${main.version}\`
+            **Node.js** \`${process.version}\`
             **Discord.js:** \`${discordversion.version}\`
             **Akairo:** \`${akairoversion.version}\`
             **DisTube:** \`${distubeversion.version}\`
@@ -38,7 +39,7 @@ module.exports = class CommandAbout extends Command
             **[Support Server](${this.client.config.invite})**
             **[Invite me!](${this.client.config.botinvite})**
             **[Fork me on Github!](http://github.com/mickykuna/deejay)**
-            `)
+            `, true)
             .setFooter(`Created by ${owner.tag}.`, owner.avatarURL({ dynamic: true }));
         return message.channel.send(aboutembed);
     }

@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const { FieldsEmbed } = require('discord-paginationembed');
+const { isArray } = require('lodash');
 
 module.exports = class CommandQueue extends Command
 {
@@ -33,28 +34,57 @@ module.exports = class CommandQueue extends Command
         if (!this.client.player.isPlaying(message) || !currentVc) return message.warn('Nothing is currently playing in this server.');
         else if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.');
 
-        const songs = queue.songs;
-        const queueEmbed = new FieldsEmbed()
-            .setArray(songs)
-            .setAuthorizedUsers(message.author.id)
-            .setChannel(message.channel)
-            .setElementsPerPage(7)
-            .setPageIndicator('footer')
-            .formatField(`${songs.length} entries in the queue.`, song => song ? `${songs.indexOf(song) + 1}: [${song.name}](${song.url}) \`${song.formattedDuration}\` ${song.user}` : `${this.client.emoji.warn}Queue is empty.`)
-            .setPage(1)
-            .setNavigationEmojis({
-                back: '◀',
-                jump: '↗',
-                forward: '▶',
-                delete: '❌'
-            });
-        
-        queueEmbed.embed
-            .setColor(this.client.utils.randColor())
-            .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-            .setDescription(`${this.client.emoji.music}**Currently Playing:**\n**[${songs[0].name}](${songs[0].url})**`)
-            .setFooter('\u200b'); // Ironically required if .setPageIndicator() is using 'footer'.
+        const songs = queue.songs.slice(1);
+        const song = queue.songs[0];
 
-        queueEmbed.build();
+        try {
+            const queueEmbed = new FieldsEmbed()
+                .setArray(songs)
+                .setAuthorizedUsers(message.author.id)
+                .setChannel(message.channel)
+                .setElementsPerPage(7)
+                .setPageIndicator('footer')
+                .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `${songs.indexOf(song) + 1}: ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${this.client.emoji.warn}Queue is empty.`)
+                .setPage(1)
+                .setNavigationEmojis({
+                    back: '◀',
+                    jump: '↗',
+                    forward: '▶',
+                    delete: '❌'
+                });
+            
+            
+            queueEmbed.embed
+                .setColor(this.client.utils.randColor())
+                .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+                .setDescription(`${this.client.emoji.music}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+                .setTimestamp()
+                .setFooter('\u200b'); // Ironically required if .setPageIndicator() is using 'footer'.
+
+
+            queueEmbed.build();
+        } catch(err) {
+            // If no array exists to build the embed.
+            if (err.name.includes('TypeError'))
+            {
+                if (err.message.includes('Cannot invoke PaginationEmbed class'))
+                {
+                    message.channel.send(new MessageEmbed()
+                        .setColor(this.client.utils.randColor())
+                        .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+                        .setDescription(`${this.client.emoji.music}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+                        .addField(':warning: The queue is empty.', 'Start adding some songs! ;)')
+                        .setTimestamp()
+                    );
+                } else {
+                    // Different error?
+                    message.error(err.message, err.name);
+                }
+            } else {
+                // Different error?
+                message.error(err.message, err.name);
+            }
+            return;
+        }
     }
 };

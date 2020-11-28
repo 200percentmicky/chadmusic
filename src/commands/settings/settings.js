@@ -27,7 +27,7 @@ module.exports = class CommandSettings extends Command
             🔖 **DJ Role:** ${settings.djRole ? `<@&${settings.djRole}>` : 'None'}
             🎤 **DJ Mode:** ${settings.djMode == true ? 'On' : 'Off'}
             ⏲ **Max Song Time (Not Implemented):** ${settings.maxTime ? prettyMilliseconds(settings.maxTime, { colonNotation: true }) : 'Unlimited'}
-            🔢 **Max Entries in the Queue:** ${settings.maxQueueLimit ? settings.maxQueueLimit : 'Unlimited'}
+            🔢 **Max Entries in the Queue (Not Implemented):** ${settings.maxQueueLimit ? settings.maxQueueLimit : 'Unlimited'}
             📢 **Now Playing Alerts (Not Implemented):** ${settings.nowPlayingAlerts == true ? 'On' : 'Off'}
             🔊 **Unlimited Volume:** ${settings.allowFreeVolume == true ? 'On' : 'Off'}
             `)

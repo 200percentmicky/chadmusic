@@ -7,6 +7,7 @@ const prettyBytes = require('pretty-bytes');
 const main = require('../../../package.json');
 const akairoversion = require('../../../node_modules/discord-akairo/package.json');
 const discordversion = require('../../../node_modules/discord.js/package.json');
+const distubeversion = require('../../../node_modules/distube/package.json');
 
 module.exports = class CommandStats extends Command
 {
@@ -35,11 +36,12 @@ module.exports = class CommandStats extends Command
              Bot Version :: ${main.version}
               Discord.js :: ${discordversion.version}
         Akairo Framework :: ${akairoversion.version}
+              DisTube.js :: ${distubeversion.version}
                   Uptime :: ${this.client.utils.uptime()}
 
         # Hardware Specifications
                  CPU :: ${cpu.manufacturer} ${cpu.brand} (${cpu.physicalCores} Cores / ${cpu.cores} Threads)
-           CPU Speed :: ${cpu.speed} GHz. (Max: ${cpu.speedmax} | Min: ${cpu.speedmin})
+           CPU Speed :: ${cpu.speed} GHz.
         Memory Total :: ${prettyBytes(memory.total)}
          Memory Used :: ${prettyBytes(memory.used)}
          Memory Free :: ${prettyBytes(memory.free)}
@@ -54,7 +56,7 @@ module.exports = class CommandStats extends Command
         Architechture :: ${osSi.arch}
                  User :: ${user.username}
                 Shell :: ${user.shell}
-        ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : '' }
+         ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : '' }
         `;
 
         message.channel.send(data, { code: 'asciidoc', split: true });

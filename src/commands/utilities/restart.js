@@ -29,8 +29,8 @@ module.exports = class CommandRestart extends Command
             .setDescription(`\`\`\`js\n${restartReport}\`\`\``)
             .setTimestamp()
         );
-
-        console.log(this.client.infolog + `[Restarting Client] ${restartReport}`);
+        var timestamp = `[${this.client.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `;
+        console.log(timestamp + this.client.infolog + `[Restart] ${restartReport}`);
         this.client.destroy();
         process.exit(0);
     }
