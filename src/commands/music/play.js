@@ -71,9 +71,11 @@ module.exports = class CommandPlay extends Command
         }
     
         try {
+            // This should be implemented if search is broken.
+            
             const urlPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
             const urlRegex = new RegExp(urlPattern);
-            if (!text.match(urlRegex))
+            if (text.match(urlRegex))
             {
                 try {
                     const result = await YouTube.search(text, { limit: 1 });
@@ -94,6 +96,10 @@ module.exports = class CommandPlay extends Command
                     message.react(this.client.emoji.okReact);
                 }
             }
+            
+            // Just in case...
+            //await this.client.player.play(message, text);
+            //message.react(this.client.emoji.okReact);
         } catch(err) {
             message.error(err.message, 'Track Error');
         } finally {
