@@ -1,6 +1,6 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
-const YouTube = require('youtube-sr');
+//const { MessageEmbed } = require('discord.js');
+//const YouTube = require('youtube-sr');
 
 module.exports = class CommandPlay extends Command
 {
@@ -71,8 +71,7 @@ module.exports = class CommandPlay extends Command
         }
     
         try {
-            // This should be implemented if search is broken.
-            
+            /* Keeping this around just in case.
             const urlPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
             const urlRegex = new RegExp(urlPattern);
             if (text.match(urlRegex))
@@ -96,10 +95,10 @@ module.exports = class CommandPlay extends Command
                 await this.client.player.play(message, text);
                 message.react(this.client.emoji.okReact);
             }
+            */
             
-            // Just in case...
-            //await this.client.player.play(message, text);
-            //message.react(this.client.emoji.okReact);
+            await this.client.player.play(message, text);
+            message.react(this.client.emoji.okReact);
         } catch(err) {
             message.error(err.message, 'Track Error');
         } finally {

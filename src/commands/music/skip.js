@@ -35,22 +35,21 @@ module.exports = class CommandSkip extends Command
         if (!this.client.player.isPlaying(message) || !currentVc) return message.warn('Nothing is currently playing in this server.');
         else if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.');
 
+        var votes = [];
+        votes.push(message.author.id);
+        const neededVotes = votes.length >= Math.round(currentVc.channel.members.size / 2);
+        const requiredVotes = Math.round(currentVc.channel.members.size / 2) - votes.length;
+
+        if (args[1] === '--force' || args[1] === '-f')
+        {
+            if (!dj) return message.error('You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.');
+            votes = [];
+            this.client.player.skip(message);
+            return message.say('⏭', this.client.color.info, 'Skipped!');   
+        }
+
         if (currentVc.channel.members.size >= 4)
         {
-            var votes = [];
-            votes.push(message.author.id);
-            const neededVotes = votes.length >= Math.round(currentVc.channel.members.size / 2);
-            const requiredVotes = Math.round(currentVc.channel.members.size / 2) - votes.length;
-
-            if (args[1] === '--force' || args[1] === '-f')
-            {
-                if (!dj) return message.error('You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.');
-                votes = [];
-                this.client.player.skip(message);
-                return message.say('⏭', this.client.color.info, 'Skipped!');
-                
-            }
-
             if (!neededVotes)
             {
                 return message.channel.send(new MessageEmbed()
@@ -58,11 +57,11 @@ module.exports = class CommandSkip extends Command
                     .setDescription('⏭ Skipping?')
                     .setFooter(`${requiredVotes} more vote${requiredVotes === 1 ? '' : 's'} needed to skip.${dj ? ' Yo DJ, you can force skip by using the --force flag.' : ''}`)
                 );
-            } else {
-                votes = [];
-                this.client.player.skip(message);
-                return message.say('⏭', this.client.color.info, 'Skipped!');
             }
         }
+
+        votes = [];
+        this.client.player.skip(message);
+        return message.say('⏭', this.client.color.info, 'Skipped!');
     }
 };
