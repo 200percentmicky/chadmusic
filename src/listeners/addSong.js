@@ -1,19 +1,14 @@
-const { Listener } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { Listener } = require('discord-akairo')
 
-module.exports = class ListenerAddSong extends Listener
-{
-    constructor()
-    {
-        super('addSong', {
-            emitter: 'player',
-            event: 'addSong'
-        });
-    }
+module.exports = class ListenerAddSong extends Listener {
+  constructor () {
+    super('addSong', {
+      emitter: 'player',
+      event: 'addSong'
+    })
+  }
 
-    async exec(message, queue, song)
-    {
-        message.ok(`Added **${song.name}** to the queue.`);
-    }
-
-};
+  async exec (message, queue, song) {
+    message.ok(`Added **${song.name}** to the queue.`)
+  }
+}

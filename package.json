@@ -1,6 +1,6 @@
 {
-  "name": "deejay",
-  "version": "2020.11.29",
+  "name": "pokimusic",
+  "version": "2020.12.7",
   "description": "The Chad Music Bot, ya boi D.J. Tree Fiddy!",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "youtube-sr": "^2.0.4"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
+    "eslint": "^7.15.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
