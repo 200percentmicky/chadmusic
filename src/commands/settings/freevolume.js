@@ -18,14 +18,18 @@ module.exports = class CommandFreeVolume extends Command {
     if (!dj) return message.forbidden('You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
     const allowFreeVolume = this.client.settings.get(message.guild.id, 'allowFreeVolume')
     const toggle = allowFreeVolume !== true
-
-    await this.client.settings.set(message.guild.id, toggle, 'allowFreeVolume')
     const queue = this.client.player.getQueue(message)
+
     if (queue) {
-      if (allowFreeVolume === false) {
+      if (allowFreeVolume === true) {
         this.client.player.setVolume(message, 100)
       }
     }
-    return message.ok(`Unlimited Volume has been **${allowFreeVolume === false ? 'disabled**. Volume is now limited to **200%**.' : 'enabled**.'}`)
+
+    await this.client.settings.set(message.guild.id, toggle, 'allowFreeVolume')
+    return message.ok(`Unlimited Volume has been **${allowFreeVolume === true
+      ? 'disabled**. Volume is now limited to **200%**.'
+      : 'enabled**.'}
+    `)
   }
 }

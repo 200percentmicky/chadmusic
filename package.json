@@ -1,6 +1,6 @@
 {
   "name": "pokimusic",
-  "version": "2020.12.7",
+  "version": "2020.12.9",
   "description": "The Chad Music Bot, ya boi D.J. Tree Fiddy!",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "@discordjs/opus": "^0.3.3",
     "bot-utils": "^1.4.2",
     "chalk": "^4.1.0",
+    "colon-notation": "^1.2.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "^8.1.0",
     "discord-paginationembed": "^2.1.0",
