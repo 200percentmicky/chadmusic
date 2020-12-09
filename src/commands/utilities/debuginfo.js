@@ -5,9 +5,9 @@ const { stripIndents } = require('common-tags')
 const prettyBytes = require('pretty-bytes')
 
 const main = require('../../../package.json')
-const akairoversion = require('discord-akairo/package')
-const discordversion = require('discord.js/package')
-const distubeversion = require('distube/package')
+const akairoversion = require('../../../node_modules/discord-akairo/package.json')
+const discordversion = require('../../../node_modules/discord.js/package.json')
+const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandStats extends Command {
   constructor () {
