@@ -31,18 +31,16 @@ Structures.extend('Message', Message => {
     say (emoji, color, description, title) {
       const embed = new MessageEmbed()
         .setColor(color)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title
-          ? description
-          : emoji
-            ? `${emoji} ${description}`
-            : description
-        )
 
       if (title) {
-        embed.setTitle(emoji
+        embed.addField(emoji
           ? `${emoji} ${title}`
-          : title
+          : title,
+        description)
+      } else {
+        embed.setDescription(emoji
+          ? `${emoji} ${description}`
+          : description
         )
       }
 
@@ -66,10 +64,9 @@ Structures.extend('Message', Message => {
     ok (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.ok)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title ? description : emoji.ok + description)
 
-      if (title) embed.setTitle(emoji.ok + title)
+      if (title) embed.addField(emoji.ok + title, description)
+      else embed.setDescription(emoji.ok + description)
 
       if (this.channel.type === 'dm') {
         return this.channel.send(embed)
@@ -87,8 +84,9 @@ Structures.extend('Message', Message => {
     warn (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.warn)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title ? description : emoji.warn + description)
+
+      if (title) embed.addField(emoji.warn + title, description)
+      else embed.setDescription(emoji.warn + description)
 
       if (title) embed.setTitle(emoji.warn + title)
 
@@ -108,10 +106,9 @@ Structures.extend('Message', Message => {
     error (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.error)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title ? description : emoji.error + description)
 
-      if (title) embed.setTitle(emoji.error + title)
+      if (title) embed.addField(emoji.error + title, description)
+      else embed.setDescription(emoji.error + description)
 
       if (this.channel.type === 'dm') {
         return this.channel.send(embed)
@@ -129,10 +126,9 @@ Structures.extend('Message', Message => {
     info (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.info)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title ? description : emoji.info + description)
 
-      if (title) embed.setTitle(emoji.info + title)
+      if (title) embed.addField(emoji.info + title, description)
+      else embed.setDescription(emoji.info + description)
 
       if (this.channel.type === 'dm') {
         return this.channel.send(embed)
@@ -150,10 +146,9 @@ Structures.extend('Message', Message => {
     forbidden (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.no)
-      // .setAuthor(this.author.tag, this.author.avatarURL({ dynamic: true }))
-        .setDescription(title ? description : emoji.no + description)
 
-      if (title) embed.setTitle(emoji.no + title)
+      if (title) embed.addField(emoji.no + title, description)
+      else embed.setDescription(emoji.no + description)
 
       if (this.channel.type === 'dm') {
         return this.channel.send(embed)
