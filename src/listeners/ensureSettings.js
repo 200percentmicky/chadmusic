@@ -2,9 +2,9 @@ const { Listener } = require('discord-akairo')
 
 // This is to ensure that all guilds the bot has access to has the default settings applied.
 // The bot will not function without any setting present.
-module.exports = class ListenerGetPrefix extends Listener {
+module.exports = class ListenerEnsureSettings extends Listener {
   constructor () {
-    super('getPrefix', {
+    super('ensureSettings', {
       emitter: 'client',
       event: 'message'
     })
