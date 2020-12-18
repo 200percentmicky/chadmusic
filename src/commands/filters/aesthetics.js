@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 module.exports = class CommandVaporwave extends Command {
   constructor () {
     super('vaporwave', {
-      aliases: ['vaporwave'],
+      aliases: ['aesthetics'],
       category: '🗣 Filter',
       description: {
         text: 'Ａｅｓｔｈｅｔｉｃｓ　新桜ど',

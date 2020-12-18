@@ -30,7 +30,7 @@ module.exports = class CommandReverse extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       await this.client.player.setFilter(message.guild.id, 'reverse')
-      return message.ok('Applied filter: **Reverse**')
+      return message.ok('Applied filter: **esreveR**')
     } else {
       if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.')
     }

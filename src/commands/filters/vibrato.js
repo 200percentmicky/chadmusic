@@ -29,6 +29,9 @@ module.exports = class CommandVibrato extends Command {
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
+      const args = message.content.split(/ +/g)
+      const f = args[2]
+      const d = args[1]
       await this.client.player.setFilter(message.guild.id, 'vibrato')
       return message.ok('Applied filter: **Vibrato**')
     } else {
