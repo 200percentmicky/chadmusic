@@ -1,6 +1,6 @@
 {
-  "name": "pokimusic",
-  "version": "2020.12.18",
+  "name": "deejay",
+  "version": "2020.12.22",
   "description": "A feature-rich Music Bot for Pokitaru.",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "discord-paginationembed": "^2.1.0",
     "discord-prefix": "^1.1.0",
     "discord.js": "^12.5.1",
-    "distube": "^2.8.7",
+    "distube": "^2.8.8",
     "enmap": "^5.8.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",

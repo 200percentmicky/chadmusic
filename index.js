@@ -1,4 +1,4 @@
-const PokiMusic = require('./src/pokimusic.js')
+const Deejay = require('./src/deejay.js')
 const { token } = require('./src/config.json')
 
-new PokiMusic().login(token)
+new Deejay().login(token)

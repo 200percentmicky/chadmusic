@@ -16,7 +16,7 @@ const emoji = require('./emoji.json')
 const color = require('./colorcode.json')
 
 /*
- * * PokiMusic - A feature-rich Music Bot for Pokitaru.
+ * * Deejay - The Chad Music Bot created by Micky-kun
  */
 
 /*
@@ -200,7 +200,7 @@ Structures.extend('Message', Message => {
   return MessageStructure
 })
 
-class PokiMusic extends AkairoClient {
+class Deejay extends AkairoClient {
   constructor () {
     super({
       ownerID: config.owner
@@ -272,4 +272,4 @@ class PokiMusic extends AkairoClient {
   }
 }
 
-module.exports = PokiMusic
+module.exports = Deejay
