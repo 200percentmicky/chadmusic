@@ -28,7 +28,7 @@ module.exports = class CommandStats extends Command {
     const user = os.userInfo()
 
     const data = stripIndents`
-    === PokiMusic ===
+    === Deejay - The Chad Music Bot ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
              Node.js :: ${process.version}
          Bot Version :: ${main.version}

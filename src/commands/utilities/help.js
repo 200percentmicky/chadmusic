@@ -26,7 +26,6 @@ module.exports = class CommandHelp extends Command {
   async exec (message, args) {
     const string = args.string
     const command = this.handler.modules.get(string)
-    const thumbnailUrl = 'https://media.discordapp.net/attachments/375453081631981568/618705968934551592/pokitaru_bot_2019-1-22.png?width=773&height=761'
 
     if (string) {
       // The command has been found.
@@ -67,9 +66,9 @@ module.exports = class CommandHelp extends Command {
 
         const commandEmbed = new MessageEmbed()
           .setColor(this.client.color.ok)
-          .setAuthor('PokiMusic', thumbnailUrl)
+          .setAuthor('Deejay - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
-          .setDescription(`${command.description.text}\n${command.description.details ? command.description.details : ''}`)
+          .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
           .setTimestamp()
           .setFooter('<Required> • [Optional] • |Subcommand/Flag|', message.author.avatarURL({ dynamic: true }))
         if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.')
@@ -88,8 +87,8 @@ module.exports = class CommandHelp extends Command {
 
         /*
         if (command.clientPermissions) {
-            const clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ');
-            commandEmbed.addField('Bot Permissions', clientPerms, true);
+          const clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ');
+          commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
         return message.channel.send(commandEmbed)
@@ -101,7 +100,7 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(this.client.color.ok)
-      .setAuthor('PokiMusic', thumbnailUrl)
+      .setAuthor('Deejay - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)
 

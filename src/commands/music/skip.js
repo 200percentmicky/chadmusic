@@ -8,8 +8,8 @@ module.exports = class CommandSkip extends Command {
       category: '🎶 Player',
       description: {
         text: 'Skips the currently playing song.',
-        usage: '[--force|-f]',
-        details: '`[--force|-f]` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
+        usage: '|--force/-f|',
+        details: '`|--force/-f|` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -60,6 +60,10 @@ module.exports = class CommandSkip extends Command {
           .setFooter(`${requiredVotes} more vote${requiredVotes === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force'.` : ''}`)
         )
       }
+    } else {
+      votes = []
+      this.client.player.skip(message)
+      return message.say('⏭', this.client.color.info, 'Skipped!')
     }
   }
 }
