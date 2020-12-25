@@ -1,6 +1,6 @@
 {
   "name": "deejay",
-  "version": "2020.12.22",
+  "version": "2020.12.25",
   "description": "A feature-rich Music Bot for Pokitaru.",
   "main": "index.js",
   "scripts": {
