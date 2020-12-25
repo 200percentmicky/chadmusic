@@ -9,8 +9,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('aboutmusic', {
-      aliases: ['aboutmusic'],
+    super('about', {
+      aliases: ['about'],
       category: '🛠 Utilities',
       description: {
         text: 'Information about Deejay.'
@@ -23,8 +23,8 @@ module.exports = class CommandAboutMusic extends Command {
     const thumbnailUrl = 'https://media.discordapp.net/attachments/375453081631981568/618705968934551592/pokitaru_bot_2019-1-22.png?width=773&height=761'
     const aboutembed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor('PokiMusic', thumbnailUrl)
-      .setDescription('A feature rich Music Bot for Pokitaru. Supports 700+ websites and filters!')
+      .setAuthor('Deejay - The Chad Music Bot', thumbnailUrl)
+      .setDescription('A feature-rich Music Bot. Supports 700+ websites and filters!')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
       **Bot Version:** \`${main.version}\`
       **Node.js** \`${process.version}\`
