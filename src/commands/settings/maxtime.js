@@ -3,7 +3,7 @@ const { toMilliseconds } = require('colon-notation')
 
 module.exports = class CommandMaxTime extends Command {
   constructor () {
-    super('maxTime', {
+    super('maxtime', {
       aliases: ['maxtime'],
       category: '⚙ Settings',
       description: {

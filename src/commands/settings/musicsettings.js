@@ -5,8 +5,8 @@ const prettyMilliseconds = require('pretty-ms')
 
 module.exports = class CommandMusicSettings extends Command {
   constructor () {
-    super('musicsettings', {
-      aliases: ['musicsettings', 'musicset'],
+    super('settings', {
+      aliases: ['settings', 'musicset', 'musicsettings'],
       category: '⚙ Settings',
       description: {
         text: 'View the setting for this server.'

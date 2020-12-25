@@ -2,8 +2,8 @@ const { Command } = require('discord-akairo')
 
 module.exports = class CommandMusicPrefix extends Command {
   constructor () {
-    super('musicprefix', {
-      aliases: ['musicprefix'],
+    super('prefix', {
+      aliases: ['prefix'],
       category: '⚙ Settings',
       description: {
         text: 'Changes the bot\'s music prefix for this server.',

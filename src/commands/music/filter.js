@@ -13,7 +13,7 @@ module.exports = class PingCommand extends Command {
         `,
         usage: '<filter>'
       },
-      category: '🛠 Utilities'
+      category: '🎶 Player'
     })
   }
 
