@@ -36,7 +36,6 @@ module.exports = class CommandSkip extends Command {
     // return message.say('⏭', this.client.color.info, 'Skipped!')
 
     let votes = []
-    votes.push(message.author.id)
     const vcSize = Math.round(currentVc.channel.members.size / 2)
     const neededVotes = votes.length >= vcSize
     const votesLeft = vcSize - votes.length
@@ -49,13 +48,13 @@ module.exports = class CommandSkip extends Command {
     }
 
     if (currentVc.channel.members.size >= 4) {
+      if (votes.includes(message.author.id)) return message.warn('You already voted to skip.')
+      votes.push(message.author.id)
       if (neededVotes) {
         votes = []
         this.client.player.skip(message)
         return message.say('⏭', this.client.color.info, 'Skipped!')
       } else {
-        if (votes.includes(message.author.id)) return message.warn('You already voted to skip.')
-        votes.push(message.author.id)
         const prefix = this.client.prefix.getPrefix(message.guild.id)
           ? this.client.prefix.getPrefix(message.guild.id)
           : this.client.config.prefix
