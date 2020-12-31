@@ -37,8 +37,9 @@ module.exports = class CommandSkip extends Command {
 
     let votes = []
     votes.push(message.author.id)
-    const neededVotes = votes.length >= Math.round(currentVc.channel.members.size) / 2
-    const requiredVotes = votes.length - neededVotes
+    const vcSize = Math.round(currentVc.channel.members.size / 2)
+    const neededVotes = votes.length >= vcSize
+    const votesLeft = vcSize - votes.length
 
     if (args[1] === '--force' || args[1] === '-f') {
       if (!dj) return message.error('You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
@@ -53,11 +54,15 @@ module.exports = class CommandSkip extends Command {
         this.client.player.skip(message)
         return message.say('⏭', this.client.color.info, 'Skipped!')
       } else {
-        const prefix = this.client.prefix.getPrefix(message.guild.id) ? this.client.prefix.getPrefix(message.guild.id) : this.client.config.prefix
+        if (votes.includes(message.author.id)) return message.warn('You already voted to skip.')
+        votes.push(message.author.id)
+        const prefix = this.client.prefix.getPrefix(message.guild.id)
+          ? this.client.prefix.getPrefix(message.guild.id)
+          : this.client.config.prefix
         return message.channel.send(new MessageEmbed()
           .setColor(this.client.color.info)
           .setDescription('⏭ Skipping?')
-          .setFooter(`${requiredVotes} more vote${requiredVotes === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force'.` : ''}`)
+          .setFooter(`${votesLeft} more vote${requiredVotes === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`)
         )
       }
     } else {
