@@ -20,9 +20,9 @@ module.exports = class CommandAboutMusic extends Command {
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
-    const thumbnailUrl = 'https://media.discordapp.net/attachments/375453081631981568/618705968934551592/pokitaru_bot_2019-1-22.png?width=773&height=761'
+    const thumbnailUrl = this.client.user.avatarURL({ dynamic: true })
     const aboutembed = new MessageEmbed()
-      .setColor(this.client.color.blood)
+      .setColor(this.client.color.ok)
       .setAuthor('Deejay - The Chad Music Bot', thumbnailUrl)
       .setDescription('A feature-rich Music Bot. Supports 700+ websites and filters!')
       .addField(`${this.client.emoji.info} Info`, stripIndents`

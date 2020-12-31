@@ -31,6 +31,7 @@ Structures.extend('Message', Message => {
     say (emoji, color, description, title) {
       const embed = new MessageEmbed()
         .setColor(color)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) {
         embed.addField(emoji
@@ -64,6 +65,7 @@ Structures.extend('Message', Message => {
     ok (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.ok)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) embed.addField(emoji.ok + title, description)
       else embed.setDescription(emoji.ok + description)
@@ -84,6 +86,7 @@ Structures.extend('Message', Message => {
     warn (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.warn)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) embed.addField(emoji.warn + title, description)
       else embed.setDescription(emoji.warn + description)
@@ -106,6 +109,7 @@ Structures.extend('Message', Message => {
     error (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.error)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) embed.addField(emoji.error + title, description)
       else embed.setDescription(emoji.error + description)
@@ -126,6 +130,7 @@ Structures.extend('Message', Message => {
     info (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.info)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) embed.addField(emoji.info + title, description)
       else embed.setDescription(emoji.info + description)
@@ -146,6 +151,7 @@ Structures.extend('Message', Message => {
     forbidden (description, title) {
       const embed = new MessageEmbed()
         .setColor(color.no)
+        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
 
       if (title) embed.addField(emoji.no + title, description)
       else embed.setDescription(emoji.no + description)
