@@ -61,7 +61,7 @@ module.exports = class CommandSkip extends Command {
         return message.channel.send(new MessageEmbed()
           .setColor(this.client.color.info)
           .setDescription('⏭ Skipping?')
-          .setFooter(`${votesLeft} more vote${requiredVotes === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`)
+          .setFooter(`${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`)
         )
       }
     } else {
