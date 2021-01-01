@@ -250,6 +250,7 @@ class Deejay extends AkairoClient {
       name: 'settings'
     })
     this.joined = new Enmap('joined')
+    this.voters = []
 
     this.commands = new CommandHandler(this, {
       directory: './src/commands',

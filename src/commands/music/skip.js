@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const Enmap = require('enmap')
 
 module.exports = class CommandSkip extends Command {
   constructor () {
@@ -35,19 +36,18 @@ module.exports = class CommandSkip extends Command {
     // this.client.player.skip(message)
     // return message.say('⏭', this.client.color.info, 'Skipped!')
 
-    let votes = []
-    const vcSize = Math.round(currentVc.channel.members.size / 2)
-    const neededVotes = votes.length >= vcSize
-    const votesLeft = vcSize - votes.length
-
     if (args[1] === '--force' || args[1] === '-f') {
       if (!dj) return message.error('You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
-      votes = []
       this.client.player.skip(message)
       return message.say('⏭', this.client.color.info, 'Skipped!')
     }
 
+    let votes = this.client.voters
+
     if (currentVc.channel.members.size >= 4) {
+      const vcSize = Math.round(currentVc.channel.members.size / 2)
+      const neededVotes = votes.length >= vcSize
+      const votesLeft = vcSize - votes.length
       if (votes.includes(message.author.id)) return message.warn('You already voted to skip.')
       votes.push(message.author.id)
       if (neededVotes) {
@@ -61,7 +61,10 @@ module.exports = class CommandSkip extends Command {
         return message.channel.send(new MessageEmbed()
           .setColor(this.client.color.info)
           .setDescription('⏭ Skipping?')
-          .setFooter(`${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`)
+          .setFooter(
+            `${message.author.tag} • ${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`,
+            message.author.avatarURL({ dynamic: true })
+          )
         )
       }
     } else {
