@@ -1,4 +1,4 @@
-const Deejay = require('./src/deejay.js')
-const { token } = require('./src/config.json')
+require('dotenv').config()
+const Deejay = require('./src/chadmusic.js')
 
-new Deejay().login(token)
+new Deejay().login(process.env.TOKEN)

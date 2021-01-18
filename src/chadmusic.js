@@ -1,3 +1,13 @@
+/*
+ * * ChadMusic - The Chad Music Bot created by Micky-kun
+ * Licensed under the MIT License. Please read LICENSE for more information.S
+ */
+
+/*
+Here lies the messy outcome of a lazy programmer.
+Either that or it's Javascript.
+*/
+
 'use strict'
 
 const { black } = require('chalk')
@@ -15,34 +25,34 @@ const config = require('./config.json')
 const emoji = require('./emoji.json')
 const color = require('./colorcode.json')
 
-/*
- * * Deejay - The Chad Music Bot created by Micky-kun
- */
-
-/*
-Here lies the messy outcome of a lazy programmer.
-Either that or it's Javascripts fault.
-*/
-
 // Extending a few things...
 Structures.extend('Message', Message => {
   class MessageStructure extends Message {
-    // Custom embed messages.
-    say (emoji, color, description, title) {
+    // Universal Embed dialogs.
+    say (type, description, title) {
+      const embedColor = {
+        ok: color.ok,
+        warn: color.warn,
+        error: color.error,
+        info: color.info,
+        no: color.no
+      }
+
+      const embedEmoji = {
+        ok: emoji.ok,
+        warn: emoji.warn,
+        error: emoji.error,
+        info: emoji.info,
+        no: emoji.no
+      }
+
       const embed = new MessageEmbed()
-        .setColor(color)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
+        .setColor(embedColor[type])
 
       if (title) {
-        embed.addField(emoji
-          ? `${emoji} ${title}`
-          : title,
-        description)
+        embed.addField(embedEmoji[type] + title, description)
       } else {
-        embed.setDescription(emoji
-          ? `${emoji} ${description}`
-          : description
-        )
+        embed.setDescription(embedEmoji[type] + description)
       }
 
       if (this.channel.type === 'dm') {
@@ -50,126 +60,41 @@ Structures.extend('Message', Message => {
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
           return this.channel.send(title
-            ? emoji
-                ? `${emoji} **${title}**\n>>> ${description}`
-                : `**${title}**\n>>> ${description}`
-            : emoji
-              ? `${emoji} ${description}`
-              : description
+            ? `${type[embedEmoji]} **${title}**\n>>> ${description}`
+            : `${type[embedEmoji]} ${description}`
           )
         } else return this.channel.send(embed)
       }
     }
 
-    // OK Dialog
-    ok (description, title) {
+    // Custom style embeds.
+    custom (emoji, color, description, title) {
       const embed = new MessageEmbed()
-        .setColor(color.ok)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
+        .setColor(color)
 
-      if (title) embed.addField(emoji.ok + title, description)
-      else embed.setDescription(emoji.ok + description)
-
-      if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
+      if (title) {
+        embed.addField(`${emoji} ${title}`, description)
       } else {
-        if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
-            ? `${emoji.ok} **${title}**\n>>> ${description}`
-            : emoji.ok + description
-          )
-        } else return this.channel.send(embed)
+        embed.setDescription(`${emoji} ${description}`)
       }
-    }
-
-    // Warning Dialog
-    warn (description, title) {
-      const embed = new MessageEmbed()
-        .setColor(color.warn)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
-
-      if (title) embed.addField(emoji.warn + title, description)
-      else embed.setDescription(emoji.warn + description)
-
-      if (title) embed.setTitle(emoji.warn + title)
 
       if (this.channel.type === 'dm') {
         return this.channel.send(embed)
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
           return this.channel.send(title
-            ? `${emoji.warn} **${title}**\n>>> ${description}`
-            : emoji.warn + description
-          )
-        } else return this.channel.send(embed)
-      }
-    }
-
-    // Error Dialog
-    error (description, title) {
-      const embed = new MessageEmbed()
-        .setColor(color.error)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
-
-      if (title) embed.addField(emoji.error + title, description)
-      else embed.setDescription(emoji.error + description)
-
-      if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
-      } else {
-        if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
-            ? `${emoji.error} **${title}**\n>>> ${description}`
-            : emoji.error + description
-          )
-        } else return this.channel.send(embed)
-      }
-    }
-
-    // Information Dialog
-    info (description, title) {
-      const embed = new MessageEmbed()
-        .setColor(color.info)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
-
-      if (title) embed.addField(emoji.info + title, description)
-      else embed.setDescription(emoji.info + description)
-
-      if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
-      } else {
-        if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
-            ? `${emoji.info} **${title}**\n>>> ${description}`
-            : emoji.info + description
-          )
-        } else return this.channel.send(embed)
-      }
-    }
-
-    // Forbidden Dialog
-    forbidden (description, title) {
-      const embed = new MessageEmbed()
-        .setColor(color.no)
-        .setFooter(this.author.tag, this.author.avatarURL({ dynamic: true }))
-
-      if (title) embed.addField(emoji.no + title, description)
-      else embed.setDescription(emoji.no + description)
-
-      if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
-      } else {
-        if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
-            ? `${emoji.no} **${title}**\n>>> ${description}`
-            : emoji.no + description
+            ? `${emoji} **${title}**\n>>> ${description}`
+            : `${emoji} ${description}`
           )
         } else return this.channel.send(embed)
       }
     }
 
     // Error Handling. Used to send to the support server.
+    // This will not be useful if self-hosting this bot.
     async recordError (type, command, title, error) {
+      // Consider replacing the channel ID for your own error reporting
+      // channel until the feature is supported in the configs.
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       const embed = new MessageEmbed()
         .setTimestamp()
@@ -183,7 +108,9 @@ Structures.extend('Message', Message => {
         )
 
       if (command) {
-        embed.addField('Command', command, true) // I don't know how to really get which command triggered it. So why not hard code it? lol
+        // I was rather lazy with this one. I'm not sure if Akairo is able to
+        // provide what command is invoked. Hard coding seems to not be an issue atm...
+        embed.addField('Command', command, true)
       }
 
       if (type === 'warning') {
@@ -211,7 +138,11 @@ class Deejay extends AkairoClient {
     super({
       ownerID: config.owner
     }, {
-      disableMentions: 'true'
+      disableMentions: 'true',
+      // Changing the offset to a lower number than 500 will cause the
+      // reactions to show faster, but it also comes with a cost of having
+      // your bot rate-limited.
+      restTimeOffset: 175
     })
 
     // Logging with some chalk. :)
@@ -249,8 +180,6 @@ class Deejay extends AkairoClient {
     this.settings = new Enmap({
       name: 'settings'
     })
-    this.joined = new Enmap('joined')
-    this.voters = []
 
     this.commands = new CommandHandler(this, {
       directory: './src/commands',

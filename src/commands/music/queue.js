@@ -19,15 +19,15 @@ module.exports = class CommandQueue extends Command {
     const settings = this.client.settings.get(message.guild.id)
     const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
     if (settings.djMode) {
-      if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+      if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
     const queue = this.client.player.getQueue(message)
     const vc = message.member.voice.channel
     const currentVc = this.client.voice.connections.get(message.guild.id)
 
-    if (!this.client.player.isPlaying(message) || !currentVc) return message.warn('Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.')
+    if (!this.client.player.isPlaying(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
+    else if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     const songs = queue.songs.slice(1)
     const song = queue.songs[0]
@@ -39,7 +39,7 @@ module.exports = class CommandQueue extends Command {
         .setChannel(message.channel)
         .setElementsPerPage(5)
         .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `${songs.indexOf(song) + 1}: ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${this.client.emoji.warn}Queue is empty.`)
+        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})\n\n` : `${this.client.emoji.warn}Queue is empty.`)
         .setPage(1)
         .setNavigationEmojis({
           back: '◀',
@@ -64,16 +64,16 @@ module.exports = class CommandQueue extends Command {
             .setColor(this.client.utils.randColor())
             .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
             .setDescription(`${this.client.emoji.music}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
-            .addField(':warning: The queue is empty.', 'Start adding some songs! ;)')
+            .addField('The queue is empty.', 'Start adding some songs! 😉')
             .setTimestamp()
           )
         } else {
           // Different error?
-          message.error(err.message, err.name)
+          message.say('error', err.message, err.name)
         }
       } else {
         // Different error?
-        message.error(err.message, err.name)
+        message.say('error', err.message, err.name)
       }
     }
   }

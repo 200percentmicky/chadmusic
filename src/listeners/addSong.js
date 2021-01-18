@@ -16,10 +16,10 @@ module.exports = class ListenerAddSong extends Listener {
       if (!dj) {
         if (parseInt(song.duration + '000') > settings.maxTime) { // DisTube omits the last three digits in the songs duration.
           queue.songs.pop()
-          return message.forbidden(`You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
+          return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
         }
       }
     }
-    message.ok(`Added **${song.name}** to the queue.`)
+    message.say('ok', `Added **${song.name}** to the queue.`)
   }
 }

@@ -2,8 +2,8 @@ const { Command } = require('discord-akairo')
 
 module.exports = class CommandMusicPrefix extends Command {
   constructor () {
-    super('prefix', {
-      aliases: ['prefix'],
+    super('musicprefix', {
+      aliases: ['musicprefix'],
       category: '⚙ Settings',
       description: {
         text: 'Changes the bot\'s music prefix for this server.',
@@ -21,9 +21,9 @@ module.exports = class CommandMusicPrefix extends Command {
 
     if (!args[1]) {
       this.client.prefix.setPrefix(this.client.config.prefix, message.guild.id)
-      return message.ok(`Music Prefix has been reset to \`${this.client.config.prefix}\``)
+      return message.say('ok', `Music Prefix has been reset to \`${this.client.config.prefix}\``)
     }
     this.client.prefix.setPrefix(prefix, message.guild.id)
-    return message.ok(`Music Prefix has been set to \`${prefix}\``)
+    return message.say('ok', `Music Prefix has been set to \`${prefix}\``)
   }
 }

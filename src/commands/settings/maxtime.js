@@ -22,15 +22,15 @@ module.exports = class CommandMaxTime extends Command {
 
   async exec (message, args) {
     const dj = message.member.roles.cache.has(this.client.settings.get(message.guild.id).djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
-    if (!dj) return message.forbidden('You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
+    if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
     const time = args.time
     const notation = toMilliseconds(time)
 
     if (time === 0 || time === 'NONE'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, null, 'maxTime')
-      return message.ok('Max time has been disabled.')
+      return message.say('ok', 'Max time has been disabled.')
     }
     await this.client.settings.set(message.guild.id, notation, 'maxTime')
-    return message.ok(`Max time has been set to \`${time}\``)
+    return message.say('ok', `Max time has been set to \`${time}\``)
   }
 }

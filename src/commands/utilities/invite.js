@@ -12,6 +12,6 @@ module.exports = class InviteCommand extends Command {
   }
 
   async exec (message) {
-    return message.ok(`**→ [Invite me!](${this.client.config.botinvite})**\n**→ [Support Server](${this.client.config.invite})**`)
+    return message.say('ok', `**→ [Invite me!](${this.client.config.botinvite})**\n**→ [Support Server](${this.client.config.invite})**`)
   }
 }

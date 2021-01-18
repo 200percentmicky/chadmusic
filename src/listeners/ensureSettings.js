@@ -19,8 +19,7 @@ module.exports = class ListenerEnsureSettings extends Listener {
       maxTime: null,
       maxQueueLimit: null
     }
-    if (this.client.settings.get(message.guild.id)) {
-      this.client.settings.ensure(message.guild.id, defaults)
-    }
+    const settings = this.client.settings.get(message.guild.id)
+    if (!settings) this.client.settings.ensure(message.guild.id, defaults)
   }
 }

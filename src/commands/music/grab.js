@@ -19,17 +19,19 @@ module.exports = class CommandGrab extends Command {
     const queue = this.client.player.getQueue(message)
     const song = queue.songs[0]
 
-    message.author.send(new MessageEmbed()
-      .setColor(this.client.utils.randColor())
-      .setAuthor('Song saved!', 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png')
-      .setTitle(song.name)
-      .setURL(song.url)
-      .setThumbnail(song.thumbnail)
-      .addField('Duration', song.formattedDuration)
-      .setTimestamp()
-    ).catch(() => {
-      return message.error('Cannot save this song for you. You are not accepting Direct Messages.')
-    })
-    return message.react(this.client.emoji.okReact)
+    try {
+      message.author.send(new MessageEmbed()
+        .setColor(this.client.utils.randColor())
+        .setAuthor('Song saved!', 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png')
+        .setTitle(song.name)
+        .setURL(song.url)
+        .setThumbnail(song.thumbnail)
+        .addField('Duration', song.formattedDuration)
+        .setTimestamp()
+      )
+      return message.react(this.client.emoji.okReact)
+    } catch (err) {
+      message.say('error', 'I cannot save this song for you. You are currently not accepting Direct Messages.')
+    }
   }
 }

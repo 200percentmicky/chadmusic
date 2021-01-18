@@ -5,8 +5,8 @@ const prettyMilliseconds = require('pretty-ms')
 
 module.exports = class CommandMusicSettings extends Command {
   constructor () {
-    super('settings', {
-      aliases: ['settings', 'musicset', 'musicsettings'],
+    super('musicsettings', {
+      aliases: ['musicset', 'musicsettings', 'audiosettings'],
       category: '⚙ Settings',
       description: {
         text: 'View the setting for this server.'
@@ -24,7 +24,7 @@ module.exports = class CommandMusicSettings extends Command {
       🔖 **DJ Role:** ${settings.djRole ? `<@&${settings.djRole}>` : 'None'}
       🎤 **DJ Mode:** ${settings.djMode === true ? 'On' : 'Off'}
       ⏲ **Max Song Time:** ${settings.maxTime ? prettyMilliseconds(settings.maxTime, { colonNotation: true }) : 'Unlimited'}
-      🔢 **Max Entries in the Queue (Not Implemented):** ${settings.maxQueueLimit ? settings.maxQueueLimit : 'Unlimited'}
+      🔢 **Max Entries in the Queue:** ${settings.maxQueueLimit ? settings.maxQueueLimit : 'Unlimited'}
       📢 **Now Playing Alerts (Not Implemented):** ${settings.nowPlayingAlerts === true ? 'On' : 'Off'}
       🔊 **Unlimited Volume:** ${settings.allowFreeVolume === true ? 'On' : 'Off'}
       `)

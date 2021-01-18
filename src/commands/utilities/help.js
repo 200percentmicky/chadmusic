@@ -94,7 +94,7 @@ module.exports = class CommandHelp extends Command {
         return message.channel.send(commandEmbed)
       } else {
         // The command is not registered or it doesn't exist.
-        return message.error(`\`${string}\` is not a registered command.`)
+        return message.say('error', `\`${string}\` is not a registered command.`)
       }
     }
 

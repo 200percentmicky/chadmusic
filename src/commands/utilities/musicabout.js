@@ -9,8 +9,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('about', {
-      aliases: ['about'],
+    super('musicabout', {
+      aliases: ['musicabout'],
       category: '🛠 Utilities',
       description: {
         text: 'Information about Deejay.'
@@ -23,8 +23,14 @@ module.exports = class CommandAboutMusic extends Command {
     const thumbnailUrl = this.client.user.avatarURL({ dynamic: true })
     const aboutembed = new MessageEmbed()
       .setColor(this.client.color.ok)
-      .setAuthor('Deejay - The Chad Music Bot', thumbnailUrl)
-      .setDescription('A feature-rich Music Bot. Supports 700+ websites and filters!')
+      .setAuthor('ChadMusic', thumbnailUrl)
+      .setDescription('This bot is running a instance of **ChadMusic**, a Discord Music Bot based off of DisTube.js.')
+      .addField('✨ Features', stripIndents`
+      - Play sources from any site that YouTube-DL supports. YouTube, Soundcloud, Twitch, etc.
+      - Unlimited Volume! The sky is the limit!
+      - Apply filters to the player, with more being added in the future!
+      - Control how the bot can be used. Max Queue Limitation, Song Duration Limits, plus more to come!
+      `)
       .addField(`${this.client.emoji.info} Info`, stripIndents`
       **Bot Version:** \`${main.version}\`
       **Node.js** \`${process.version}\`
@@ -33,13 +39,6 @@ module.exports = class CommandAboutMusic extends Command {
       **DisTube:** \`${distubeversion.version}\`
       `, true)
       .setThumbnail(thumbnailUrl)
-      /*
-      .addField('🔗 Links', stripIndents`
-      **[Support Server](${this.client.config.invite})**
-      **[Invite me!](${this.client.config.botinvite})**
-      **[Fork me on Github!](http://github.com/mickykuna/deejay)**
-      `, true)
-      */
       .setFooter(`Created by ${owner.tag}.`, owner.avatarURL({ dynamic: true }))
     return message.channel.send(aboutembed)
   }

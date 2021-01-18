@@ -1,6 +1,5 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const Enmap = require('enmap')
 
 module.exports = class CommandSkip extends Command {
   constructor () {
@@ -15,6 +14,8 @@ module.exports = class CommandSkip extends Command {
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
     })
+
+    this.votes = new Array(0)
   }
 
   async exec (message) {
@@ -22,38 +23,42 @@ module.exports = class CommandSkip extends Command {
     const settings = this.client.settings.get(message.guild.id)
     const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
     if (settings.djMode) {
-      if (!dj) return message.forbidden('DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+      if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return message.error('You are not in a voice channel.')
+    if (!vc) return message.say('error', 'You are not in a voice channel.')
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
-    if (!this.client.player.isPlaying(message) || !currentVc) return message.warn('Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return message.error('You must be in the same voice channel that I\'m in to use that command.')
+    if (!this.client.player.isPlaying(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
+    else if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     // For breaking use only.
     // this.client.player.skip(message)
     // return message.say('⏭', this.client.color.info, 'Skipped!')
 
-    if (args[1] === '--force' || args[1] === '-f') {
-      if (!dj) return message.error('You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
+    if (args[1] === ('--force' || '-f')) {
+      if (!dj) return message.say('error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
-      return message.say('⏭', this.client.color.info, 'Skipped!')
+      return message.channel.send(new MessageEmbed()
+        .setColor(this.client.color.info)
+        .setDescription('⏭ Skipped!')
+      )
     }
-
-    let votes = this.client.voters
 
     if (currentVc.channel.members.size >= 4) {
       const vcSize = Math.round(currentVc.channel.members.size / 2)
-      const neededVotes = votes.length >= vcSize
-      const votesLeft = vcSize - votes.length
-      if (votes.includes(message.author.id)) return message.warn('You already voted to skip.')
-      votes.push(message.author.id)
+      const neededVotes = this.votes.length >= vcSize
+      const votesLeft = vcSize - this.votes.length
+      if (this.votes.includes(message.author.id)) return message.say('warn', 'You already voted to skip.')
+      this.votes.push(message.author.id)
       if (neededVotes) {
-        votes = []
+        this.votes = []
         this.client.player.skip(message)
-        return message.say('⏭', this.client.color.info, 'Skipped!')
+        return message.channel.send(new MessageEmbed()
+          .setColor(this.client.color.info)
+          .setDescription('⏭ Skipped!')
+        )
       } else {
         const prefix = this.client.prefix.getPrefix(message.guild.id)
           ? this.client.prefix.getPrefix(message.guild.id)
@@ -62,15 +67,18 @@ module.exports = class CommandSkip extends Command {
           .setColor(this.client.color.info)
           .setDescription('⏭ Skipping?')
           .setFooter(
-            `${message.author.tag} • ${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`,
+            `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`,
             message.author.avatarURL({ dynamic: true })
           )
         )
       }
     } else {
-      votes = []
+      this.votes = []
       this.client.player.skip(message)
-      return message.say('⏭', this.client.color.info, 'Skipped!')
+      return message.channel.send(new MessageEmbed()
+        .setColor(this.client.color.info)
+        .setDescription('⏭ Skipped!')
+      )
     }
   }
 }

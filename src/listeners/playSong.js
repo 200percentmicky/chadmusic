@@ -20,7 +20,7 @@ module.exports = class ListenerPlaySong extends Listener {
             // Stupid fix.
             if (message.content.includes(this.client.prefix.getPrefix(message.guild.id) + 'skip') || message.content.includes(this.client.prefix.getPrefix(message.guild.id) + 's')) return
             this.client.player.stop(message)
-            return message.forbidden(`You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
+            return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
           }
         }
       }
@@ -30,7 +30,7 @@ module.exports = class ListenerPlaySong extends Listener {
     const guild = channel.guild // This as well...
     textChannel.send(new MessageEmbed()
       .setColor(this.client.utils.randColor())
-      .setAuthor(`🎵 Now playing in ${guild.name} - ${channel.name}`, guild.iconURL({ dynamic: true }))
+      .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
