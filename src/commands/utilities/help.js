@@ -91,7 +91,7 @@ module.exports = class CommandHelp extends Command {
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
-        return message.author.send(commandEmbed)
+        return message.channel.send(commandEmbed)
       }
     }
 
@@ -113,6 +113,6 @@ module.exports = class CommandHelp extends Command {
       helpEmbed.fields.push(field)
     })
     message.react(this.client.emoji.okReact)
-    return message.channel.send(helpEmbed)
+    return message.author.send(helpEmbed)
   }
 }

@@ -1,3 +1,4 @@
+const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 
@@ -33,13 +34,15 @@ module.exports = class CommandNowPlaying extends Command {
     return message.channel.send(new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+      .setDescription(stripIndents`
+      **Requested by:** ${song.user}
+      **Duration:** \`${song.formattedDuration}\`
+      **Volume:** \`${song.volume}\`
+      **Current Filter:** ${queue.filter != null ? queue.filter : 'None'}
+      `)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .addField('Duration', song.formattedDuration, true)
-      .addField('Requested by', song.user, true)
-      .addField('Volume', queue.volume, true)
-      .addField('Current Filter', queue.filter != null ? queue.filter : 'None')
       .setTimestamp()
     )
   }
