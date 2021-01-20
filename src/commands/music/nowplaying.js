@@ -36,8 +36,8 @@ module.exports = class CommandNowPlaying extends Command {
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(stripIndents`
       **Requested by:** ${song.user}
-      **Duration:** \`${song.formattedDuration}\`
-      **Volume:** \`${song.volume}\`
+      **Duration:** ${song.formattedDuration}
+      **Volume:** ${queue.volume}
       **Current Filter:** ${queue.filter != null ? queue.filter : 'None'}
       `)
       .setTitle(song.name)

@@ -34,7 +34,7 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
       .setDescription(stripIndents`
       **Requested by:** ${song.user}
-      **Duration:** \`${song.formattedDuration}\`
+      **Duration:** ${song.formattedDuration}
       `)
       .setTitle(song.name)
       .setURL(song.url)
