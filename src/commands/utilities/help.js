@@ -91,15 +91,12 @@ module.exports = class CommandHelp extends Command {
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
-        return message.channel.send(commandEmbed)
-      } else {
-        // The command is not registered or it doesn't exist.
-        return message.say('error', `\`${string}\` is not a registered command.`)
+        return message.author.send(commandEmbed)
       }
     }
 
     const helpEmbed = new MessageEmbed()
-      .setColor(this.client.color.ok)
+      .setColor(this.client.color.blood)
       .setAuthor('Deejay - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)

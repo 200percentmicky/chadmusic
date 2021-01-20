@@ -11,7 +11,7 @@ module.exports = class ListenerGetPrefix extends Listener {
   async exec (message) {
     if (message.content === this.client.user.toString() || message.content === `<@!${this.client.user.id}>`) {
       const prefix = this.client.prefix.getPrefix(message.guild.id) ? this.client.prefix.getPrefix(message.guild.id) : this.client.config.prefix
-      return message.channel.send(this.client.emoji.ok + `My prefix for **${message.guild.name}** is \`${prefix}\``)
+      return message.channel.send(this.client.emoji.music + `My music prefix for **${message.guild.name}** is \`${prefix}\` | You can run \`${prefix}mprefix\` to change it.`)
     }
   }
 }

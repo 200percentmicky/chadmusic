@@ -39,7 +39,7 @@ module.exports = class CommandQueue extends Command {
         .setChannel(message.channel)
         .setElementsPerPage(5)
         .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})\n\n` : `${this.client.emoji.warn}Queue is empty.`)
+        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${this.client.emoji.warn}Queue is empty.`)
         .setPage(1)
         .setNavigationEmojis({
           back: '◀',

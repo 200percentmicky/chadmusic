@@ -9,8 +9,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('musicabout', {
-      aliases: ['musicabout'],
+    super('mabout', {
+      aliases: ['mabout'],
       category: '🛠 Utilities',
       description: {
         text: 'Information about Deejay.'
