@@ -65,8 +65,8 @@ module.exports = class CommandHelp extends Command {
         }
 
         const commandEmbed = new MessageEmbed()
-          .setColor(this.client.color.ok)
-          .setAuthor('Deejay - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+          .setColor(this.client.color.blood)
+          .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
           .setTimestamp()
@@ -97,7 +97,7 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor('Deejay - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)
 

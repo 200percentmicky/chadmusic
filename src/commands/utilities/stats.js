@@ -11,11 +11,11 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandStats extends Command {
   constructor () {
-    super('stats', {
-      aliases: ['stats'],
+    super('mstats', {
+      aliases: ['mstats'],
       category: '🛠 Utilities',
       description: {
-        text: 'System statistics about the bot.'
+        text: 'System statistics about the music bot.'
       }
     })
   }

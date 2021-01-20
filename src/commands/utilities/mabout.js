@@ -22,7 +22,7 @@ module.exports = class CommandAboutMusic extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const thumbnailUrl = this.client.user.avatarURL({ dynamic: true })
     const aboutembed = new MessageEmbed()
-      .setColor(this.client.color.ok)
+      .setColor(this.client.color.blood)
       .setAuthor('ChadMusic', thumbnailUrl)
       .setDescription('This bot is running a instance of **ChadMusic**, a Discord Music Bot based off of DisTube.js.')
       .addField('✨ Features', stripIndents`
