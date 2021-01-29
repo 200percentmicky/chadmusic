@@ -8,7 +8,7 @@ module.exports = class PingCommand extends Command {
       description: {
         text: 'Applies a filter to the player.',
         details: stripIndent`
-        \`<flanger>\` The filter to apply to the player. Only one filter can be used at a time.
+        \`<filter>\` The filter to apply to the player. Only one filter can be used at a time.
         **Available Filters:** 3d, vaporwave, bassboost, demonic, earwax, echo, flanger, gate, haas, karaoke, nightcore, phaser, reverse, vibrato, off
         `,
         usage: '<filter>'

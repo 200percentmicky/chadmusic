@@ -3,13 +3,14 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandRestart extends Command {
   constructor () {
-    super('mrestart', {
-      aliases: ['mrestart', 'mreboot'],
+    super('restart', {
+      aliases: ['restart', 'reboot'],
       ownerOnly: true,
       category: '🛠 Utilities',
       description: {
         text: 'Attempts to restart the bot.',
-        usage: '[reason]'
+        usage: '[reason]',
+        details: '`[reason]` The reason for the restarting the bot.'
       }
     })
   }

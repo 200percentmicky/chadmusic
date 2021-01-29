@@ -9,6 +9,6 @@ module.exports = class ListenerGuildDelete extends Listener {
   }
 
   async exec (guild) {
-    this.client.joined.delete(guild.id)
+    this.client.settings.delete(guild.id)
   }
 }

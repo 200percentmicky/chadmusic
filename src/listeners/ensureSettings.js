@@ -11,15 +11,7 @@ module.exports = class ListenerEnsureSettings extends Listener {
   }
 
   async exec (message) {
-    const defaults = {
-      djMode: false,
-      djRole: null,
-      allowFreeVolume: true,
-      nowPlayingAlerts: true,
-      maxTime: null,
-      maxQueueLimit: null
-    }
     const settings = this.client.settings.get(message.guild.id)
-    if (!settings) this.client.settings.ensure(message.guild.id, defaults)
+    if (!settings) this.client.settings.ensure(message.guild.id, this.client.defaults)
   }
 }

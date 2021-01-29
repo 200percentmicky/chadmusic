@@ -9,7 +9,6 @@ module.exports = class ListenerWarn extends Listener {
   }
 
   async exec (warn) {
-    const timestamp = `[${this.client.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `
-    console.log(timestamp + this.client.warnlog + warn)
+    this.client.logger.warn(warn)
   }
 }

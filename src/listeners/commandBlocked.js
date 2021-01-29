@@ -9,7 +9,6 @@ module.exports = class CommandBlockedListener extends Listener {
   }
 
   async exec (message, command, reason) {
-    console.log(`Command Blocked: ${reason}`)
     if (reason === 'owner') return message.say('no', 'Only the bot owner can execute that command.')
     if (reason === 'guild') return message.say('error', 'That command must be used in a server.')
     if (reason === 'dm') return message.say('error', 'That command must be used in a Direct Message.')

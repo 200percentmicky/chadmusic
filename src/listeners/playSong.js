@@ -19,7 +19,7 @@ module.exports = class ListenerPlaySong extends Listener {
         if (!dj) {
           if (parseInt(song.duration + '000') > settings.maxTime) { // DisTube omits the last three digits in the songs duration.
             // Stupid fix.
-            if (message.content.includes(this.client.prefix.getPrefix(message.guild.id) + 'skip') || message.content.includes(this.client.prefix.getPrefix(message.guild.id) + 's')) return
+            if (message.content.includes(this.client.prefix.getPrefix(message.guild.id) + ('skip' || 's'))) return
             this.client.player.stop(message)
             return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
           }

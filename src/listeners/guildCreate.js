@@ -11,15 +11,6 @@ module.exports = class ListenerGuildCreate extends Listener {
   }
 
   async exec (guild) {
-    const defaults = {
-      djMode: false,
-      djRole: null,
-      allowFreeVolume: true,
-      nowPlayingAlerts: true,
-      maxTime: null,
-      maxQueueLimit: null
-    }
-
-    await this.client.settings.ensure(guild.id, defaults)
+    await this.client.settings.ensure(guild.id, this.client.defaults)
   }
 }

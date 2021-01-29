@@ -10,16 +10,45 @@ Either that or it's Javascript.
 
 'use strict'
 
-const { black } = require('chalk')
-const moment = require('moment')
-const timestamp = `[${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `
-console.log(timestamp + `${black.cyan('[ii]')} Loading libraries...`)
+// Configuring winston
+const chalk = require('chalk')
+const { createLogger, format, transports } = require('winston')
+const logger = createLogger({
+  format: format.combine(
+    format.splat(),
+    format.timestamp(),
+    format.label({ label: '==>' }),
+    format.printf(({ timestamp, label, level, message }) => {
+      return `[${timestamp}] ${label} ${level}: ${message}`
+    })
+  ),
+  transports: [
+    new transports.File({
+      filename: 'console.log'
+    })
+  ]
+})
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new transports.Console({
+    format: format.combine(
+      format.colorize(),
+      format.simple(),
+      format.printf(({ timestamp, label, level, message }) => {
+        return `${chalk.black.cyan(`[${timestamp}]`)} ${label} ${level}: ${message}`
+      })
+    )
+  }))
+}
+
+logger.info('Loading libraries...')
 
 const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, MessageEmbed } = require('discord.js')
 const Enmap = require('enmap')
 const DisTube = require('distube')
+const moment = require('moment')
 
 const config = require('./config.json')
 const emoji = require('./emoji.json')
@@ -145,12 +174,6 @@ class Deejay extends AkairoClient {
       restTimeOffset: 175
     })
 
-    // Logging with some chalk. :)
-    this.infolog = `${black.cyan('[ii]')} `
-    this.errlog = `${black.red('[XX]')} `
-    this.warnlog = `${black.yellow('[!!]')} `
-    this.debuglog = `${black.green('[##]')} `
-
     // Configuration files.
     this.config = config
     this.emoji = emoji
@@ -160,6 +183,7 @@ class Deejay extends AkairoClient {
     this.utils = require('bot-utils')
     this.moment = moment
     this.prefix = prefix
+    this.logger = logger
     this.si = require('systeminformation')
     this.player = new DisTube(this, {
       emitNewSongOnly: true,
@@ -176,7 +200,16 @@ class Deejay extends AkairoClient {
       }
     })
 
-    console.log(timestamp + this.infolog + 'Loading settings...')
+    this.defaults = {
+      djMode: false,
+      djRole: null,
+      allowFreeVolume: true,
+      nowPlayingAlerts: true,
+      maxTime: null,
+      maxQueueLimit: null
+    }
+
+    logger.info('Loading settings...')
     this.settings = new Enmap({
       name: 'settings'
     })

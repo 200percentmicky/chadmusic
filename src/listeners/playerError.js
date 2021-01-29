@@ -1,5 +1,4 @@
 const { Listener } = require('discord-akairo')
-const { MessageAttachment } = require('discord.js')
 
 module.exports = class ListenerPlayerError extends Listener {
   constructor () {

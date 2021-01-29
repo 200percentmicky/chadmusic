@@ -31,7 +31,7 @@ module.exports = class CommandGrab extends Command {
       )
       return message.react(this.client.emoji.okReact)
     } catch (err) {
-      message.say('error', 'I cannot save this song for you. You are currently not accepting Direct Messages.')
+      if (err.name === 'DiscordAPIError') message.say('error', 'Unable to save this song. You are currently not accepting Direct Messages.')
     }
   }
 }

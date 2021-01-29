@@ -10,7 +10,6 @@ module.exports = class ListenerProcessUnhandledRejection extends Listener {
 
   async exec (error) {
     if (error.name === 'DiscordAPIError') return // Discord API Errors should never be unhandled.
-    const timestamp = `[${this.client.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `
-    console.log(timestamp + this.client.errlog + error.stack)
+    this.client.logger.error(error)
   }
 }

@@ -11,6 +11,5 @@ module.exports = class ListenerCommandError extends Listener {
   async exec (error, message, command) {
     message.channel.send(`💢 \`Bruh Moment in command '${command.id}'. An error report was sent to the bot owner.\``)
     message.recordError('error', command, 'Command Error', error.stack)
-    console.error(this.client.errlog + error.stack)
   }
 }

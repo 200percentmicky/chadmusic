@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { stripIndents } = require('common-tags')
+
 // Mainly for version info...
 const main = require('../../../package.json')
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
@@ -9,11 +10,11 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('mabout', {
-      aliases: ['mabout'],
+    super('about', {
+      aliases: ['about'],
       category: '🛠 Utilities',
       description: {
-        text: 'Information about Deejay.'
+        text: 'Shows information about the bot.'
       }
     })
   }
@@ -23,14 +24,8 @@ module.exports = class CommandAboutMusic extends Command {
     const thumbnailUrl = this.client.user.avatarURL({ dynamic: true })
     const aboutembed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor('ChadMusic', thumbnailUrl)
-      .setDescription('This bot is running a instance of **ChadMusic**, a Discord Music Bot based off of DisTube.js.')
-      .addField('✨ Features', stripIndents`
-      - Play sources from any site that YouTube-DL supports. YouTube, Soundcloud, Twitch, etc.
-      - Unlimited Volume! The sky is the limit!
-      - Apply filters to the player, with more being added in the future!
-      - Control how the bot can be used. Max Queue Limitation, Song Duration Limits, plus more to come!
-      `)
+      .setAuthor(this.client.user.name + ' - The Chad Music Bot', thumbnailUrl)
+      .setDescription('A Discord Music bot based off of DisTube.js that supports 700+ websites, audio filters, unlimited volume, etc.')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
       **Bot Version:** \`${main.version}\`
       **Node.js** \`${process.version}\`

@@ -8,9 +8,11 @@ module.exports = class CommandMaxTime extends Command {
       category: '⚙ Settings',
       description: {
         text: 'Allows you to restrict songs from being added to the queue if the duration of the video exceeds this.',
-        details: 'Requires the DJ role or the **Manage Channels** permission.'
+        usage: '<duration>',
+        details: '`<duration>` The max duration of the song to limit. Members will be unable to add any songs that go past this limit. DJs can bypass this.'
       },
       clientPermissions: ['EMBED_LINKS'],
+      userPermissions: ['MANAGE_GUILD'],
       args: [
         {
           id: 'time',
@@ -21,8 +23,6 @@ module.exports = class CommandMaxTime extends Command {
   }
 
   async exec (message, args) {
-    const dj = message.member.roles.cache.has(this.client.settings.get(message.guild.id).djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
-    if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
     const time = args.time
     const notation = toMilliseconds(time)
 

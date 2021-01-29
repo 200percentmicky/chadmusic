@@ -66,14 +66,13 @@ module.exports = class CommandHelp extends Command {
 
         const commandEmbed = new MessageEmbed()
           .setColor(this.client.color.blood)
-          .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+          .setAuthor(this.client.user.name + ' - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
           .setTimestamp()
-          .setFooter('<Required> • [Optional] • |Subcommand/Flag|', message.author.avatarURL({ dynamic: true }))
+          .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }))
         if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.')
         if (command.category) commandEmbed.addField('Category', command.category, true)
-        if (command.description.filter) commandEmbed.addField('FFMPEG Arguments', command.description.filter, true)
         // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
         if (command.aliases.length > 1) commandEmbed.addField('Aliases', command.aliases, true)
 
@@ -92,12 +91,12 @@ module.exports = class CommandHelp extends Command {
         } */
 
         return message.channel.send(commandEmbed)
-      }
+      } else return message.say('error', `${string} is not a registered command.`)
     }
 
     const helpEmbed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor(this.client.user.name + ' - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)
 
