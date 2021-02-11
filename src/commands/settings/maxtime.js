@@ -1,10 +1,11 @@
 const { Command } = require('discord-akairo')
 const { toMilliseconds } = require('colon-notation')
+const { maxtime } = require('../../aliases.json')
 
 module.exports = class CommandMaxTime extends Command {
   constructor () {
-    super('maxtime', {
-      aliases: ['maxtime'],
+    super(maxtime !== undefined ? maxtime[0] : 'maxtime', {
+      aliases: maxtime || ['maxtime'],
       category: '⚙ Settings',
       description: {
         text: 'Allows you to restrict songs from being added to the queue if the duration of the video exceeds this.',

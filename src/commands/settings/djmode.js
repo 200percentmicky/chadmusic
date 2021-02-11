@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { djmode } = require('../../aliases.json')
 
 module.exports = class CommandDJMode extends Command {
   constructor () {
-    super('djmode', {
-      aliases: ['djmode'],
+    super(djmode !== undefined ? djmode[0] : 'djmode', {
+      aliases: djmode || ['djmode'],
       category: '⚙ Settings',
       description: {
         text: 'Toggles DJ Mode for the server.',

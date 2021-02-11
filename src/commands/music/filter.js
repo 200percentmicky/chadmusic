@@ -1,10 +1,11 @@
 const { stripIndent } = require('common-tags')
 const { Command } = require('discord-akairo')
+const { filter } = require('../../aliases.json')
 
-module.exports = class PingCommand extends Command {
+module.exports = class CommandFilter extends Command {
   constructor () {
-    super('filter', {
-      aliases: ['filter', 'f'],
+    super(filter !== undefined ? filter[0] : 'filter', {
+      aliases: filter || ['filter'],
       description: {
         text: 'Applies a filter to the player.',
         details: stripIndent`
@@ -21,14 +22,20 @@ module.exports = class PingCommand extends Command {
     const settings = this.client.settings.get(message.guild.id)
     const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
     if (settings.djMode) {
-      if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+      if (!dj) {
+        return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+      }
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return message.say('error', 'You are not in a voice channel.')
+    if (!vc) {
+      return message.say('error', 'You are not in a voice channel.')
+    }
 
     const queue = this.client.player.getQueue(message.guild.id)
-    if (!queue) return message.say('warn', 'Nothing is currently playing on this server.')
+    if (!queue) {
+      return message.say('warn', 'Nothing is currently playing on this server.')
+    }
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     const args = message.content.split(/ +/g)
@@ -45,7 +52,9 @@ module.exports = class PingCommand extends Command {
       }
       try {
         const filter = this.client.player.getQueue(message).filter
-        if (args[1] === filter) return message.say('warn', `\`${args[1]}\` is already applied to the player.`)
+        if (args[1] === filter) {
+          return message.say('warn', `\`${args[1]}\` is already applied to the player.`)
+        }
         await this.client.player.setFilter(message.guild.id, args[1] === 'OFF'.toLowerCase()
           ? filter
           : args[1]

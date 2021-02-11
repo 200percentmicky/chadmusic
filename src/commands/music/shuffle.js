@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { shuffle } = require('../../aliases.json')
 
 module.exports = class CommandShuffle extends Command {
   constructor () {
-    super('shuffle', {
-      aliases: ['shuffle'],
+    super(shuffle !== undefined ? shuffle[0] : 'shuffle', {
+      aliases: shuffle || ['shuffle'],
       category: '🎶 Player',
       description: {
         text: 'Randomizes the entries in the queue.'

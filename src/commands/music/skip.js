@@ -1,10 +1,11 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { skip } = require('../../aliases.json')
 
 module.exports = class CommandSkip extends Command {
   constructor () {
-    super('skip', {
-      aliases: ['skip', 's'],
+    super(skip !== undefined ? skip[0] : 'skip', {
+      aliases: skip || ['skip'],
       category: '🎶 Player',
       description: {
         text: 'Skips the currently playing song.',

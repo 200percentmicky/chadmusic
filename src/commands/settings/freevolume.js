@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { freevolume } = require('../../aliases.json')
 
 module.exports = class CommandFreeVolume extends Command {
   constructor () {
-    super('freevolume', {
-      aliases: ['freevolume'],
+    super(freevolume !== undefined ? freevolume[0] : 'freevolume', {
+      aliases: freevolume || ['freevolume'],
       category: '⚙ Settings',
       description: {
         text: 'Toggles the ability to change the volume past 200%.',

@@ -3,6 +3,7 @@ const { Command } = require('discord-akairo')
 const si = require('systeminformation')
 const { stripIndents } = require('common-tags')
 const prettyBytes = require('pretty-bytes')
+const { stats } = require('../../aliases.json')
 
 const main = require('../../../package.json')
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
@@ -11,8 +12,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandStats extends Command {
   constructor () {
-    super('mstats', {
-      aliases: ['mstats'],
+    super(stats !== undefined ? stats[0] : 'stats', {
+      aliases: stats || ['stats'],
       category: '🛠 Utilities',
       description: {
         text: 'System statistics about the music bot.'

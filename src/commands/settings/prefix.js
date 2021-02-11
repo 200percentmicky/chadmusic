@@ -1,12 +1,13 @@
 const { Command } = require('discord-akairo')
+const { prefix } = require('../../aliases.json')
 
-module.exports = class CommandMusicPrefix extends Command {
+module.exports = class CommandPrefix extends Command {
   constructor () {
-    super('musicprefix', {
-      aliases: ['musicprefix'],
+    super(prefix !== undefined ? prefix[0] : 'prefix', {
+      aliases: prefix || ['prefix'],
       category: '⚙ Settings',
       description: {
-        text: 'Changes the bot\'s music prefix for this server.',
+        text: 'Changes the bot\'s prefix for this server.',
         usage: '<prefix>',
         details: '`<prefix>` The new prefix you want to use. If none, resets the prefix to defaults.'
       },

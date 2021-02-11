@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { ping } = require('../../aliases.json')
 
 module.exports = class PingCommand extends Command {
   constructor () {
-    super('ping', {
-      aliases: ['ping'],
+    super(ping !== undefined ? ping[0] : 'ping', {
+      aliases: ping || ['ping'],
       description: {
         text: 'Tests the bot\'s connection to Discord.'
       },

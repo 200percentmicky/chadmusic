@@ -1,11 +1,12 @@
 const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { nowplaying } = require('../../aliases.json')
 
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
-    super('nowplaying', {
-      aliases: ['nowplaying', 'now', 'np'],
+    super(nowplaying !== undefined ? nowplaying[0] : 'nowplaying', {
+      aliases: nowplaying || ['nowplaying'],
       category: '🎶 Player',
       description: {
         text: 'Shows the currently playing song.'

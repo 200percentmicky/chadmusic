@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { stop } = require('../../aliases.json')
 
 module.exports = class CommandStop extends Command {
   constructor () {
-    super('stop', {
-      aliases: ['stop'],
+    super(stop !== undefined ? stop[0] : 'stop', {
+      aliases: stop || ['stop'],
       category: '🎶 Player',
       description: {
         text: 'Stops the player, and clears the queue.'

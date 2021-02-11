@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { summon } = require('../../aliases.json')
 
 module.exports = class CommandSummon extends Command {
   constructor () {
-    super('summon', {
-      aliases: ['summon', 'join'],
+    super(summon !== undefined ? summon[0] : 'summon', {
+      aliases: summon,
       category: '🎶 Player',
       description: {
         text: 'Joins a ',

@@ -1,10 +1,11 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { search } = require('../../aliases.json')
 
 module.exports = class CommandSearch extends Command {
   constructor () {
-    super('search', {
-      aliases: ['search'],
+    super(search !== undefined ? search[0] : 'search', {
+      aliases: search || ['search'],
       category: '🎶 Player',
       description: {
         text: 'Searches for a song on YouTube.',

@@ -1,17 +1,19 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { restart } = require('../../aliases.json')
 
 module.exports = class CommandRestart extends Command {
   constructor () {
-    super('restart', {
-      aliases: ['restart', 'reboot'],
+    super(restart !== undefined ? restart[0] : 'restart', {
+      aliases: restart || ['restart'],
       ownerOnly: true,
       category: '🛠 Utilities',
       description: {
         text: 'Attempts to restart the bot.',
         usage: '[reason]',
         details: '`[reason]` The reason for the restarting the bot.'
-      }
+      },
+      prefix: [';>']
     })
   }
 

@@ -13,3 +13,449 @@
 [2021-01-29T09:24:43.954Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
 [2021-01-29T09:24:43.956Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
 [2021-01-29T09:25:07.847Z] ==> error: Cannot read property 'id' of null
+[2021-02-08T08:47:04.554Z] ==> info: Loading libraries...
+[2021-02-08T08:47:05.119Z] ==> info: Loading settings...
+[2021-02-08T08:47:06.208Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-08T08:47:06.210Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-08T08:55:37.608Z] ==> warn: SIGINT received!
+[2021-02-08T08:55:38.303Z] ==> info: Loading libraries...
+[2021-02-08T08:55:38.847Z] ==> info: Loading settings...
+[2021-02-08T08:55:39.567Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-08T08:55:39.568Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-08T08:55:52.224Z] ==> warn: SIGINT received!
+[2021-02-08T08:55:53.086Z] ==> info: Loading libraries...
+[2021-02-08T08:55:53.628Z] ==> info: Loading settings...
+[2021-02-08T08:55:54.357Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-08T08:55:54.359Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:05:02.430Z] ==> info: Loading libraries...
+[2021-02-11T05:05:04.554Z] ==> info: Loading settings...
+[2021-02-11T05:05:05.899Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:05:05.900Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:08:31.027Z] ==> warn: SIGINT received!
+[2021-02-11T05:09:38.916Z] ==> info: Loading libraries...
+[2021-02-11T05:09:39.450Z] ==> info: Loading settings...
+[2021-02-11T05:09:40.108Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:09:40.110Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:13:30.966Z] ==> warn: SIGINT received!
+[2021-02-11T05:13:31.820Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:13:31.824Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:13:31.825Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:13:31.825Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:13:31.837Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:13:31.837Z] ==> info: Loading libraries...
+[2021-02-11T05:13:32.377Z] ==> info: Loading settings...
+[2021-02-11T05:13:33.160Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:13:33.162Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:32:36.662Z] ==> warn: SIGINT received!
+[2021-02-11T05:35:52.215Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:35:52.218Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:35:52.218Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:35:52.219Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:35:52.219Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:35:52.230Z] ==> info: Loading libraries...
+[2021-02-11T05:35:52.771Z] ==> info: Loading settings...
+[2021-02-11T05:35:53.521Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:35:53.523Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:38:16.737Z] ==> warn: SIGINT received!
+[2021-02-11T05:38:17.706Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:38:17.710Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:38:17.710Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:38:17.711Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:38:17.722Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:38:17.722Z] ==> info: Loading libraries...
+[2021-02-11T05:38:18.257Z] ==> info: Loading settings...
+[2021-02-11T05:38:19.030Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:38:19.032Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:39:21.991Z] ==> warn: SIGINT received!
+[2021-02-11T05:39:22.574Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:39:22.578Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:39:22.579Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:39:22.579Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:39:22.580Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:39:22.590Z] ==> info: Loading libraries...
+[2021-02-11T05:39:23.155Z] ==> info: Loading settings...
+[2021-02-11T05:39:23.911Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:39:23.913Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:39:28.605Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:40:34.750Z] ==> warn: SIGINT received!
+[2021-02-11T05:40:35.809Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:40:35.813Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:40:35.814Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:40:35.814Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:40:35.825Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:40:35.825Z] ==> info: Loading libraries...
+[2021-02-11T05:40:36.360Z] ==> info: Loading settings...
+[2021-02-11T05:40:37.047Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:40:37.048Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:40:41.422Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:40:41.705Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:40:52.828Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:40:52.974Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:41:33.237Z] ==> warn: SIGINT received!
+[2021-02-11T05:41:34.773Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:41:34.777Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:41:34.777Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:41:34.778Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:41:34.779Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:41:34.789Z] ==> info: Loading libraries...
+[2021-02-11T05:41:35.335Z] ==> info: Loading settings...
+[2021-02-11T05:41:36.029Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:41:36.030Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:41:40.495Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:41:40.797Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:41:47.483Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:42:00.320Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:42:13.047Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:42:13.269Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:43:40.038Z] ==> warn: SIGINT received!
+[2021-02-11T05:43:40.821Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:43:40.825Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:43:40.826Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:43:40.836Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:43:40.836Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:43:40.837Z] ==> info: Loading libraries...
+[2021-02-11T05:43:41.392Z] ==> info: Loading settings...
+[2021-02-11T05:43:42.179Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:43:42.180Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:43:44.781Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:43:44.991Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:43:47.796Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:43:50.460Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:43:50.580Z] ==> error: Cannot read property 'id' of null
+[2021-02-11T05:48:45.268Z] ==> warn: SIGINT received!
+[2021-02-11T05:50:07.807Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:50:07.813Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:50:07.813Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:50:07.813Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:50:07.824Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:50:07.824Z] ==> info: Loading libraries...
+[2021-02-11T05:50:08.357Z] ==> info: Loading settings...
+[2021-02-11T05:50:09.117Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:50:09.118Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:55:34.460Z] ==> warn: SIGINT received!
+[2021-02-11T05:55:35.306Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:55:35.313Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:55:35.313Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:55:35.313Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:55:35.324Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:55:35.324Z] ==> info: Loading libraries...
+[2021-02-11T05:55:35.863Z] ==> info: Loading settings...
+[2021-02-11T05:55:36.590Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:55:36.591Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:56:50.362Z] ==> warn: SIGINT received!
+[2021-02-11T05:56:51.143Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:56:51.155Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:56:51.155Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:56:51.155Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:56:51.167Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:56:51.167Z] ==> info: Loading libraries...
+[2021-02-11T05:56:51.704Z] ==> info: Loading settings...
+[2021-02-11T05:56:52.502Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:56:52.504Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T05:57:53.823Z] ==> warn: SIGINT received!
+[2021-02-11T05:57:54.373Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T05:57:54.383Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T05:57:54.383Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T05:57:54.383Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T05:57:54.393Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T05:57:54.393Z] ==> info: Loading libraries...
+[2021-02-11T05:57:54.923Z] ==> info: Loading settings...
+[2021-02-11T05:57:55.633Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T05:57:55.641Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:00:41.159Z] ==> warn: SIGINT received!
+[2021-02-11T06:00:41.763Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:00:41.775Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:00:41.775Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:00:41.775Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:00:41.777Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:00:41.786Z] ==> info: Loading libraries...
+[2021-02-11T06:00:42.344Z] ==> info: Loading settings...
+[2021-02-11T06:00:43.128Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:00:43.132Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:03:19.705Z] ==> warn: SIGINT received!
+[2021-02-11T06:03:20.306Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:03:20.310Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:03:20.310Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:03:20.311Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:03:20.321Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:03:20.322Z] ==> info: Loading libraries...
+[2021-02-11T06:03:20.875Z] ==> info: Loading settings...
+[2021-02-11T06:03:21.676Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:03:21.686Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:04:25.056Z] ==> warn: SIGINT received!
+[2021-02-11T06:04:25.725Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:04:25.730Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:04:25.730Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:04:25.731Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:04:25.732Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:04:25.741Z] ==> info: Loading libraries...
+[2021-02-11T06:04:26.286Z] ==> info: Loading settings...
+[2021-02-11T06:04:27.031Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:04:27.036Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:05:52.250Z] ==> warn: SIGINT received!
+[2021-02-11T06:05:52.965Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:05:52.976Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:05:52.976Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:05:52.986Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:05:52.987Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:05:52.988Z] ==> info: Loading libraries...
+[2021-02-11T06:05:53.547Z] ==> info: Loading settings...
+[2021-02-11T06:05:54.305Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:05:54.306Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:08:08.643Z] ==> warn: SIGINT received!
+[2021-02-11T06:08:09.238Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:08:09.245Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:08:09.245Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:08:09.245Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:08:09.255Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:08:09.256Z] ==> info: Loading libraries...
+[2021-02-11T06:08:09.813Z] ==> info: Loading settings...
+[2021-02-11T06:08:10.528Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:08:10.532Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:09:01.249Z] ==> warn: SIGINT received!
+[2021-02-11T06:09:02.058Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:09:02.070Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:09:02.070Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:09:02.070Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:09:02.080Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:09:02.081Z] ==> info: Loading libraries...
+[2021-02-11T06:09:02.611Z] ==> info: Loading settings...
+[2021-02-11T06:09:03.308Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:09:03.311Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:14:12.512Z] ==> warn: SIGINT received!
+[2021-02-11T06:14:13.376Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:14:13.382Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:14:13.382Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:14:13.382Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:14:13.383Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:14:13.393Z] ==> info: Loading libraries...
+[2021-02-11T06:14:13.955Z] ==> info: Loading settings...
+[2021-02-11T06:14:14.656Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:14:14.663Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:15:35.877Z] ==> warn: SIGINT received!
+[2021-02-11T06:15:36.696Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:15:36.703Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:15:36.703Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:15:36.703Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:15:36.713Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:15:36.714Z] ==> info: Loading libraries...
+[2021-02-11T06:15:37.266Z] ==> info: Loading settings...
+[2021-02-11T06:15:37.978Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:15:37.980Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:16:43.976Z] ==> warn: SIGINT received!
+[2021-02-11T06:16:44.986Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:16:44.991Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:16:44.991Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:16:44.991Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:16:45.002Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:16:45.002Z] ==> info: Loading libraries...
+[2021-02-11T06:16:45.559Z] ==> info: Loading settings...
+[2021-02-11T06:16:46.259Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:16:46.260Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:35:04.972Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:35:04.976Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:35:04.976Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:35:04.977Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:35:04.977Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:35:04.977Z] ==> info: Loading libraries...
+[2021-02-11T06:35:05.526Z] ==> info: Loading settings...
+[2021-02-11T06:35:06.341Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:35:06.343Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T06:36:33.462Z] ==> warn: SIGINT received!
+[2021-02-11T06:36:34.472Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T06:36:34.476Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T06:36:34.477Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T06:36:34.477Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T06:36:34.490Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T06:36:34.491Z] ==> info: Loading libraries...
+[2021-02-11T06:36:35.031Z] ==> info: Loading settings...
+[2021-02-11T06:36:35.844Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T06:36:35.846Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T07:12:45.699Z] ==> warn: SIGINT received!
+[2021-02-11T07:12:47.418Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:12:47.422Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:12:47.423Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:12:47.423Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:12:47.433Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:12:47.434Z] ==> info: ChadMusic - The Chad Music Bot! Version: 2021.1.29
+[2021-02-11T07:12:47.434Z] ==> info: Loading libraries...
+[2021-02-11T07:12:48.001Z] ==> info: Loading settings...
+[2021-02-11T07:12:48.716Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:12:48.718Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T07:13:43.135Z] ==> warn: SIGINT received!
+[2021-02-11T07:13:43.771Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:13:43.775Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:13:43.775Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:13:43.776Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:13:43.777Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:13:43.787Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:13:43.787Z] ==> info: Loading libraries...
+[2021-02-11T07:13:44.322Z] ==> info: Loading settings...
+[2021-02-11T07:13:45.010Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:13:45.011Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T07:18:20.385Z] ==> warn: SIGINT received!
+[2021-02-11T07:22:26.034Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:22:26.038Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:22:26.039Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:22:26.039Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:22:26.050Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:22:26.051Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:22:26.052Z] ==> info: Loading libraries...
+[2021-02-11T07:22:26.600Z] ==> info: Loading settings...
+[2021-02-11T07:22:27.307Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:22:27.308Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-02-11T07:28:46.924Z] ==> warn: SIGINT received!
+[2021-02-11T07:28:47.896Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:28:47.900Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:28:47.901Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:28:47.901Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:28:47.912Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:28:47.912Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:28:47.913Z] ==> info: Loading libraries...
+[2021-02-11T07:28:48.461Z] ==> info: Loading settings...
+[2021-02-11T07:28:48.810Z] ==> error: An invalid token was provided.
+[2021-02-11T07:29:05.310Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:29:05.314Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:29:05.314Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:29:05.315Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:29:05.326Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:29:05.327Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:29:05.328Z] ==> info: Loading libraries...
+[2021-02-11T07:29:05.892Z] ==> info: Loading settings...
+[2021-02-11T07:29:06.235Z] ==> error: An invalid token was provided.
+[2021-02-11T07:30:18.342Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:30:18.346Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:30:18.346Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:30:18.346Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:30:18.359Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:30:18.360Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:30:18.372Z] ==> info: Loading libraries...
+[2021-02-11T07:30:18.917Z] ==> info: Loading settings...
+[2021-02-11T07:30:19.245Z] ==> error: An invalid token was provided.
+[2021-02-11T07:30:52.378Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:30:52.382Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:30:52.383Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:30:52.383Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:30:52.392Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:30:52.393Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:30:52.394Z] ==> info: Loading libraries...
+[2021-02-11T07:30:52.930Z] ==> info: Loading settings...
+[2021-02-11T07:30:53.263Z] ==> error: An invalid token was provided.
+[2021-02-11T07:31:58.061Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:31:58.067Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:31:58.068Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:31:58.085Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:31:58.107Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:31:58.108Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:31:58.111Z] ==> info: Loading libraries...
+[2021-02-11T07:31:58.650Z] ==> info: Loading settings...
+[2021-02-11T07:31:59.016Z] ==> error: An invalid token was provided.
+[2021-02-11T07:32:32.874Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:32:32.877Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:32:32.877Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:32:32.878Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:32:32.889Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:32:32.890Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:32:32.890Z] ==> info: Loading libraries...
+[2021-02-11T07:32:33.421Z] ==> info: Loading settings...
+[2021-02-11T07:32:33.744Z] ==> error: Error [TOKEN_INVALID]: An invalid token was provided.
+    at WebSocketManager.connect (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:133:26)
+    at Deejay.login (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\Client.js:222:21)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[2021-02-11T07:33:11.236Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:33:11.240Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:33:11.240Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:33:11.241Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:33:11.253Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:33:11.254Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:33:11.255Z] ==> info: Loading libraries...
+[2021-02-11T07:33:11.785Z] ==> info: Loading settings...
+[2021-02-11T07:33:12.766Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:33:12.768Z] ==> info: Client: Poki#7585 (375450533114413060)
+[2021-02-11T07:33:25.716Z] ==> warn: SIGINT received!
+[2021-02-11T07:33:26.799Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:33:26.803Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:33:26.803Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:33:26.804Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:33:26.813Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:33:26.814Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:33:26.815Z] ==> info: Loading libraries...
+[2021-02-11T07:33:27.344Z] ==> info: Loading settings...
+[2021-02-11T07:33:28.118Z] ==> error: TypeError: Cannot read property 'remove' of undefined
+    at SurferReady.exec (D:\DiscordBots\ChadMusic\src\listeners\ready.js:17:21)
+    at Deejay.emit (events.js:327:22)
+    at WebSocketManager.triggerClientReady (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:416:17)
+    at WebSocketManager.checkShardsReady (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:400:10)
+    at WebSocketShard.<anonymous> (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:197:14)
+    at WebSocketShard.emit (events.js:315:20)
+    at WebSocketShard.checkReady (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:473:12)
+    at WebSocketShard.onPacket (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:445:16)
+    at WebSocketShard.onMessage (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:299:10)
+    at WebSocket.onMessage (D:\DiscordBots\ChadMusic\node_modules\ws\lib\event-target.js:132:16)
+[2021-02-11T07:34:31.084Z] ==> warn: SIGINT received!
+[2021-02-11T07:34:31.711Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:34:31.714Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:34:31.715Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:34:31.715Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:34:31.726Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:34:31.727Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:34:31.728Z] ==> info: Loading libraries...
+[2021-02-11T07:34:32.263Z] ==> info: Loading settings...
+[2021-02-11T07:34:33.118Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:34:33.120Z] ==> info: Client: Poki#7585 (375450533114413060)
+[2021-02-11T07:34:39.854Z] ==> error: TypeError: Cannot read property 'id' of null
+    at ListenerEnsureSettings.exec (D:\DiscordBots\ChadMusic\src\listeners\ensureSettings.js:14:61)
+    at Deejay.emit (events.js:327:22)
+    at MessageCreateAction.handle (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\actions\MessageCreate.js:31:14)
+    at Object.module.exports [as MESSAGE_CREATE] (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\handlers\MESSAGE_CREATE.js:4:32)
+    at WebSocketManager.handlePacket (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:384:31)
+    at WebSocketShard.onPacket (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:442:22)
+    at WebSocketShard.onMessage (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:299:10)
+    at WebSocket.onMessage (D:\DiscordBots\ChadMusic\node_modules\ws\lib\event-target.js:132:16)
+    at WebSocket.emit (events.js:315:20)
+    at Receiver.receiverOnMessage (D:\DiscordBots\ChadMusic\node_modules\ws\lib\websocket.js:825:20)
+[2021-02-11T07:34:45.317Z] ==> error: TypeError: Cannot read property 'id' of null
+    at ListenerEnsureSettings.exec (D:\DiscordBots\ChadMusic\src\listeners\ensureSettings.js:14:61)
+    at Deejay.emit (events.js:327:22)
+    at MessageCreateAction.handle (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\actions\MessageCreate.js:31:14)
+    at Object.module.exports [as MESSAGE_CREATE] (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\handlers\MESSAGE_CREATE.js:4:32)
+    at WebSocketManager.handlePacket (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketManager.js:384:31)
+    at WebSocketShard.onPacket (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:442:22)
+    at WebSocketShard.onMessage (D:\DiscordBots\ChadMusic\node_modules\discord.js\src\client\websocket\WebSocketShard.js:299:10)
+    at WebSocket.onMessage (D:\DiscordBots\ChadMusic\node_modules\ws\lib\event-target.js:132:16)
+    at WebSocket.emit (events.js:315:20)
+    at Receiver.receiverOnMessage (D:\DiscordBots\ChadMusic\node_modules\ws\lib\websocket.js:825:20)
+[2021-02-11T07:35:27.059Z] ==> warn: SIGINT received!
+[2021-02-11T07:35:27.644Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:35:27.647Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:35:27.647Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:35:27.648Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:35:27.659Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:35:27.660Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:35:27.661Z] ==> info: Loading libraries...
+[2021-02-11T07:35:28.225Z] ==> info: Loading settings...
+[2021-02-11T07:35:29.051Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:35:29.053Z] ==> info: Client: Poki#7585 (375450533114413060)
+[2021-02-11T07:36:12.527Z] ==> warn: SIGINT received!
+[2021-02-11T07:36:13.169Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:36:13.173Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:36:13.174Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:36:13.174Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:36:13.175Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:36:13.175Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:36:13.176Z] ==> info: Loading libraries...
+[2021-02-11T07:36:13.706Z] ==> info: Loading settings...
+[2021-02-11T07:36:14.656Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:36:14.658Z] ==> info: Client: Poki#7585 (375450533114413060)
+[2021-02-11T07:37:09.815Z] ==> warn: SIGINT received!
+[2021-02-11T07:37:10.553Z] ==> info:    ________              ____  ___           _     
+[2021-02-11T07:37:10.556Z] ==> info:   / ____/ /_  ____ _____/ /  |/  /_  _______(_)____
+[2021-02-11T07:37:10.557Z] ==> info:  / /   / __ \/ __ `/ __  / /|_/ / / / / ___/ / ___/
+[2021-02-11T07:37:10.557Z] ==> info: / /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__
+[2021-02-11T07:37:10.568Z] ==> info: \____/_/ /_/\__,_/\__,_/_/  /_/\__,_/____/_/\___/
+[2021-02-11T07:37:10.568Z] ==> info: ChadMusic - The Chad Music Bot! Version: alpha_2021.2.11
+[2021-02-11T07:37:10.569Z] ==> info: Loading libraries...
+[2021-02-11T07:37:11.100Z] ==> info: Loading settings...
+[2021-02-11T07:37:11.943Z] ==> info: [Ready!<3♪] It's ya boy, D.J. Tree Fiddy!
+[2021-02-11T07:37:11.945Z] ==> info: Client: Poki#7585 (375450533114413060)
+[2021-02-11T07:39:01.909Z] ==> warn: SIGINT received!

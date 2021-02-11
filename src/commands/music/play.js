@@ -1,8 +1,11 @@
 const { Command } = require('discord-akairo')
+const { play } = require('../../aliases.json')
 // const { MessageEmbed } = require('discord.js');
 // const YouTube = require('youtube-sr');
 
 function pornPattern (url) {
+  // ! TODO: Come up with a better regex lol
+  // eslint-disable-next-line no-useless-escape
   const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g
   const pornRegex = new RegExp(pornPattern)
   return url.match(pornRegex)
@@ -10,8 +13,8 @@ function pornPattern (url) {
 
 module.exports = class CommandPlay extends Command {
   constructor () {
-    super('play', {
-      aliases: ['play', 'p'],
+    super(play !== undefined ? play[0] : 'play', {
+      aliases: play || ['play'],
       category: '🎶 Player',
       description: {
         text: 'Play\'s a song from a URL or search term.',
@@ -47,8 +50,8 @@ module.exports = class CommandPlay extends Command {
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT', 'SPEAK'])
-      if (!permissions) return message.say('error', `Missing **Connect** or **Speak** permissions for **${vc.name}**`)
+      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+      if (!permissions) return message.say('error', `Missing **Connect** permissions for \`${vc.name}\``)
       vc.join()
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')

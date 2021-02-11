@@ -9,6 +9,6 @@ module.exports = class ListenerClientError extends Listener {
   }
 
   async exec (error) {
-    this.client.logger.error(error)
+    this.client.logger.error(error.stack)
   }
 }

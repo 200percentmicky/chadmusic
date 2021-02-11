@@ -1,14 +1,15 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { earrape } = require('../../aliases.json')
 
 module.exports = class CommandEarrape extends Command {
   constructor () {
-    super('earrape', {
-      aliases: ['earrape'],
+    super(earrape !== undefined ? earrape[0] : 'earrape', {
+      aliases: earrape || ['earrape'],
       category: '🎶 Player',
       description: {
-        text: 'Changes the volume of the player to 42069%. The ratio that no man can ever withstand.',
-        details: 'Only works if Unlimited Volume is On.'
+        text: 'Changes the volume of the player to 42069%.',
+        details: 'The ratio that no man can withstand. Only works if Unlimited Volume is On.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -19,17 +20,25 @@ module.exports = class CommandEarrape extends Command {
     const settings = this.client.settings.get(message.guild.id)
     const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
     if (settings.djMode) {
-      if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+      if (!dj) {
+        return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+      }
     }
 
-    if (settings.allowFreeVolume === false) return message.say('no', 'This command cannot be used because **Unlimited Volume** is currently disabled.')
+    if (settings.allowFreeVolume === false) {
+      return message.say('no', 'This command cannot be used because **Unlimited Volume** is off.')
+    }
 
     // This command should not be limited by the DJ Role. Must be a toggable setting.
     const vc = message.member.voice.channel
-    if (!vc) return message.say('error', 'You are not in a voice channel.')
+    if (!vc) {
+      return message.say('error', 'You are not in a voice channel.')
+    }
 
     const queue = this.client.player.getQueue(message.guild.id)
-    if (!queue) return message.say('warn', 'Nothing is currently playing on this server.')
+    if (!queue) {
+      return message.say('warn', 'Nothing is currently playing on this server.')
+    }
 
     const earrape = 42069 // 😂👌👌💯
     const volume = this.client.player.getQueue(message).volume

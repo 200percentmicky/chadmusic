@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { stripIndents } = require('common-tags')
+const { about } = require('../../aliases.json')
 
 // Mainly for version info...
 const main = require('../../../package.json')
@@ -10,31 +11,33 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('about', {
-      aliases: ['about'],
+    super(about !== undefined ? about[0] : 'about', {
+      aliases: about || ['about'],
       category: '🛠 Utilities',
       description: {
-        text: 'Shows information about the bot.'
+        text: 'Shows information about ChadMusic.'
       }
     })
   }
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
-    const thumbnailUrl = this.client.user.avatarURL({ dynamic: true })
+    const thumbnailUrl = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
-      .setColor(this.client.color.blood)
-      .setAuthor(this.client.user.name + ' - The Chad Music Bot', thumbnailUrl)
-      .setDescription('A Discord Music bot based off of DisTube.js that supports 700+ websites, audio filters, unlimited volume, etc.')
+      .setColor(1602089)
+      .setAuthor('ChadMusic - The Chad Music Bot', thumbnailUrl)
+      .setDescription('This bot is running an instant of **ChadMusic**, a Discord music bot based on DisTube.js. **ChadMusic** supports over 700+ websites with the ability to add audio filters to the player.')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
-      **Bot Version:** \`${main.version}\`
-      **Node.js** \`${process.version}\`
-      **Discord.js:** \`${discordversion.version}\`
-      **Akairo:** \`${akairoversion.version}\`
-      **DisTube:** \`${distubeversion.version}\`
+      **Client:** ${this.client.user.tag} (ID: ${this.client.user.id})
+      **Node.js:** ${process.version}
+      **Bot Version:** ${main.version}
+      **Discord.js:** ${discordversion.version}
+      **Akairo Framework:** ${akairoversion.version}
+      **DisTube.js:** ${distubeversion.version}
+      **Uptime:** ${this.client.utils.uptime()}
       `, true)
       .setThumbnail(thumbnailUrl)
-      .setFooter(`Created by ${owner.tag}.`, owner.avatarURL({ dynamic: true }))
+      .setFooter(`The owner of this instant is ${owner.tag}.`, owner.avatarURL({ dynamic: true }))
     return message.channel.send(aboutembed)
   }
 }

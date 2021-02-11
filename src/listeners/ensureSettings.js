@@ -11,6 +11,7 @@ module.exports = class ListenerEnsureSettings extends Listener {
   }
 
   async exec (message) {
+    if (message.channel.type === 'dm') return
     const settings = this.client.settings.get(message.guild.id)
     if (!settings) this.client.settings.ensure(message.guild.id, this.client.defaults)
   }

@@ -41,8 +41,15 @@ if (process.env.NODE_ENV !== 'production') {
   }))
 }
 
-logger.info('Loading libraries...')
+const { version } = require('../package.json')
+logger.info('   ________              ____  ___           _     ')
+logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____')
+logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/')
+logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__')
+logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/')
+logger.info(`ChadMusic - The Chad Music Bot! Version: ${version}`)
 
+logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, MessageEmbed } = require('discord.js')
@@ -79,21 +86,33 @@ Structures.extend('Message', Message => {
         .setColor(embedColor[type])
 
       if (title) {
-        embed.addField(embedEmoji[type] + title, description)
+        embed.setTitle(`${embedEmoji[type]} ${title}`)
+        embed.setDescription(description)
       } else {
-        embed.setDescription(embedEmoji[type] + description)
+        embed.setDescription(`${embedEmoji[type]} ${description}`)
       }
 
       if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
+        return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
-            ? `${type[embedEmoji]} **${title}**\n>>> ${description}`
-            : `${type[embedEmoji]} ${description}`
-          )
-        } else return this.channel.send(embed)
+          return this.reply(title
+            ? `${embedEmoji[type]} **${title}**\n>>> ${description}`
+            : `${embedEmoji[type]} ${description}`
+          , { allowedMentions: { repliedUser: false } })
+        } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
       }
+    }
+
+    // Shows the commands usage in case no arguments were provided for
+    // some commands.
+    usage (syntax) {
+      const guildPrefix = prefix.getPrefix(this.guild.id) || config.prefix
+      const embed = new MessageEmbed()
+        .setColor(color.info)
+        .setTitle(`${emoji.info} Usage`)
+        .setDescription(`\`${guildPrefix}${syntax}\``)
+      this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     }
 
     // Custom style embeds.
@@ -102,20 +121,21 @@ Structures.extend('Message', Message => {
         .setColor(color)
 
       if (title) {
-        embed.addField(`${emoji} ${title}`, description)
+        embed.setTitle(`${emoji} ${title}`)
+        embed.setDescription(description)
       } else {
         embed.setDescription(`${emoji} ${description}`)
       }
 
       if (this.channel.type === 'dm') {
-        return this.channel.send(embed)
+        return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
-          return this.channel.send(title
+          return this.reply(title
             ? `${emoji} **${title}**\n>>> ${description}`
             : `${emoji} ${description}`
-          )
-        } else return this.channel.send(embed)
+          , { allowedMentions: { repliedUser: false } })
+        } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
       }
     }
 

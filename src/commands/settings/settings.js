@@ -2,11 +2,12 @@ const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const prettyMilliseconds = require('pretty-ms')
+const { settings } = require('../../aliases.json')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('settings', {
-      aliases: ['settings', 'config'],
+    super(settings !== undefined ? settings[0] : 'settings', {
+      aliases: settings || ['settings'],
       category: '⚙ Settings',
       description: {
         text: 'View the setting for this server.'

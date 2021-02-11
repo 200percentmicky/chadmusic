@@ -1,11 +1,12 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { FieldsEmbed } = require('discord-paginationembed')
+const { queue } = require('../../aliases.json')
 
 module.exports = class CommandQueue extends Command {
   constructor () {
-    super('queue', {
-      aliases: ['queue', 'q'],
+    super(queue !== undefined ? queue[0] : 'queue', {
+      aliases: queue || ['queue'],
       category: '🎶 Player',
       description: {
         text: 'View the queue for this server.'

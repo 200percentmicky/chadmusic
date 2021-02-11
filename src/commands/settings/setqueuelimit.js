@@ -1,9 +1,10 @@
 const { Command } = require('discord-akairo')
+const { setqueuelimit } = require('../../aliases.json')
 
 module.exports = class CommandSetQueueLimit extends Command {
   constructor () {
-    super('setqueuelimit', {
-      aliases: ['setqueuelimit', 'setql'],
+    super(setqueuelimit !== undefined ? setqueuelimit[0] : 'setqueuelimit', {
+      aliases: setqueuelimit || ['setqueuelimit'],
       category: '⚙ Settings',
       description: {
         text: 'Limits the number of entries that members can add to the queue.',

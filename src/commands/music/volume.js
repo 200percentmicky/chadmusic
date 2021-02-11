@@ -1,10 +1,11 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { volume } = require('../../aliases.json')
 
 module.exports = class CommandVolume extends Command {
   constructor () {
-    super('volume', {
-      aliases: ['volume', 'vol'],
+    super(volume !== undefined ? volume[0] : 'volume', {
+      aliases: volume || ['volume'],
       category: '🎶 Player',
       description: {
         text: 'Changes the volume of the player.',
