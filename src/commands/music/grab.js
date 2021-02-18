@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { grab } = require('../../aliases.json')
 
 module.exports = class CommandGrab extends Command {
   constructor () {
-    super(grab !== undefined ? grab[0] : 'grab', {
-      aliases: grab || ['grab'],
+    super('grab', {
+      aliases: ['grab', 'save'],
       category: '🎶 Player',
       description: {
         text: 'Saves this song to your DMs.'

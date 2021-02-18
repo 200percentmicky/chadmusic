@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { earrape } = require('../../aliases.json')
 
 module.exports = class CommandEarrape extends Command {
   constructor () {
-    super(earrape !== undefined ? earrape[0] : 'earrape', {
-      aliases: earrape || ['earrape'],
+    super('earrape', {
+      aliases: ['earrape'],
       category: '🎶 Player',
       description: {
         text: 'Changes the volume of the player to 42069%.',
@@ -18,7 +17,7 @@ module.exports = class CommandEarrape extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) {
         return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
@@ -47,11 +46,11 @@ module.exports = class CommandEarrape extends Command {
       return message.say('ok', 'Volume has been set to **100%** 😌😏')
     } else {
       this.client.player.setVolume(message, earrape)
-      return message.channel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.color.ok)
         .setDescription(`🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      )
+      return message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
     }
   }
 }

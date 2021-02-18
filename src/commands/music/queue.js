@@ -1,12 +1,11 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { FieldsEmbed } = require('discord-paginationembed')
-const { queue } = require('../../aliases.json')
 
 module.exports = class CommandQueue extends Command {
   constructor () {
-    super(queue !== undefined ? queue[0] : 'queue', {
-      aliases: queue || ['queue'],
+    super('queue', {
+      aliases: ['queue', 'q'],
       category: '🎶 Player',
       description: {
         text: 'View the queue for this server.'
@@ -18,7 +17,7 @@ module.exports = class CommandQueue extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }

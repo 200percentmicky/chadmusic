@@ -18,7 +18,7 @@ module.exports = class CommandSummon extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -26,8 +26,8 @@ module.exports = class CommandSummon extends Command {
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT', 'SPEAK'])
-    if (!permissions) return message.say('error', `Missing **Connect** or **Speak** permissions for **${vc.name}**`)
+    const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+    if (!permissions) return message.say('no', `Missing **Connect** permission for **${vc.name}**`)
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {

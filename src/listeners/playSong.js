@@ -14,7 +14,7 @@ module.exports = class ListenerPlaySong extends Listener {
   async exec (message, queue, song) {
     if (queue.songs.length === 1) { // If someone started a new queue.
       const settings = this.client.settings.get(message.guild.id)
-      const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+      const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
       if (settings.maxTime) {
         if (!dj) {
           if (parseInt(song.duration + '000') > settings.maxTime) { // DisTube omits the last three digits in the songs duration.
@@ -25,10 +25,13 @@ module.exports = class ListenerPlaySong extends Listener {
           }
         }
       }
+      message.say('ok', `Added **${song.name}** to the queue.`)
     }
+
     const textChannel = queue.initMessage.channel // Because message sometimes returns 'undefined'.
     const channel = queue.connection.channel // Same.
     const guild = channel.guild // This as well...
+
     textChannel.send(new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))

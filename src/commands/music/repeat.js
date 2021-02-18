@@ -1,10 +1,9 @@
 const { Command } = require('discord-akairo')
-const { repeat } = require('../../aliases.json')
 
 module.exports = class CommandRepeat extends Command {
   constructor () {
-    super(repeat !== undefined ? repeat[0] : 'repeat', {
-      aliases: repeat || ['repeat'],
+    super('repeat', {
+      aliases: ['repeat'],
       description: {
         text: 'Toggles repeat mode for the player.',
         usage: '[mode:int]',
@@ -18,7 +17,7 @@ module.exports = class CommandRepeat extends Command {
     const args = message.content.split(/ +/g)
     const player = this.client.player
 
-    if (!args[1]) return message.usage(`${repeat !== undefined ? repeat[0] : 'repeat'} <mode:int>`)
+    if (!args[1]) return message.usage('repeat <mode:int>')
 
     const repeatNumbers = {
       0: 'Off',

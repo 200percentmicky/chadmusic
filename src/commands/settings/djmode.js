@@ -1,10 +1,9 @@
 const { Command } = require('discord-akairo')
-const { djmode } = require('../../aliases.json')
 
 module.exports = class CommandDJMode extends Command {
   constructor () {
-    super(djmode !== undefined ? djmode[0] : 'djmode', {
-      aliases: djmode || ['djmode'],
+    super('djmode', {
+      aliases: ['djmode'],
       category: '⚙ Settings',
       description: {
         text: 'Toggles DJ Mode for the server.',
@@ -20,6 +19,7 @@ module.exports = class CommandDJMode extends Command {
     const settings = this.client.settings
 
     const args = message.content.split(/ +/g)
+    if (!args[1]) return message.usage('djmode <toggle:on/off>')
     if (args[1] === 'ON'.toLowerCase()) await settings.set(message.guild.id, true, 'djMode')
     else if (args[1] === 'OFF'.toLowerCase()) await settings.set(message.guild.id, false, 'djMode')
 

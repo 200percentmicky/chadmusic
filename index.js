@@ -1,4 +1,4 @@
 require('dotenv').config()
-const Deejay = require('./src/chadmusic.js')
+const PokiMusic = require('./src/pokimusic.js')
 
-new Deejay().login(process.env.TOKEN)
+new PokiMusic().login(process.env.TOKEN)

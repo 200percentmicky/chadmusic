@@ -20,7 +20,7 @@ module.exports = class CommandSearch extends Command {
     const args = message.content.split(/ +/g)
     const search = args.slice(1).join(' ')
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -36,8 +36,8 @@ module.exports = class CommandSearch extends Command {
     message.channel.startTyping()
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT', 'SPEAK'])
-      if (!permissions) return message.say('error', `Missing **Connect** or **Speak** permissions for **${vc.name}**`)
+      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+      if (!permissions) return message.say('no', `Missing **Connect** permission for **${vc.name}**`)
       vc.join()
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')

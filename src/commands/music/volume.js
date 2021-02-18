@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { volume } = require('../../aliases.json')
 
 module.exports = class CommandVolume extends Command {
   constructor () {
-    super(volume !== undefined ? volume[0] : 'volume', {
-      aliases: volume || ['volume'],
+    super('volume', {
+      aliases: ['volume', 'vol'],
       category: '🎶 Player',
       description: {
         text: 'Changes the volume of the player.',
@@ -19,7 +18,7 @@ module.exports = class CommandVolume extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -34,10 +33,16 @@ module.exports = class CommandVolume extends Command {
 
     const volume = queue.volume
     if (!args[1]) {
-      return message.channel.send(new MessageEmbed()
-        .setColor(this.client.color.info)
-        .setDescription(`Current Volume: **${volume}%**`)
-      )
+      const volumeEmoji = () => {
+        const volumeIcon = {
+          50: '🔈',
+          100: '🔉',
+          150: '🔊'
+        }
+        if (volume > 175) return '🔊😭👌'
+        return volumeIcon[Math.round(volume / 50) * 50]
+      }
+      return message.custom(volumeEmoji(), this.client.color.info, `Current Volume: **${volume}%**`)
     }
 
     let newVolume = parseInt(args[1])
@@ -45,11 +50,11 @@ module.exports = class CommandVolume extends Command {
     this.client.player.setVolume(message.guild.id, newVolume)
 
     if (newVolume >= 201) {
-      message.channel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.color.warn)
         .setDescription(`${this.client.emoji.warn} Volume has been set to **${newVolume}%**.`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      )
+      message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
     } else {
       return message.say('ok', `Volume has been set to **${newVolume}%**.`)
     }

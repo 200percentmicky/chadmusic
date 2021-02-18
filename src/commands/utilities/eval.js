@@ -12,7 +12,7 @@ module.exports = class CommandEval extends Command {
         usage: '<code>'
       },
       category: '🛠 Utilities',
-      prefix: [';>'] // To prevent conflict with Red bot.
+      prefix: [';js'] // To prevent conflict with Red bot.
     })
   }
 

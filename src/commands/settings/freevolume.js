@@ -1,10 +1,9 @@
 const { Command } = require('discord-akairo')
-const { freevolume } = require('../../aliases.json')
 
 module.exports = class CommandFreeVolume extends Command {
   constructor () {
-    super(freevolume !== undefined ? freevolume[0] : 'freevolume', {
-      aliases: freevolume || ['freevolume'],
+    super('freevolume', {
+      aliases: ['freevolume'],
       category: '⚙ Settings',
       description: {
         text: 'Toggles the ability to change the volume past 200%.',
@@ -22,6 +21,7 @@ module.exports = class CommandFreeVolume extends Command {
     const queue = this.client.player.getQueue(message)
 
     const args = message.content.split(/ +/g)
+    if (!args[1]) return message.usage('freevolume <toggle:on/off>')
     if (args[1] === 'OFF'.toLowerCase()) {
       if (queue) {
         if (queue.volume > 200) this.client.player.setVolume(message, 100)

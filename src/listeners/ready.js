@@ -15,9 +15,8 @@ module.exports = class SurferReady extends Listener {
     if (this.client.user.id === '375450533114413056') {
       const aliases = require('../aliases.json')
       this.client.commands.remove(aliases.invite[0] || 'invite')
-      this.client.commands.remove(aliases.stats[0] || 'stats')
 
-      this.client.logger.info('[Ready!<3♪] It\'s ya boy, D.J. Tree Fiddy!')
+      this.client.logger.info('[Ready!<3♪] Let\'s party!!')
       this.client.logger.info('Client: %s (%d)', this.client.user.tag, this.client.user.id)
     } else {
       const activity = async () => {
@@ -26,7 +25,7 @@ module.exports = class SurferReady extends Listener {
       }
       setInterval(activity, 120000)
 
-      this.client.logger.info('[Ready!<3♪] It\'s ya boy, D.J. Tree Fiddy!')
+      this.client.logger.info('[Ready!<3♪] Let\'s party!!')
       this.client.logger.info('Client: %s (%d)', this.client.user.tag, this.client.user.id)
 
       return activity()

@@ -1,7 +1,6 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { stripIndents } = require('common-tags')
-const { about } = require('../../aliases.json')
 
 // Mainly for version info...
 const main = require('../../../package.json')
@@ -11,8 +10,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super(about !== undefined ? about[0] : 'about', {
-      aliases: about || ['about'],
+    super('aboutmusic', {
+      aliases: ['aboutmusic'],
       category: '🛠 Utilities',
       description: {
         text: 'Shows information about ChadMusic.'
@@ -22,13 +21,21 @@ module.exports = class CommandAboutMusic extends Command {
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
-    const thumbnailUrl = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
       .setColor(1602089)
-      .setAuthor('ChadMusic - The Chad Music Bot', thumbnailUrl)
-      .setDescription('This bot is running an instant of **ChadMusic**, a Discord music bot based on DisTube.js. **ChadMusic** supports over 700+ websites with the ability to add audio filters to the player.')
+      .setAuthor('About PokiMusic', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('A JavaScript Music Bot for Poki based on a forked build of **[DisTube.js](https://distube.js.org)**.')
+      .addField('✨ Features', stripIndents`
+      ▫ Supports 700+ websites.
+      ▫ Add filters to the player.
+      ▫ Alter filter values during playback.
+      ▫ Unlimited volume! 😂👌
+      ▫ DJ commands to control the player.
+      ▫ Queue and track length limits.
+      ▫ And more to come!
+      `)
       .addField(`${this.client.emoji.info} Info`, stripIndents`
-      **Client:** ${this.client.user.tag} (ID: ${this.client.user.id})
+      **Client:** ${this.client.user.tag}
       **Node.js:** ${process.version}
       **Bot Version:** ${main.version}
       **Discord.js:** ${discordversion.version}
@@ -36,8 +43,7 @@ module.exports = class CommandAboutMusic extends Command {
       **DisTube.js:** ${distubeversion.version}
       **Uptime:** ${this.client.utils.uptime()}
       `, true)
-      .setThumbnail(thumbnailUrl)
-      .setFooter(`The owner of this instant is ${owner.tag}.`, owner.avatarURL({ dynamic: true }))
+      .setFooter(`The owner of this instant is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send(aboutembed)
   }
 }

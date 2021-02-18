@@ -42,12 +42,18 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const { version } = require('../package.json')
-logger.info('   ________              ____  ___           _     ')
-logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____')
-logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/')
-logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__')
-logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/')
-logger.info(`ChadMusic - The Chad Music Bot! Version: ${version}`)
+logger.info('    ____        __   _ __  ___           _     ')
+logger.info('   / __ \\____  / /__(_)  |/  /_  _______(_)____')
+logger.info('  / /_/ / __ \\/ //_/ / /|_/ / / / / ___/ / ___/')
+logger.info(' / ____/ /_/ / ,< / / /  / / /_/ (__  ) / /__  ')
+logger.info('/_/    \\____/_/|_/_/_/  /_/\\__,_/____/_/\\___/  ')
+logger.info('                                                  ')
+logger.info(`PokiMusic - Version: ${version}`)
+
+if (process.versions.node < '14.0.0') {
+  logger.error('ChadMusic requires at least Node JS %s. You have %s installed. Aborting...', '14.0.0', process.versions.node)
+  process.exit(1)
+}
 
 logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
@@ -60,6 +66,7 @@ const moment = require('moment')
 const config = require('./config.json')
 const emoji = require('./emoji.json')
 const color = require('./colorcode.json')
+const { Intents } = require('discord.js')
 
 // Extending a few things...
 Structures.extend('Message', Message => {
@@ -163,13 +170,13 @@ Structures.extend('Message', Message => {
       }
 
       if (type === 'warning') {
-        console.log(this.client.warnlog + error)
+        logger.warn(error)
         embed.setColor(color.warn)
         embed.setTitle(emoji.warn + title)
       }
 
       if (type === 'error') {
-        console.log(this.client.errlog + error)
+        logger.error(error)
         embed.setColor(color.error)
         embed.setTitle(emoji.error + title)
       }
@@ -182,7 +189,7 @@ Structures.extend('Message', Message => {
   return MessageStructure
 })
 
-class Deejay extends AkairoClient {
+class PokiMusic extends AkairoClient {
   constructor () {
     super({
       ownerID: config.owner
@@ -191,7 +198,8 @@ class Deejay extends AkairoClient {
       // Changing the offset to a lower number than 500 will cause the
       // reactions to show faster, but it also comes with a cost of having
       // your bot rate-limited.
-      restTimeOffset: 175
+      restTimeOffset: 175,
+      intents: new Intents(Intents.NON_PRIVILEGED, 'GUILD_MEMBERS')
     })
 
     // Configuration files.
@@ -231,7 +239,8 @@ class Deejay extends AkairoClient {
 
     logger.info('Loading settings...')
     this.settings = new Enmap({
-      name: 'settings'
+      name: 'settings',
+      fetchAll: true
     })
 
     this.commands = new CommandHandler(this, {
@@ -261,4 +270,4 @@ class Deejay extends AkairoClient {
   }
 }
 
-module.exports = Deejay
+module.exports = PokiMusic

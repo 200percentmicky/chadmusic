@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { invite } = require('../../aliases.json')
 
 module.exports = class InviteCommand extends Command {
   constructor () {
-    super(invite !== undefined ? invite[0] : 'invite', {
-      aliases: invite || ['invite'],
+    super('invite', {
+      aliases: ['invite'],
       description: {
         text: 'Sends the bot\'s invite link.'
       },

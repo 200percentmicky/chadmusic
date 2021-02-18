@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { toMilliseconds } = require('colon-notation')
-const { maxtime } = require('../../aliases.json')
 
 module.exports = class CommandMaxTime extends Command {
   constructor () {
-    super(maxtime !== undefined ? maxtime[0] : 'maxtime', {
-      aliases: maxtime || ['maxtime'],
+    super('maxtime', {
+      aliases: ['maxtime'],
       category: '⚙ Settings',
       description: {
         text: 'Allows you to restrict songs from being added to the queue if the duration of the video exceeds this.',
@@ -26,6 +25,8 @@ module.exports = class CommandMaxTime extends Command {
   async exec (message, args) {
     const time = args.time
     const notation = toMilliseconds(time)
+
+    if (!time) message.usage('time <duration>')
 
     if (time === 0 || time === 'NONE'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, null, 'maxTime')

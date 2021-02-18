@@ -16,7 +16,7 @@ module.exports = class CommandShuffle extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -28,8 +28,8 @@ module.exports = class CommandShuffle extends Command {
     if (currentVc.channel.members.size <= 2 || dj) {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT', 'SPEAK'])
-      if (!permissions) return message.say('error', `Missing **Connect** or **Speak** permissions for **${vc.name}**`)
+      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+      if (!permissions) return message.say('no', `Missing **Connect** permission for **${vc.name}**`)
 
       const queue = this.client.player.getQueue(message)
       if (!queue) return message.say('warn', 'Nothing is currently playing in this server.')

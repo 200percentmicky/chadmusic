@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const { play } = require('../../aliases.json')
 // const { MessageEmbed } = require('discord.js');
 // const YouTube = require('youtube-sr');
 
@@ -13,8 +12,8 @@ function pornPattern (url) {
 
 module.exports = class CommandPlay extends Command {
   constructor () {
-    super(play !== undefined ? play[0] : 'play', {
-      aliases: play || ['play'],
+    super('play', {
+      aliases: ['play', 'p'],
       category: '🎶 Player',
       description: {
         text: 'Play\'s a song from a URL or search term.',
@@ -31,7 +30,7 @@ module.exports = class CommandPlay extends Command {
     const text = args.slice(1).join(' ')
 
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -39,11 +38,7 @@ module.exports = class CommandPlay extends Command {
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    const prefix = this.client.prefix.getPrefix(message.guild.id)
-      ? this.client.prefix.getPrefix(message.guild.id)
-      : this.client.config.prefix
-
-    if (!text) return message.say('info', `\`${prefix}play <URL|search>\``, 'Usage')
+    if (!text) return message.usage('play <URL|search>')
 
     // eslint-disable-next-line no-useless-escape
     if (pornPattern(text)) return message.say('no', 'The URL you\'re requesting to play is not allowed.')
@@ -51,7 +46,7 @@ module.exports = class CommandPlay extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) return message.say('error', `Missing **Connect** permissions for \`${vc.name}\``)
+      if (!permissions) return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
       vc.join()
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')

@@ -1,7 +1,7 @@
 {
-  "name": "chadmusic",
-  "version": "2021.2.11",
-  "description": "The Chad Music Bot.",
+  "name": "pokimusic",
+  "version": "2021.2.17",
+  "description": "A music bot for Poki",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,24 +18,24 @@
     "discord-paginationembed": "^2.1.0",
     "discord-prefix": "^1.1.0",
     "discord.js": "github:discordjs/discord.js",
-    "distube": "^2.8.8",
+    "distube": "github:mickykuna/chadtube",
     "dotenv": "^8.2.0",
-    "enmap": "^5.8.2",
+    "enmap": "^5.8.4",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "pretty-bytes": "^5.4.1",
+    "pretty-bytes": "^5.5.0",
     "pretty-ms": "^7.0.1",
-    "systeminformation": "^4.31.1",
+    "systeminformation": "^4.34.10",
     "underscore": "^1.12.0",
     "winston": "^3.3.3",
-    "youtube-sr": "^2.0.4"
+    "youtube-sr": "^2.0.5"
   },
   "devDependencies": {
-    "eslint": "^7.15.0",
+    "eslint": "^7.19.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-promise": "^4.3.1",
     "standard": "^16.0.3"
   }
 }

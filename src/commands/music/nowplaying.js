@@ -1,12 +1,11 @@
 const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { nowplaying } = require('../../aliases.json')
 
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
-    super(nowplaying !== undefined ? nowplaying[0] : 'nowplaying', {
-      aliases: nowplaying || ['nowplaying'],
+    super('nowplaying', {
+      aliases: ['nowplaying', 'np'],
       category: '🎶 Player',
       description: {
         text: 'Shows the currently playing song.'
@@ -18,7 +17,7 @@ module.exports = class CommandNowPlaying extends Command {
 
   async exec (message) {
     const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (settings.djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
@@ -39,11 +38,11 @@ module.exports = class CommandNowPlaying extends Command {
       **Requested by:** ${song.user}
       **Duration:** ${song.formattedDuration}
       **Volume:** ${queue.volume}
-      **Current Filter:** ${queue.filter != null ? queue.filter : 'None'}
       `)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
+      .addField('📢 Filters', queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None')
       .setTimestamp()
     )
   }
