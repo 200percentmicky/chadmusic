@@ -97,7 +97,8 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor(this.client.user.username + ' - PokiMusic Commands', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor(this.client.user.username + ' - Music Commands', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('This is for music commands. If you\'re looking for Poki\'s other commands, please run `;help` instead.')
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)
 

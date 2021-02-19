@@ -1,7 +1,6 @@
 /*
- * * ChadMusic - The Chad Music Bot created by Micky-kun
- * Licensed under the MIT License. Please read LICENSE for more information.S
- */
+ * * PokiMusic - A feature-rich music bot for Poki. Created by Micky-kun
+ * Licensed under the MIT License. Please read LICENSE for more information.
 
 /*
 Here lies the messy outcome of a lazy programmer.
@@ -51,7 +50,7 @@ logger.info('                                                  ')
 logger.info(`PokiMusic - Version: ${version}`)
 
 if (process.versions.node < '14.0.0') {
-  logger.error('ChadMusic requires at least Node JS %s. You have %s installed. Aborting...', '14.0.0', process.versions.node)
+  logger.error('PokiMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
   process.exit(1)
 }
 
