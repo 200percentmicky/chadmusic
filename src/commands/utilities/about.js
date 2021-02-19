@@ -24,7 +24,7 @@ module.exports = class CommandAboutMusic extends Command {
     const aboutembed = new MessageEmbed()
       .setColor(1602089)
       .setAuthor('About PokiMusic', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('A JavaScript Music Bot for Poki based on a forked build of **[DisTube.js](https://distube.js.org)**.')
+      .setDescription('A Music Bot for Poki based on a forked build of **[DisTube.js](https://distube.js.org)**.')
       .addField('✨ Features', stripIndents`
       ▫ Supports 700+ websites.
       ▫ Add filters to the player.
@@ -34,6 +34,7 @@ module.exports = class CommandAboutMusic extends Command {
       ▫ Queue and track length limits.
       ▫ And more to come!
       `)
+      .addField('⚠ Caution', 'As with all forms of software that are currently in development, expect for bugs to appear from time to time! Please feel free to contact me using `;contact` if you found a bug when using the bot.')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
       **Client:** ${this.client.user.tag}
       **Node.js:** ${process.version}
