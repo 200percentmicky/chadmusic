@@ -103,7 +103,7 @@ Structures.extend('Message', Message => {
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
           return this.reply(title
-            ? `${embedEmoji[type]} **${title}**\n>>> ${description}`
+            ? `${embedEmoji[type]} **${title}** | ${description}`
             : `${embedEmoji[type]} ${description}`
           , { allowedMentions: { repliedUser: false } })
         } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
@@ -138,7 +138,7 @@ Structures.extend('Message', Message => {
       } else {
         if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
           return this.reply(title
-            ? `${emoji} **${title}**\n>>> ${description}`
+            ? `${emoji} **${title}** | ${description}`
             : `${emoji} ${description}`
           , { allowedMentions: { repliedUser: false } })
         } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })

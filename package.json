@@ -1,6 +1,6 @@
 {
   "name": "pokimusic",
-  "version": "2021.2.17",
+  "version": "2021.2.19",
   "description": "A music bot for Poki",
   "main": "index.js",
   "scripts": {

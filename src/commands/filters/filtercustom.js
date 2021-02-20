@@ -1,17 +1,17 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandVibrato extends Command {
+module.exports = class CommandCustomFilter extends Command {
   constructor () {
-    super('vibrato', {
-      aliases: ['vibrato'],
+    super('customfilter', {
+      aliases: ['customfilter', 'cfilter', 'cf'],
       category: '📢 Filter',
       description: {
-        text: 'Adds a vibrato filter to the player.',
-        usage: 'vibrato <depth:int(0.1-1)/off> <frequency:int>',
+        text: 'Allows you to add a custom FFMPEG filter to the player.',
+        usage: 'customfilter <argument:str>',
         details: stripIndents`
-        \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
-        \`<frequency:int>\` The frequency of the vibrato.
+        \`<argument:str>\` The argument to provide to FFMPEG.
+        ⚠ If the argument is invalid or not supported by FFMPEG, the stream will end.
         `
       },
       channel: 'guild',
@@ -34,6 +34,8 @@ module.exports = class CommandVibrato extends Command {
       }
     }
 
+    if (!args[1]) return message.usage('customfilter <argument:str>')
+
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
@@ -43,23 +45,20 @@ module.exports = class CommandVibrato extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
-        return message.custom('📢', this.client.color.info, '**Vibrato** Off')
+        await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
+        return message.custom('📢', this.client.color.info, '**Bass Boost** Off')
       } else {
-        const d = args[1]
-        let f = parseInt(args[2])
-        if (d < 0.1 || d > 1 || isNaN(d)) {
-          return message.say('error', 'Depth must be between **0.1** to **1**, or **off**.')
+        const custom = args[1]
+        const hasWhiteSpace = () => {
+          return /\s/g.test(args.slice(1).join(' '))
         }
-        if (!args[2]) f = 5
-        if (isNaN(f)) {
-          return message.say('error', 'Frequency requires a number.')
+        if (args[2] || hasWhiteSpace) {
+          return message.say('error', oneLine`
+            FFMPEG filters do not allow spaces or any form of whitespace.
+          `)
         }
-        if (f < 1) {
-          return message.say('error', 'Frequency must be greater than 0.')
-        }
-        await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
-        return message.custom('📢', this.client.color.info, `**Vibrato** Gain: Depth \`${d}\` at \`${f}Hz\``)
+        await this.client.player.setFilter(message.guild.id, 'custom', custom)
+        return message.custom('📢', this.client.color.info, `**Custom Filter** Argument: \`${custom}\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

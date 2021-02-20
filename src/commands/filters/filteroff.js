@@ -4,9 +4,9 @@ module.exports = class CommandFilterOff extends Command {
   constructor () {
     super('filteroff', {
       aliases: ['filteroff'],
-      category: '🗣 Filter',
+      category: '📢 Filter',
       description: {
-        text: 'Removes the filter from the player.'
+        text: 'Removes all filters from the player.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -28,6 +28,7 @@ module.exports = class CommandFilterOff extends Command {
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
+      if (!queue.filter) return message.say('warn', 'No filters are currently applied to the player.')
       await this.client.player.setFilter(message.guild.id, 'off')
       return message.say('info', 'Removed all filters from the player.')
     } else {
