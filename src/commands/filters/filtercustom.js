@@ -49,14 +49,6 @@ module.exports = class CommandCustomFilter extends Command {
         return message.custom('📢', this.client.color.info, '**Bass Boost** Off')
       } else {
         const custom = args[1]
-        const hasWhiteSpace = () => {
-          return /\s/g.test(args.slice(1).join(' '))
-        }
-        if (args[2] || hasWhiteSpace) {
-          return message.say('error', oneLine`
-            FFMPEG filters do not allow spaces or any form of whitespace.
-          `)
-        }
         await this.client.player.setFilter(message.guild.id, 'custom', custom)
         return message.custom('📢', this.client.color.info, `**Custom Filter** Argument: \`${custom}\``)
       }
