@@ -266,6 +266,7 @@ class PokiMusic extends AkairoClient {
 
     this.commands.loadAll()
     this.listeners.loadAll()
+    this.inhibitors.loadAll()
   }
 }
 

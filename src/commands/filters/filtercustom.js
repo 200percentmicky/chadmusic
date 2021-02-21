@@ -1,5 +1,6 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
+const ffmpeg = require('fluent-ffmpeg')
 
 module.exports = class CommandCustomFilter extends Command {
   constructor () {
@@ -45,10 +46,16 @@ module.exports = class CommandCustomFilter extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
-        return message.custom('📢', this.client.color.info, '**Bass Boost** Off')
+        await this.client.player.setFilter(message.guild.id, 'custom', 'off')
+        return message.custom('📢', this.client.color.info, '**Custom Filter** Removed')
       } else {
         const custom = args[1]
+        // Using fluent-ffmpeg to check if the audio filter uses a valid syntax.
+        ffmpeg()
+          .audioFilter(custom)
+          .on('error', (err, stdout, stderr) => {
+            return message.say('error', err.message)
+          })
         await this.client.player.setFilter(message.guild.id, 'custom', custom)
         return message.custom('📢', this.client.color.info, `**Custom Filter** Argument: \`${custom}\``)
       }
