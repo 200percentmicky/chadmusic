@@ -266,7 +266,10 @@ class PokiMusic extends AkairoClient {
 
     this.commands.loadAll()
     this.listeners.loadAll()
-    this.inhibitors.loadAll()
+    
+    if (process.env.NODE_ENV === 'production') {
+      this.inhibitors.loadAll()
+    }
   }
 }
 
