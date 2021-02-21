@@ -254,7 +254,7 @@ class PokiMusic extends AkairoClient {
     this.listeners = new ListenerHandler(this, {
       directory: './src/listeners'
     })
-    this.inhibitor = new InhibitorHandler(this, {
+    this.inhibitors = new InhibitorHandler(this, {
       directory: './src/inhibitors'
     })
 
