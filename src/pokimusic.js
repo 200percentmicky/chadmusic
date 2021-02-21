@@ -55,7 +55,7 @@ if (process.versions.node < '14.0.0') {
 }
 
 logger.info('Loading libraries...')
-const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo')
+const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, MessageEmbed } = require('discord.js')
 const Enmap = require('enmap')
@@ -254,6 +254,9 @@ class PokiMusic extends AkairoClient {
     this.listeners = new ListenerHandler(this, {
       directory: './src/listeners'
     })
+    this.inhibitor = new InhibitorHandler(this, {
+      directory: './src/inhibitors'
+    })
 
     this.listeners.setEmitters({
       process: process,
@@ -266,7 +269,7 @@ class PokiMusic extends AkairoClient {
 
     this.commands.loadAll()
     this.listeners.loadAll()
-    
+
     if (process.env.NODE_ENV === 'production') {
       this.inhibitors.loadAll()
     }
