@@ -96,10 +96,11 @@ module.exports = class CommandPlay extends Command {
       */
 
       await this.client.player.play(message, text)
-      message.react(this.client.emoji.okReact)
+      const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
+      message.react(emojiPerms ? this.client.emoji.musicReact : '🎵')
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
-      return message.say('error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Track Error')
+      return message.say('error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
     } finally {
       message.channel.stopTyping(true)
     }

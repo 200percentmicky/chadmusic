@@ -29,12 +29,12 @@ module.exports = class CommandShuffle extends Command {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) return message.say('no', `Missing **Connect** permission for **${vc.name}**`)
+      if (!permissions) return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
 
       const queue = this.client.player.getQueue(message)
       if (!queue) return message.say('warn', 'Nothing is currently playing in this server.')
       this.client.player.shuffle(message)
-      return message.say('ok', `**${queue.songs.length}** entries have been shuffled.`)
+      return message.say('ok', `**${queue.songs.length - 1}** entries have been shuffled.`)
     } else {
       return message.say('error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }

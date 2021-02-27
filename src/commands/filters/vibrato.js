@@ -8,7 +8,7 @@ module.exports = class CommandVibrato extends Command {
       category: '📢 Filter',
       description: {
         text: 'Adds a vibrato filter to the player.',
-        usage: 'vibrato <depth:int(0.1-1)/off> <frequency:int>',
+        usage: '<depth:int(0.1-1)/off> <frequency:int>',
         details: stripIndents`
         \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
         \`<frequency:int>\` The frequency of the vibrato.
@@ -59,7 +59,7 @@ module.exports = class CommandVibrato extends Command {
           return message.say('error', 'Frequency must be greater than 0.')
         }
         await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
-        return message.custom('📢', this.client.color.info, `**Vibrato** Gain: Depth \`${d}\` at \`${f}Hz\``)
+        return message.custom('📢', this.client.color.info, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

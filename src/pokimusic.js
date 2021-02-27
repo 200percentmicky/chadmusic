@@ -73,19 +73,20 @@ Structures.extend('Message', Message => {
     // Universal Embed dialogs.
     say (type, description, title) {
       const embedColor = {
-        ok: color.ok,
+        ok: color.music,
         warn: color.warn,
         error: color.error,
         info: color.info,
         no: color.no
       }
 
+      const emojiPerms = this.channel.permissionsFor(this.user.id).has(['USE_EXTERNAL_EMOJIS'])
       const embedEmoji = {
-        ok: emoji.ok,
-        warn: emoji.warn,
-        error: emoji.error,
-        info: emoji.info,
-        no: emoji.no
+        ok: emojiPerms ? emoji.music : '🎵',
+        warn: emojiPerms ? emoji.warn : '⚠',
+        error: emojiPerms ? emoji.error : '❌',
+        info: emojiPerms ? emoji.info : 'ℹ',
+        no: emojiPerms ? emoji.no : '🚫'
       }
 
       const embedIcon = {
@@ -103,15 +104,7 @@ Structures.extend('Message', Message => {
         embed.setAuthor(title, embedIcon[type])
         embed.setDescription(description)
       } else {
-        if (type === 'error') {
-          embed.setAuthor('Error', embedIcon[type])
-          embed.setDescription(description)
-        } else if (type === 'no') {
-          embed.setAuthor('Forbidden', embedIcon[type])
-          embed.setDescription(description)
-        } else {
-          embed.setDescription(`${embedEmoji[type]} ${description}`)
-        }
+        embed.setDescription(`${embedEmoji[type]} ${description}`)
       }
 
       if (this.channel.type === 'dm') {

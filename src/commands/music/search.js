@@ -37,7 +37,7 @@ module.exports = class CommandSearch extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) return message.say('no', `Missing **Connect** permission for **${vc.name}**`)
+      if (!permissions) return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
       vc.join()
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
