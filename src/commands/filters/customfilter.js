@@ -52,6 +52,7 @@ module.exports = class CommandCustomFilter extends Command {
       } else {
         const custom = args[1]
         // Using fluent-ffmpeg to check if the audio filter uses a valid syntax.
+        // Aaaaaand it doesn't do anything. Still leaving it here though lol.
         ffmpeg()
           .audioFilter(custom)
           .on('error', (err, stdout, stderr) => {
