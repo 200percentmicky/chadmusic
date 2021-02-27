@@ -31,7 +31,6 @@ module.exports = class ListenerPlaySong extends Listener {
           }
         }
       }
-      message.say('ok', `Added **${song.name}** to the queue.`)
     }
 
     textChannel.send(new MessageEmbed()

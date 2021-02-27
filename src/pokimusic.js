@@ -57,7 +57,7 @@ if (process.versions.node < '14.0.0') {
 logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo')
 const prefix = require('discord-prefix')
-const { Structures, MessageEmbed } = require('discord.js')
+const { Structures, MessageEmbed, Intents } = require('discord.js')
 const Enmap = require('enmap')
 const DisTube = require('distube')
 const moment = require('moment')
@@ -65,7 +65,7 @@ const moment = require('moment')
 const config = require('./config.json')
 const emoji = require('./emoji.json')
 const color = require('./colorcode.json')
-const { Intents } = require('discord.js')
+const urlicon = require('./urlicon.json')
 
 // Extending a few things...
 Structures.extend('Message', Message => {
@@ -88,14 +88,30 @@ Structures.extend('Message', Message => {
         no: emoji.no
       }
 
+      const embedIcon = {
+        ok: urlicon.ok,
+        warn: urlicon.warn,
+        error: urlicon.error,
+        info: urlicon.info,
+        no: urlicon.no
+      }
+
       const embed = new MessageEmbed()
         .setColor(embedColor[type])
 
       if (title) {
-        embed.setTitle(`${embedEmoji[type]} ${title}`)
+        embed.setAuthor(title, embedIcon[type])
         embed.setDescription(description)
       } else {
-        embed.setDescription(`${embedEmoji[type]} ${description}`)
+        if (type === 'error') {
+          embed.setAuthor('Error', embedIcon[type])
+          embed.setDescription(description)
+        } else if (type === 'no') {
+          embed.setAuthor('Forbidden', embedIcon[type])
+          embed.setDescription(description)
+        } else {
+          embed.setDescription(`${embedEmoji[type]} ${description}`)
+        }
       }
 
       if (this.channel.type === 'dm') {
@@ -116,7 +132,7 @@ Structures.extend('Message', Message => {
       const guildPrefix = prefix.getPrefix(this.guild.id) || config.prefix
       const embed = new MessageEmbed()
         .setColor(color.info)
-        .setTitle(`${emoji.info} Usage`)
+        .setAuthor('Usage', urlicon.info)
         .setDescription(`\`${guildPrefix}${syntax}\``)
       this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     }
