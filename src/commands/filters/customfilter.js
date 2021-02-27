@@ -16,7 +16,8 @@ module.exports = class CommandCustomFilter extends Command {
         `
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      ownerOnly: true
     })
   }
 
