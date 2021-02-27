@@ -80,7 +80,7 @@ Structures.extend('Message', Message => {
         no: color.no
       }
 
-      const emojiPerms = this.channel.permissionsFor(this.user.id).has(['USE_EXTERNAL_EMOJIS'])
+      const emojiPerms = this.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
       const embedEmoji = {
         ok: emojiPerms ? emoji.music : '🎵',
         warn: emojiPerms ? emoji.warn : '⚠',
