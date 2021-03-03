@@ -1,7 +1,7 @@
 {
-  "name": "pokimusic",
-  "version": "2021.2.27",
-  "description": "A music bot for Poki.",
+  "name": "poki",
+  "version": "2021.3.3",
+  "description": "A multi-purpose Discord bot in Javascript thats also a cute alien girl!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
