@@ -1,4 +1,4 @@
 require('dotenv').config()
-const PokiMusic = require('./src/pokimusic.js')
+const Poki = require('./src/poki.js')
 
-new PokiMusic().login(process.env.TOKEN)
+new Poki().login(process.env.TOKEN)

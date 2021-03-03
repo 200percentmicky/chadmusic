@@ -457,3 +457,706 @@
 [2021-02-27T23:08:04.135Z] ==> info: Loading settings...
 [2021-02-27T23:08:04.919Z] ==> info: [Ready!<3♪] Let's party!!
 [2021-02-27T23:08:04.921Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-01T08:17:23.002Z] ==> info:     ____        __   _ __  ___           _     
+[2021-03-01T08:17:23.006Z] ==> info:    / __ \____  / /__(_)  |/  /_  _______(_)____
+[2021-03-01T08:17:23.007Z] ==> info:   / /_/ / __ \/ //_/ / /|_/ / / / / ___/ / ___/
+[2021-03-01T08:17:23.007Z] ==> info:  / ____/ /_/ / ,< / / /  / / /_/ (__  ) / /__  
+[2021-03-01T08:17:23.007Z] ==> info: /_/    \____/_/|_/_/_/  /_/\__,_/____/_/\___/  
+[2021-03-01T08:17:23.008Z] ==> info:                                                   
+[2021-03-01T08:17:23.008Z] ==> info: PokiMusic - Version: 2021.2.27
+[2021-03-01T08:17:23.008Z] ==> info: Loading libraries...
+[2021-03-01T08:17:26.667Z] ==> info: Loading settings...
+[2021-03-01T08:17:28.485Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-01T08:17:28.486Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-01T08:35:26.318Z] ==> info:     ____        __   _ __  ___           _     
+[2021-03-01T08:35:26.322Z] ==> info:    / __ \____  / /__(_)  |/  /_  _______(_)____
+[2021-03-01T08:35:26.322Z] ==> info:   / /_/ / __ \/ //_/ / /|_/ / / / / ___/ / ___/
+[2021-03-01T08:35:26.322Z] ==> info:  / ____/ /_/ / ,< / / /  / / /_/ (__  ) / /__  
+[2021-03-01T08:35:26.322Z] ==> info: /_/    \____/_/|_/_/_/  /_/\__,_/____/_/\___/  
+[2021-03-01T08:35:26.323Z] ==> info:                                                   
+[2021-03-01T08:35:26.323Z] ==> info: PokiMusic - Version: 2021.2.27
+[2021-03-01T08:35:26.323Z] ==> info: Loading libraries...
+[2021-03-01T08:35:26.893Z] ==> info: Loading settings...
+[2021-03-01T08:35:27.792Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-01T08:35:27.793Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T07:35:18.547Z] ==> info:     ____        __   _ __  ___           _     
+[2021-03-03T07:35:18.551Z] ==> info:    / __ \____  / /__(_)  |/  /_  _______(_)____
+[2021-03-03T07:35:18.552Z] ==> info:   / /_/ / __ \/ //_/ / /|_/ / / / / ___/ / ___/
+[2021-03-03T07:35:18.553Z] ==> info:  / ____/ /_/ / ,< / / /  / / /_/ (__  ) / /__  
+[2021-03-03T07:35:18.564Z] ==> info: /_/    \____/_/|_/_/_/  /_/\__,_/____/_/\___/  
+[2021-03-03T07:35:18.576Z] ==> info:                                                   
+[2021-03-03T07:35:18.599Z] ==> info: PokiMusic - Version: 2021.2.27
+[2021-03-03T07:35:18.600Z] ==> info: Loading libraries...
+[2021-03-03T07:35:19.150Z] ==> info: Loading settings...
+[2021-03-03T07:35:19.942Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T07:35:19.943Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T07:35:44.990Z] ==> error: TypeError: Cannot read property 'get' of undefined
+    at CommandTag.exec (D:\DiscordBots\Poki\main\src\commands\tags\tag.js:24:34)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T07:45:45.742Z] ==> info:  ____       _    _ 
+[2021-03-03T07:45:45.746Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T07:45:45.747Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T07:45:45.747Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T07:45:45.748Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T07:45:45.754Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T07:45:45.761Z] ==> info: Loading libraries...
+[2021-03-03T07:45:46.595Z] ==> info: Loading settings...
+[2021-03-03T07:45:46.596Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T07:45:46.600Z] ==> info: Initializing starboards...
+[2021-03-03T07:45:47.384Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T07:45:47.385Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:03:59.507Z] ==> info:  ____       _    _ 
+[2021-03-03T08:03:59.511Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:03:59.511Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:03:59.511Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:03:59.522Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:03:59.523Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:03:59.524Z] ==> info: Loading libraries...
+[2021-03-03T08:04:00.245Z] ==> info: Loading settings...
+[2021-03-03T08:04:00.247Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:04:00.249Z] ==> info: Initializing starboards...
+[2021-03-03T08:04:01.091Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:04:01.092Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:04:23.269Z] ==> info:  ____       _    _ 
+[2021-03-03T08:04:23.273Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:04:23.274Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:04:23.274Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:04:23.284Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:04:23.285Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:04:23.286Z] ==> info: Loading libraries...
+[2021-03-03T08:04:23.996Z] ==> info: Loading settings...
+[2021-03-03T08:04:23.998Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:04:24.000Z] ==> info: Initializing starboards...
+[2021-03-03T08:04:24.758Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:04:24.759Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:04:47.422Z] ==> info:  ____       _    _ 
+[2021-03-03T08:04:47.425Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:04:47.426Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:04:47.426Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:04:47.435Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:04:47.436Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:04:47.437Z] ==> info: Loading libraries...
+[2021-03-03T08:04:48.152Z] ==> info: Loading settings...
+[2021-03-03T08:04:48.155Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:04:48.157Z] ==> info: Initializing starboards...
+[2021-03-03T08:04:48.983Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:04:48.984Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:14:13.170Z] ==> error: EnmapPathError: The key "449606846697963531" does not exist in the enmap "tags"
+    at Map.[check] (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:1047:13)
+    at Map.get (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:340:19)
+    at CommandTag.exec (D:\DiscordBots\Poki\main\src\commands\tags\tag.js:24:34)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:15:25.210Z] ==> info:  ____       _    _ 
+[2021-03-03T08:15:25.214Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:15:25.215Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:15:25.215Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:15:25.226Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:15:25.227Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:15:25.228Z] ==> info: Loading libraries...
+[2021-03-03T08:15:25.964Z] ==> info: Loading settings...
+[2021-03-03T08:15:25.966Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:15:25.968Z] ==> info: Initializing starboards...
+[2021-03-03T08:15:26.793Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:15:26.794Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:15:58.022Z] ==> info:  ____       _    _ 
+[2021-03-03T08:15:58.025Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:15:58.026Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:15:58.026Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:15:58.037Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:15:58.038Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:15:58.047Z] ==> info: Loading libraries...
+[2021-03-03T08:15:58.785Z] ==> info: Loading settings...
+[2021-03-03T08:15:58.787Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:15:58.789Z] ==> info: Initializing starboards...
+[2021-03-03T08:15:59.672Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:15:59.673Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:16:09.730Z] ==> error: EnmapPathError: The key "449606846697963531" does not exist in the enmap "tags"
+    at Map.[check] (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:1047:13)
+    at Map.get (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:340:19)
+    at CommandTag.exec (D:\DiscordBots\Poki\main\src\commands\tags\tag.js:24:34)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:17:28.065Z] ==> info:  ____       _    _ 
+[2021-03-03T08:17:28.069Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:17:28.069Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:17:28.070Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:17:28.082Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:17:28.083Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:17:28.083Z] ==> info: Loading libraries...
+[2021-03-03T08:17:28.813Z] ==> info: Loading settings...
+[2021-03-03T08:17:28.815Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:17:28.817Z] ==> info: Initializing starboards...
+[2021-03-03T08:17:29.697Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:17:29.699Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:17:42.711Z] ==> error: EnmapPathError: The key "449606846697963531" does not exist in the enmap "tags"
+    at Map.[check] (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:1047:13)
+    at Map.get (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:340:19)
+    at CommandTag.exec (D:\DiscordBots\Poki\main\src\commands\tags\tag.js:24:34)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:19:20.421Z] ==> info:  ____       _    _ 
+[2021-03-03T08:19:20.425Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:19:20.426Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:19:20.426Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:19:20.426Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:19:20.439Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:19:20.440Z] ==> info: Loading libraries...
+[2021-03-03T08:19:21.185Z] ==> info: Loading settings...
+[2021-03-03T08:19:21.187Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:19:21.190Z] ==> info: Initializing starboards...
+[2021-03-03T08:19:21.943Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:19:21.947Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:20:05.877Z] ==> info:  ____       _    _ 
+[2021-03-03T08:20:05.881Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:20:05.882Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:20:05.882Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:20:05.883Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:20:05.883Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:20:05.884Z] ==> info: Loading libraries...
+[2021-03-03T08:20:06.613Z] ==> info: Loading settings...
+[2021-03-03T08:20:06.615Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:20:06.618Z] ==> info: Initializing starboards...
+[2021-03-03T08:20:07.363Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:20:07.368Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:20:11.744Z] ==> error: EnmapArgumentError: No default value provided on ensure method for "449606846697963531" in "tags"
+    at Map.ensure (D:\DiscordBots\Poki\main\node_modules\enmap\src\index.js:625:13)
+    at CommandTag.exec (D:\DiscordBots\Poki\main\src\commands\tags\tag.js:24:22)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:20:21.922Z] ==> info:  ____       _    _ 
+[2021-03-03T08:20:21.926Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:20:21.927Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:20:21.928Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:20:21.929Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:20:21.941Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:20:21.945Z] ==> info: Loading libraries...
+[2021-03-03T08:20:22.719Z] ==> info: Loading settings...
+[2021-03-03T08:20:22.721Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:20:22.724Z] ==> info: Initializing starboards...
+[2021-03-03T08:20:23.479Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:20:23.480Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:21:44.726Z] ==> info:  ____       _    _ 
+[2021-03-03T08:21:44.731Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:21:44.731Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:21:44.732Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:21:44.732Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:21:44.733Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:21:44.734Z] ==> info: Loading libraries...
+[2021-03-03T08:21:45.491Z] ==> info: Loading settings...
+[2021-03-03T08:21:45.495Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:21:45.498Z] ==> info: Initializing starboards...
+[2021-03-03T08:21:46.315Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:21:46.317Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:24:02.706Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:26:19.483Z] ==> warn: SIGINT received!
+[2021-03-03T08:26:22.436Z] ==> info:  ____       _    _ 
+[2021-03-03T08:26:22.440Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:26:22.440Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:26:22.440Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:26:22.441Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:26:22.451Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:26:22.460Z] ==> info: Loading libraries...
+[2021-03-03T08:26:23.192Z] ==> info: Loading settings...
+[2021-03-03T08:26:23.194Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:26:23.197Z] ==> info: Initializing starboards...
+[2021-03-03T08:26:24.125Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:26:24.127Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:26:30.605Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:28:52.518Z] ==> warn: SIGINT received!
+[2021-03-03T08:29:25.173Z] ==> info:  ____       _    _ 
+[2021-03-03T08:29:25.177Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:29:25.177Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:29:25.177Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:29:25.186Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:29:25.187Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:29:25.188Z] ==> info: Loading libraries...
+[2021-03-03T08:29:25.939Z] ==> info: Loading settings...
+[2021-03-03T08:29:25.941Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:29:25.944Z] ==> info: Initializing starboards...
+[2021-03-03T08:29:26.745Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:29:26.746Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:29:30.540Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:37:40.229Z] ==> warn: SIGINT received!
+[2021-03-03T08:37:42.677Z] ==> info:  ____       _    _ 
+[2021-03-03T08:37:42.681Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:37:42.682Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:37:42.682Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:37:42.691Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:37:42.693Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:37:42.694Z] ==> info: Loading libraries...
+[2021-03-03T08:37:43.427Z] ==> info: Loading settings...
+[2021-03-03T08:37:43.429Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:37:43.433Z] ==> info: Initializing starboards...
+[2021-03-03T08:37:44.283Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:37:44.285Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:37:50.780Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:38:48.221Z] ==> warn: SIGINT received!
+[2021-03-03T08:40:20.283Z] ==> info:  ____       _    _ 
+[2021-03-03T08:40:20.286Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:40:20.287Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:40:20.287Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:40:20.295Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:40:20.295Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:40:20.296Z] ==> info: Loading libraries...
+[2021-03-03T08:40:21.020Z] ==> info: Loading settings...
+[2021-03-03T08:40:21.022Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:40:21.033Z] ==> info: Initializing starboards...
+[2021-03-03T08:40:21.843Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:40:21.846Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:40:26.271Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:42:06.956Z] ==> warn: SIGINT received!
+[2021-03-03T08:44:16.588Z] ==> info:  ____       _    _ 
+[2021-03-03T08:44:16.592Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:44:16.592Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:44:16.593Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:44:16.601Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:44:16.602Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:44:16.602Z] ==> info: Loading libraries...
+[2021-03-03T08:44:17.320Z] ==> info: Loading settings...
+[2021-03-03T08:44:17.322Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:44:17.332Z] ==> info: Initializing starboards...
+[2021-03-03T08:44:18.112Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:44:18.113Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:44:33.521Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:47:22.594Z] ==> warn: SIGINT received!
+[2021-03-03T08:47:59.434Z] ==> info:  ____       _    _ 
+[2021-03-03T08:47:59.438Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:47:59.439Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:47:59.446Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:47:59.446Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:47:59.447Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:47:59.448Z] ==> info: Loading libraries...
+[2021-03-03T08:48:00.179Z] ==> info: Loading settings...
+[2021-03-03T08:48:00.182Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:48:00.185Z] ==> info: Initializing starboards...
+[2021-03-03T08:48:00.983Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:48:00.984Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:48:24.808Z] ==> warn: SIGINT received!
+[2021-03-03T08:48:28.741Z] ==> info:  ____       _    _ 
+[2021-03-03T08:48:28.744Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:48:28.745Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:48:28.745Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:48:28.754Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:48:28.759Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:48:28.782Z] ==> info: Loading libraries...
+[2021-03-03T08:48:29.507Z] ==> info: Loading settings...
+[2021-03-03T08:48:29.509Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:48:29.512Z] ==> info: Initializing starboards...
+[2021-03-03T08:48:30.419Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:48:30.420Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:48:38.827Z] ==> error: TypeError: moment(...).tz is not a function
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:88:55)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T08:51:29.004Z] ==> info:  ____       _    _ 
+[2021-03-03T08:51:29.010Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:51:29.011Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:51:29.013Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:51:29.013Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:51:29.014Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:51:29.027Z] ==> info: Loading libraries...
+[2021-03-03T08:51:29.755Z] ==> info: Loading settings...
+[2021-03-03T08:51:29.757Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:51:29.772Z] ==> info: Initializing starboards...
+[2021-03-03T08:51:30.615Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:51:30.616Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T08:54:52.956Z] ==> info:  ____       _    _ 
+[2021-03-03T08:54:52.960Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T08:54:52.962Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T08:54:52.962Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T08:54:52.962Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T08:54:52.964Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T08:54:52.965Z] ==> info: Loading libraries...
+[2021-03-03T08:54:53.715Z] ==> info: Loading settings...
+[2021-03-03T08:54:53.717Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T08:54:53.728Z] ==> info: Initializing starboards...
+[2021-03-03T08:54:54.622Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T08:54:54.623Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:04:33.903Z] ==> info:  ____       _    _ 
+[2021-03-03T09:04:33.907Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:04:33.907Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:04:33.908Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:04:33.909Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:04:33.919Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:04:33.930Z] ==> info: Loading libraries...
+[2021-03-03T09:04:34.677Z] ==> info: Loading settings...
+[2021-03-03T09:04:34.679Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:04:34.682Z] ==> info: Initializing starboards...
+[2021-03-03T09:04:35.401Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:04:35.402Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:05:19.171Z] ==> info:  ____       _    _ 
+[2021-03-03T09:05:19.175Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:05:19.175Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:05:19.177Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:05:19.177Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:05:19.178Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:05:19.179Z] ==> info: Loading libraries...
+[2021-03-03T09:05:19.907Z] ==> info: Loading settings...
+[2021-03-03T09:05:19.909Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:05:19.912Z] ==> info: Initializing starboards...
+[2021-03-03T09:05:20.809Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:05:20.810Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:06:06.943Z] ==> info:  ____       _    _ 
+[2021-03-03T09:06:06.947Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:06:06.947Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:06:06.948Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:06:06.949Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:06:06.949Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:06:06.951Z] ==> info: Loading libraries...
+[2021-03-03T09:06:07.705Z] ==> info: Loading settings...
+[2021-03-03T09:06:07.707Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:06:07.709Z] ==> info: Initializing starboards...
+[2021-03-03T09:06:08.519Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:06:08.520Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:06:10.175Z] ==> error: ReferenceError: moment is not defined
+    at CommandTime.exec (D:\DiscordBots\Poki\main\src\commands\utilities\time.js:66:22)
+    at CommandHandler.runCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:768:39)
+    at CommandHandler.handleDirectCommand (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:439:31)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async CommandHandler.handle (D:\DiscordBots\Poki\main\node_modules\discord-akairo\src\struct\commands\CommandHandler.js:379:23)
+[2021-03-03T09:06:23.638Z] ==> info:  ____       _    _ 
+[2021-03-03T09:06:23.642Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:06:23.643Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:06:23.655Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:06:23.656Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:06:23.658Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:06:23.659Z] ==> info: Loading libraries...
+[2021-03-03T09:06:24.476Z] ==> info: Loading settings...
+[2021-03-03T09:06:24.478Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:06:24.482Z] ==> info: Initializing starboards...
+[2021-03-03T09:06:25.324Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:06:25.326Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:12:28.684Z] ==> info:  ____       _    _ 
+[2021-03-03T09:12:28.687Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:12:28.688Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:12:28.688Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:12:28.690Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:12:28.698Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:12:28.705Z] ==> info: Loading libraries...
+[2021-03-03T09:12:29.469Z] ==> info: Loading settings...
+[2021-03-03T09:12:29.472Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:12:29.475Z] ==> info: Initializing starboards...
+[2021-03-03T09:12:30.287Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:12:30.289Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:13:59.910Z] ==> info:  ____       _    _ 
+[2021-03-03T09:13:59.914Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:13:59.914Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:13:59.915Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:13:59.923Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:13:59.924Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:13:59.926Z] ==> info: Loading libraries...
+[2021-03-03T09:14:00.645Z] ==> info: Loading settings...
+[2021-03-03T09:14:00.647Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:14:00.650Z] ==> info: Initializing starboards...
+[2021-03-03T09:14:01.385Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:14:01.386Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:14:54.589Z] ==> info:  ____       _    _ 
+[2021-03-03T09:14:54.593Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:14:54.593Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:14:54.594Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:14:54.602Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:14:54.610Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:14:54.616Z] ==> info: Loading libraries...
+[2021-03-03T09:14:55.370Z] ==> info: Loading settings...
+[2021-03-03T09:14:55.372Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:14:55.375Z] ==> info: Initializing starboards...
+[2021-03-03T09:14:56.183Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:14:56.184Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:19:12.940Z] ==> info:  ____       _    _ 
+[2021-03-03T09:19:12.945Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:19:12.945Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:19:12.946Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:19:12.953Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:19:12.960Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:19:12.960Z] ==> info: Loading libraries...
+[2021-03-03T09:19:13.699Z] ==> info: Loading settings...
+[2021-03-03T09:19:13.701Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:19:13.703Z] ==> info: Initializing starboards...
+[2021-03-03T09:19:14.557Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:19:14.560Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:21:39.531Z] ==> info:  ____       _    _ 
+[2021-03-03T09:21:39.535Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:21:39.536Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:21:39.537Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:21:39.538Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:21:39.539Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:21:39.540Z] ==> info: Loading libraries...
+[2021-03-03T09:21:40.294Z] ==> info: Loading settings...
+[2021-03-03T09:21:40.296Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:21:40.299Z] ==> info: Initializing starboards...
+[2021-03-03T09:21:41.093Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:21:41.094Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:22:12.147Z] ==> info:  ____       _    _ 
+[2021-03-03T09:22:12.150Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:22:12.151Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:22:12.151Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:22:12.157Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:22:12.158Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:22:12.160Z] ==> info: Loading libraries...
+[2021-03-03T09:22:12.883Z] ==> info: Loading settings...
+[2021-03-03T09:22:12.885Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:22:12.887Z] ==> info: Initializing starboards...
+[2021-03-03T09:22:13.675Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:22:13.676Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:23:51.632Z] ==> info:  ____       _    _ 
+[2021-03-03T09:23:51.636Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:23:51.636Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:23:51.637Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:23:51.638Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:23:51.639Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:23:51.641Z] ==> info: Loading libraries...
+[2021-03-03T09:23:52.404Z] ==> info: Loading settings...
+[2021-03-03T09:23:52.407Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:23:52.412Z] ==> info: Initializing starboards...
+[2021-03-03T09:23:53.261Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:23:53.262Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:25:06.080Z] ==> info:  ____       _    _ 
+[2021-03-03T09:25:06.084Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:25:06.084Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:25:06.085Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:25:06.092Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:25:06.093Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:25:06.095Z] ==> info: Loading libraries...
+[2021-03-03T09:25:06.817Z] ==> info: Loading settings...
+[2021-03-03T09:25:06.819Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:25:06.827Z] ==> info: Initializing starboards...
+[2021-03-03T09:25:07.550Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:25:07.552Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:25:20.448Z] ==> info:  ____       _    _ 
+[2021-03-03T09:25:20.452Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:25:20.455Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:25:20.462Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:25:20.462Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:25:20.463Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:25:20.465Z] ==> info: Loading libraries...
+[2021-03-03T09:25:21.182Z] ==> info: Loading settings...
+[2021-03-03T09:25:21.184Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:25:21.187Z] ==> info: Initializing starboards...
+[2021-03-03T09:25:21.923Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:25:21.925Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:27:04.830Z] ==> info:  ____       _    _ 
+[2021-03-03T09:27:04.834Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:27:04.835Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:27:04.836Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:27:04.848Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:27:04.877Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:27:04.877Z] ==> info: Loading libraries...
+[2021-03-03T09:27:05.628Z] ==> info: Loading settings...
+[2021-03-03T09:27:05.634Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:27:05.636Z] ==> info: Initializing starboards...
+[2021-03-03T09:27:06.412Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:27:06.424Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:27:26.447Z] ==> info:  ____       _    _ 
+[2021-03-03T09:27:26.452Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:27:26.452Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:27:26.452Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:27:26.454Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:27:26.454Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:27:26.455Z] ==> info: Loading libraries...
+[2021-03-03T09:27:27.207Z] ==> info: Loading settings...
+[2021-03-03T09:27:27.210Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:27:27.213Z] ==> info: Initializing starboards...
+[2021-03-03T09:27:27.959Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:27:27.960Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:28:07.400Z] ==> info:  ____       _    _ 
+[2021-03-03T09:28:07.404Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:28:07.404Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:28:07.405Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:28:07.407Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:28:07.414Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:28:07.422Z] ==> info: Loading libraries...
+[2021-03-03T09:28:08.161Z] ==> info: Loading settings...
+[2021-03-03T09:28:08.163Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:28:08.171Z] ==> info: Initializing starboards...
+[2021-03-03T09:28:09.028Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:28:09.029Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:28:43.299Z] ==> info:  ____       _    _ 
+[2021-03-03T09:29:11.678Z] ==> info:  ____       _    _ 
+[2021-03-03T09:34:20.472Z] ==> info:  ____       _    _ 
+[2021-03-03T09:34:20.475Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:34:20.476Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:34:20.476Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:34:20.481Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:34:20.481Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:34:20.482Z] ==> info: Loading libraries...
+[2021-03-03T09:34:21.184Z] ==> info: Loading settings...
+[2021-03-03T09:34:21.186Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:34:21.189Z] ==> info: Initializing starboards...
+[2021-03-03T09:34:22.001Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:34:22.003Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:34:34.951Z] ==> info: New data values for 'settings' has been ensured for Guild ID: 449606846697963531
+[2021-03-03T09:43:47.486Z] ==> error: TypeError: Cannot read property 'includes' of undefined
+    at ListenerPlayerError.exec (D:\DiscordBots\Poki\main\src\listeners\playerError.js:21:20)
+    at DisTube.emit (events.js:315:20)
+    at DisTube._emitError (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:855:46)
+    at VoiceConnection.<anonymous> (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:418:12)
+    at VoiceConnection.emit (events.js:315:20)
+    at VoiceWebSocket.<anonymous> (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\VoiceConnection.js:422:32)
+    at VoiceWebSocket.emit (events.js:315:20)
+    at VoiceWebSocket.onError (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\networking\VoiceWebSocket.js:160:10)
+    at WebSocket.onError (D:\DiscordBots\Poki\main\node_modules\ws\lib\event-target.js:140:16)
+    at WebSocket.emit (events.js:315:20)
+    at ClientRequest.<anonymous> (D:\DiscordBots\Poki\main\node_modules\ws\lib\websocket.js:579:15)
+    at ClientRequest.emit (events.js:315:20)
+    at TLSSocket.socketErrorListener (_http_client.js:469:9)
+    at TLSSocket.emit (events.js:315:20)
+    at emitErrorNT (internal/streams/destroy.js:106:8)
+    at emitErrorCloseNT (internal/streams/destroy.js:74:3)
+[2021-03-03T09:43:49.498Z] ==> error: TypeError: Cannot read property 'includes' of undefined
+    at ListenerPlayerError.exec (D:\DiscordBots\Poki\main\src\listeners\playerError.js:21:20)
+    at DisTube.emit (events.js:315:20)
+    at DisTube._emitError (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:855:46)
+    at VoiceConnection.<anonymous> (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:418:12)
+    at VoiceConnection.emit (events.js:315:20)
+    at VoiceWebSocket.<anonymous> (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\VoiceConnection.js:422:32)
+    at VoiceWebSocket.emit (events.js:315:20)
+    at VoiceWebSocket.onError (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\networking\VoiceWebSocket.js:160:10)
+    at WebSocket.onError (D:\DiscordBots\Poki\main\node_modules\ws\lib\event-target.js:140:16)
+    at WebSocket.emit (events.js:315:20)
+    at ClientRequest.<anonymous> (D:\DiscordBots\Poki\main\node_modules\ws\lib\websocket.js:579:15)
+    at ClientRequest.emit (events.js:315:20)
+    at TLSSocket.socketErrorListener (_http_client.js:469:9)
+    at TLSSocket.emit (events.js:315:20)
+    at emitErrorNT (internal/streams/destroy.js:106:8)
+    at emitErrorCloseNT (internal/streams/destroy.js:74:3)
+[2021-03-03T09:43:52.503Z] ==> error: TypeError: Cannot read property 'includes' of undefined
+    at ListenerPlayerError.exec (D:\DiscordBots\Poki\main\src\listeners\playerError.js:21:20)
+    at DisTube.emit (events.js:315:20)
+    at DisTube._emitError (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:855:46)
+    at VoiceConnection.<anonymous> (D:\DiscordBots\Poki\main\node_modules\distube\src\DisTube.js:418:12)
+    at VoiceConnection.emit (events.js:315:20)
+    at VoiceWebSocket.<anonymous> (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\VoiceConnection.js:422:32)
+    at VoiceWebSocket.emit (events.js:315:20)
+    at VoiceWebSocket.onError (D:\DiscordBots\Poki\main\node_modules\discord.js\src\client\voice\networking\VoiceWebSocket.js:160:10)
+    at WebSocket.onError (D:\DiscordBots\Poki\main\node_modules\ws\lib\event-target.js:140:16)
+    at WebSocket.emit (events.js:315:20)
+    at ClientRequest.<anonymous> (D:\DiscordBots\Poki\main\node_modules\ws\lib\websocket.js:579:15)
+    at ClientRequest.emit (events.js:315:20)
+    at TLSSocket.socketErrorListener (_http_client.js:469:9)
+    at TLSSocket.emit (events.js:315:20)
+    at emitErrorNT (internal/streams/destroy.js:106:8)
+    at emitErrorCloseNT (internal/streams/destroy.js:74:3)
+[2021-03-03T09:45:42.881Z] ==> info:  ____       _    _ 
+[2021-03-03T09:45:42.884Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:45:42.885Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:45:42.885Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:45:42.891Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:45:42.891Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:45:42.892Z] ==> info: Loading libraries...
+[2021-03-03T09:45:43.603Z] ==> info: Loading settings...
+[2021-03-03T09:45:43.606Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:45:43.609Z] ==> info: Initializing starboards...
+[2021-03-03T09:45:44.522Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:45:44.523Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:46:08.464Z] ==> info:  ____       _    _ 
+[2021-03-03T09:46:08.467Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:46:08.468Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:46:08.468Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:46:08.470Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:46:08.470Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:46:08.471Z] ==> info: Loading libraries...
+[2021-03-03T09:46:09.195Z] ==> info: Loading settings...
+[2021-03-03T09:46:09.197Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:46:09.199Z] ==> info: Initializing starboards...
+[2021-03-03T09:46:10.062Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:46:10.064Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:46:14.287Z] ==> info: New data values for 'settings' has been ensured for Guild ID: 449606846697963531
+[2021-03-03T09:47:28.927Z] ==> info:  ____       _    _ 
+[2021-03-03T09:47:28.930Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T09:47:28.931Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T09:47:28.931Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T09:47:28.939Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T09:47:28.940Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T09:47:28.941Z] ==> info: Loading libraries...
+[2021-03-03T09:47:29.645Z] ==> info: Loading settings...
+[2021-03-03T09:47:29.647Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T09:47:29.655Z] ==> info: Initializing starboards...
+[2021-03-03T09:47:30.455Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T09:47:30.457Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T09:47:37.025Z] ==> info: New data values for 'settings' has been ensured for Guild ID: 449606846697963531
+[2021-03-03T21:00:30.034Z] ==> info:  ____       _    _ 
+[2021-03-03T21:00:30.037Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T21:00:30.038Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T21:00:30.038Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T21:00:30.038Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T21:00:30.038Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T21:00:30.039Z] ==> info: Loading libraries...
+[2021-03-03T21:00:31.505Z] ==> info: Loading settings...
+[2021-03-03T21:00:31.507Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T21:00:31.509Z] ==> info: Initializing starboards...
+[2021-03-03T21:00:32.735Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T21:00:32.736Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T21:15:01.748Z] ==> info:  ____       _    _ 
+[2021-03-03T21:15:01.752Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T21:15:01.752Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T21:15:01.752Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T21:15:01.753Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T21:15:01.753Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T21:15:01.753Z] ==> info: Loading libraries...
+[2021-03-03T21:15:07.813Z] ==> info: Loading settings...
+[2021-03-03T21:15:07.815Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T21:15:07.817Z] ==> info: Initializing starboards...
+[2021-03-03T21:15:10.007Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T21:15:10.009Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)
+[2021-03-03T21:15:13.824Z] ==> info: New data values for 'settings' has been ensured for Guild ID: 449606846697963531
+[2021-03-03T21:18:57.908Z] ==> info:  ____       _    _ 
+[2021-03-03T21:18:57.911Z] ==> info: |  _ \ ___ | | _(_)
+[2021-03-03T21:18:57.912Z] ==> info: | |_) / _ \| |/ / |
+[2021-03-03T21:18:57.912Z] ==> info: |  __/ (_) |   <| |
+[2021-03-03T21:18:57.912Z] ==> info: |_|   \___/|_|\_\_|
+[2021-03-03T21:18:57.913Z] ==> info: Poki - Surf's up! v2021.2.27
+[2021-03-03T21:18:57.913Z] ==> info: Loading libraries...
+[2021-03-03T21:18:58.638Z] ==> info: Loading settings...
+[2021-03-03T21:18:58.640Z] ==> info: Retrieving Modlog cases...
+[2021-03-03T21:18:58.643Z] ==> info: Initializing starboards...
+[2021-03-03T21:18:59.436Z] ==> info: [Ready!<3♪] Let's party!!
+[2021-03-03T21:18:59.437Z] ==> info: Client: Floppy Disk#5273 (700631058936365000)

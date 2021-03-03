@@ -1,10 +1,13 @@
 /*
- * * PokiMusic - A feature-rich music bot for Poki. Created by Micky-kun
+ * * Poki - a multi-purpose Discord bot by Micky-kun
+ * The sun is shining. Let's go to the beach!
+ *
  * Licensed under the MIT License. Please read LICENSE for more information.
+ */
 
 /*
-Here lies the messy outcome of a lazy programmer.
-Either that or it's Javascript.
+ * Here lies the messy outcome of a lazy programmer.
+ * Either that or it's Javascripts fault.
 */
 
 'use strict'
@@ -40,14 +43,15 @@ if (process.env.NODE_ENV !== 'production') {
   }))
 }
 
+// Say hello!
 const { version } = require('../package.json')
-logger.info('    ____        __   _ __  ___           _     ')
-logger.info('   / __ \\____  / /__(_)  |/  /_  _______(_)____')
-logger.info('  / /_/ / __ \\/ //_/ / /|_/ / / / / ___/ / ___/')
-logger.info(' / ____/ /_/ / ,< / / /  / / /_/ (__  ) / /__  ')
-logger.info('/_/    \\____/_/|_/_/_/  /_/\\__,_/____/_/\\___/  ')
-logger.info('                                                  ')
-logger.info(`PokiMusic - Version: ${version}`)
+logger.info(' ____       _    _ ')
+logger.info('|  _ \\ ___ | | _(_)')
+logger.info('| |_) / _ \\| |/ / |')
+logger.info('|  __/ (_) |   <| |')
+logger.info('|_|   \\___/|_|\\_\\_|')
+logger.log('info', `Poki - Surf's up! v${version}`)
+// Looks like shit lol.
 
 if (process.versions.node < '14.0.0') {
   logger.error('PokiMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
@@ -61,6 +65,10 @@ const { Structures, MessageEmbed, Intents } = require('discord.js')
 const Enmap = require('enmap')
 const DisTube = require('distube')
 const moment = require('moment')
+const StarboardManager = require('discord-starboards')
+
+const starboard = new Enmap('starboards')
+starboard.ensure('starboards', [])
 
 const config = require('./config.json')
 const emoji = require('./emoji.json')
@@ -73,7 +81,7 @@ Structures.extend('Message', Message => {
     // Universal Embed dialogs.
     say (type, description, title) {
       const embedColor = {
-        ok: color.music,
+        ok: color.ok,
         warn: color.warn,
         error: color.error,
         info: color.info,
@@ -82,7 +90,7 @@ Structures.extend('Message', Message => {
 
       const emojiPerms = this.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
       const embedEmoji = {
-        ok: emojiPerms ? emoji.music : '🎵',
+        ok: emojiPerms ? emoji.ok : '✅',
         warn: emojiPerms ? emoji.warn : '⚠',
         error: emojiPerms ? emoji.error : '❌',
         info: emojiPerms ? emoji.info : 'ℹ',
@@ -197,7 +205,7 @@ Structures.extend('Message', Message => {
   return MessageStructure
 })
 
-class PokiMusic extends AkairoClient {
+class Poki extends AkairoClient {
   constructor () {
     super({
       ownerID: config.owner
@@ -229,26 +237,66 @@ class PokiMusic extends AkairoClient {
       youtubeCookie: config.ytCookie,
       highWaterMark: 1 << 25,
       youtubeDL: true,
-      updateYouTubeDL: false,
-      customFilters: {
-        vibrato: 'vibrato=f=7:d=1',
-        demonic: 'vibrato=f=2500:d=1'
-      }
+      updateYouTubeDL: false
     })
 
+    // Data Management
+    // Server Defaults
     this.defaults = {
+      noInvites: false,
+      modlog: null,
+      messagelog: null,
+      memberlog: null,
+      voicelog: null,
+      taglog: null,
+      guildMemberAdd: null,
+      guildMemberRemove: null,
+      guildMemberUpdate: null,
+      messageDelete: null,
+      messageUpdate: null,
+      voiceStateUpdate: null,
       djMode: false,
       djRole: null,
       allowFreeVolume: true,
       nowPlayingAlerts: true,
       maxTime: null,
-      maxQueueLimit: null
+      maxQueueLimit: null,
+      textChannel: null,
+      voiceChannel: null,
+      timezone: 'UTC'
     }
 
     logger.info('Loading settings...')
     this.settings = new Enmap({
       name: 'settings',
       fetchAll: true
+    })
+    logger.log('info', 'Retrieving Modlog cases...')
+    this.modlog = new Enmap('modlog')
+    this.tags = new Enmap('tags')
+
+    // Starboard!
+    // Moved to the main client so data can be easily accessed.
+    class StarSaver extends StarboardManager {
+      async getAllStarboards () {
+        return starboard.get('starboards')
+      }
+
+      async saveStarboard (data) {
+        starboard.push('starboards', data)
+        return true
+      }
+
+      async deleteStarboard (channel, emoji) {
+        const starboardArray = starboard.get('starboards').filter((sb) => !(sb.channelID === channel && sb.options.emoji === emoji))
+        starboard.set('starboards', starboardArray)
+        return true
+      }
+    }
+
+    logger.info('Initializing starboards...')
+    this.starboard = new StarSaver(this, {
+      storage: false
     })
 
     this.commands = new CommandHandler(this, {
@@ -285,4 +333,4 @@ class PokiMusic extends AkairoClient {
   }
 }
 
-module.exports = PokiMusic
+module.exports = Poki

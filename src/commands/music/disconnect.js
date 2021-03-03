@@ -44,8 +44,7 @@ module.exports = class CommandDisconnect extends Command {
         this.client.player.stop(message)
       }
       vc.leave()
-      message.react('📤')
-      return message.say('ok', `Left **${vc.name}**.`)
+      return message.custom('📤', 0xDD2E44, `Left \`${vc.name}\``)
     } else {
       return message.say('error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }

@@ -67,12 +67,13 @@ module.exports = class CommandHelp extends Command {
 
         const commandEmbed = new MessageEmbed()
           .setColor(this.client.color.blood)
-          .setAuthor('PokiMusic Help Documentation', this.client.user.avatarURL({ dynamic: true }))
+          .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${this.client.config.prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
           .setTimestamp()
           .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }))
         if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.')
+        if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.')
         if (command.category) commandEmbed.addField('Category', command.category, true)
         // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
         if (command.aliases.length > 1) commandEmbed.addField('Aliases', command.aliases, true)
@@ -97,8 +98,8 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(this.client.color.blood)
-      .setAuthor(this.client.user.username + ' - Music Commands', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('This is for music commands. If you\'re looking for Poki\'s other commands, please run `;help` instead.')
+      .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('This is Poki\'s rewrite! There may be bugs! Currently a work in progress.')
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${this.client.config.prefix}help [command]`)
 
@@ -113,7 +114,7 @@ module.exports = class CommandHelp extends Command {
       field.value = `${field.value}`
       helpEmbed.fields.push(field)
     })
-    message.react(this.client.emoji.okReact)
-    return message.author.send(helpEmbed)
+    message.react(this.client.emoji.cutieReact)
+    return message.channel.send(helpEmbed)
   }
 }
