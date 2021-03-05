@@ -112,7 +112,12 @@ Structures.extend('Message', Message => {
         embed.setAuthor(title, embedIcon[type])
         embed.setDescription(description)
       } else {
-        embed.setDescription(`${embedEmoji[type]} ${description}`)
+        if (type === 'error' || type === 'warn') {
+          embed.setAuthor(type === 'error' ? 'Error' : 'Warning', embedIcon[type])
+          embed.setDescription(description)
+        } else {
+          embed.setDescription(`${embedEmoji[type]} ${description}`)
+        }
       }
 
       if (this.channel.type === 'dm') {
@@ -205,6 +210,86 @@ Structures.extend('Message', Message => {
   return MessageStructure
 })
 
+// Extending the Guild class.
+Structures.extend('Guild', Guild => {
+  class GuildStructure extends Guild {
+    // Records a moderation case.
+    // Anytime someone with the appropriate elavated permissions uses
+    // a moderation command, the case will be recorded only if the guild
+    // has a modlog channel set.
+    async recordCase (type, modid, userid, reason) {
+      await this.client.modlog.ensure(this.id, {}) // Makes sure that the database exists.
+      const modlog = this.client.modlog.get(this.id) // Gets the mod log for the guild.
+      const caseid = Object.keys(modlog).length // Gets the current amount of entries in the mod log.
+
+      // Embed colors!
+      const colors = {
+        ban: color.ban,
+        kick: color.kick,
+        softban: color.softban,
+        unban: color.unban
+      }
+
+      const moderator = this.members.cache.get(modid) // The moderators user ID.
+      const user = this.client.users.cache.find(val => val.id === userid) // The affected users ID.
+
+      const _type = type.charAt(0).toUpperCase() + type.slice(1)
+      const emojiType = {
+        ban: '🔨',
+        kick: '👢',
+        softban: '💨',
+        unban: '🕊'
+      }
+
+      // Used to construct the embed.
+      if (!reason) reason = `No reason provided. Type \`${this.client.config.prefix}reason ${caseid + 1}\` to add it.`
+
+      const __type = `**Action:** ${_type} ${emojiType[type]}\n`
+      const __user = `**User:** ${user.tag} (\`${user.id}\`)\n`
+      const __reason = `**Reason:** ${reason}`
+
+      const embed = new MessageEmbed()
+        .setColor(colors[type])
+        .setAuthor(moderator.user.tag + ` (${moderator.user.id})`, moderator.user.avatarURL({ dynamic: true }))
+        .setDescription(`${__type}${__user}${__reason}`)
+        .setThumbnail(user.avatarURL({ dynamic: true }))
+        .setTimestamp()
+        .setFooter(`Case ${caseid + 1}`) // Adds 1 from the caseid variable.
+
+      const modlogSetting = this.client.settings.get(this.id, 'modlog') // The modlog channel.
+      const modlogChannel = this.channels.cache.find(val => val.id === modlogSetting) // Get's the modlog channel for the guild.
+
+      if (!modlogChannel) return // The modlog channel doesn't exist.
+
+      return modlogChannel.send(embed).then(msg => {
+        // Adds a case into the modlog DB.
+        // Then it'll be possible to retrieve the case's message ID to edit the modlog case.
+        this.client.modlog.set(this.id, {
+          type: type,
+          mod_id: modid,
+          message_id: msg.id,
+          user_tag: user.tag,
+          user_avatar: user.avatarURL({ dynamic: true }),
+          user_id: userid,
+          caseid: caseid + 1
+        }, caseid + 1)
+      }).catch(err => {
+        // Some stupid shit happened idk...
+        if (err.name === 'DiscordAPIError') return
+        const errorChannel = this.client.channels.cache.find(val => val.id === '603735567733227531')
+        const embed = new MessageEmbed()
+          .setColor(color.error)
+          .setTitle(emoji.error + 'Internal Error')
+          .setDescription(`\`\`\`js\n${err}\`\`\``)
+          .setTimestamp()
+        errorChannel.send(embed)
+      })
+    }
+  }
+
+  return GuildStructure
+})
+
 class Poki extends AkairoClient {
   constructor () {
     super({
@@ -215,7 +300,7 @@ class Poki extends AkairoClient {
       // reactions to show faster, but it also comes with a cost of having
       // your bot rate-limited.
       restTimeOffset: 175,
-      intents: new Intents(Intents.NON_PRIVILEGED, 'GUILD_MEMBERS')
+      intents: new Intents(Intents.ALL)
     })
 
     // Configuration files.

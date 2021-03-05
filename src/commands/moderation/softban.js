@@ -18,17 +18,7 @@ module.exports = class CommandSoftban extends Command {
         `
       },
       channel: 'guild',
-      category: '⚒ Moderation',
-      args: [
-        {
-          id: 'member',
-          type: 'member'
-        },
-        {
-          id: 'days',
-          type: 'number'
-        }
-      ]
+      category: '⚒ Moderation'
     })
   }
 
@@ -37,7 +27,7 @@ module.exports = class CommandSoftban extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.say('info', 'Please provide a member to ban.')
+      return message.usage('softban <@user> [reason]')
     }
 
     if (!member) {
@@ -64,31 +54,21 @@ module.exports = class CommandSoftban extends Command {
     const randomResponse = responses[Math.floor(Math.random() * responses.length)]
 
     try {
+      message.delete()
       await member.user.send(new MessageEmbed()
         .setColor(this.client.color.softban)
         .setAuthor(`You have been softbanned from ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`**Reason:** ${reason}`)
-        .setTimestamp()
-        .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
-      message.delete()
+      await member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
+      await message.guild.members.unban(member.user.id)
+      await message.guild.recordCase('softban', message.author.id, member.user.id, reason)
+      return message.channel.send(new MessageEmbed()
+        .setColor(this.client.color.softban)
+        .setAuthor(randomResponse, member.user.avatarURL({ dynamic: true }))
+      )
     } catch (err) {
-      return
-    } finally {
-      member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
-      message.guild.members.unban(member.user.id)
-      message.say('💨', this.client.color.softban, `**Reason:** ${reason}`, randomResponse)
-      message.guild.recordCase('softban', message.author.id, member.user.id, reason)
+      return message.say('error', err.message)
     }
   }
 }
-
-/*
-member.user.send(softdm).then(() => {
-    member.ban({ days: 1, reason: reason }).catch(O_o=>{});
-    msg.channel.send(softe);
-    let modlog = msg.guild.channels.find(`name`, "modlog");
-    if (!modlog) return;
-    modlog.send(modlogE);
-    return msg.guild.unban(member.id).catch(O_o=>{});
-*/

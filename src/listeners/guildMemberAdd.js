@@ -25,6 +25,6 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
       .setThumbnail(member.user.avatarURL() + '?size=2048')
       .setTimestamp()
       .setFooter('Member Joined')
-    memberLogChannel.send(`📥 **${member.user.tag}** (\`${member.user.id}\`) joined the server.`, join)
+    memberLogChannel.send(`📥 **${member.user.username}**#${member.user.discriminator} (\`${member.user.id}\`) joined the server.`, join)
   }
 }

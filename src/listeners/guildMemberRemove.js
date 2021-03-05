@@ -25,6 +25,6 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
       .setThumbnail(member.user.avatarURL() + '?size=2048')
       .setTimestamp()
       .setFooter('Member left or was kicked.')
-    memberLogChannel.send(`📤 **${member.user.tag}** (\`${member.user.id}\`) left or was kicked from the server.`, left)
+    memberLogChannel.send(`📤 **${member.user.username}**#${member.user.discriminator} (\`${member.user.id}\`) left or was kicked from the server.`, left)
   }
 }

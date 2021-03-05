@@ -24,7 +24,7 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
         .setTitle(`\`${newMember.user.id}\``)
         .setDescription(`**Before:** ${oldMember.nickname !== null ? oldMember.nickname : 'None'}\n**After:** ${newMember.nickname !== null ? newMember.nickname : 'None'}`)
         .setTimestamp()
-      memberLogChannel.send(`📛 **${newMember.user.tag}** (\`${newMember.user.id}\`) changed their nickname.`, nickname)
+      memberLogChannel.send(`📛 **${newMember.user.username}**#${newMember.user.discriminator} (\`${newMember.user.id}\`) changed their nickname.`, nickname)
     }
 
     // TODO: Username and Discriminator updates

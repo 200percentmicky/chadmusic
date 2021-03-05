@@ -95,9 +95,8 @@ module.exports = class CommandPlay extends Command {
       }
       */
 
-      if (text.startsWith('<') || text.endsWith('>')) text.replace(/\W/gm, '')
-
-      await this.client.player.play(message, text)
+      // eslint-disable-next-line no-useless-escape
+      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
       const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
       message.react(emojiPerms ? this.client.emoji.musicReact : '🎵')
     } catch (err) {

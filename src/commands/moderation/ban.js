@@ -23,7 +23,7 @@ module.exports = class CommandBan extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.say('info', 'Please provide a member to kick.')
+      return message.usage('ban <@user> [days] [reason]')
     }
 
     if (!member) {
@@ -48,10 +48,10 @@ module.exports = class CommandBan extends Command {
     }
 
     const responses = [
-      `Done. **${member.user.tag}** is now banned from the server.`,
-      `**${member.user.tag}** is now forever gone.`,
-      `And just like that, **${member.user.tag}** has been banned.`,
-      `**${member.user.tag}** has been struck by the ban hammer!`
+      `${member.user.tag} is now banned from the server.`,
+      `${member.user.tag} is now forever gone.`,
+      `And just like that, ${member.user.tag} has been banned.`,
+      `${member.user.tag} has been struck by the ban hammer!`
     ]
 
     const randomResponse = responses[Math.floor(Math.random() * responses.length)]
@@ -61,16 +61,17 @@ module.exports = class CommandBan extends Command {
         .setColor(this.client.color.ban)
         .setAuthor(`You have been banned from ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`**Reason:** ${reason}`)
-        .setTimestamp()
-        .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
       message.delete()
-    } catch (err) {
-      return
-    } finally {
       await member.ban({ days: days, reason: `${message.author.tag}: ${reason}` })
-      message.custom('🔨', this.client.color.ban, `**Reason:** ${reason}`, randomResponse)
       message.guild.recordCase('ban', message.author.id, member.user.id, reason)
+      return message.channel.send(new MessageEmbed()
+        .setColor(this.client.color.ban)
+        .setAuthor(randomResponse, member.user.avatarURL({ dynamic: true }))
+        .setDescription(`**Reason:** ${reason}`)
+      )
+    } catch (err) {
+      return message.say('error', err.message)
     }
   }
 }

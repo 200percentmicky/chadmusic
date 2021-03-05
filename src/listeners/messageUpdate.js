@@ -41,6 +41,6 @@ module.exports = class ListenerMessageUpdate extends Listener {
     }
 
     if (newMessage.channel.id === logChannel) return // Probably a band-aid fix. Inspect further...
-    logChannel.send(`✏ **${newMessage.author.tag}** (\`${newMessage.author.id}\`) updated their message in ${newMessage.channel.toString()}.`, edited)
+    logChannel.send(`📝 **${newMessage.author.username}**#${newMessage.author.discriminator} (\`${newMessage.author.id}\`) updated their message in ${newMessage.channel.toString()}.`, edited)
   }
 }

@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { Embeds } = require('discord-paginationembed')
+const { warn } = require('../../urlicon.json')
 
 module.exports = class CommandNukeChannel extends Command {
   constructor () {
@@ -22,7 +23,8 @@ module.exports = class CommandNukeChannel extends Command {
     for (let i = 1; i <= 1; ++i) {
       embeds.push(new MessageEmbed()
         .setColor(this.client.color.warn)
-        .addField(`${this.client.emoji.warn} Are you sure you want to nuke this channel?`, 'Nuking this channel will delete all messages! This action is irreversable.')
+        .setAuthor('Are you sure you want to nuke this channel?', warn)
+        .setDescription('Nuking this channel will delete all messages! This action cannot be reverted.')
         .addField('\u200b', '✅ Nuke this channel!\n❌ Cancel. I changed my mind.'))
     }
 
