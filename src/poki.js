@@ -387,7 +387,7 @@ class Poki extends AkairoClient {
     this.commands = new CommandHandler(this, {
       directory: './src/commands',
       prefix: message => message.channel.type === 'text'
-        ? prefix.getPrefix(message.guild.id) || config.prefix
+        ? prefix.getPrefix(message.guild.id) || prefix.getPrefix('global') || config.prefix
         : config.prefix,
       commandUtil: true,
       handleEdits: true,

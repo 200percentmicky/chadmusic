@@ -10,8 +10,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAboutMusic extends Command {
   constructor () {
-    super('about', {
-      aliases: ['about'],
+    super('aboutmusic', {
+      aliases: ['aboutmusic'],
       category: '🛠 Utilities',
       description: {
         text: 'Shows information about Poki.'
@@ -24,8 +24,17 @@ module.exports = class CommandAboutMusic extends Command {
     const aboutembed = new MessageEmbed()
       .setColor(1602089)
       .setAuthor(this.client.user.username + ' - Surf\'s up!', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('Micky-kun\'s multi-purpose Discord bot with a variety of features.')
-      .addField('⚠ Caution', 'As with all forms of software that are currently in development, expect for bugs to appear from time to time! Please feel free to contact me using `;contact` if you found a bug when using the bot.')
+      .setDescription('A Music Bot for Poki based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
+      .addField('✨ Features', stripIndents`
+      :white_small_square: Supports 700+ websites.
+      :white_small_square: Add filters to the player.
+      :white_small_square: Alter filter values during playback.
+      :white_small_square: Unlimited volume! :joy::ok_hand:
+      :white_small_square: DJ commands to control the player.
+      :white_small_square: Queue and track length limits.
+      :white_small_square: And more to come!
+      `)
+      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, expect for bugs to appear from time to time! Please feel free to contact me using `;contact` if you found a bug when using the bot.')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
       **Node.js:** ${process.version}
       **Bot Version:** ${main.version}
