@@ -29,6 +29,7 @@
     "dotenv": "^8.2.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",
     "keyv": "^4.0.3",
+    "keyv-file": "^0.2.0",
     "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "moment-timezone": "^0.5.33",

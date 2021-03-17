@@ -86,6 +86,7 @@ const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = requ
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
 const Keyv = require('keyv')
+const { KeyvFile } = require('keyv-file')
 const DisTube = require('distube')
 const moment = require('moment')
 
@@ -149,17 +150,18 @@ class ChadMusic extends AkairoClient {
 
     /* Data Management */
     // Keyv is perfectly scalable for sharding. Due to its simplicity though, each new Keyv instance
-    // must be made to make it multi-guild compatible.
+    // for a particular setting must be made to make it multi-guild compatible. This also prevent data
+    // from being overlapped or overwritten. It looks rather silly, but it seems to work without errors.
     logger.info('Loading settings...')
-    const token = process.env.POSTGRES_URI
-    this.djMode = new Keyv(token, { namespace: 'djMode' })
-    this.djRole = new Keyv(token, { namespace: 'djRole' })
-    this.allowFreeVolume = new Keyv(token, { namespace: 'allowFreeVolume' })
-    this.nowPlayingAlerts = new Keyv(token, { namespace: 'nowPlayingAlerts' })
-    this.maxTime = new Keyv(token, { namespace: 'maxTime' })
-    this.maxQueueLimit = new Keyv(token, { namespace: 'maxQueueLimit' })
-    this.textChannel = new Keyv(token, { namespace: 'textChannel' })
-    this.voiceChannel = new Keyv(token, { namespace: 'voiceChannel' })
+    const token = process.env.NODE_ENV
+    this.djMode = new Keyv(token, { namespace: 'djMode', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] djMode: %s', err))
+    this.djRole = new Keyv(token, { namespace: 'djRole', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] djRole: %s', err))
+    this.allowFreeVolume = new Keyv(token, { namespace: 'allowFreeVolume', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] allowFreeVolume: %s', err))
+    this.nowPlayingAlerts = new Keyv(token, { namespace: 'nowPlayingAlerts', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] nowPlayingAlerts: %s', err))
+    this.maxTime = new Keyv(token, { namespace: 'maxTime', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] maxTime: %s', err))
+    this.maxQueueLimit = new Keyv(token, { namespace: 'maxQueueLimit', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] maxQueueLimit: %s', err))
+    this.textChannel = new Keyv(token, { namespace: 'textChannel', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] textChannel: %s', err))
+    this.voiceChannel = new Keyv(token, { namespace: 'voiceChannel', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] voiceChannel: %s', err))
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {
