@@ -1,4 +1,3 @@
-
 /* Extending Message class */
 // This is the overall UI that the bot will utilize. This also contains a function to
 // provide a commands usage if no arguments are provided to some commands, as well as

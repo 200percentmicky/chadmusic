@@ -29,10 +29,10 @@ module.exports = class CommandMaxTime extends Command {
     if (!time) message.usage('time <duration>')
 
     if (time === 0 || time === 'NONE'.toLowerCase()) {
-      await this.client.settings.set(message.guild.id, null, 'maxTime')
+      await this.client.maxTime.set(message.guild.id, null)
       return message.say('ok', 'Max time has been disabled.')
     }
-    await this.client.settings.set(message.guild.id, notation, 'maxTime')
+    await this.client.maxTime.set(message.guild.id, notation)
     return message.say('ok', `Max time has been set to \`${time}\``)
   }
 }

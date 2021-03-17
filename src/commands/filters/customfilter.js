@@ -23,11 +23,12 @@ module.exports = class CommandCustomFilter extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) ||
+    const djMode = this.client.djMode.get(message.guild.id)
+    const djRole = this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
-    if (settings.djMode) {
+    if (djMode) {
       if (!dj) {
         return message.say('no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 

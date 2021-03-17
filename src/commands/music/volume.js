@@ -17,9 +17,10 @@ module.exports = class CommandVolume extends Command {
   }
 
   async exec (message) {
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = this.client.djMode.get(message.guild.id)
+    const djRole = this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
@@ -46,7 +47,8 @@ module.exports = class CommandVolume extends Command {
     }
 
     let newVolume = parseInt(args[1])
-    if (settings.allowFreeVolume === false) newVolume = 200
+    const allowFreeVolume = this.client.allowFreeVolume.get(message.guild.id)
+    if (allowFreeVolume === false) newVolume = 200
     this.client.player.setVolume(message.guild.id, newVolume)
 
     if (newVolume >= 201) {
