@@ -16,8 +16,8 @@ module.exports = class CommandEarrape extends Command {
   }
 
   async exec (message) {
-    const djMode = this.client.djMode.get(message.guild.id)
-    const djRole = this.client.djRole.get(message.guild.id)
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) {

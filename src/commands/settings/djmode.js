@@ -14,7 +14,7 @@ module.exports = class CommandDJMode extends Command {
   }
 
   async exec (message) {
-    const dj = message.member.roles.cache.has(this.client.djRole.get(message.guild.id)) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(await this.client.djRole.get(message.guild.id)) || message.member.hasPermission(['MANAGE_CHANNELS'])
     if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle DJ Mode.')
 
     const args = message.content.split(/ +/g)

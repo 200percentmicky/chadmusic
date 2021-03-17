@@ -29,8 +29,8 @@ module.exports = class CommandPlay extends Command {
     const args = message.content.split(/ +/g)
     const text = args.slice(1).join(' ')
 
-    const djMode = this.client.djMode.get(message.guild.id)
-    const djRole = this.client.djRole.get(message.guild.id)
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
@@ -59,7 +59,7 @@ module.exports = class CommandPlay extends Command {
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
       if (queue) {
-        const maxQueueLimit = this.client.maxQueueLimit.get(message.guild.id)
+        const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
         if (maxQueueLimit) {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
           if (queueMemberSize >= maxQueueLimit) {

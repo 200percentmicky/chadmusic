@@ -19,8 +19,8 @@ module.exports = class ListenerPlaySong extends Listener {
     // This be some weird shit above...
 
     if (queue.songs.length === 1) { // If someone started a new queue.
-      const djRole = this.client.djRole.get(message.guild.id)
-      const maxTime = this.client.maxTime.get(message.guild.id)
+      const djRole = await this.client.djRole.get(message.guild.id)
+      const maxTime = await this.client.maxTime.get(message.guild.id)
       const dj = msg.member.roles.cache.has(djRole) || channel.permissionsFor(msg.member.user.id).has(['MANAGE_CHANNELS'])
       if (maxTime) {
         if (!dj) {
