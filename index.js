@@ -28,6 +28,6 @@ SOFTWARE.
 /* Index File */
 
 require('dotenv').config()
-const ChadMusic = require('./src/ChadMusic.js')
+const ChadMusic = require('./src/chadmusic.js')
 
 new ChadMusic().login(process.env.TOKEN)

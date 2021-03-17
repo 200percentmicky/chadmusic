@@ -153,15 +153,14 @@ class ChadMusic extends AkairoClient {
     // for a particular setting must be made to make it multi-guild compatible. This also prevent data
     // from being overlapped or overwritten. It looks rather silly, but it seems to work without errors.
     logger.info('Loading settings...')
-    const token = process.env.NODE_ENV
-    this.djMode = new Keyv(token, { namespace: 'djMode', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] djMode: %s', err))
-    this.djRole = new Keyv(token, { namespace: 'djRole', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] djRole: %s', err))
-    this.allowFreeVolume = new Keyv(token, { namespace: 'allowFreeVolume', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] allowFreeVolume: %s', err))
-    this.nowPlayingAlerts = new Keyv(token, { namespace: 'nowPlayingAlerts', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] nowPlayingAlerts: %s', err))
-    this.maxTime = new Keyv(token, { namespace: 'maxTime', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] maxTime: %s', err))
-    this.maxQueueLimit = new Keyv(token, { namespace: 'maxQueueLimit', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] maxQueueLimit: %s', err))
-    this.textChannel = new Keyv(token, { namespace: 'textChannel', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] textChannel: %s', err))
-    this.voiceChannel = new Keyv(token, { namespace: 'voiceChannel', adapter: 'postgres' }).on('error', (err) => logger.error('[Keyv] voiceChannel: %s', err))
+    this.djMode = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'djMode' }).on('error', (err) => logger.error('[Keyv] djMode: %s', err))
+    this.djRole = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'djRole' }).on('error', (err) => logger.error('[Keyv] djRole: %s', err))
+    this.allowFreeVolume = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'allowFreeVolume' }).on('error', (err) => logger.error('[Keyv] allowFreeVolume: %s', err))
+    this.nowPlayingAlerts = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'nowPlayingAlerts' }).on('error', (err) => logger.error('[Keyv] nowPlayingAlerts: %s', err))
+    this.maxTime = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'maxTime' }).on('error', (err) => logger.error('[Keyv] maxTime: %s', err))
+    this.maxQueueLimit = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'maxQueueLimit' }).on('error', (err) => logger.error('[Keyv] maxQueueLimit: %s', err))
+    this.textChannel = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'textChannel' }).on('error', (err) => logger.error('[Keyv] textChannel: %s', err))
+    this.voiceChannel = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'voiceChannel' }).on('error', (err) => logger.error('[Keyv] voiceChannel: %s', err))
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {
