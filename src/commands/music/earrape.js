@@ -25,7 +25,7 @@ module.exports = class CommandEarrape extends Command {
       }
     }
 
-    const allowFreeVolume = this.client.allowFreeVolume.get(message.guild.id)
+    const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
     if (!allowFreeVolume) {
       return message.say('no', 'This command cannot be used because **Unlimited Volume** is disabled.')
     }
