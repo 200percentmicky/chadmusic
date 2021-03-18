@@ -14,7 +14,7 @@ module.exports = class CommandFreeVolume extends Command {
   }
 
   async exec (message) {
-    const dj = message.member.roles.cache.has(await this.client.djRole.get(message.guild.id)) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(await this.client.djRole.get(message.guild.id)) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
 
     const args = message.content.split(/ +/g)
