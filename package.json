@@ -1,6 +1,6 @@
 {
   "name": "poki",
-  "version": "2021.3.10",
+  "version": "2021.3.21-keyv",
   "description": "A multi-purpose Discord bot in Javascript thats also a cute alien girl!",
   "main": "index.js",
   "scripts": {

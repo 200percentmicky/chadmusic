@@ -23,8 +23,8 @@ module.exports = class CommandAboutMusic extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
       .setColor(1602089)
-      .setAuthor(this.client.user.username + ' - Surf\'s up!', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('A Music Bot for Poki based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
+      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('A feature-rich open source music bot based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
       .addField('✨ Features', stripIndents`
       :white_small_square: Supports 700+ websites.
       :white_small_square: Add filters to the player.
@@ -34,8 +34,9 @@ module.exports = class CommandAboutMusic extends Command {
       :white_small_square: Queue and track length limits.
       :white_small_square: And more to come!
       `)
-      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, expect for bugs to appear from time to time! Please feel free to contact me using `;contact` if you found a bug when using the bot.')
+      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, there will be bugs! Please report any bugs you may come across by opening an issue on **[GitHub](https://github.com/mickykuna/ChadMusic)**.')
       .addField(`${this.client.emoji.info} Info`, stripIndents`
+      **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
       **Bot Version:** ${main.version}
       **Discord.js:** ${discordversion.version}
@@ -43,6 +44,7 @@ module.exports = class CommandAboutMusic extends Command {
       **DisTube.js:** ${distubeversion.version}
       **Uptime:** ${this.client.utils.uptime()}
       `, true)
+      .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
       .setFooter(`The owner of this instant is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send(aboutembed)
   }

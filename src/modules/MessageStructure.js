@@ -27,19 +27,11 @@ module.exports = class MessageStructure extends Message {
       no: emojiPerms ? this.client.emoji.no : '🚫'
     }
 
-    const embedIcon = {
-      ok: this.client.urlicon.ok,
-      warn: this.client.urlicon.warn,
-      error: this.client.urlicon.error,
-      info: this.client.urlicon.info,
-      no: this.client.urlicon.no
-    }
-
     const embed = new MessageEmbed()
       .setColor(embedColor[type])
 
     if (title) { /* The title of the embed, if one is provided. */
-      embed.setAuthor(title, embedIcon[type])
+      embed.setTitle(`${embedEmoji[type]} ${title}`)
       embed.setDescription(description)
     } else {
       embed.setDescription(`${embedEmoji[type]} ${description}`)
@@ -65,7 +57,7 @@ module.exports = class MessageStructure extends Message {
     const guildPrefix = this.client.config.prefix // TODO: Add guild prefix data.
     const embed = new MessageEmbed()
       .setColor(this.client.color.info)
-      .setAuthor('Usage', this.client.urlicon.info)
+      .setTitle(this.client.emoji.info + ' Usage')
       .setDescription(`\`${guildPrefix}${syntax}\``)
     this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
   }
