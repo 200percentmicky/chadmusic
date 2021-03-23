@@ -9,7 +9,7 @@ module.exports = class MessageStructure extends Message {
   say (type, description, title) {
     /* The color of the embed */
     const embedColor = {
-      ok: this.client.color.ok,
+      ok: this.client.color.music,
       warn: this.client.color.warn,
       error: this.client.color.error,
       info: this.client.color.info,
@@ -20,7 +20,7 @@ module.exports = class MessageStructure extends Message {
     // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
     const emojiPerms = this.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
     const embedEmoji = {
-      ok: emojiPerms ? this.client.emoji.ok : '✅',
+      ok: emojiPerms ? this.client.emoji.music : '✅',
       warn: emojiPerms ? this.client.emoji.warn : '⚠',
       error: emojiPerms ? this.client.emoji.error : '❌',
       info: emojiPerms ? this.client.emoji.info : 'ℹ',
