@@ -30,7 +30,7 @@ module.exports = class CommandSettings extends Command {
       **⁉ Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || this.client.config.prefix}\`
       **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
       **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **⏲ Max Song Time:** ${maxTime !== null ? toColonNotation(maxTime) : 'Unlimited'}
+      **⏲ Max Song Time:** ${maxTime !== (null || undefined) ? toColonNotation(maxTime) : 'Unlimited'}
       **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
       **📣 Now Playing Alerts:** ${nowPlayingAlerts === true ? 'On' : 'Off'}
       **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}

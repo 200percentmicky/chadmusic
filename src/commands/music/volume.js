@@ -48,7 +48,7 @@ module.exports = class CommandVolume extends Command {
 
     let newVolume = parseInt(args[1])
     const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
-    if (allowFreeVolume === false) newVolume = 200
+    if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200
     this.client.player.setVolume(message.guild.id, newVolume)
 
     if (newVolume >= 201) {
