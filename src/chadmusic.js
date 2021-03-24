@@ -136,22 +136,7 @@ class ChadMusic extends AkairoClient {
       updateYouTubeDL: false
     })
 
-    /* Client Defaults */
-    this.defaults = {
-      djMode: false,
-      djRole: null,
-      allowFreeVolume: true,
-      nowPlayingAlerts: true,
-      maxTime: null,
-      maxQueueLimit: null,
-      textChannel: null,
-      voiceChannel: null
-    }
-
     /* Data Management */
-    // Keyv is perfectly scalable for sharding. Due to its simplicity though, each new Keyv instance
-    // for a particular setting must be made to make it multi-guild compatible. This also prevent data
-    // from being overlapped or overwritten. It looks rather silly, but it seems to work without errors.
     logger.info('Loading settings...')
     this.djMode = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'djMode' }).on('error', (err) => logger.error('[Keyv] djMode: %s', err))
     this.djRole = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'djRole' }).on('error', (err) => logger.error('[Keyv] djRole: %s', err))
