@@ -31,7 +31,7 @@ module.exports = class CommandEvalJS extends Command {
       }
 
       if (code.includes('.token')) {
-        await message.react(this.client.emoji.warnReact)
+        await message.react(process.env.REACTION_WARN)
         try {
           message.author.send(clean(evaled))
         } catch (err) {
@@ -39,16 +39,16 @@ module.exports = class CommandEvalJS extends Command {
         }
         return console.log(clean(evaled))
       } else {
-        await message.react(this.client.emoji.okReact)
+        await message.react(process.env.REACTION_OK)
         return message.channel.send(clean(evaled), { code: 'js', split: true })
       }
     } catch (err) {
-      message.react(this.client.emoji.errorReact)
+      message.react(process.env.REACTION_ERROR)
       message.channel.send(`${err.name}: ${err.message}`, { code: 'js', split: true })
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       errorChannel.send(new MessageEmbed()
-        .setColor(this.client.color.warn)
-        .setTitle(this.client.emoji.warn + 'eval() Error')
+        .setColor(process.env.COLOR_WARN)
+        .setTitle(process.env.EMOJI_WARN + 'eval() Error')
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
         .setTimestamp()

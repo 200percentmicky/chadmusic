@@ -29,10 +29,7 @@ module.exports = class CommandSearch extends Command {
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    const prefix = this.client.prefix.getPrefix(message.guild.id)
-      ? this.client.prefix.getPrefix(message.guild.id)
-      : this.client.config.prefix
-    if (!search) return message.say('info', `\`${prefix}search <query>\``, 'Usage')
+    if (!args[1]) return message.usage('search <query>')
 
     message.channel.startTyping()
     const currentVc = this.client.voice.connections.get(message.guild.id)
@@ -83,7 +80,7 @@ module.exports = class CommandSearch extends Command {
           message.channel.startTyping(5)
           const selected = results[parseInt(collected.first().content - 1)].url
           await this.client.player.play(message, selected)
-          message.react(this.client.emoji.okReact)
+          message.react(process.env.REACTION_OK)
           return message.channel.stopTyping(true)
         }).catch(() => {
           return msg.delete()

@@ -45,7 +45,7 @@ module.exports = class CommandVibrato extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
-        return message.custom('📢', this.client.color.info, '**Vibrato** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
       } else {
         const d = args[1]
         let f = parseInt(args[2])
@@ -60,7 +60,7 @@ module.exports = class CommandVibrato extends Command {
           return message.say('error', 'Frequency must be greater than 0.')
         }
         await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
-        return message.custom('📢', this.client.color.info, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

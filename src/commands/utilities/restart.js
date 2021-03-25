@@ -22,7 +22,7 @@ module.exports = class CommandRestartJS extends Command {
     const errChannel = this.client.channels.cache.find(val => val.id === '603735567733227531')
     await message.react('🔄')
     await errChannel.send(new MessageEmbed()
-      .setColor(this.client.color.info)
+      .setColor(process.env.COLOR_INFO)
       .setTitle('🔁 Restart')
       .setDescription(`\`\`\`js\n${restartReport}\`\`\``)
       .setTimestamp()

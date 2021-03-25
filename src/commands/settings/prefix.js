@@ -21,8 +21,8 @@ module.exports = class CommandPrefix extends Command {
     const prefix = args[1]
 
     if (!args[1]) {
-      await this.client.prefix.setPrefix(this.client.config.prefix, message.guild.id)
-      return message.say('ok', `The prefix for music commands has been reset to \`${this.client.config.prefix}\``)
+      await this.client.prefix.setPrefix(process.env.PREFIX, message.guild.id)
+      return message.say('ok', `The prefix for music commands has been reset to \`${process.env.PREFIX}\``)
     }
     await this.client.prefix.setPrefix(prefix, message.guild.id)
     return message.say('ok', `The prefix for music commands has been set to \`${prefix}\``)

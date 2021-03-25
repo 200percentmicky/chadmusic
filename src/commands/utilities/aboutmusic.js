@@ -35,7 +35,7 @@ module.exports = class CommandAboutMusic extends Command {
       :white_small_square: And more to come!
       `)
       .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, there will be bugs! Please report any bugs you may come across by opening an issue on **[GitHub](https://github.com/mickykuna/ChadMusic)**.')
-      .addField(`${this.client.emoji.info} Info`, stripIndents`
+      .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
       **Bot Version:** ${main.version}

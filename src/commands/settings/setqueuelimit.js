@@ -19,12 +19,7 @@ module.exports = class CommandSetQueueLimit extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
 
-    if (!args[1]) {
-      const prefix = this.client.prefix.getPrefix(message.guild.id)
-        ? this.client.prefix.getPrefix(message.guild.id)
-        : this.client.config.prefix
-      return message.say('info', `${prefix}setqueuelimit <number|none>`, 'Usage')
-    }
+    if (!args[1]) return message.usage('setqueuelimit <number|none>')
 
     if (args[1] === (0 || 'NONE'.toLowerCase())) {
       await this.client.maxQueueLimit.set(message.guild.id, null)

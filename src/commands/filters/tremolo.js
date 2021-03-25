@@ -45,7 +45,7 @@ module.exports = class CommandTremolo extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
-        return message.custom('📢', this.client.color.info, '**Tremolo** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
       } else {
         const d = args[1]
         let f = parseInt(args[2])
@@ -60,7 +60,7 @@ module.exports = class CommandTremolo extends Command {
           return message.say('error', 'Frequency must be greater than 0.')
         }
         await this.client.player.setFilter(message.guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`)
-        return message.custom('📢', this.client.color.info, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

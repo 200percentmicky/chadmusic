@@ -43,7 +43,7 @@ module.exports = class CommandBassBoost extends Command {
 
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
-        return message.custom('📢', this.client.color.info, '**Bass Boost** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
       } else {
         const gain = parseInt(args[1])
 
@@ -52,7 +52,7 @@ module.exports = class CommandBassBoost extends Command {
         }
 
         await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`)
-        return message.custom('📢', this.client.color.info, `**Bass Boost** Gain \`${gain}dB\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

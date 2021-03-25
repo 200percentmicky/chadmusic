@@ -43,7 +43,7 @@ module.exports = class CommandVolume extends Command {
         if (volume > 175) return '🔊😭👌'
         return volumeIcon[Math.round(volume / 50) * 50]
       }
-      return message.custom(volumeEmoji(), this.client.color.info, `Current Volume: **${volume}%**`)
+      return message.custom(volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`)
     }
 
     let newVolume = parseInt(args[1])
@@ -53,10 +53,10 @@ module.exports = class CommandVolume extends Command {
 
     if (newVolume >= 201) {
       const embed = new MessageEmbed()
-        .setColor(this.client.color.warn)
-        .setDescription(`${this.client.emoji.warn} Volume has been set to **${newVolume}%**.`)
+        .setColor(process.env.COLOR_WARN)
+        .setDescription(`${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
+      return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     } else {
       return message.say('ok', `Volume has been set to **${newVolume}%**.`)
     }

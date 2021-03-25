@@ -49,7 +49,7 @@ module.exports = class CommandCustomFilter extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'custom', 'off')
-        return message.custom('📢', this.client.color.info, '**Custom Filter** Removed')
+        return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
       } else {
         const custom = args[1]
         // Using fluent-ffmpeg to check if the audio filter uses a valid syntax.
@@ -60,7 +60,7 @@ module.exports = class CommandCustomFilter extends Command {
             return message.say('error', err.message)
           })
         await this.client.player.setFilter(message.guild.id, 'custom', custom)
-        return message.custom('📢', this.client.color.info, `**Custom Filter** Argument: \`${custom}\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

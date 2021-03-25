@@ -9,22 +9,22 @@ module.exports = class MessageStructure extends Message {
   say (type, description, title) {
     /* The color of the embed */
     const embedColor = {
-      ok: this.client.color.music,
-      warn: this.client.color.warn,
-      error: this.client.color.error,
-      info: this.client.color.info,
-      no: this.client.color.no
+      ok: process.env.COLOR_OK,
+      warn: process.env.COLOR_WARN,
+      error: process.env.COLOR_ERROR,
+      info: process.env.COLOR_INFO,
+      no: process.env.COLOR_NO
     }
 
     /* The emoji of the embed */
     // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
     const emojiPerms = this.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
     const embedEmoji = {
-      ok: emojiPerms ? this.client.emoji.music : '✅',
-      warn: emojiPerms ? this.client.emoji.warn : '⚠',
-      error: emojiPerms ? this.client.emoji.error : '❌',
-      info: emojiPerms ? this.client.emoji.info : 'ℹ',
-      no: emojiPerms ? this.client.emoji.no : '🚫'
+      ok: emojiPerms ? process.env.EMOJI_OK : '✅',
+      warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+      error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+      info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
+      no: emojiPerms ? process.env.EMOJI_NO : '🚫'
     }
 
     const embed = new MessageEmbed()
@@ -54,10 +54,12 @@ module.exports = class MessageStructure extends Message {
   /* Command Usage Embed */
   // Used if no argument was provided to some commands.
   usage (syntax) {
-    const guildPrefix = this.client.config.prefix // TODO: Add guild prefix data.
+    const guildPrefix = this.client.prefix.getPrefix(this.guild.id)
+      ? this.client.prefix.getPrefix(this.guild.id)
+      : process.env.PREFIX
     const embed = new MessageEmbed()
-      .setColor(this.client.color.info)
-      .setTitle(this.client.emoji.info + ' Usage')
+      .setColor(process.env.COLOR_INFO)
+      .setTitle(process.env.EMOJI_INFO + ' Usage')
       .setDescription(`\`${guildPrefix}${syntax}\``)
     this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
   }
@@ -112,14 +114,14 @@ module.exports = class MessageStructure extends Message {
 
     if (type === 'warning') {
       this.client.logger.warn(error)
-      embed.setColor(this.client.color.warn)
-      embed.setTitle(this.client.emoji.warn + title)
+      embed.setColor(process.env.COLOR_WARN)
+      embed.setTitle(process.env.EMOJI_WARN + title)
     }
 
     if (type === 'error') {
       this.client.logger.error(error)
-      embed.setColor(this.client.color.error)
-      embed.setTitle(this.client.emoji.error + title)
+      embed.setColor(process.env.COLOR_ERROR)
+      embed.setTitle(process.env.EMOJI_ERROR + title)
     }
 
     await errorChannel.send(embed)

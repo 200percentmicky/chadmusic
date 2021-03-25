@@ -40,7 +40,7 @@ module.exports = class CommandQueue extends Command {
         .setChannel(message.channel)
         .setElementsPerPage(5)
         .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${this.client.emoji.warn}Queue is empty.`)
+        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`)
         .setPage(1)
         .setNavigationEmojis({
           back: '◀',
@@ -52,7 +52,7 @@ module.exports = class CommandQueue extends Command {
       queueEmbed.embed
         .setColor(this.client.utils.randColor())
         .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`${this.client.emoji.music}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+        .setDescription(`${process.env.EMOJI_OK}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
         .setTimestamp()
         .setFooter('\u200b') // Ironically required if .setPageIndicator() is using 'footer'.
 
@@ -64,7 +64,7 @@ module.exports = class CommandQueue extends Command {
           message.channel.send(new MessageEmbed()
             .setColor(this.client.utils.randColor())
             .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-            .setDescription(`${this.client.emoji.music}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+            .setDescription(`${process.env.EMOJI_OK}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
             .addField('The queue is empty.', 'Start adding some songs! 😉')
             .setTimestamp()
           )

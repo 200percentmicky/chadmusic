@@ -49,10 +49,10 @@ module.exports = class CommandEarrape extends Command {
     } else {
       this.client.player.setVolume(message, earrape)
       const embed = new MessageEmbed()
-        .setColor(this.client.color.ok)
+        .setColor(process.env.COLOR_OK)
         .setDescription(`🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
+      return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     }
   }
 }

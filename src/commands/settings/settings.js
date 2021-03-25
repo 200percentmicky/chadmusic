@@ -24,10 +24,10 @@ module.exports = class CommandSettings extends Command {
     const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
 
     const embed = new MessageEmbed()
-      .setColor(this.client.color.blood)
+      .setColor(process.env.COLOR_BLOOD)
       .setAuthor(`Music Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(stripIndents`
-      **⁉ Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || this.client.config.prefix}\`
+      **⁉ Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || process.env.PREFIX}\`
       **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
       **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
       **⏲ Max Song Time:** ${maxTime !== (null || undefined) ? toColonNotation(maxTime) : 'Unlimited'}

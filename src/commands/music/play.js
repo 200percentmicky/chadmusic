@@ -82,25 +82,25 @@ module.exports = class CommandPlay extends Command {
           if (text.match(playlistRegex))
           {
             await this.client.player.play(message, text);
-            message.react(this.client.emoji.okReact);
+            message.react(process.env.REACTION_OK);
           } else {
             const result = await YouTube.search(text, { limit: 1 });
             await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
-            message.react(this.client.emoji.okReact);
+            message.react(process.env.REACTION_OK);
           }
         } catch(err) {
           return message.say('error', `No results found for \`${text}\``, 'Track Error');
         }
       } else {
         await this.client.player.play(message, text);
-        message.react(this.client.emoji.okReact);
+        message.react(process.env.REACTION_OK);
       }
       */
 
       // eslint-disable-next-line no-useless-escape
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
       const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
-      message.react(emojiPerms ? this.client.emoji.musicReact : '🎵')
+      message.react(emojiPerms ? process.env.REACTION_OK : '✅')
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
       return message.say('error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
