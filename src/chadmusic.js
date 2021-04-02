@@ -130,7 +130,7 @@ class ChadMusic extends AkairoClient {
       leaveOnStop: true,
       leaveOnEmpty: true,
       leaveOnFinish: true,
-      youtubeCookie: config.ytCookie,
+      youtubeCookie: process.env.YOUTUBE_COOKIE,
       highWaterMark: 1 << 25,
       youtubeDL: true,
       updateYouTubeDL: false
@@ -151,8 +151,8 @@ class ChadMusic extends AkairoClient {
     this.commands = new CommandHandler(this, {
       directory: './src/commands',
       prefix: message => message.channel.type === 'text'
-        ? prefix.getPrefix(message.guild.id) || prefix.getPrefix('global') || config.prefix
-        : config.prefix,
+        ? prefix.getPrefix(message.guild.id) || prefix.getPrefix('global') || process.env.PREFIX
+        : process.env.PREFIX,
       commandUtil: true,
       handleEdits: true,
       allowMention: true

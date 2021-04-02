@@ -22,7 +22,7 @@ module.exports = class CommandAboutMusic extends Command {
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
-      .setColor(1602089)
+      .setColor(process.env.COLOR_BLOOD)
       .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setDescription('A feature-rich open source music bot based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
       .addField('✨ Features', stripIndents`
