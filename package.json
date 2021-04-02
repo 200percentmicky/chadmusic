@@ -1,7 +1,7 @@
 {
-  "name": "poki",
-  "version": "2021.3.25-keyv",
-  "description": "A multi-purpose Discord bot in Javascript thats also a cute alien girl!",
+  "name": "pokimusic",
+  "version": "2021.4.1-keyv",
+  "description": "A feature-rich music bot based on a forked build of DisTube.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

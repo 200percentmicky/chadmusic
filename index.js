@@ -1,6 +1,6 @@
 /* Index File */
 
 require('dotenv').config()
-const ChadMusic = require('./src/chadmusic.js')
+const PokiMusic = require('./src/pokimusic.js')
 
-new ChadMusic().login(process.env.TOKEN)
+new PokiMusic().login(process.env.TOKEN)

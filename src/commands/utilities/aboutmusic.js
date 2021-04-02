@@ -23,7 +23,7 @@ module.exports = class CommandAboutMusic extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor('PokiMusic', this.client.user.avatarURL({ dynamic: true }))
       .setDescription('A feature-rich open source music bot based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
       .addField('✨ Features', stripIndents`
       :white_small_square: Supports 700+ websites.
@@ -34,7 +34,7 @@ module.exports = class CommandAboutMusic extends Command {
       :white_small_square: Queue and track length limits.
       :white_small_square: And more to come!
       `)
-      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, there will be bugs! Please report any bugs you may come across by opening an issue on **[GitHub](https://github.com/mickykuna/ChadMusic)**.')
+      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, there will be bugs! Please report any bugs you may come across by opening an issue on **[GitHub](https://github.com/mickykuna/PokiMusic)**.')
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}

@@ -28,7 +28,7 @@ module.exports = class CommandSysInfo extends Command {
     const user = os.userInfo()
 
     const data = stripIndents`
-    === ChadMusic - The Chad Music Bot ===
+    === PokiMusic ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
              Node.js :: ${process.version}
          Bot Version :: ${main.version}
