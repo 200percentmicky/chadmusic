@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 module.exports = class CommandFilterOff extends Command {
   constructor () {
     super('filteroff', {
-      aliases: ['filteroff'],
+      aliases: ['filteroff', 'filtersoff', 'foff'],
       category: '📢 Filter',
       description: {
         text: 'Removes all filters from the player.'

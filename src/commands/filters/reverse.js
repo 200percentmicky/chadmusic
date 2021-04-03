@@ -1,22 +1,20 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandCustomFilter extends Command {
+module.exports = class CommandReverse extends Command {
   constructor () {
-    super('customfilter', {
-      aliases: ['customfilter', 'cfilter', 'cf'],
+    super('reverse', {
+      aliases: ['reverse'],
       category: '📢 Filter',
       description: {
-        text: 'Allows you to add a custom FFMPEG filter to the player.',
-        usage: 'customfilter <argument:str>',
+        text: 'Plays the music in reverse.',
+        usage: '[off]',
         details: stripIndents`
-        \`<argument:str>\` The argument to provide to FFMPEG.
-        ⚠ If the argument is invalid or not supported by FFMPEG, the stream will end.
+        \`[off]\` Turns off reverse if its active.
         `
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS'],
-      ownerOnly: true
+      clientPermissions: ['EMBED_LINKS']
     })
   }
 
@@ -36,8 +34,6 @@ module.exports = class CommandCustomFilter extends Command {
       }
     }
 
-    if (!args[1]) return message.usage('customfilter <argument:str>')
-
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
@@ -47,12 +43,11 @@ module.exports = class CommandCustomFilter extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'custom', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
+        await this.client.player.setFilter(message.guild.id, 'reverse', 'off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Reverse** Off')
       } else {
-        const custom = args[1]
-        await this.client.player.setFilter(message.guild.id, 'custom', custom)
-        return message.custom('📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
+        await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse')
+        return message.custom('📢', process.env.COLOR_INFO, '**Reverse** On')
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
