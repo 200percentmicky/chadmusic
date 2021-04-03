@@ -25,6 +25,8 @@ module.exports = class CommandDJMode extends Command {
     } else if (args[1] === 'OFF'.toLowerCase()) {
       await this.client.djMode.set(message.guild.id, false)
       return message.say('ok', 'DJ Mode has been **disabled**.')
+    } else {
+      return message.say('error', 'Toggle must be **on** or **off**.')
     }
   }
 }

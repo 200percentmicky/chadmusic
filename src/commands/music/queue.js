@@ -64,7 +64,7 @@ module.exports = class CommandQueue extends Command {
           message.channel.send(new MessageEmbed()
             .setColor(this.client.utils.randColor())
             .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-            .setDescription(`${process.env.EMOJI_OK}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+            .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
             .addField('The queue is empty.', 'Start adding some songs! 😉')
             .setTimestamp()
           )

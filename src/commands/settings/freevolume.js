@@ -9,14 +9,12 @@ module.exports = class CommandFreeVolume extends Command {
         text: 'Toggles the ability to change the volume past 200%.',
         details: 'Requires the DJ role or the **Manage Channels** permission.'
       },
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      userPermissions: ['MANAGE_GUILD']
     })
   }
 
   async exec (message) {
-    const dj = message.member.roles.cache.has(await this.client.djRole.get(message.guild.id)) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle Unlimited Volume.')
-
     const args = message.content.split(/ +/g)
     if (!args[1]) return message.usage('freevolume <toggle:on/off>')
     if (args[1] === 'OFF'.toLowerCase()) {
@@ -29,6 +27,8 @@ module.exports = class CommandFreeVolume extends Command {
     } else if (args[1] === 'ON'.toLowerCase()) {
       await this.client.allowFreeVolume.set(message.guild.id, true)
       return message.say('ok', 'Unlimited Volume has been **enabled**.')
+    } else {
+      return message.say('error', 'Toggle must be **on** or **off**.')
     }
   }
 }

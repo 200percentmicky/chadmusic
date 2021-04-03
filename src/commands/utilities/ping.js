@@ -16,6 +16,6 @@ module.exports = class PingCommand extends Command {
 
     const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt)
 
-    await ping.edit(`${process.env.EMOJI_OK}**Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``)
+    await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``)
   }
 }

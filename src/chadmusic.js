@@ -142,7 +142,7 @@ class ChadMusic extends AkairoClient {
     this.djRole = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'djRole' }).on('error', (err) => logger.error('[Keyv] djRole: %s', err))
     this.allowFreeVolume = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'allowFreeVolume' }).on('error', (err) => logger.error('[Keyv] allowFreeVolume: %s', err))
     this.nowPlayingAlerts = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'nowPlayingAlerts' }).on('error', (err) => logger.error('[Keyv] nowPlayingAlerts: %s', err))
-    this.allowFilters = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'allowFilters' })
+    this.allowFilters = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'allowFilters' }).on('error', (err) => logger.error('[Keyv] allowFilters: %s', err))
     this.maxTime = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'maxTime' }).on('error', (err) => logger.error('[Keyv] maxTime: %s', err))
     this.maxQueueLimit = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'maxQueueLimit' }).on('error', (err) => logger.error('[Keyv] maxQueueLimit: %s', err))
     this.textChannel = new Keyv({ store: new KeyvFile({ filename: 'settings.json' }), namespace: 'textChannel' }).on('error', (err) => logger.error('[Keyv] textChannel: %s', err))

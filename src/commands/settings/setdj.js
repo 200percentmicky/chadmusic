@@ -23,7 +23,7 @@ module.exports = class CommandSetDJ extends Command {
       message.guild.roles.cache.get(text) ||
       message.guild.roles.cache.find(val => val.name === args.slice(1).join(' '))
 
-    if (!args[1] || args[2] === 'NONE'.toLowerCase()) {
+    if (!args[1] || args[2] === 'NONE'.toLowerCase() || args[2] === 'OFF'.toLowerCase()) {
       await this.client.djRole.set(message.guild.id, null)
       return message.say('ok', 'The DJ role has been removed.')
     }

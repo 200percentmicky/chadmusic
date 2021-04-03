@@ -7,11 +7,12 @@ module.exports = class CommandSettings extends Command {
   constructor () {
     super('settings', {
       aliases: ['settings'],
-      category: '🔑 Administration',
+      category: '⚙ Settings',
       description: {
         text: 'View the current settings for this server.'
       },
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      userPermissions: ['MANAGE_GUILD']
     })
   }
 
@@ -21,6 +22,7 @@ module.exports = class CommandSettings extends Command {
     const maxTime = await this.client.maxTime.get(message.guild.id)
     const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
     const nowPlayingAlerts = await this.client.nowPlayingAlerts.get(message.guild.id)
+    const allowFilters = await this.client.allowFilters.get(message.guild.id)
     const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
 
     const embed = new MessageEmbed()
@@ -33,6 +35,7 @@ module.exports = class CommandSettings extends Command {
       **⏲ Max Song Time:** ${maxTime !== (null || undefined) ? toColonNotation(maxTime) : 'Unlimited'}
       **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
       **📣 Now Playing Alerts:** ${nowPlayingAlerts === true ? 'On' : 'Off'}
+      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
       **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
       `)
       .setTimestamp()
