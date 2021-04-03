@@ -20,9 +20,10 @@ module.exports = class CommandSkip extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
@@ -35,12 +36,12 @@ module.exports = class CommandSkip extends Command {
 
     // For breaking use only.
     // this.client.player.skip(message)
-    // return message.say('⏭', this.client.color.info, 'Skipped!')
+    // return message.say('⏭', process.env.COLOR_INFO, 'Skipped!')
 
     if (args[1] === ('--force' || '-f')) {
       if (!dj) return message.say('error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
-      return message.custom('⏭', this.client.color.info, 'Skipped!')
+      return message.custom('⏭', process.env.COLOR_INFO, 'Skipped!')
     }
 
     if (currentVc.channel.members.size >= 4) {
@@ -52,13 +53,13 @@ module.exports = class CommandSkip extends Command {
       if (neededVotes) {
         this.votes = []
         this.client.player.skip(message)
-        return message.custom('⏭', this.client.color.info, 'Skipped!')
+        return message.custom('⏭', process.env.COLOR_INFO, 'Skipped!')
       } else {
         const prefix = this.client.prefix.getPrefix(message.guild.id)
           ? this.client.prefix.getPrefix(message.guild.id)
-          : this.client.config.prefix
+          : process.env.PREFIX
         const embed = new MessageEmbed()
-          .setColor(this.client.color.info)
+          .setColor(process.env.COLOR_INFO)
           .setDescription('⏭ Skipping?')
           .setFooter(
             `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`,
@@ -69,7 +70,7 @@ module.exports = class CommandSkip extends Command {
     } else {
       this.votes = []
       this.client.player.skip(message)
-      return message.custom('⏭', this.client.color.info, 'Skipped!')
+      return message.custom('⏭', process.env.COLOR_INFO, 'Skipped!')
     }
   }
 }

@@ -12,10 +12,10 @@ module.exports = class PingCommand extends Command {
   }
 
   async exec (message) {
-    const ping = await message.channel.send(this.client.emoji.loading + 'Ping?')
+    const ping = await message.channel.send(process.env.EMOJI_LOADING + 'Ping?')
 
     const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt)
 
-    await ping.edit(`${this.client.emoji.music}**Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``)
+    await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``)
   }
 }

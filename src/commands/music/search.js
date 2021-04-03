@@ -19,19 +19,17 @@ module.exports = class CommandSearch extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     const search = args.slice(1).join(' ')
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    const prefix = this.client.prefix.getPrefix(message.guild.id)
-      ? this.client.prefix.getPrefix(message.guild.id)
-      : this.client.config.prefix
-    if (!search) return message.say('info', `\`${prefix}search <query>\``, 'Usage')
+    if (!args[1]) return message.usage('search <query>')
 
     message.channel.startTyping()
     const currentVc = this.client.voice.connections.get(message.guild.id)
@@ -49,10 +47,11 @@ module.exports = class CommandSearch extends Command {
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
       if (queue) {
-        if (settings.maxQueueLimit) {
+        const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
+        if (maxQueueLimit) {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
-          if (queueMemberSize >= settings.maxQueueLimit) {
-            message.say('no', `You are only allowed to add a max of ${settings.maxQueueLimit} entr${settings.maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
+          if (queueMemberSize >= maxQueueLimit) {
+            message.say('no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
             return message.channel.stopTyping(true)
           }
         }
@@ -81,7 +80,7 @@ module.exports = class CommandSearch extends Command {
           message.channel.startTyping(5)
           const selected = results[parseInt(collected.first().content - 1)].url
           await this.client.player.play(message, selected)
-          message.react(this.client.emoji.okReact)
+          message.react(process.env.REACTION_OK)
           return message.channel.stopTyping(true)
         }).catch(() => {
           return msg.delete()

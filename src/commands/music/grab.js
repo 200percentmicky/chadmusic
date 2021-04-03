@@ -29,7 +29,7 @@ module.exports = class CommandGrab extends Command {
         .addField('Duration', song.formattedDuration)
         .setTimestamp()
       )
-      return message.react(this.client.emoji.okReact)
+      return message.react(process.env.REACTION_OK)
     } catch (err) {
       if (err.name === 'DiscordAPIError') message.say('error', 'Unable to save this song. You are currently not accepting Direct Messages.')
     }

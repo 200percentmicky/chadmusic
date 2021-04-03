@@ -19,15 +19,16 @@ module.exports = class ListenerPlaySong extends Listener {
     // This be some weird shit above...
 
     if (queue.songs.length === 1) { // If someone started a new queue.
-      const settings = this.client.settings.get(guild.id)
-      const dj = msg.member.roles.cache.has(settings.djRole) || channel.permissionsFor(msg.member.user.id).has(['MANAGE_CHANNELS'])
-      if (settings.maxTime) {
+      const djRole = await this.client.djRole.get(message.guild.id)
+      const maxTime = await this.client.maxTime.get(message.guild.id)
+      const dj = msg.member.roles.cache.has(djRole) || channel.permissionsFor(msg.member.user.id).has(['MANAGE_CHANNELS'])
+      if (maxTime) {
         if (!dj) {
-          if (parseInt(song.duration + '000') > settings.maxTime) { // DisTube omits the last three digits in the songs duration.
+          if (parseInt(song.duration + '000') > maxTime) { // DisTube omits the last three digits in the songs duration.
             // Stupid fix.
             if (msg.content.includes(this.client.prefix.getPrefix(guild.id) + ('skip' || 's'))) return
             this.client.player.stop(message)
-            return msg.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
+            return msg.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
           }
         }
       }
@@ -38,7 +39,7 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
       .setDescription(stripIndents`
       **Requested by:** ${song.user}
-      **Duration:** ${song.formattedDuration}
+      **Duration:** ${song.formattedDuration === '00:00' ? 'Live' : song.formattedDuration}
       `)
       .setTitle(song.name)
       .setURL(song.url)

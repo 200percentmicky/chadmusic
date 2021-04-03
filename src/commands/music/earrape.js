@@ -16,16 +16,18 @@ module.exports = class CommandEarrape extends Command {
   }
 
   async exec (message) {
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) {
         return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
       }
     }
 
-    if (settings.allowFreeVolume === false) {
-      return message.say('no', 'This command cannot be used because **Unlimited Volume** is off.')
+    const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
+    if (!allowFreeVolume) {
+      return message.say('no', 'This command cannot be used because **Unlimited Volume** is disabled.')
     }
 
     // This command should not be limited by the DJ Role. Must be a toggable setting.
@@ -47,10 +49,10 @@ module.exports = class CommandEarrape extends Command {
     } else {
       this.client.player.setVolume(message, earrape)
       const embed = new MessageEmbed()
-        .setColor(this.client.color.ok)
+        .setColor(process.env.COLOR_OK)
         .setDescription(`🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
+      return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     }
   }
 }

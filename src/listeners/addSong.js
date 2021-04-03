@@ -10,13 +10,14 @@ module.exports = class ListenerAddSong extends Listener {
   }
 
   async exec (message, queue, song) {
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.maxTime) {
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const maxTime = await this.client.maxTime.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (maxTime) {
       if (!dj) {
-        if (parseInt(song.duration + '000') > settings.maxTime) { // DisTube omits the last three digits in the songs duration.
+        if (parseInt(song.duration + '000') > maxTime) { // DisTube omits the last three digits in the songs duration.
           queue.songs.pop()
-          return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(settings.maxTime, { colonNotation: true })}\` for this server.`)
+          return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
         }
       }
     }

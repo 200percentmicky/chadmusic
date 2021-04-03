@@ -21,16 +21,24 @@ module.exports = class CommandTremolo extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) ||
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
-    if (settings.djMode) {
+    if (djMode) {
       if (!dj) {
         return message.say('no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
           permission to use music commands at this time.
         `)
+      }
+    }
+
+    if (allowFilters === 'dj') {
+      if (!dj) {
+        return message.say('no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
       }
     }
 
@@ -44,7 +52,7 @@ module.exports = class CommandTremolo extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
-        return message.custom('📢', this.client.color.info, '**Tremolo** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
       } else {
         const d = args[1]
         let f = parseInt(args[2])
@@ -59,7 +67,7 @@ module.exports = class CommandTremolo extends Command {
           return message.say('error', 'Frequency must be greater than 0.')
         }
         await this.client.player.setFilter(message.guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`)
-        return message.custom('📢', this.client.color.info, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

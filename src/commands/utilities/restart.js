@@ -3,16 +3,15 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandRestartJS extends Command {
   constructor () {
-    super('restartjs', {
-      aliases: ['restartjs'],
+    super('restart', {
+      aliases: ['restart'],
       ownerOnly: true,
       category: '🛠 Utilities',
       description: {
         text: 'Attempts to restart the bot.',
         usage: '[reason]',
         details: '`[reason]` The reason for the restarting the bot.'
-      },
-      prefix: [';js']
+      }
     })
   }
 
@@ -23,13 +22,13 @@ module.exports = class CommandRestartJS extends Command {
     const errChannel = this.client.channels.cache.find(val => val.id === '603735567733227531')
     await message.react('🔄')
     await errChannel.send(new MessageEmbed()
-      .setColor(this.client.color.info)
+      .setColor(process.env.COLOR_INFO)
       .setTitle('🔁 Restart')
       .setDescription(`\`\`\`js\n${restartReport}\`\`\``)
       .setTimestamp()
     )
-    const timestamp = `[${this.client.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}] `
-    console.log(timestamp + this.client.infolog + `[Restart] ${restartReport}`)
+    this.client.logger.info('[Restart] %s', restartReport)
+    this.client.logger.warn('Shutting down...')
     this.client.destroy()
     process.exit(0)
   }

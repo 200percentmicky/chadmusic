@@ -17,16 +17,24 @@ module.exports = class CommandBassBoost extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) ||
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
-    if (settings.djMode) {
+    if (djMode) {
       if (!dj) {
         return message.say('no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
           permission to use music commands at this time.
         `)
+      }
+    }
+
+    if (allowFilters === 'dj') {
+      if (!dj) {
+        return message.say('no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
       }
     }
 
@@ -42,7 +50,7 @@ module.exports = class CommandBassBoost extends Command {
 
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
-        return message.custom('📢', this.client.color.info, '**Bass Boost** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
       } else {
         const gain = parseInt(args[1])
 
@@ -51,7 +59,7 @@ module.exports = class CommandBassBoost extends Command {
         }
 
         await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`)
-        return message.custom('📢', this.client.color.info, `**Bass Boost** Gain \`${gain}dB\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

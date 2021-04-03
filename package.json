@@ -1,7 +1,7 @@
 {
-  "name": "poki",
-  "version": "2021.3.10",
-  "description": "A multi-purpose Discord bot in Javascript thats also a cute alien girl!",
+  "name": "chadmusic",
+  "version": "2021.4.3-keyv",
+  "description": "A feature-rich music bot based on a forked build of DisTube.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
+    "@keyv/postgres": "^1.0.16",
     "axios": "^0.21.1",
     "booru": "^2.4.0",
     "bot-utils": "^1.4.2",
@@ -26,8 +27,9 @@
     "discord.js": "github:discordjs/discord.js",
     "distube": "github:mickykuna/chadtube",
     "dotenv": "^8.2.0",
-    "enmap": "^5.8.4",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",
+    "keyv": "^4.0.3",
+    "keyv-file": "^0.2.0",
     "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "moment-timezone": "^0.5.33",

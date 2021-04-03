@@ -1,6 +1,5 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
-const ffmpeg = require('fluent-ffmpeg')
 
 module.exports = class CommandCustomFilter extends Command {
   constructor () {
@@ -23,11 +22,12 @@ module.exports = class CommandCustomFilter extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) ||
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
-    if (settings.djMode) {
+    if (djMode) {
       if (!dj) {
         return message.say('no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
@@ -48,18 +48,11 @@ module.exports = class CommandCustomFilter extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message.guild.id, 'custom', 'off')
-        return message.custom('📢', this.client.color.info, '**Custom Filter** Removed')
+        return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
       } else {
         const custom = args[1]
-        // Using fluent-ffmpeg to check if the audio filter uses a valid syntax.
-        // Aaaaaand it doesn't do anything. Still leaving it here though lol.
-        ffmpeg()
-          .audioFilter(custom)
-          .on('error', (err, stdout, stderr) => {
-            return message.say('error', err.message)
-          })
         await this.client.player.setFilter(message.guild.id, 'custom', custom)
-        return message.custom('📢', this.client.color.info, `**Custom Filter** Argument: \`${custom}\``)
+        return message.custom('📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

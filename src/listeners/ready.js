@@ -21,7 +21,7 @@ module.exports = class SurferReady extends Listener {
     } else {
       const activity = async () => {
         const serverSize = this.client.guilds.cache.size === '1' ? `${this.client.guilds.cache.size} server` : `${this.client.guilds.cache.size} servers`
-        await this.client.user.setActivity(`${this.client.config.prefix}help | Getting turnt in ${serverSize}.`)
+        await this.client.user.setActivity(`${process.env.PREFIX}help | Getting turnt in ${serverSize}.`)
       }
       setInterval(activity, 120000)
 

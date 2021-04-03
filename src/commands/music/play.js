@@ -29,9 +29,10 @@ module.exports = class CommandPlay extends Command {
     const args = message.content.split(/ +/g)
     const text = args.slice(1).join(' ')
 
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
@@ -58,10 +59,11 @@ module.exports = class CommandPlay extends Command {
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
       if (queue) {
-        if (settings.maxQueueLimit) {
+        const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
+        if (maxQueueLimit) {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
-          if (queueMemberSize >= settings.maxQueueLimit) {
-            message.say('no', `You are only allowed to add a max of ${settings.maxQueueLimit} entr${settings.maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
+          if (queueMemberSize >= maxQueueLimit) {
+            message.say('no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
             return message.channel.stopTyping(true)
           }
         }
@@ -80,25 +82,25 @@ module.exports = class CommandPlay extends Command {
           if (text.match(playlistRegex))
           {
             await this.client.player.play(message, text);
-            message.react(this.client.emoji.okReact);
+            message.react(process.env.REACTION_OK);
           } else {
             const result = await YouTube.search(text, { limit: 1 });
             await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
-            message.react(this.client.emoji.okReact);
+            message.react(process.env.REACTION_OK);
           }
         } catch(err) {
           return message.say('error', `No results found for \`${text}\``, 'Track Error');
         }
       } else {
         await this.client.player.play(message, text);
-        message.react(this.client.emoji.okReact);
+        message.react(process.env.REACTION_OK);
       }
       */
 
       // eslint-disable-next-line no-useless-escape
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
       const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
-      message.react(emojiPerms ? this.client.emoji.musicReact : '🎵')
+      message.react(emojiPerms ? process.env.REACTION_OK : '✅')
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
       return message.say('error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')

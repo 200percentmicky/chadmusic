@@ -14,16 +14,19 @@ module.exports = class CommandDJMode extends Command {
   }
 
   async exec (message) {
-    const dj = message.member.roles.cache.has(this.client.settings.get(message.guild.id).djRole) || message.member.hasPermission(['MANAGE_CHANNELS'])
+    const dj = message.member.roles.cache.has(await this.client.djRole.get(message.guild.id)) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (!dj) return message.say('no', 'You must have the DJ role or the **Manage Channels** permissions to toggle DJ Mode.')
-    const settings = this.client.settings
 
     const args = message.content.split(/ +/g)
     if (!args[1]) return message.usage('djmode <toggle:on/off>')
-    if (args[1] === 'ON'.toLowerCase()) await settings.set(message.guild.id, true, 'djMode')
-    else if (args[1] === 'OFF'.toLowerCase()) await settings.set(message.guild.id, false, 'djMode')
-
-    const djMode = settings.get(message.guild.id, 'djMode')
-    return message.say('ok', `DJ Mode has been **${djMode === true ? 'enabled' : 'disabled'}**.`)
+    if (args[1] === 'ON'.toLowerCase()) {
+      await this.client.djMode.set(message.guild.id, true)
+      return message.say('ok', 'DJ Mode has been **enabled**.')
+    } else if (args[1] === 'OFF'.toLowerCase()) {
+      await this.client.djMode.set(message.guild.id, false)
+      return message.say('ok', 'DJ Mode has been **disabled**.')
+    } else {
+      return message.say('error', 'Toggle must be **on** or **off**.')
+    }
   }
 }

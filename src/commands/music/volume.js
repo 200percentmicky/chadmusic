@@ -17,9 +17,10 @@ module.exports = class CommandVolume extends Command {
   }
 
   async exec (message) {
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
@@ -42,19 +43,20 @@ module.exports = class CommandVolume extends Command {
         if (volume > 175) return '🔊😭👌'
         return volumeIcon[Math.round(volume / 50) * 50]
       }
-      return message.custom(volumeEmoji(), this.client.color.info, `Current Volume: **${volume}%**`)
+      return message.custom(volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`)
     }
 
     let newVolume = parseInt(args[1])
-    if (settings.allowFreeVolume === false) newVolume = 200
+    const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
+    if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200
     this.client.player.setVolume(message.guild.id, newVolume)
 
     if (newVolume >= 201) {
       const embed = new MessageEmbed()
-        .setColor(this.client.color.warn)
-        .setDescription(`${this.client.emoji.warn} Volume has been set to **${newVolume}%**.`)
+        .setColor(process.env.COLOR_WARN)
+        .setDescription(`${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      message.channel.send({ embed: embed, allowedMentions: { repliedUser: false } })
+      return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     } else {
       return message.say('ok', `Volume has been set to **${newVolume}%**.`)
     }

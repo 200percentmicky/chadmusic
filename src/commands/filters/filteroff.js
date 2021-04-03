@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 module.exports = class CommandFilterOff extends Command {
   constructor () {
     super('filteroff', {
-      aliases: ['filteroff'],
+      aliases: ['filteroff', 'filtersoff', 'foff'],
       category: '📢 Filter',
       description: {
         text: 'Removes all filters from the player.'
@@ -14,10 +14,19 @@ module.exports = class CommandFilterOff extends Command {
   }
 
   async exec (message) {
-    const settings = this.client.settings.get(message.guild.id)
-    const dj = message.member.roles.cache.has(settings.djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
-    if (settings.djMode) {
+    const djMode = await this.client.djMode.get(message.guild.id)
+    const djRole = await this.client.djRole.get(message.guild.id)
+    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+
+    if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.')
+    }
+
+    if (allowFilters === 'dj') {
+      if (!dj) {
+        return message.say('no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
+      }
     }
 
     const vc = message.member.voice.channel
