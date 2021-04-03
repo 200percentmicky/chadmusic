@@ -22,7 +22,7 @@ module.exports = class CommandSysInfo extends Command {
   }
 
   async exec (message) {
-    const args = message.channel.split(/ +/g)
+    const args = message.content.split(/ +/g)
     if (args[1]) return
     message.channel.startTyping()
     const cpu = await si.cpu()
