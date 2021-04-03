@@ -1,4 +1,4 @@
-/// PokiMusic
+/// ChadMusic - The Chad Music Bot
 /// A feature-rich music bot based on a forked build of DisTube.js
 
 /*
@@ -68,16 +68,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Say hello!
 const { version } = require('../package.json')
-logger.info('///////////////////////////')
-logger.info('   * * * PokiMusic * * *')
-logger.info('///////////////////////////')
+logger.info('/////////////////////////////////////////////////')
+logger.info('   * * * ChadMusic - The Chad Music Bot * * *')
+logger.info('/////////////////////////////////////////////////')
 logger.info('Bot Version: %s', version)
 // Looks like shit lol.
 
 /* Version check */
 // Discord.js require Node > 14
 if (process.versions.node < '14.0.0') {
-  logger.error('PokiMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
+  logger.error('ChadMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
   process.exit(1)
 }
 
@@ -103,7 +103,7 @@ Structures.extend('Message', () => {
 })
 
 /* Main Client */
-class PokiMusic extends AkairoClient {
+class ChadMusic extends AkairoClient {
   constructor () {
     super({
       ownerID: config.owner
@@ -182,4 +182,4 @@ class PokiMusic extends AkairoClient {
   }
 }
 
-module.exports = PokiMusic
+module.exports = ChadMusic
