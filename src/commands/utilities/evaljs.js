@@ -10,7 +10,8 @@ module.exports = class CommandEvalJS extends Command {
         text: 'Executes Javascript code.',
         usage: '<code>'
       },
-      category: '🛠 Utilities'
+      category: '🛠 Utilities',
+      prefix: [';js']
     })
   }
 
