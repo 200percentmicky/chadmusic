@@ -8,6 +8,7 @@ const main = require('../../../package.json')
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package')
 const distubeversion = require('../../../node_modules/distube/package')
+const { italic } = require('chalk')
 
 module.exports = class CommandSysInfo extends Command {
   constructor () {
@@ -21,6 +22,8 @@ module.exports = class CommandSysInfo extends Command {
   }
 
   async exec (message) {
+    const args = message.channel.split(/ +/g)
+    if (args[1]) return
     message.channel.startTyping()
     const cpu = await si.cpu()
     const osSi = await si.osInfo()
