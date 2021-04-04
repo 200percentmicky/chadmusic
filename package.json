@@ -24,7 +24,7 @@
     "discord-paginationembed": "^2.1.0",
     "discord-prefix": "^1.1.0",
     "discord-starboards": "^2.2.1",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "^12.5.3",
     "distube": "github:mickykuna/chadtube",
     "dotenv": "^8.2.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",
