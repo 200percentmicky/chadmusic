@@ -1,6 +1,6 @@
-const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const createBar = require('string-progressbar')
 
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
@@ -32,17 +32,17 @@ module.exports = class CommandNowPlaying extends Command {
 
     const queue = this.client.player.getQueue(message)
     const song = queue.songs[0]
+    const total = song.duration + '000'
+    const current = queue.currentTime
     return message.channel.send(new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(stripIndents`
-      **Requested by:** ${song.user}
-      **Duration:** ${song.formattedDuration}
-      **Volume:** ${queue.volume}
-      `)
+      .setDescription(`${queue.formattedCurrentTime} [${createBar(total, current, 17)[0]}] ${song.formattedDuration}`)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
+      .addField('Requested by', song.user, true)
+      .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None')
       .setTimestamp()
     )

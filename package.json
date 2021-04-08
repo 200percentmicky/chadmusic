@@ -1,6 +1,6 @@
 {
   "name": "chadmusic",
-  "version": "2021.4.3-keyv",
+  "version": "2021.4.8",
   "description": "A feature-rich music bot based on a forked build of DisTube.",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "pretty-bytes": "^5.5.0",
     "pretty-ms": "^7.0.1",
     "reddit-image-fetcher": "^2.0.6",
+    "string-progressbar": "^1.0.3",
     "systeminformation": "^5.3.1",
     "underscore": "^1.12.0",
     "uwufy": "^1.0.7",

@@ -54,7 +54,7 @@ module.exports = class CommandTremolo extends Command {
         await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
         return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
       } else {
-        const d = args[1]
+        const d = parseInt(args[1])
         let f = parseInt(args[2])
         if (d < 0.1 || d > 1 || isNaN(d)) {
           return message.say('error', 'Depth must be between **0.1** to **1**, or **off**.')

@@ -3,15 +3,14 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandEvalJS extends Command {
   constructor () {
-    super('eval', {
-      aliases: ['eval'],
+    super('jseval', {
+      aliases: ['jseval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',
         usage: '<code>'
       },
-      category: '🛠 Utilities',
-      prefix: [';js']
+      category: '🛠 Utilities'
     })
   }
 
