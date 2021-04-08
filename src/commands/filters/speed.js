@@ -41,11 +41,14 @@ module.exports = class CommandSpeed extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       const rate = parseInt(args[1])
+      if (!rate) {
+        return message.usage('speed <int:rate[1-15]>')
+      }
+      if (rate === 'OFF'.toLowerCase()) {
+        await this.client.player.setFilter(message, 'asetrate', 'off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Rhythm** Off')
+      }
       if (isNaN(rate)) {
-        if (rate === 'OFF'.toLowerCase()) {
-          await this.client.player.setFilter(message, 'asetrate', 'off')
-          return message.custom('📢', process.env.COLOR_INFO, '**Rhythm** Off')
-        }
         return message.say('error', 'Rate of speed requires a number or **off**.')
       }
       if (rate <= 0 || rate >= 16) {
