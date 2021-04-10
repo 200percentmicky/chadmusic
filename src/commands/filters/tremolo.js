@@ -8,10 +8,10 @@ module.exports = class CommandTremolo extends Command {
       category: '📢 Filter',
       description: {
         text: 'Adds a tremolo filter to the player.',
-        usage: '<depth:int(0.1-1)/off> <frequency:int>',
+        usage: '<depth:int(0.1-1)/off> [frequency:int]',
         details: stripIndents`
         \`<depth:int(0.1-1)/off>\` The depth of the tremolo between 0.1-1, or "off" to disable it.
-        \`<frequency:int>\` The frequency of the tremolo.
+        \`[frequency:int]\` The frequency of the tremolo.
         `
       },
       channel: 'guild',
@@ -54,6 +54,9 @@ module.exports = class CommandTremolo extends Command {
         await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
         return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
       } else {
+        if (!args[1]) {
+          return message.usage('tremolo <depth:int(0.1-1)/off> [frequency:int]')
+        }
         const d = parseInt(args[1])
         let f = parseInt(args[2])
         if (d < 0.1 || d > 1 || isNaN(d)) {

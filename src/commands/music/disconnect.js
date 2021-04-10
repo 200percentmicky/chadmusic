@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 module.exports = class CommandDisconnect extends Command {
   constructor () {
     super('disconnect', {
-      aliases: ['disconnect', 'leave'],
+      aliases: ['disconnect', 'leave', 'pissoff', 'fuckoff'],
       category: '🎶 Player',
       description: {
         text: 'Disconnects from the current voice channel.'

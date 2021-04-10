@@ -38,9 +38,9 @@ module.exports = class CommandQueue extends Command {
         .setArray(songs)
         .setAuthorizedUsers(message.author.id)
         .setChannel(message.channel)
-        .setElementsPerPage(5)
+        .setElementsPerPage(7)
         .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`)
+        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name.length > 35 ? song.name.slice(0, 35) + '...' : song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`)
         .setPage(1)
         .setNavigationEmojis({
           back: '◀',

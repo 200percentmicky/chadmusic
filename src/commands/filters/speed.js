@@ -6,9 +6,9 @@ module.exports = class CommandSpeed extends Command {
       aliases: ['speed'],
       category: '📢 Filter',
       description: {
-        text: 'Changes the rhythm of the player. Anything lower than 5 will slow down playback.',
-        usage: '<int:rate[1-15]>',
-        details: '`<int:rate[1-15]>` The rate of speed to change.'
+        text: 'Changes the rhythm of the player.',
+        usage: '<rate:int[1-20]>',
+        details: '`<rate:int[1-20]>` The rate of speed to change. Anything lower than 5 will slow down playback.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -41,7 +41,7 @@ module.exports = class CommandSpeed extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (!args[1]) {
-        return message.usage('speed <int:rate[1-15]>')
+        return message.usage('speed <rate:int[1-20]/off>')
       }
 
       if (args[1] === 'OFF'.toLowerCase()) {
@@ -53,8 +53,8 @@ module.exports = class CommandSpeed extends Command {
       if (isNaN(rate)) {
         return message.say('error', 'Rate of speed requires a number or **off**.')
       }
-      if (rate <= 0 || rate >= 16) {
-        return message.say('error', 'Rate of speed must be between **1-15** or **off**.')
+      if (rate <= 0 || rate >= 21) {
+        return message.say('error', 'Rate of speed must be between **1-20** or **off**.')
       }
       await this.client.player.setFilter(message, 'asetrate', `asetrate=${rate}*10000`)
       return message.custom('📢', process.env.COLOR_INFO, `**Rhythm** Rate: \`${rate}\``)

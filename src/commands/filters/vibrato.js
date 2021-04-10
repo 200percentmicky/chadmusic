@@ -8,7 +8,7 @@ module.exports = class CommandVibrato extends Command {
       category: '📢 Filter',
       description: {
         text: 'Adds a vibrato filter to the player.',
-        usage: '<depth:int(0.1-1)/off> <frequency:int>',
+        usage: '<depth:int(0.1-1)/off> [frequency:int]',
         details: stripIndents`
         \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
         \`<frequency:int>\` The frequency of the vibrato.
@@ -54,6 +54,9 @@ module.exports = class CommandVibrato extends Command {
         await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
         return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
       } else {
+        if (!args[1]) {
+          return message.usage('vibrato <depth:int(0.1-1)/off> [frequency:int]')
+        }
         const d = args[1]
         let f = parseInt(args[2])
         if (d < 0.1 || d > 1 || isNaN(d)) {
