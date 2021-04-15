@@ -1,14 +1,14 @@
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandSpeed extends Command {
+module.exports = class CommandTempo extends Command {
   constructor () {
-    super('speed', {
-      aliases: ['speed'],
+    super('tempo', {
+      aliases: ['tempo'],
       category: '📢 Filter',
       description: {
-        text: 'Changes the rhythm of the player.',
+        text: 'Changes the tempo of the player.',
         usage: '<rate:int[1-20]>',
-        details: '`<rate:int[1-20]>` The rate of speed to change. Anything lower than 5 will slow down playback.'
+        details: '`<rate:int[1-20]>` The rate to change. Anything lower than 5 will slow down playback.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -41,23 +41,23 @@ module.exports = class CommandSpeed extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (!args[1]) {
-        return message.usage('speed <rate:int[1-20]/off>')
+        return message.usage('tempo <rate:int[1-20]/off>')
       }
 
       if (args[1] === 'OFF'.toLowerCase()) {
         await this.client.player.setFilter(message, 'asetrate', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Rhythm** Off')
+        return message.custom('📢', process.env.COLOR_INFO, '**Tempo** Off')
       }
 
       const rate = parseInt(args[1])
       if (isNaN(rate)) {
-        return message.say('error', 'Rate of speed requires a number or **off**.')
+        return message.say('error', 'Tempo requires a number or **off**.')
       }
       if (rate <= 0 || rate >= 21) {
-        return message.say('error', 'Rate of speed must be between **1-20** or **off**.')
+        return message.say('error', 'Tempo must be between **1-20** or **off**.')
       }
       await this.client.player.setFilter(message, 'asetrate', `asetrate=${rate}*10000`)
-      return message.custom('📢', process.env.COLOR_INFO, `**Rhythm** Rate: \`${rate}\``)
+      return message.custom('📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``)
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
