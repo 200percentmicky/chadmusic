@@ -40,6 +40,6 @@ module.exports = class CommandSettings extends Command {
       `)
       .setTimestamp()
 
-    return message.channel.send(embed)
+    return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
   }
 }
