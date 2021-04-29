@@ -6,8 +6,8 @@ module.exports = class CommandRepeat extends Command {
       aliases: ['repeat'],
       description: {
         text: 'Toggles repeat mode for the player.',
-        usage: '[mode:int]',
-        details: '`[mode:int]` The mode to apply for repeat mode.\n\n0 = Off\n1 = Loop Song\n2 = Loop Queue'
+        usage: '[mode]',
+        details: '`[mode]` The mode to apply for repeat mode.\n\nOff or 0\n1 = Loop Song\n2 = Loop Queue'
       },
       category: '🎶 Player'
     })
@@ -17,15 +17,32 @@ module.exports = class CommandRepeat extends Command {
     const args = message.content.split(/ +/g)
     const player = this.client.player
 
-    if (!args[1]) return message.usage('repeat <mode:int>')
-
-    const repeatNumbers = {
-      0: 'Off',
-      1: 'Repeat Song',
-      2: 'Repeat Queue'
+    switch (args[1]) {
+      case 'off' || 0: {
+        await player.setRepeatMode(message, 0)
+        message.say('ok', 'Repeat has been disabled.')
+        break
+      }
+      case 'song' || 1: {
+        await player.setRepeatMode(message, 1)
+        message.say('ok', 'Enabled repeat to **🔂 Repeat Song**')
+        break
+      }
+      case 'queue' || 2: {
+        await player.setRepeatMode(message, 2)
+        message.say('ok', 'Enabled repeat to **🔁 Repeat Queue**')
+        break
+      }
+      default: {
+        if (player.repeatMode !== 0) {
+          await player.setRepeatMode(message, 0)
+          message.say('ok', 'Repeat has been disabled.')
+          break
+        }
+        await player.setRepeatMode(message, 1)
+        message.say('ok', 'Enabled repeat to **🔂 Repeat Song**')
+        break
+      }
     }
-
-    await player.setRepeatMode(message, args[1])
-    return message.say('ok', `Enabled repeat mode to **${repeatNumbers[args[1]]}**`)
   }
 }
