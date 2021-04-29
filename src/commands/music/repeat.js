@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 module.exports = class CommandRepeat extends Command {
   constructor () {
     super('repeat', {
-      aliases: ['repeat'],
+      aliases: ['repeat', 'loop'],
       description: {
         text: 'Toggles repeat mode for the player.',
         usage: '[mode]',
