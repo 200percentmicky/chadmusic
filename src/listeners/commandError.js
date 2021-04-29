@@ -16,7 +16,7 @@ module.exports = class ListenerCommandError extends Listener {
     if (perms) {
       const guru = new MessageEmbed()
         .setColor(process.env.COLOR_ERROR)
-        .setTitle('🧘‍♀️ Guru Meditation')
+        .setTitle('💢 Bruh Moment')
         .setDescription(`Something bad happened while executing \`${command.id}\`.\n\`\`\`js\n${error.name}: ${error.message}\`\`\``)
         .setFooter('An error report was sent to the bot owner.')
       message.reply({ embed: guru, allowedMentions: { repliedUser: false } })
