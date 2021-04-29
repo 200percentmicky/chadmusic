@@ -40,7 +40,7 @@ module.exports = class CommandVolume extends Command {
           100: '🔉',
           150: '🔊'
         }
-        if (volume > 175) return '🔊😭👌'
+        if (volume >= 175) return '🔊😭👌'
         return volumeIcon[Math.round(volume / 50) * 50]
       }
       return message.custom(volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`)
