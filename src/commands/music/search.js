@@ -29,8 +29,6 @@ module.exports = class CommandSearch extends Command {
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    if (!args[1]) return message.usage('search <query>')
-
     message.channel.startTyping()
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
@@ -43,6 +41,8 @@ module.exports = class CommandSearch extends Command {
 
     message.channel.startTyping()
     const queue = this.client.player.getQueue(message.guild.id)
+
+    if (!args[1]) return message.usage('search <query>')
 
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
