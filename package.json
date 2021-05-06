@@ -1,6 +1,6 @@
 {
   "name": "chadmusic",
-  "version": "2021.5.6",
+  "version": "2021.5.6-3",
   "description": "A feature-rich music bot based on a forked build of DisTube.",
   "main": "index.js",
   "scripts": {
