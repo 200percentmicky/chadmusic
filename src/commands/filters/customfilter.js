@@ -47,8 +47,12 @@ module.exports = class CommandCustomFilter extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'custom', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
+        try {
+          await this.client.player.setFilter(message.guild.id, 'custom', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
+        } catch (err) {
+          return message.say('error', 'No custom filters are applied to the player.')
+        }
       } else {
         const custom = args[1]
         await this.client.player.setFilter(message.guild.id, 'custom', custom)

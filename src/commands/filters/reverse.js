@@ -50,8 +50,12 @@ module.exports = class CommandReverse extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'reverse', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Reverse** Off')
+        try {
+          await this.client.player.setFilter(message.guild.id, 'reverse', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Reverse** Off')
+        } catch (err) {
+          return message.say('error', '**Reverse** is not applied to the player.')
+        }
       } else {
         await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse')
         return message.custom('📢', process.env.COLOR_INFO, '**Reverse** On')

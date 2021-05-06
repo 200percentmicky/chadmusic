@@ -51,8 +51,12 @@ module.exports = class CommandTremolo extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
+        try {
+          await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
+        } catch (err) {
+          return message.say('error', '**Tremolo** is not applied to the player.')
+        }
       } else {
         if (!args[1]) {
           return message.usage('tremolo <depth:int(0.1-1)/off> [frequency:int]')

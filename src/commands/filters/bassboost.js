@@ -49,8 +49,12 @@ module.exports = class CommandBassBoost extends Command {
       if (!args[1]) return message.usage('bassboost <gain:int(1-100)/off>')
 
       if (args[1] === 'OFF'.toLowerCase()) {
-        await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
-        return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
+        try {
+          await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
+        } catch (err) {
+          return message.say('error', '**Bass Boost** is not applied to the player.')
+        }
       } else {
         const gain = parseInt(args[1])
 
