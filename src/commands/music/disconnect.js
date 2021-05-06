@@ -36,11 +36,6 @@ module.exports = class CommandDisconnect extends Command {
         return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
       }
 
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) {
-        return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
-      }
-
       if (this.client.player.isPlaying(message)) {
         this.client.player.stop(message)
       }

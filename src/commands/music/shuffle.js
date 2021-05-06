@@ -29,9 +29,6 @@ module.exports = class CommandShuffle extends Command {
     if (currentVc.channel.members.size <= 2 || dj) {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
-
       const queue = this.client.player.getQueue(message)
       if (!queue) return message.say('warn', 'Nothing is currently playing in this server.')
       this.client.player.shuffle(message)

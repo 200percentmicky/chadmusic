@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo')
+const { Permissions } = require('discord.js')
 // const { MessageEmbed } = require('discord.js');
 // const YouTube = require('youtube-sr');
 
@@ -47,8 +48,26 @@ module.exports = class CommandPlay extends Command {
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
-      if (!permissions) return message.say('no', `Missing **Connect** permission for \`${vc.name}\``)
-      vc.join()
+      if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)
+
+      if (vc.type === 'stage') {
+        await vc.join() // Must be awaited only if the VC is a Stage Channel.
+        const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
+        if (!stageMod) {
+          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK'])
+          if (!requestToSpeak) {
+            vc.leave()
+            return message.say('no', `Missing **Request to Speak** permission for <#${vc.id}>.`)
+          } else if (message.guild.me.voice.suppress) {
+            await message.guild.me.voice.setRequestToSpeak(true)
+            message.say('info', `Since I'm not a **Stage Moderator** for <#${vc.id}>, please accept my request to speak on stage.`)
+          }
+        } else {
+          await message.guild.me.voice.setSuppressed(false)
+        }
+      } else {
+        vc.join()
+      }
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
