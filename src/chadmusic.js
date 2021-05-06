@@ -4,9 +4,7 @@
 /*
 MIT License
 
-Copyright (c) 2021 Michael L. Dickerson
-Twitter: @200percentmicky
-Discord: Micky-kun#3836
+Copyright (c) 2021 Michael L. Dickerson | Twitter: @200percentmicky | Discord: Micky-kun#3836
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
