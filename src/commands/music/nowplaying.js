@@ -1,6 +1,6 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const createBar = require('string-progressbar')
+const { splitBar } = require('string-progressbar')
 
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
@@ -37,7 +37,7 @@ module.exports = class CommandNowPlaying extends Command {
     return message.channel.send(new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`${queue.formattedCurrentTime} [${createBar(total, current, 17)[0]}] ${song.formattedDuration}`)
+      .setDescription(`${queue.formattedCurrentTime} [${splitBar(total, current, 17)[0]}] ${song.formattedDuration}`)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
