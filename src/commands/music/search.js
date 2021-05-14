@@ -81,12 +81,13 @@ module.exports = class CommandSearch extends Command {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})\n`)
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor('Search Results', message.author.avatarURL({ dynamic: true }))
+        .setAuthor('Which track do you wanna play?', message.author.avatarURL({ dynamic: true }))
         .setDescription(resultMap)
-        .setFooter('Type the number of your selection. Type "cancel" if you changed your mind.')
+        .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
       message.channel.send(embed).then(msg => {
-        message.channel.awaitMessages(m => m.author.id === message.author.id, {
+        const filter = m => m.author.id === message.author.id && (!isNaN(m.content) || m.content === 'CANCEL'.toLowerCase())
+        message.channel.awaitMessages(filter, {
           max: 1,
           time: 30000,
           errors: ['time']
@@ -94,7 +95,6 @@ module.exports = class CommandSearch extends Command {
           msg.delete()
           collected.first().delete()
           if (collected.first().content === 'CANCEL'.toLowerCase()) return
-          if (isNaN(collected.first().content)) return message.say('error', 'You must provide a number when selecting a song. Please retry your search.')
           message.channel.startTyping(5)
           const selected = results[parseInt(collected.first().content - 1)].url
           await this.client.player.play(message, selected)
