@@ -54,7 +54,7 @@ module.exports = class CommandSummon extends Command {
       } else {
         vc.join()
       }
-      return message.custom('📥', 0x77B255, `Joined \`${vc.name}\``)
+      return message.custom('📥', 0x77B255, `Joined <#${vc.id}>`)
     }
   }
 }
