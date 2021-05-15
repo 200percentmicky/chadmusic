@@ -8,13 +8,13 @@ const akairoversion = require('../../../node_modules/discord-akairo/package.json
 const discordversion = require('../../../node_modules/discord.js/package.json')
 const distubeversion = require('../../../node_modules/distube/package.json')
 
-module.exports = class CommandAboutMusic extends Command {
+module.exports = class CommandAbout extends Command {
   constructor () {
-    super('aboutmusic', {
-      aliases: ['aboutmusic'],
+    super('about', {
+      aliases: ['about'],
       category: '🛠 Utilities',
       description: {
-        text: 'Shows information about Poki.'
+        text: 'Shows information about the bot.'
       }
     })
   }

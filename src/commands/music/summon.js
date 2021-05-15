@@ -7,9 +7,7 @@ module.exports = class CommandSummon extends Command {
       aliases: ['summon', 'join'],
       category: '🎶 Player',
       description: {
-        text: 'Joins a ',
-        usage: '<url/search>',
-        details: '`<url/search>` The URL or search term to load.'
+        text: 'Summons the bot to a voice channel.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']

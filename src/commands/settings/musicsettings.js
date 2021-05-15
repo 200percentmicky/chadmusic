@@ -5,11 +5,11 @@ const { toColonNotation } = require('colon-notation')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('musicsettings', {
-      aliases: ['musicsettings'],
+    super('settings', {
+      aliases: ['settings'],
       category: '⚙ Settings',
       description: {
-        text: 'View the current settings for this server.'
+        text: 'Shows you the current settings for this server.'
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']

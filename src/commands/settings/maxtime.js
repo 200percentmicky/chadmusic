@@ -24,7 +24,7 @@ module.exports = class CommandMaxTime extends Command {
 
   async exec (message, args) {
     const time = args.time
-    if (!time) return message.usage('time <duration>')
+    if (!time) return message.usage('maxtime <duration|0/none/off>')
 
     if (time === 0 || time === 'NONE'.toLowerCase() || time === 'OFF'.toLowerCase()) {
       await this.client.maxTime.set(message.guild.id, null)

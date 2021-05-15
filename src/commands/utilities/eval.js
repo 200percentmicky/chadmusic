@@ -1,10 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 
-module.exports = class CommandEvalJS extends Command {
+module.exports = class CommandEval extends Command {
   constructor () {
-    super('jseval', {
-      aliases: ['jseval'],
+    super('eval', {
+      aliases: ['eval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',

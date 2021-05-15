@@ -8,8 +8,8 @@ module.exports = class CommandSetQueueLimit extends Command {
       category: '⚙ Settings',
       description: {
         text: 'Limits the number of entries that members can add to the queue.',
-        usage: '<number>',
-        details: '`<number>` The numbers of entries to limit for members.\n- DJs can bypass this limitation.'
+        usage: '<number|0/none>',
+        details: '`<number|0/none>` The numbers of entries to limit for members.\n- DJs can bypass this limitation.'
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']
@@ -19,7 +19,7 @@ module.exports = class CommandSetQueueLimit extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
 
-    if (!args[1]) return message.usage('setqueuelimit <number|none>')
+    if (!args[1]) return message.usage('setqueuelimit <number|0/none>')
 
     if (args[1] === (0 || 'NONE'.toLowerCase())) {
       await this.client.maxQueueLimit.set(message.guild.id, null)

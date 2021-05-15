@@ -8,8 +8,8 @@ module.exports = class CommandSetDJ extends Command {
       category: '⚙ Settings',
       description: {
         text: 'Sets the DJ Role for this server.',
-        usage: '<role>',
-        details: '`<role>` The role you would like to set. Can be the name, the ID, or a mention of the role.'
+        usage: '[role|none/off]',
+        details: '`[role|none/off]` The role you would like to set. Can be the name, the ID, or a mention of the role.'
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']

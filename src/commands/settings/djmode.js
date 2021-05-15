@@ -7,7 +7,8 @@ module.exports = class CommandDJMode extends Command {
       category: '⚙ Settings',
       description: {
         text: 'Toggles DJ Mode for the server.',
-        deatils: 'Requires the DJ role or the **Manage Channels** permission.'
+        usage: '<toggle:on/off>',
+        details: 'Requires the DJ role or the **Manage Channels** permission.'
       },
       clientPermissions: ['EMBED_LINKS']
     })
