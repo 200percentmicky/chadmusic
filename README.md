@@ -12,7 +12,7 @@
 
 ChadMusic is a feature-rich badass Discord music bot for your badass Discord server based on a forked build of **[DisTube.js](https://distube.js.org)**.
 
-### **[Add me to your server.](https://discord.com/api/oauth2/authorize?client_id=842687709776707585&permissions=37055552&scope=bot%20applications.commands)**
+### Wanna try it out? **[Add my bot to your server!](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
 
 ## ✨ Features
 * Supports up to 700+ websites.
