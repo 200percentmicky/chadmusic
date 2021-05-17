@@ -14,7 +14,7 @@ module.exports = class ListenerGetPrefix extends Listener {
       const prefix = this.client.prefix.getPrefix(message.guild.id)
         ? this.client.prefix.getPrefix(message.guild.id)
         : process.env.PREFIX
-      return message.channel.send(process.env.EMOJI_OK + ` My prefix for music commands in **${message.guild.name}** is \`${prefix}\` | You can run \`${prefix}prefix\` to change this.`)
+      return message.channel.send(process.env.EMOJI_OK + ` My prefix for music commands in **${message.guild.name}** is \`${prefix}\` | You can run \`${prefix}musicprefix\` to change this.`)
     }
   }
 }
