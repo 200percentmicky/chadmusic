@@ -1,18 +1,19 @@
 <p align="center">
-    <img align="center" width="100" height="100" src="https://images-ext-2.discordapp.net/external/E9HLR2Sflz6AA8Pv2Q4TtSD-lDUrN2ZNu3VN5jlXscs/https/media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png">
+    <img align="center" width="200" height="200" src="https://images-ext-2.discordapp.net/external/E9HLR2Sflz6AA8Pv2Q4TtSD-lDUrN2ZNu3VN5jlXscs/https/media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png">
 </p>
 
 # ChadMusic - The Chad Music Bot
 
-
+![GitHub](https://img.shields.io/github/license/mickykun-ar/ChadMusic)
+[![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)  
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
-[![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)
 
 ChadMusic is a feature-rich badass Discord music bot for your badass Discord server based on a forked build of **[DisTube.js](https://distube.js.org)**.
 
-### **[Add me to your server.](https://discord.com/api/oauth2/authorize?client_id=842687709776707585&permissions=37055552&scope=bot%20applications.commands)**
+### Wanna try it out? **[Add my bot to your server!](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
 
 ## ✨ Features
 * Supports up to 700+ websites.
@@ -75,7 +76,7 @@ ChadMusic is a feature-rich badass Discord music bot for your badass Discord ser
 
 
 # All of this looks cool! Can I self host this?
-You may self host this bot as long as you abide by the MIT License. **No support will be given if you decide to self host this bot.** Since this bot is based on **[DisTube.js](https://distube.js.org)**, I encourage you to learn how to build your own music bot to your taste. If any of this seems scary to you, again you can always **[add this bot to your server.](https://discord.com/api/oauth2/authorize?client_id=842687709776707585&permissions=37055552&scope=bot%20applications.commands)**
+Self-hosting ChadMusic is not supported, but I will not stop you from doing so as long as you abide by the MIT License. Since this bot is based on **[DisTube.js](https://distube.js.org)**, I encourage you to learn how to build your own music bot to your taste. If any of this seems scary to you, again you can always **[add this bot to your server.](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
 
 ## Directions
 The bot requires Node.JS 14.0.0 to run.
