@@ -1,12 +1,12 @@
 {
   "name": "chadmusic",
-  "version": "2021.5.15",
+  "version": "2021.5.20",
   "description": "A feature-rich music bot based on a forked build of DisTube.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "mickykun-ar",
   "license": "MIT",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",

@@ -1,4 +1,3 @@
-const { stripIndents } = require('common-tags')
 const { Listener } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const prettyms = require('pretty-ms')
@@ -34,17 +33,20 @@ module.exports = class ListenerPlaySong extends Listener {
       }
     }
 
-    textChannel.send(new MessageEmbed()
+    const songNow = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
-      .setDescription(stripIndents`
-      **Requested by:** ${song.user}
-      **Duration:** ${song.formattedDuration === '00:00' ? 'Live' : song.formattedDuration}
-      `)
+      .addField('Requested by', song.user)
+      .addField('Duration', song.formattedDuration === '00:00' ? 'Live' : song.formattedDuration)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
       .setTimestamp()
-    )
+
+    if (!message.channel) {
+      textChannel.send(songNow)
+    } else {
+      message.channel.send(songNow)
+    }
   }
 }

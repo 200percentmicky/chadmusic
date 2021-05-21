@@ -1,10 +1,11 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { Eval } = require('../../aliases.json')
 
 module.exports = class CommandEval extends Command {
   constructor () {
-    super('eval', {
-      aliases: ['eval'],
+    super(Eval !== undefined ? Eval[0] : 'eval', {
+      aliases: Eval || ['eval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',
