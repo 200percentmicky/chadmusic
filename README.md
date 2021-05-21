@@ -1,14 +1,15 @@
 <p align="center">
-    <img align="center" width="100" height="100" src="https://images-ext-2.discordapp.net/external/E9HLR2Sflz6AA8Pv2Q4TtSD-lDUrN2ZNu3VN5jlXscs/https/media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png">
+    <img align="center" width="200" height="200" src="https://images-ext-2.discordapp.net/external/E9HLR2Sflz6AA8Pv2Q4TtSD-lDUrN2ZNu3VN5jlXscs/https/media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png">
 </p>
 
 # ChadMusic - The Chad Music Bot
 
-
+![GitHub](https://img.shields.io/github/license/mickykun-ar/ChadMusic)
+[![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)  
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
-[![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)
 
 ChadMusic is a feature-rich badass Discord music bot for your badass Discord server based on a forked build of **[DisTube.js](https://distube.js.org)**.
 
