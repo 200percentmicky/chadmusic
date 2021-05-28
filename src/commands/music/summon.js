@@ -5,7 +5,7 @@ module.exports = class CommandSummon extends Command {
   constructor () {
     super('summon', {
       aliases: ['summon', 'join'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Summons the bot to a voice channel.'
       },
@@ -15,8 +15,8 @@ module.exports = class CommandSummon extends Command {
   }
 
   async exec (message) {
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')

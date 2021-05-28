@@ -4,7 +4,7 @@ module.exports = class ListenerCooldown extends Listener {
   constructor () {
     super('cooldown', {
       emitter: 'commandHandler',
-      event: 'cooldown'
+      event: 'commandCooldown'
     })
   }
 

@@ -4,7 +4,7 @@ module.exports = class CommandFilterOff extends Command {
   constructor () {
     super('filteroff', {
       aliases: ['filteroff', 'filtersoff', 'foff'],
-      category: '📢 Filter',
+      category: '🎶 Music',
       description: {
         text: 'Removes all filters from the player.'
       },
@@ -14,9 +14,9 @@ module.exports = class CommandFilterOff extends Command {
   }
 
   async exec (message) {
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
-    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
+    const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
     if (djMode) {

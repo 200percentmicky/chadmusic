@@ -5,7 +5,7 @@ module.exports = class CommandSkip extends Command {
   constructor () {
     super('skip', {
       aliases: ['skip', 's'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Skips the currently playing song.',
         usage: '|--force/-f|',
@@ -20,8 +20,8 @@ module.exports = class CommandSkip extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')

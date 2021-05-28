@@ -23,18 +23,9 @@ module.exports = class CommandAbout extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('A feature-rich open source music bot based on a forked build of **[DisTube.js](https://distube.js.org/)**.')
-      .addField('✨ Features', stripIndents`
-      :white_small_square: Supports 700+ websites.
-      :white_small_square: Add filters to the player.
-      :white_small_square: Alter filter values during playback.
-      :white_small_square: Unlimited volume! :joy::ok_hand:
-      :white_small_square: DJ commands to control the player.
-      :white_small_square: Queue and track length limits.
-      :white_small_square: And more to come!
-      `)
-      .addField('⚠ Caution', 'As with all forms of software that\'s currently in development, there will be bugs! Please report any bugs you may come across by opening an issue on **[GitHub](https://github.com/mickykuna/ChadMusic)**.')
+      .setAuthor('Project Wave', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('Project Wave is my attempted rewrite of a multi-purpose Discord bot. It extends off of ChadMusic with additional commands and features with the goal to replace whats currently running on Poki.')
+      .addField('⚠ Caution', `This bot is a work in progress. Anything you see in this build is not guaranteed to persist into the next. As with all forms of software currently in development, there will be bugs! If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
@@ -44,8 +35,8 @@ module.exports = class CommandAbout extends Command {
       **DisTube.js:** ${distubeversion.version}
       **Uptime:** ${this.client.utils.uptime()}
       `, true)
-      .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
-      .setFooter(`The owner of this instant is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
+      .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
+      .setFooter(`Created by ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send(aboutembed)
   }
 }

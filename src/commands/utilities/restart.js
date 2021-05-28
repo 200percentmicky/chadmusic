@@ -19,8 +19,8 @@ module.exports = class CommandRestart extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     let restartReport = args.slice(1).join(' ')
-    if (!restartReport) restartReport = 'Just refreshing... nothing serious. (☞ﾟヮﾟ)☞'
-    const errChannel = this.client.channels.cache.find(val => val.id === '603735567733227531')
+    if (!restartReport) restartReport = 'Just refreshing... nothing serious. :3'
+    const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL)
     await message.react('🔄')
     await errChannel.send(new MessageEmbed()
       .setColor(process.env.COLOR_INFO)

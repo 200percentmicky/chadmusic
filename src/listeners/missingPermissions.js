@@ -47,13 +47,12 @@ module.exports = class CommandMissingPermissions extends Listener {
     const userPerms = await missing.map(missing => permissions[missing]).join(', ')
 
     if (type === 'client') {
-      if (clientPerms.includes('Embed Links')) return message.say('error', 'Oh no! I can\'t run any commands in this channel! Please make sure that I have the **Embed Links** permission.')
-      return message.say('warn', `**Required Permissions:** ${clientPerms}`, 'I don\'t have the permissions needed to run that command.')
+      return message.say('warn', `I require the **${clientPerms}** permission(s) to execute that command.`)
     }
 
     if (type === 'user') {
       if (command.userPermissions === 'ADMINISTRATOR') return message.say('no', 'Only server administrators can use that command.')
-      else return message.say('no', `**Required Permissions:** ${userPerms}`, 'You do not have permission to use this command.')
+      else return message.say('no', `You need the **${userPerms}** permission(s) to use that command.`)
     }
   }
 }

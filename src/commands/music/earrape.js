@@ -5,7 +5,7 @@ module.exports = class CommandEarrape extends Command {
   constructor () {
     super('earrape', {
       aliases: ['earrape'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Changes the volume of the player to 42069%.',
         details: 'The ratio that no man can withstand. Only works if Unlimited Volume is On.'
@@ -16,8 +16,8 @@ module.exports = class CommandEarrape extends Command {
   }
 
   async exec (message) {
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) {

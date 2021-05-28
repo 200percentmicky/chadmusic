@@ -10,8 +10,8 @@ module.exports = class ListenerAddSong extends Listener {
   }
 
   async exec (message, queue, song) {
-    const djRole = await this.client.djRole.get(message.guild.id)
-    const maxTime = await this.client.maxTime.get(message.guild.id)
+    const djRole = await this.client.settings.get(message.guild.id, 'djRole')
+    const maxTime = await this.client.settings.get(message.guild.id, 'maxTime')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (maxTime) {
       if (!dj) {

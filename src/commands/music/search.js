@@ -6,7 +6,7 @@ module.exports = class CommandSearch extends Command {
   constructor () {
     super('search', {
       aliases: ['search'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Searches for a song on YouTube.',
         usage: '<query>'
@@ -19,8 +19,8 @@ module.exports = class CommandSearch extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     const search = args.slice(1).join(' ')
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')

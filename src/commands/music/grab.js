@@ -5,7 +5,7 @@ module.exports = class CommandGrab extends Command {
   constructor () {
     super('grab', {
       aliases: ['grab', 'save'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Saves this song to your DMs.'
       },

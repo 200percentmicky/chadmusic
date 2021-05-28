@@ -17,27 +17,86 @@ module.exports = class CommandSettings extends Command {
   }
 
   async exec (message) {
-    const djRole = await this.client.djRole.get(message.guild.id)
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const maxTime = await this.client.maxTime.get(message.guild.id)
-    const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
-    const nowPlayingAlerts = await this.client.nowPlayingAlerts.get(message.guild.id)
-    const allowFilters = await this.client.allowFilters.get(message.guild.id)
-    const allowFreeVolume = await this.client.allowFreeVolume.get(message.guild.id)
+    const settings = this.client.settings
+
+    /* All Settings */
+    const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
+    const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
+    const maxTime = settings.get(message.guild.id, 'maxTime', null) // Max Song Duration
+    const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null) // Max Entries in the Queue
+    const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all') // Allow the use of Filters
+    const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
+    const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
+    const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
+    const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
+    const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
+    const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
+    const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
+    const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
+    const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
 
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(`Music Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(stripIndents`
-      **⁉ Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || process.env.PREFIX}\`
-      **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **⏲ Max Song Time:** ${maxTime !== (null || undefined) ? toColonNotation(maxTime) : 'Unlimited'}
-      **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      **📣 Now Playing Alerts:** ${nowPlayingAlerts === true ? 'On' : 'Off'}
-      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      .setAuthor(`Current Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+      .addField('🌐 General', stripIndents`
+      **Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || process.env.PREFIX}\`
       `)
+      .addField('🎶 Music', stripIndents`
+      **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      `)
+      .addField('📃 Logging', stripIndents`
+      **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
+      **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
+      **guildMemberAdd:** ${guildMemberAdd ? `<#${guildMemberAdd}>` : 'None'}
+      **guildMemberRemove:** ${guildMemberRemove ? `<#${guildMemberRemove}>` : 'None'}
+      **guildMemberUpdate:** ${guildMemberUpdate ? `<#${guildMemberUpdate}>` : 'None'}
+      **messageDelete:** ${messageDelete ? `<#${messageDelete}>` : 'None'}
+      **messageUpdate:** ${messageUpdate ? `<#${messageUpdate}>` : 'None'}
+      **voiceStateUpdate:** ${voiceStateUpdate ? `<#${voiceStateUpdate}>` : 'None'}
+      `)
+      /*
+      .addField('🌟 Starboard', stripIndents`
+      **Channel:** ${starboard ? `<#${starboard.channelID}>` : 'None'}
+      **Emoji:** ${starboard ? starboard.options.emoji : 'Not configured'}
+      **Threshold:** ${starboard ? starboard.options.threshold : 'Not configured'}
+      **Color:** ${starboard ? starboard.options.color : 'Not configured'}
+      **Post Attachments:** ${starboard
+        ? starboard.options.attachment === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      **Resolve Image URLs:** ${starboard
+        ? starboard.options.resolveImageUrl === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      **Self Star:** ${starboard
+        ? starboard.options.selfStar === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      **Star Bot Messages:** ${starboard
+        ? starboard.options.starBotMsg === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      **Star Embeds:** ${starboard
+        ? starboard.options.starEmbed === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      **Allow NSFW:** ${starboard
+        ? starboard.options.allowNsfw === true
+          ? 'Yes'
+          : 'No'
+        : 'Not configured'}
+      `)
+      */
       .setTimestamp()
 
     return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })

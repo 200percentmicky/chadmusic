@@ -1,6 +1,6 @@
 /* Index File */
 
 require('dotenv').config()
-const ChadMusic = require('./src/chadmusic.js')
+const WaveBot = require('./src/wavebot.js')
 
-new ChadMusic().login(process.env.TOKEN)
+new WaveBot().login(process.env.TOKEN)

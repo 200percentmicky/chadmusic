@@ -1,17 +1,17 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandVibrato extends Command {
+module.exports = class CommandTremolo extends Command {
   constructor () {
-    super('vibrato', {
-      aliases: ['vibrato'],
-      category: '📢 Filter',
+    super('tremolo', {
+      aliases: ['tremolo'],
+      category: '🎶 Music',
       description: {
-        text: 'Adds a vibrato filter to the player.',
+        text: 'Adds a tremolo filter to the player.',
         usage: '<depth:int(0.1-1)/off> [frequency:int]',
         details: stripIndents`
-        \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
-        \`<frequency:int>\` The frequency of the vibrato.
+        \`<depth:int(0.1-1)/off>\` The depth of the tremolo between 0.1-1, or "off" to disable it.
+        \`[frequency:int]\` The frequency of the tremolo.
         `
       },
       channel: 'guild',
@@ -21,9 +21,9 @@ module.exports = class CommandVibrato extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
-    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
+    const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters')
     const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
@@ -52,16 +52,16 @@ module.exports = class CommandVibrato extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
-          return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
+          await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
         } catch (err) {
-          return message.say('error', '**Vibrato** is not applied to the player.')
+          return message.say('error', '**Tremolo** is not applied to the player.')
         }
       } else {
         if (!args[1]) {
-          return message.usage('vibrato <depth:int(0.1-1)/off> [frequency:int]')
+          return message.usage('tremolo <depth:int(0.1-1)/off> [frequency:int]')
         }
-        const d = args[1]
+        const d = parseInt(args[1])
         let f = parseInt(args[2])
         if (d < 0.1 || d > 1 || isNaN(d)) {
           return message.say('error', 'Depth must be between **0.1** to **1**, or **off**.')
@@ -73,8 +73,8 @@ module.exports = class CommandVibrato extends Command {
         if (f < 1) {
           return message.say('error', 'Frequency must be greater than 0.')
         }
-        await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
-        return message.custom('📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
+        await this.client.player.setFilter(message.guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`)
+        return message.custom('📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

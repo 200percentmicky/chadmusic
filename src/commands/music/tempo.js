@@ -4,7 +4,7 @@ module.exports = class CommandTempo extends Command {
   constructor () {
     super('tempo', {
       aliases: ['tempo'],
-      category: '📢 Filter',
+      category: '🎶 Music',
       description: {
         text: 'Changes the tempo of the player.',
         usage: '<rate:int[1-20]>',
@@ -17,9 +17,9 @@ module.exports = class CommandTempo extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
-    const allowFilters = await this.client.allowFilters.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
+    const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
     if (djMode) {

@@ -4,7 +4,7 @@ module.exports = class CommandDisconnect extends Command {
   constructor () {
     super('disconnect', {
       aliases: ['disconnect', 'leave', 'pissoff', 'fuckoff'],
-      category: '🎶 Player',
+      category: '🎶 Music',
       description: {
         text: 'Disconnects from the current voice channel.'
       },
@@ -14,8 +14,8 @@ module.exports = class CommandDisconnect extends Command {
   }
 
   async exec (message) {
-    const djMode = await this.client.djMode.get(message.guild.id)
-    const djRole = await this.client.djRole.get(message.guild.id)
+    const djMode = this.client.settings.get(message.guild.id, 'djMode')
+    const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
       if (!dj) {

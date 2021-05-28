@@ -76,7 +76,7 @@ module.exports = class CommandHelp extends Command {
 
         const commandEmbed = new MessageEmbed()
           .setColor(process.env.COLOR_BLOOD)
-          .setAuthor(this.client.user.username + ' - ChadMusic Documentation', this.client.user.avatarURL({ dynamic: true }))
+          .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
           .setTimestamp()
@@ -107,7 +107,7 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(this.client.user.username + ' - ChadMusic Documentation', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${prefix}help [command]`)
 
@@ -122,7 +122,6 @@ module.exports = class CommandHelp extends Command {
       field.value = `${field.value}`
       helpEmbed.fields.push(field)
     })
-    message.react(process.env.REACTION_CUTIE)
-    return message.author.send(helpEmbed)
+    return message.channel.send(helpEmbed)
   }
 }

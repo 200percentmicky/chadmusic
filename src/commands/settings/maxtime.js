@@ -27,14 +27,14 @@ module.exports = class CommandMaxTime extends Command {
     if (!time) return message.usage('maxtime <duration|0/none/off>')
 
     if (time === 0 || time === 'NONE'.toLowerCase() || time === 'OFF'.toLowerCase()) {
-      await this.client.maxTime.set(message.guild.id, null)
+      await this.client.settings.delete(message.guild.id, 'maxTime')
       return message.say('ok', 'Max time has been disabled.')
     }
 
     const notation = toMilliseconds(time)
     if (!notation) return message.error(`\`${time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`)
 
-    await this.client.maxTime.set(message.guild.id, notation)
+    await this.client.settings.set(message.guild.id, 'maxTime', notation)
     return message.say('ok', `Max time has been set to \`${time}\``)
   }
 }

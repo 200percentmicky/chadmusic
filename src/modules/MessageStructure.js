@@ -94,7 +94,7 @@ module.exports = class MessageStructure extends Message {
   async recordError (type, command, title, error) {
     // Consider replacing the channel ID for your own error reporting
     // channel until the feature is supported in the configs.
-    const errorChannel = this.client.channels.cache.get('603735567733227531')
+    const errorChannel = this.client.channels.cache.get(process.env.BUG_CHANNEL)
     const embed = new MessageEmbed()
       .setTimestamp()
       .addField('Server', this.channel.type === 'dm'

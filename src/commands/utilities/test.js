@@ -7,7 +7,7 @@ module.exports = class CommandTest extends Command {
       aliases: ['jstest'],
       category: '🛠 Utilities',
       description: {
-        text: 'Test command. Does I do work????'
+        text: 'Test command. Doesn\'t really do anything lmao'
       }
     })
   }
