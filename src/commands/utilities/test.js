@@ -1,10 +1,10 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = class CommandTest extends Command {
   constructor () {
-    super('jstest', {
-      aliases: ['jstest'],
+    super('test', {
+      aliases: ['test'],
       category: '🛠 Utilities',
       description: {
         text: 'Test command. Doesn\'t really do anything lmao'
@@ -33,6 +33,18 @@ module.exports = class CommandTest extends Command {
 
           await message.channel.send({ embed }) // Wait for the embed to be sent
         }
+        break
+      }
+
+      case 'button': {
+        const row = new MessageActionRow()
+          .addComponents(new MessageButton()
+            .setStyle('LINK')
+            .setLabel('Click me!')
+            .setURL('https://kanka-user-assets.s3.eu-central-1.amazonaws.com/characters/peF4OjkGLd3Z9H5GLPMn8PH3oIcMulyIQ9JFxOpm.png')
+          )
+
+        message.channel.send('Oh look, it\'s a button! Go on, click it!', { components: [row] })
         break
       }
 
