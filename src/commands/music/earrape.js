@@ -7,7 +7,7 @@ module.exports = class CommandEarrape extends Command {
       aliases: ['earrape'],
       category: '🎶 Music',
       description: {
-        text: 'Changes the volume of the player to 42069%.',
+        text: 'Changes the volume of the player to 69420%.',
         details: 'The ratio that no man can withstand. Only works if Unlimited Volume is On.'
       },
       channel: 'guild',
@@ -41,7 +41,7 @@ module.exports = class CommandEarrape extends Command {
       return message.say('warn', 'Nothing is currently playing on this server.')
     }
 
-    const earrape = 42069 // 😂👌👌💯
+    const earrape = 69420 // 😂👌👌💯
     const volume = this.client.player.getQueue(message).volume
     if (volume >= 5000) {
       this.client.player.setVolume(message, 100)
