@@ -1,6 +1,6 @@
 {
   "name": "projectwave",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "New JS bot. Let's see how this goes.",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "discord-paginationembed": "^2.1.0",
     "discord-prefix": "^1.1.0",
     "discord-starboards": "^2.2.3",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "github:monbrey/discord.js#message-components",
     "distube": "github:mickykun-ar/chadtube",
     "dotenv": "^8.6.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",

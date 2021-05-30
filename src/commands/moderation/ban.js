@@ -23,7 +23,7 @@ module.exports = class CommandBan extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.say('info', 'Please provide a member to kick.')
+      return message.usage('ban <@user> [days] [reason]')
     }
 
     if (!member) {

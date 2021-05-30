@@ -6,7 +6,7 @@ module.exports = class CommandNukeChannel extends Command {
   constructor () {
     super('nukechannel', {
       aliases: ['nukechannel', 'nuke'],
-      category: '🔑 Administration',
+      category: '⚙ Settings',
       description: {
         text: 'Nukes all messages in a channel.'
       },

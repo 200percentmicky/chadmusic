@@ -78,6 +78,10 @@ Structures.extend('Message', () => {
   const MessageStructure = require('./modules/MessageStructure.js')
   return MessageStructure
 })
+Structures.extend('Guild', () => {
+  const GuildStructure = require('./modules/GuildStructure.js')
+  return GuildStructure
+})
 
 /* Main Client */
 class WaveBot extends AkairoClient {
@@ -114,7 +118,8 @@ class WaveBot extends AkairoClient {
     })
 
     /* Data Management */
-    this.settings = new MongooseProvider(require('./modules/MongooseProvider.js'))
+    this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
+    this.modlog = new MongooseProvider(require('./modules/ModlogProvider.js'))
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {
@@ -156,6 +161,7 @@ class WaveBot extends AkairoClient {
   /* Load Mongoose Provider */
   async login (token) {
     await this.settings.init()
+    await this.modlog.init()
     return super.login(token)
   }
 }

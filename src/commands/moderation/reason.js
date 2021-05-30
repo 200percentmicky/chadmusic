@@ -1,5 +1,8 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const prettyms = require('pretty-ms')
+
+const color = require('../../colorcode.json')
 
 module.exports = class CommandReason extends Command {
   constructor () {
@@ -19,7 +22,7 @@ module.exports = class CommandReason extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    if (!args[1]) return
+    if (!args[1]) return message.usage('reason <case_number> <reason>')
     const reason = args.slice(2).join(' ')
 
     const modlogCase = this.client.modlog.get(message.guild.id, args[1])
@@ -35,31 +38,49 @@ module.exports = class CommandReason extends Command {
     // const auditEntry = audit.entries.get(modlogCase.audit_id);
 
     // Building the embed.
+    // Embed colors!
+    const colors = {
+      ban: color.ban,
+      kick: color.kick,
+      softban: color.softban,
+      unban: color.unban
+    }
+
     const emojiType = {
       ban: '🔨',
       kick: '👢',
       softban: '💨',
-      unban: '🕊'
+      unban: '🕊',
+      mute: '🔇',
+      unmute: '🔊'
     }
+
     const _type = modlogCase.type.charAt(0).toUpperCase() + modlogCase.type.slice(1)
     const moderator = message.guild.members.cache.get(modlogCase.mod_id)
+    const lastKnownUser = modlogCase.user_tag
+    const lastKnownUserID = modlogCase.user_id
+    const lastKnownUserAvatar = modlogCase.user_avatar
 
-    const __type = `**Action:** ${_type} ${emojiType[type]}\n`
-    const __user = `**User:** ${modlogCase.user_tag} (\`${modlogCase.user_id}\`)\n`
+    const __type = `${emojiType[type]} ${_type}`
     const __reason = `**Reason:** ${reason}\n`
-    const __lastModified = `**Last Modified:** ${this.client.moment(new Date()).format('ddd, MMM D, YYYY k:mm:ss')}`
-    const __amended = message.channel.permissionsFor(message.author.id).has(['ADMINISTRATOR']) &&
-            message.author.id !== modlogCase.mod_id
-      ? `**Amended:** ${message.author.tag} (\`${message.author.id}\`)\n`
-      : ''
+    const __lastModified = this.client.moment(new Date()).format('ddd, MMM D, YYYY k:mm:ss')
 
     const embed = new MessageEmbed()
-      .setColor(this.client.color[modlogCase.type])
-      .setAuthor(moderator.user.tag + ` (${moderator.user.id})`, moderator.user.avatarURL({ dynamic: true }))
-      .setDescription(`${__type}${__user}${__reason}${__lastModified}${__amended}`)
-      .setThumbnail(modlogCase.user_avatar)
+      .setColor(colors[type])
+      .setAuthor(lastKnownUser, lastKnownUserAvatar)
+      .setTitle(`\`${lastKnownUserID}\``)
+      .setDescription(__reason)
+      .setThumbnail(lastKnownUserAvatar)
+      .addField('Action', __type)
+      .addField('Moderator', moderator.user.toString())
+      .addField('Last Modified', __lastModified)
       .setTimestamp()
-      .setFooter(`Case ${args[1]}`)
+      .setFooter(`Case ${modlogCase.caseid}`)
+
+    if (modlogCase.type === 'mute') {
+      const _duration = prettyms(modlogCase.duration, { verbose: true })
+      embed.addField('Duration', _duration)
+    }
 
     // Fetches the log's message so it can be changed.
     const msg = await modlogChannel.messages.fetch(modlogCase.message_id)

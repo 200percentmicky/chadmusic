@@ -27,7 +27,7 @@ module.exports = class CommandKick extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.say('info', 'Please provide a member to kick.')
+      return message.usage('kick <@user> [reason]')
     }
 
     if (!member) {
@@ -67,7 +67,7 @@ module.exports = class CommandKick extends Command {
     } finally {
       await member.kick(`${message.author.tag}: ${reason}`)
       message.custom('👢', this.client.color.kick, `**Reason:** ${reason}`, randomResponse)
-      message.guild.recordCase('ban', message.author.id, member.user.id, reason)
+      message.guild.recordCase('kick', message.author.id, member.user.id, reason)
     }
   }
 }

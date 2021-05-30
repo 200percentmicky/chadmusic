@@ -18,17 +18,7 @@ module.exports = class CommandSoftban extends Command {
         `
       },
       channel: 'guild',
-      category: '⚒ Moderation',
-      args: [
-        {
-          id: 'member',
-          type: 'member'
-        },
-        {
-          id: 'days',
-          type: 'number'
-        }
-      ]
+      category: '⚒ Moderation'
     })
   }
 
@@ -37,7 +27,7 @@ module.exports = class CommandSoftban extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.say('info', 'Please provide a member to ban.')
+      return message.usage('softban <@user> [reason]')
     }
 
     if (!member) {
@@ -75,9 +65,9 @@ module.exports = class CommandSoftban extends Command {
     } catch (err) {
       return
     } finally {
-      member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
-      message.guild.members.unban(member.user.id)
-      message.say('💨', this.client.color.softban, `**Reason:** ${reason}`, randomResponse)
+      await member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
+      await message.guild.members.unban(member.user.id)
+      message.custom('💨', this.client.color.softban, `**Reason:** ${reason}`, randomResponse)
       message.guild.recordCase('softban', message.author.id, member.user.id, reason)
     }
   }
