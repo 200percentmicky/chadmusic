@@ -40,7 +40,7 @@ class GuildStructure extends Guild {
       }
 
       // Used to construct the embed.
-      const prefix = this.client.settings.get(this.id, 'prefix')
+      const prefix = this.client.settings.get(this.id, 'prefix') || process.env.PREFIX
       if (!reason) reason = `No reason provided. Type \`${prefix}reason ${caseid + 1}\` to add it.`
 
       const __type = `${emojiType[type]} ${_type}`

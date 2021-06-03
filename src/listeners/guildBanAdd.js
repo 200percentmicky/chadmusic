@@ -8,11 +8,12 @@ module.exports = class ListenerGuildBanAdd extends Listener {
     })
   }
 
-  async exec (guild, user) {
-    guild.fetchAuditLogs({ type: 'MEMBER_BAN_ADD' }).then(audit => {
+  async exec (ban) {
+    if (!ban.guild.me.permissions.has(['VIEW_AUDIT_LOG'])) return
+    ban.guild.fetchAuditLogs({ type: 'MEMBER_BAN_ADD' }).then(audit => {
       const entry = audit.entries.first()
       if (entry.executor.id === this.client.user.id) return
-      guild.recordCase('ban', entry.executor.id, user.id, entry.reason)
+      ban.guild.recordCase('ban', entry.executor.id, ban.user.id, entry.reason)
     })
   }
 }
