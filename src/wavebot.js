@@ -58,9 +58,10 @@ const { Structures, Intents } = require('discord.js')
 const DisTube = require('distube')
 const moment = require('moment')
 
-/* Mongoose */
+/* Connecting to databases... */
+const { Database } = require('quickmongo')
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGO_URI_MAIN, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -119,7 +120,7 @@ class WaveBot extends AkairoClient {
 
     /* Data Management */
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
-    this.modlog = new MongooseProvider(require('./modules/ModlogProvider.js'))
+    this.modlog = new Database(process.env.MONGO_URI_MODLOG)
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {
@@ -144,7 +145,8 @@ class WaveBot extends AkairoClient {
     this.listeners.setEmitters({
       process: process,
       commandHandler: this.commands,
-      player: this.player
+      player: this.player,
+      modlog: this.modlog
     })
 
     this.commands.useInhibitorHandler(this.inhibitors)
@@ -161,7 +163,6 @@ class WaveBot extends AkairoClient {
   /* Load Mongoose Provider */
   async login (token) {
     await this.settings.init()
-    await this.modlog.init()
     return super.login(token)
   }
 }

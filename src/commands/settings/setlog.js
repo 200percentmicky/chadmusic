@@ -12,7 +12,7 @@ module.exports = class CommandSetLog extends Command {
         Allows you to set various logs and event alerts for the server.
 
         **Available Logs:**
-        \`modlog\` Logs moderation actions. [**Cannot be applied. WIP**]
+        \`modlog\` Logs moderation actions.
         \`taglog\` Logs tags being created or deleted.
 
         **Available Events:**
@@ -42,7 +42,7 @@ module.exports = class CommandSetLog extends Command {
         \`setlog <log> [channel]\`
 
         **Available Logs:**
-        \`modlog\` Logs moderation actions. [**Cannot be applied. WIP**]
+        \`modlog\` Logs moderation actions.
         \`taglog\` Logs tags being created or deleted.
 
         **Available Events:**
@@ -57,7 +57,7 @@ module.exports = class CommandSetLog extends Command {
     }
 
     const logType = { // Again, pure lazy programming.
-      // modlog: 'Moderation logs', // This is a work in progress.
+      modlog: 'Moderation logs',
       taglog: 'Tag logs',
       guildMemberAdd: '`guildMemberAdd`',
       guildMemberRemove: '`guildMemberRemove`',
@@ -72,7 +72,7 @@ module.exports = class CommandSetLog extends Command {
             \`${args[1]}\` is not a valid log you can set.
 
             **Available Logs:**
-            \`modlog\` Logs moderation actions. [**Cannot be applied. WIP**]
+            \`modlog\` Logs moderation actions.
             \`taglog\` Logs tags being created or deleted.
 
             **Available Events:**

@@ -15,7 +15,7 @@
   "prefix": [ "prefix" ],
   "queue": [ "queue" ],
   "repeat": [ "repeat" ],
-  "restart": [ "jsrestart" ],
+  "restart": [ "restart" ],
   "setdj": [ "setdj" ],
   "setqueuelimit": [ "setqueuelimit" ],
   "settings": [ "settings" ],

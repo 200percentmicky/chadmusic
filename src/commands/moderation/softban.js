@@ -48,7 +48,7 @@ module.exports = class CommandSoftban extends Command {
     const responses = [
       `And like that, **${member.user.tag}** has been softbanned!`,
       `**${message.user.tag}** has been softbanned.`,
-      `**${message.user.tag}** posted something silly.`
+      `Softbanned **${message.user.tag}** for posting something silly.`
     ]
 
     const randomResponse = responses[Math.floor(Math.random() * responses.length)]
@@ -61,13 +61,12 @@ module.exports = class CommandSoftban extends Command {
         .setTimestamp()
         .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
-      message.delete()
     } catch (err) {
       return
     } finally {
       await member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
       await message.guild.members.unban(member.user.id)
-      message.custom('💨', this.client.color.softban, `**Reason:** ${reason}`, randomResponse)
+      message.custom('💨', this.client.color.softban, randomResponse)
       message.guild.recordCase('softban', message.author.id, member.user.id, reason)
     }
   }

@@ -61,12 +61,11 @@ module.exports = class CommandKick extends Command {
         .setTimestamp()
         .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
-      message.delete()
     } catch (err) {
       return
     } finally {
       await member.kick(`${message.author.tag}: ${reason}`)
-      message.custom('👢', this.client.color.kick, `**Reason:** ${reason}`, randomResponse)
+      message.custom('👢', this.client.color.kick, randomResponse)
       message.guild.recordCase('kick', message.author.id, member.user.id, reason)
     }
   }

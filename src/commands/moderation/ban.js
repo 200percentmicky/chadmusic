@@ -49,7 +49,7 @@ module.exports = class CommandBan extends Command {
 
     const responses = [
       `Done. **${member.user.tag}** is now banned from the server.`,
-      `**${member.user.tag}** is now forever gone.`,
+      `**${member.user.tag}** is now gone, forever.`,
       `And just like that, **${member.user.tag}** has been banned.`,
       `**${member.user.tag}** has been struck by the ban hammer!`
     ]
@@ -64,12 +64,11 @@ module.exports = class CommandBan extends Command {
         .setTimestamp()
         .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
-      message.delete()
     } catch (err) {
       return
     } finally {
       await member.ban({ days: days, reason: `${message.author.tag}: ${reason}` })
-      message.custom('🔨', this.client.color.ban, `**Reason:** ${reason}`, randomResponse)
+      message.custom('🔨', this.client.color.ban, randomResponse)
       message.guild.recordCase('ban', message.author.id, member.user.id, reason)
     }
   }

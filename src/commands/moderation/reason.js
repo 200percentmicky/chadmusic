@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
+const { stripIndents } = require('common-tags')
 const prettyms = require('pretty-ms')
 
 const color = require('../../colorcode.json')
@@ -25,7 +26,8 @@ module.exports = class CommandReason extends Command {
     if (!args[1]) return message.usage('reason <case_number> <reason>')
     const reason = args.slice(2).join(' ')
 
-    const modlogCase = this.client.modlog.get(message.guild.id, args[1])
+    const caseNumber = parseInt(args[1] - 1)
+    const modlogCase = await this.client.modlog.get(`${message.guild.id}`).then(x => x[caseNumber])
     if (!modlogCase) return message.say('error', 'That case does not exist.')
     const modlogSettings = this.client.settings.get(message.guild.id, 'modlog')
     const modlogChannel = message.guild.channels.cache.find(val => val.id === modlogSettings)
@@ -67,13 +69,11 @@ module.exports = class CommandReason extends Command {
 
     const embed = new MessageEmbed()
       .setColor(colors[type])
-      .setAuthor(lastKnownUser, lastKnownUserAvatar)
-      .setTitle(`\`${lastKnownUserID}\``)
+      .setAuthor(moderator.user.tag, moderator.user.avatarURL({ dynamic: true }))
       .setDescription(__reason)
-      .setThumbnail(lastKnownUserAvatar)
-      .addField('Action', __type)
-      .addField('Moderator', moderator.user.toString())
-      .addField('Last Modified', __lastModified)
+      .setThumbnail(`${lastKnownUserAvatar}?size=1024`)
+      .addField('User', lastKnownUser, true)
+      .addField('Action', __type, true)
       .setTimestamp()
       .setFooter(`Case ${modlogCase.caseid}`)
 
@@ -87,22 +87,29 @@ module.exports = class CommandReason extends Command {
 
     // Check if the author's ID matches with the ID saved in the DB.
     if (modlogCase.mod_id !== message.author.id) {
-      // If the user is an administrator or the server owner, they
-      // may change cases that they did not make.
+      /* Anyone with a higher role than the mod that created the case can amend it. */
+      const authorRolePosition = message.member.roles.highest.position
+      const modRolePosition = moderator.roles.highest.position
 
-      // TODO: I would want for this to go off of the server's role hierarchy
-      // in the future. Higher ranked Moderators should have this ability.
-      // Not everyone can be Admin. So for now, this will do.
-      if (message.channel.permissionsFor(message.author.id).has(['ADMINISTRATOR'])) {
+      if (authorRolePosition > modRolePosition || message.guild.ownerID === message.author.id) {
         // Must include a reason.
         if (!reason) return message.say('warn', 'Please provide a new reason for the case.')
-        if (message.author.id !== modlogCase.mod_id) embed.addField('Amended', `${message.author.toString()}\n${message.author.tag}`)
-        await msg.edit(embed)
-        return message.say('ok', `Case **${args[1]}** has been updated.`)
+        if (message.author.id !== modlogCase.mod_id) embed.addField('Amended', message.author.tag)
+      } else {
+        // In case that the member is not an admin.
+        return message.say('error', `Case **${args[1]}** is not your case.`)
       }
-      // In case that the member is not an admin.
-      return message.say('error', 'You can only update cases that you created.')
     }
+
+    embed.addField('Last Modified', __lastModified)
+
+    embed.addField('ID', stripIndents`
+    \`\`\`js\n
+    User: ${lastKnownUserID}
+    Moderator: ${moderator.user.id}
+    ${modlogCase.mod_id !== message.author.id ? `Amender: ${message.author.id}` : ''}
+    \`\`\`
+    `)
 
     // Must include a reason.
     if (!reason) return message.say('warn', 'Please provide a new reason for the case.')

@@ -25,7 +25,7 @@ module.exports = class CommandEval extends Command {
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(code)
+      let evaled = eval(await (async () => code)())
 
       if (typeof evaled !== 'string') {
         evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 })

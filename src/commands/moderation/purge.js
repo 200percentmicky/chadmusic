@@ -15,7 +15,7 @@ module.exports = class CommandPurge extends Command {
       args: [
         {
           id: 'deleteCount',
-          type: Argument.range('number', 2, 100),
+          type: Argument.range('number', 1, 101),
           default: undefined
         }
       ]
@@ -24,9 +24,9 @@ module.exports = class CommandPurge extends Command {
 
   async exec (message, args) {
     if (!args) return message.usage('purge <number:2-100>')
+    message.delete()
     if (args.deleteCount) {
       try {
-        message.delete()
         message.channel.bulkDelete(args.deleteCount)
         return
       } catch (err) {

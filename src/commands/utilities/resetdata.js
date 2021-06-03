@@ -34,8 +34,8 @@ module.exports = class CommandResetData extends Command {
             return [process.env.REACTION_OK, process.env.REACTION_ERROR].includes(reaction.emoji.name) && user.id === message.author.id
           }
 
-          msg.react(process.env.REACTION_OK)
-          msg.react(process.env.REACTION_ERROR)
+          msg.react('✅')
+          msg.react('❌')
 
           msg.awaitReactions(filter, {
             max: 1,
@@ -44,7 +44,7 @@ module.exports = class CommandResetData extends Command {
           }).then(async collected => {
             const reaction = collected.first()
 
-            if (reaction.emoji.name === process.env.REACTION_OK) {
+            if (reaction.emoji.name === '✅') {
               msg.delete()
               message.channel.startTyping()
               await this.client.settings.clear(message.guild.id)
@@ -66,8 +66,8 @@ module.exports = class CommandResetData extends Command {
             return [process.env.REACTION_OK, process.env.REACTION_ERROR].includes(reaction.emoji.name) && user.id === message.author.id
           }
 
-          msg.react(process.env.REACTION_OK)
-          msg.react(process.env.REACTION_ERROR)
+          msg.react('✅')
+          msg.react('❌')
 
           msg.awaitReactions(filter, {
             max: 1,
@@ -76,10 +76,10 @@ module.exports = class CommandResetData extends Command {
           }).then(async collected => {
             const reaction = collected.first()
 
-            if (reaction.emoji.name === process.env.REACTION_OK) {
+            if (reaction.emoji.name === '✅') {
               msg.delete()
               message.channel.startTyping()
-              await this.client.modlog.clear(message.guild.id)
+              await this.client.modlog.set(message.guild.id, []) // Set to an empty array instead of deleting the database.
               message.say('ok', 'The modlog\'s case count has been reset.')
               message.channel.stopTyping(true)
             } else {
