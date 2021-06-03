@@ -28,7 +28,7 @@ module.exports = class CommandCleanLewds extends Command {
       })
       message.channel.send(new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(wholesomePic[0].title, message.author.avatarURL({ dynamic: true }), wholesomePic[0].postLink)
+        .setAuthor(`${wholesomePic[0].title}`, message.author.avatarURL({ dynamic: true }), wholesomePic[0].postLink)
         .setDescription(`**[Click here if the image isn't loading.](${wholesomePic[0].image})**`)
         .setImage(wholesomePic[0].image)
         .setTimestamp()

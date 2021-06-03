@@ -32,7 +32,7 @@ module.exports = class MessageStructure extends Message {
 
     if (title) { /* The title of the embed, if one is provided. */
       embed.setTitle(`${embedEmoji[type]} ${title}`)
-      embed.setDescription(description)
+      embed.setDescription(`${description}`)
     } else {
       embed.setDescription(`${embedEmoji[type]} ${description}`)
     }
@@ -59,7 +59,7 @@ module.exports = class MessageStructure extends Message {
       : process.env.PREFIX
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_INFO)
-      .setTitle(process.env.EMOJI_INFO + ' Usage')
+      .setTitle(`${process.env.EMOJI_INFO} Usage`)
       .setDescription(`\`${guildPrefix}${syntax}\``)
     this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
   }
@@ -71,7 +71,7 @@ module.exports = class MessageStructure extends Message {
 
     if (title) { /* The title of the embed, if one is provided. */
       embed.setTitle(`${emoji} ${title}`)
-      embed.setDescription(description)
+      embed.setDescription(`${description}`)
     } else {
       embed.setDescription(`${emoji} ${description}`)
     }
@@ -97,31 +97,31 @@ module.exports = class MessageStructure extends Message {
     const errorChannel = this.client.channels.cache.get(process.env.BUG_CHANNEL)
     const embed = new MessageEmbed()
       .setTimestamp()
-      .addField('Server', this.channel.type === 'dm'
+      .addField('Server', `${this.channel.type === 'dm'
         ? 'Direct Message'
-        : this.guild.name + '\nID: ' + this.guild.id, true
+        : this.guild.name + '\nID: ' + this.guild.id}`, true
       )
-      .addField('Channel', this.channel.type === 'dm'
+      .addField('Channel', `${this.channel.type === 'dm'
         ? 'Direct Message'
-        : this.channel.name + '\nID: ' + this.channel.id, true
+        : this.channel.name + '\nID: ' + this.channel.id}`, true
       )
 
     if (command) {
       // I was rather lazy with this one. I'm not sure if Akairo is able to
       // provide what command is invoked. Hard coding seems to not be an issue atm...
-      embed.addField('Command', command, true)
+      embed.addField('Command', `${command}`, true)
     }
 
     if (type === 'warning') {
       this.client.logger.warn(error)
       embed.setColor(process.env.COLOR_WARN)
-      embed.setTitle(process.env.EMOJI_WARN + title)
+      embed.setTitle(`${process.env.EMOJI_WARN} ${title}`)
     }
 
     if (type === 'error') {
       this.client.logger.error(error)
       embed.setColor(process.env.COLOR_ERROR)
-      embed.setTitle(process.env.EMOJI_ERROR + title)
+      embed.setTitle(`${process.env.EMOJI_ERROR} ${title}`)
     }
 
     await errorChannel.send(embed)

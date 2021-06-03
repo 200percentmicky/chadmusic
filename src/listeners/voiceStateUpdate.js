@@ -20,7 +20,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
     if (!oldState.channel) {
       return voiceLogChannel.send(new MessageEmbed()
         .setColor(0x78B159)
-        .setAuthor(newState.member.user.tag, newState.member.user.avatarURL({ dynamic: true }))
+        .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🟢 Joined Voice Channel')
         .setDescription(`<#${newState.channel.id}>`)
         .addField('ID', stripIndents`
@@ -36,7 +36,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
     if (!newState.channel) {
       const embed = new MessageEmbed()
         .setColor(0xDD2E44)
-        .setAuthor(newState.member.user.tag, newState.member.user.avatarURL({ dynamic: true }))
+        .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🔴 Left Voice Channel')
         .setDescription(`<#${oldState.channel.id}>`)
         .addField('ID', stripIndents`
@@ -60,7 +60,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
     if (oldState.channel !== newState.channel) {
       const embed = new MessageEmbed()
         .setColor(0x55ACEE)
-        .setAuthor(newState.member.user.tag, newState.member.user.avatarURL({ dynamic: true }))
+        .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🔵 Moved Voice Channels')
         .setDescription(`<#${oldState.channel.id}> 🡆 <#${newState.channel.id}>`)
         .addField('ID', stripIndents`

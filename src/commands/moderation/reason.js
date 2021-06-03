@@ -69,17 +69,17 @@ module.exports = class CommandReason extends Command {
 
     const embed = new MessageEmbed()
       .setColor(colors[type])
-      .setAuthor(moderator.user.tag, moderator.user.avatarURL({ dynamic: true }))
-      .setDescription(__reason)
+      .setAuthor(`${moderator.user.tag}`, moderator.user.avatarURL({ dynamic: true }))
+      .setDescription(`${__reason}`)
       .setThumbnail(`${lastKnownUserAvatar}?size=1024`)
-      .addField('User', lastKnownUser, true)
-      .addField('Action', __type, true)
+      .addField('User', `${lastKnownUser}`, true)
+      .addField('Action', `${__type}`, true)
       .setTimestamp()
       .setFooter(`Case ${modlogCase.caseid}`)
 
     if (modlogCase.type === 'mute') {
       const _duration = prettyms(modlogCase.duration, { verbose: true })
-      embed.addField('Duration', _duration)
+      embed.addField('Duration', `${_duration}`)
     }
 
     // Fetches the log's message so it can be changed.
@@ -101,7 +101,7 @@ module.exports = class CommandReason extends Command {
       }
     }
 
-    embed.addField('Last Modified', __lastModified)
+    embed.addField('Last Modified', `${__lastModified}`)
 
     embed.addField('ID', stripIndents`
     \`\`\`js\n

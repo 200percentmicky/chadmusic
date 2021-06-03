@@ -59,7 +59,7 @@ module.exports = class CommandSoftban extends Command {
         .setAuthor(`You have been softbanned from ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`**Reason:** ${reason}`)
         .setTimestamp()
-        .setFooter(message.author.tag + ` • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
+        .setFooter(`${message.author.tag} • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
       )
     } catch (err) {
       return

@@ -28,7 +28,7 @@ module.exports = class CommandBoobs extends Command {
       })
       message.channel.send(new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(tiddyPic[0].title, message.author.avatarURL({ dynamic: true }), tiddyPic[0].postLink)
+        .setAuthor(`${tiddyPic[0].title}`, message.author.avatarURL({ dynamic: true }), tiddyPic[0].postLink)
         .setDescription(`**[Click here if the image isn't loading.](${tiddyPic[0].image})**`)
         .setImage(tiddyPic[0].image)
         .setTimestamp()

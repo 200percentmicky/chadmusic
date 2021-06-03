@@ -32,14 +32,14 @@ module.exports = class ListenerMessageUpdate extends Listener {
     const user = newMessage.member.nickname ? newMessage.member.nickname : newMessage.author.tag
     const edited = new MessageEmbed()
       .setColor(0xDFED1A)
-      .setAuthor(user, newMessage.author.avatarURL())
+      .setAuthor(`${user}`, newMessage.author.avatarURL())
       .setTitle('📝 Edited Message')
-      .setDescription(desc)
-      .addField('Channel', newMessage.channel.toString(), true)
+      .setDescription(`${desc}`)
+      .addField('Channel', `${newMessage.channel.toString()}`, true)
       .setTimestamp()
 
     if (desc.length > 2048) {
-      edited.addField(msgURLField, `**[➡ ${msgURLTagline}](https://discord.com/channels/${newMessage.guild.id}/${newMessage.channel.id}/${newMessage.id})**`, true)
+      edited.addField(`${msgURLField}`, `**[➡ ${msgURLTagline}](https://discord.com/channels/${newMessage.guild.id}/${newMessage.channel.id}/${newMessage.id})**`, true)
     }
 
     edited.addField('ID', stripIndents`

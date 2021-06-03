@@ -78,14 +78,14 @@ module.exports = class CommandHelp extends Command {
           .setColor(process.env.COLOR_BLOOD)
           .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
-          .addField(command.description.text, command.description.details ? command.description.details : '\u200b')
+          .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
           .setTimestamp()
           .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }))
         if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.')
         if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.')
-        if (command.category) commandEmbed.addField('Category', command.category, true)
+        if (command.category) commandEmbed.addField('Category', `${command.category}`, true)
         // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
-        if (command.aliases.length > 1) commandEmbed.addField('Aliases', command.aliases, true)
+        if (command.aliases.length > 1) commandEmbed.addField('Aliases', `${command.aliases}`, true)
 
         // This gonna be a bruh moment.
         // It do be Yandere Simulator lol
@@ -107,7 +107,7 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(this.client.user.username + ' Command Documentation', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor(`${this.client.user.username} Command Documentation`, this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${prefix}help [command]`)
 

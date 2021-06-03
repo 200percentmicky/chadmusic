@@ -82,7 +82,7 @@ module.exports = class CommandSearch extends Command {
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
         .setAuthor('Which track do you wanna play?', message.author.avatarURL({ dynamic: true }))
-        .setDescription(resultMap)
+        .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
       message.channel.send(embed).then(msg => {

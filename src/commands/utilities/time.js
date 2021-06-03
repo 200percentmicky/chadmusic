@@ -57,7 +57,7 @@ module.exports = class CommandTime extends Command {
 
     const embed = new MessageEmbed()
       .setColor(message.guild.members.cache.get(this.client.user.id).displayColor)
-      .setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
+      .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(`:calendar_spiral: ${calendar}\n${emoji[clock.hour()]} ${time}`)
       .setFooter(`Time Zone: ${timezone}`)
 

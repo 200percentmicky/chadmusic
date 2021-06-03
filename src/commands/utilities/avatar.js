@@ -40,7 +40,7 @@ module.exports = class CommandAvatar extends Command {
         .setColor(0xFF597D)
         .setAuthor(`Server Icon for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setImage(serverurl + large)
-        .addField('Sizes:', sizes)
+        .addField('Sizes:', `${sizes}`)
       )
     }
 
@@ -55,7 +55,7 @@ module.exports = class CommandAvatar extends Command {
       .setColor(avatarcolor)
       .setAuthor(isAuthor, member.user.avatarURL({ dynamic: true }))
       .setImage(pfpurl + large)
-      .addField('Sizes:', sizes)
+      .addField('Sizes:', `${sizes}`)
 
     if (!args[1]) { // For the author only.
       return message.channel.send(embed)

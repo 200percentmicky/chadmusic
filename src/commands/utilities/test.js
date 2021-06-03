@@ -29,7 +29,7 @@ module.exports = class CommandTest extends Command {
         for (const chunk of arr) { // Loop through every element
           const embed = new MessageEmbed()
             .setColor(this.client.utils.randColor())
-            .setDescription(chunk)
+            .setDescription(`${chunk}`)
 
           await message.channel.send({ embed }) // Wait for the embed to be sent
         }

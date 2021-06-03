@@ -22,7 +22,7 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
       .setAuthor(member.user.tag, member.user.avatarURL())
       .setTitle('📥 User Joined')
       .setDescription(`${member.user.toString()}\n${member.user.bot ? '**🤖 Bot Account**' : ''}`)
-      .addField('Total Members', member.guild.memberCount)
+      .addField('Total Members', `${member.guild.memberCount}`)
       .setThumbnail(member.user.avatarURL() + '?size=2048')
       .addField('ID', stripIndents`
       \`\`\`js

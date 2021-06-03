@@ -60,7 +60,7 @@ module.exports = class CommandServerInfo extends Command {
       `)
       // .addField('✨ Date Created:', `${this.client.moment(message.guild.createdTimestamp).format('LLLL')}\n${this.client.moment(message.guild.createdTimestamp).fromNow()}`, true)
       // .addField('👑 Owner', `${owner.toString()}\n**${owner.tag}**\n\`${owner.id}\``, true)
-      .addField(':person_raising_hand: Members', message.guild.members.cache.size, true)
+      .addField(':person_raising_hand: Members', `${message.guild.members.cache.size}`, true)
       .addField('🔐 Security', `**Verification Level:** ${verifyLevels[message.guild.verificationLevel]}\n**Content Filter:** ${filterLevels[message.guild.explicitContentFilter]}`, true)
       // .addField('🏷 Roles', roles)
     message.channel.send(embed) // A work in progress...

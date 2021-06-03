@@ -41,9 +41,9 @@ module.exports = class CommandNowPlaying extends Command {
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .addField('Requested by', song.user, true)
+      .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
-      .addField('📢 Filters', queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None')
+      .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
     )
   }

@@ -28,7 +28,7 @@ module.exports = class CommandAss extends Command {
       })
       message.channel.send(new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(boodyPic[0].title, message.author.avatarURL({ dynamic: true }), boodyPic[0].postLink)
+        .setAuthor(`${boodyPic[0].title}`, message.author.avatarURL({ dynamic: true }), boodyPic[0].postLink)
         .setDescription(`**[Click here if the image isn't loading.](${boodyPic[0].image})**`)
         .setImage(boodyPic[0].image)
         .setTimestamp()

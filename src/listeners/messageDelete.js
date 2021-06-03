@@ -22,10 +22,10 @@ module.exports = class ListenerMessageDelete extends Listener {
 
     const deleted = new MessageEmbed()
       .setColor(0x9C0003)
-      .setAuthor(message.author.tag, message.author.avatarURL())
+      .setAuthor(`${message.author.tag}`, message.author.avatarURL())
       .setTitle('🗑 Message Deleted')
-      .setDescription(message.content)
-      .addField('Channel', message.channel.toString(), true)
+      .setDescription(`${message.content}`)
+      .addField('Channel', `${message.channel.toString()}`, true)
       .addField('ID', stripIndents`
       \`\`\`js
       Channel: ${message.channel.id}
@@ -40,7 +40,7 @@ module.exports = class ListenerMessageDelete extends Listener {
     await message.guild.fetchAuditLogs({ type: 'MESSAGE_DELETE' }).then(audit => {
       const x = audit.entries.first()
       if (message.author) return
-      if (audit) deleted.addField('Moderator', x.executor.toString(), true)
+      if (audit) deleted.addField('Moderator', `${x.executor.toString()}`, true)
     })
     if (message.channel.id === logChannel) return // Again, a band-aid fix. Same as messageUpdate.js.
     logChannel.send(deleted)

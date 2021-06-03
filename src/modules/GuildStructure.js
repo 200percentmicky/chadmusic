@@ -48,11 +48,11 @@ class GuildStructure extends Guild {
 
       const embed = new MessageEmbed()
         .setColor(colors[type])
-        .setAuthor(moderator.user.tag, moderator.user.avatarURL({ dynamic: true }))
-        .setDescription(__reason)
+        .setAuthor(`${moderator.user.tag}`, moderator.user.avatarURL({ dynamic: true }))
+        .setDescription(`${__reason}`)
         .setThumbnail(`${user.avatarURL({ dynamic: true })}?size=1024`)
-        .addField('User', user.tag, true)
-        .addField('Action', __type, true)
+        .addField('User', `${user.tag}`, true)
+        .addField('Action', `${__type}`, true)
         .setTimestamp()
         .setFooter(`Case ${caseid + 1}`) // Adds 1 from the caseid variable.
 
@@ -94,7 +94,7 @@ class GuildStructure extends Guild {
         const errorChannel = this.client.channels.cache.find(val => val.id === '603735567733227531')
         const embed = new MessageEmbed()
           .setColor(color.error)
-          .setTitle(emoji.error + 'Internal Error')
+          .setTitle(`${emoji.error} Internal Error`)
           .setDescription(`\`\`\`js\n${err}\`\`\``)
           .setTimestamp()
         errorChannel.send(embed)

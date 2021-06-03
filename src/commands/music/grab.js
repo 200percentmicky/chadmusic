@@ -26,7 +26,7 @@ module.exports = class CommandGrab extends Command {
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
-        .addField('Duration', song.formattedDuration)
+        .addField('Duration', `${song.formattedDuration}`)
         .setTimestamp()
       )
       return message.react(process.env.REACTION_OK)
