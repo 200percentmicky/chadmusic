@@ -6,7 +6,7 @@ module.exports = class CommandUserInfo extends Command {
     super('userinfo', {
       aliases: ['userinfo', 'ui'],
       channelRestriction: 'guild',
-      category: '⚙ Utilities',
+      category: '🔧 Tools',
       clientPermissions: ['EMBED_LINKS'],
       description: {
         text: 'Get information on a member.',

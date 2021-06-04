@@ -9,11 +9,11 @@ const akairoversion = require('../../../node_modules/discord-akairo/package.json
 const discordversion = require('../../../node_modules/discord.js/package')
 const distubeversion = require('../../../node_modules/distube/package')
 
-module.exports = class CommandSysInfo extends Command {
+module.exports = class CommandDebug extends Command {
   constructor () {
-    super('sysinfo', {
-      aliases: ['sysinfo', 'jssysinfo', 'msysinfo'],
-      category: '🛠 Utilities',
+    super('debug', {
+      aliases: ['debug', 'sysinfo', 'jssysinfo', 'msysinfo'],
+      category: '💻 Core',
       description: {
         text: 'System statistics about the music bot.'
       }

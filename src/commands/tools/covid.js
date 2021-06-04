@@ -7,7 +7,7 @@ module.exports = class CommandCovid extends Command {
   constructor () {
     super('covid', {
       aliases: ['covid', 'covid19', 'coronavirus'],
-      category: '⚙ Utilities',
+      category: '🔧 Tools',
       clientPermissions: ['EMBED_LINKS'],
       description: {
         text: 'Used to get statistics about the on-going Covid-19 pandemic.'

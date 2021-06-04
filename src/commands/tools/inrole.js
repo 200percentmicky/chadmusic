@@ -5,7 +5,7 @@ module.exports = class CommandInRole extends Command {
   constructor () {
     super('inrole', {
       aliases: ['inrole'],
-      category: '⚙ Utilities',
+      category: '🔧 Tools',
       description: {
         text: 'Returns a list of all members within a role.',
         usage: '<role>',
@@ -37,12 +37,12 @@ module.exports = class CommandInRole extends Command {
         forward: '▶',
         delete: '❌'
       })
-      .formatField(`${memberList.length} member${memberList == 1 ? ' has' : 's have'} this role.`, member => member.user.tag)
+      .formatField(`${memberList.length} member${memberList === 1 ? ' has' : 's have'} this role.`, member => member.user.tag)
       .setTimeout(60000)
 
     embed.embed
       .setColor(role.color)
-      .setAuthor(role.name)
+      .setAuthor(`${role.name}`)
       .setFooter(null) // This is required if you use .setPageIndicator('footer').
 
     embed.build()

@@ -5,7 +5,7 @@ module.exports = class CommandResetData extends Command {
   constructor () {
     super('resetdata', {
       aliases: ['resetdata'],
-      category: '🛠 Utilities',
+      category: '🔧 Tools',
       description: {
         text: 'Allows you to reset the bot\'s data for this guild.',
         usage: '<type>',

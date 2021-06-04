@@ -5,7 +5,7 @@ module.exports = class CommandTest extends Command {
   constructor () {
     super('test', {
       aliases: ['test'],
-      category: '🛠 Utilities',
+      category: '💻 Core',
       description: {
         text: 'Test command. Doesn\'t really do anything lmao'
       }

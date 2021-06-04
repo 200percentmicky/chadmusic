@@ -12,7 +12,7 @@ module.exports = class CommandAbout extends Command {
   constructor () {
     super('about', {
       aliases: ['about'],
-      category: '🛠 Utilities',
+      category: '💻 Core',
       description: {
         text: 'Shows information about the bot.'
       }

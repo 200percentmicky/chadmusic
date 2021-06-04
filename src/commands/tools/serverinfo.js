@@ -6,7 +6,7 @@ module.exports = class CommandServerInfo extends Command {
   constructor () {
     super('serverinfo', {
       aliases: ['serverinfo', 'server', 'si'],
-      category: '⚙ Utilities',
+      category: '🔧 Tools',
       clientPermissions: ['EMBED_LINKS'],
       description: {
         text: 'Get information about the server.'
@@ -17,7 +17,7 @@ module.exports = class CommandServerInfo extends Command {
 
   async exec (message) {
     const owner = message.guild.members.cache.get(message.guild.ownerID)
-    const roles = message.guild.roles.cache.size
+    // const roles = message.guild.roles.cache.size
     const emojis = message.guild.emojis.cache.map(emojis => emojis).join(' ')
     const verifyLevels = {
       NONE: 'None',

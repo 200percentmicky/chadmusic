@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
 const { invite } = require('../../aliases.json')
 
 module.exports = class InviteCommand extends Command {
@@ -9,17 +8,14 @@ module.exports = class InviteCommand extends Command {
       description: {
         text: 'Sends the bot\'s invite link.'
       },
-      category: '🛠 Utilities'
+      category: '💻 Core'
     })
   }
 
   async exec (message) {
     const invite = process.env.BOT_INVITE
     const server = process.env.SERVER_INVITE
-    return message.channel.send(new MessageEmbed()
-      .setColor(this.client.color.blood)
-      .setAuthor('Links', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription(`**[Invite me!](${invite})**\n**[Support Server](${server})**`)
-    )
+    const msg = `${process.env.EMOJI_CUTIE} **Here's my invite link. Enjoy!**\n<${invite}>\n\n🆘 **Support Server**\n${server}`
+    return message.channel.send(msg)
   }
 }

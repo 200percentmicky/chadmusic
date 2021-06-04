@@ -14,7 +14,7 @@ module.exports = class CommandTime extends Command {
   constructor () {
     super('time', {
       aliases: ['time'],
-      category: '🛠 Utilities',
+      category: '🔧 Tools',
       description: {
         text: 'Shows the current time on the server.'
       }

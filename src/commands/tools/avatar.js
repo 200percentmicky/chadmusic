@@ -7,7 +7,7 @@ module.exports = class CommandAvatar extends Command {
     super('avatar', {
       aliases: ['avatar', 'pfp'],
       channel: 'guild',
-      category: '⚒ Moderation',
+      category: '🔧 Tools',
       clientPermissions: ['EMBED_LINKS'],
       description: {
         text: 'Retrieves the URL of a person\'s profile picture',

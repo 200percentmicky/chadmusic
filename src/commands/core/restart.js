@@ -7,7 +7,7 @@ module.exports = class CommandRestart extends Command {
     super(restart !== undefined ? restart[0] : 'restart', {
       aliases: restart || ['restart'],
       ownerOnly: true,
-      category: '🛠 Utilities',
+      category: '💻 Core',
       description: {
         text: 'Attempts to restart the bot.',
         usage: '[reason]',
