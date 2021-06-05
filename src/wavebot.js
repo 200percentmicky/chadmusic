@@ -57,6 +57,7 @@ const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
 const DisTube = require('distube')
 const moment = require('moment')
+const Moderator = require('discord-moderator')
 
 /* Connecting to databases... */
 const { Database } = require('quickmongo')
@@ -116,6 +117,13 @@ class WaveBot extends AkairoClient {
       highWaterMark: 1 << 25,
       youtubeDL: true,
       updateYouTubeDL: false
+    })
+
+    /* Management for mutes and warns. */
+    this.moderator = new Moderator(this, {
+      mutesTableName: 'mutes',
+      checkMutesCountdown: 20000,
+      warnsTableName: 'warns'
     })
 
     /* Data Management */

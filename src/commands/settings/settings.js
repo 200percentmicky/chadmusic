@@ -20,6 +20,8 @@ module.exports = class CommandSettings extends Command {
     const settings = this.client.settings
 
     /* All Settings */
+    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
+    const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
     const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
     const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
     const maxTime = settings.get(message.guild.id, 'maxTime', null) // Max Song Duration
@@ -34,12 +36,14 @@ module.exports = class CommandSettings extends Command {
     const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
     const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
     const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
+    const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
       .setAuthor(`Current Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .addField('🌐 General', stripIndents`
-      **Server Prefix:** \`${this.client.prefix.getPrefix(message.guild.id) || process.env.PREFIX}\`
+      **Server Prefix:** \`${prefix}\`
+      **Time Zone:** ${timezone}
       `)
       .addField('🎶 Music', stripIndents`
       **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
@@ -58,6 +62,9 @@ module.exports = class CommandSettings extends Command {
       **messageDelete:** ${messageDelete ? `<#${messageDelete}>` : 'None'}
       **messageUpdate:** ${messageUpdate ? `<#${messageUpdate}>` : 'None'}
       **voiceStateUpdate:** ${voiceStateUpdate ? `<#${voiceStateUpdate}>` : 'None'}
+      `)
+      .addField('🔨 Auto Moderation', stripIndents`
+      **No Invites:** ${noInvites ? 'On' : 'Off'}
       `)
       /*
       .addField('🌟 Starboard', stripIndents`

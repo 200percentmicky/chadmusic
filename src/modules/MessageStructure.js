@@ -34,7 +34,12 @@ module.exports = class MessageStructure extends Message {
       embed.setTitle(`${embedEmoji[type]} ${title}`)
       embed.setDescription(`${description}`)
     } else {
-      embed.setDescription(`${embedEmoji[type]} ${description}`)
+      if (type === 'error') {
+        embed.setTitle(`${embedEmoji[type]} Command Error`)
+        embed.setDescription(`${description}`)
+      } else {
+        embed.setDescription(`${embedEmoji[type]} ${description}`)
+      }
     }
 
     /* No embed */
@@ -45,7 +50,7 @@ module.exports = class MessageStructure extends Message {
       if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
         return this.reply(title
           ? `${embedEmoji[type]} **${title}** | ${description}`
-          : `${embedEmoji[type]} ${description}`
+          : `${embedEmoji[type]} ${type === 'error' ? '**Command Error** | ' : ''}${description}`
         , { allowedMentions: { repliedUser: false } })
       } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
     }
@@ -54,9 +59,7 @@ module.exports = class MessageStructure extends Message {
   /* Command Usage Embed */
   // Used if no argument was provided to some commands.
   usage (syntax) {
-    const guildPrefix = this.client.prefix.getPrefix(this.guild.id)
-      ? this.client.prefix.getPrefix(this.guild.id)
-      : process.env.PREFIX
+    const guildPrefix = this.client.settings.get(this.id, 'prefix', process.env.PREFIX)
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_INFO)
       .setTitle(`${process.env.EMOJI_INFO} Usage`)

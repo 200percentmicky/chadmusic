@@ -1,6 +1,9 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { FieldsEmbed } = require('discord-paginationembed')
+const { Paginator } = require('array-paginator')
+// const { FieldsEmbed } = require('discord-paginationembed')
+
+// TODO: Use Discord Embed Buttons to go to the next page.
 
 module.exports = class CommandQueue extends Command {
   constructor () {
@@ -16,6 +19,7 @@ module.exports = class CommandQueue extends Command {
   }
 
   async exec (message) {
+    const args = message.content.split(/ +/g)
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
@@ -30,9 +34,34 @@ module.exports = class CommandQueue extends Command {
     if (!this.client.player.isPlaying(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
     else if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
+    /* Getting the entire queue. */
     const songs = queue.songs.slice(1)
     const song = queue.songs[0]
 
+    /* Create a paginated array. */
+    const queuePaginate = new Paginator(songs, 10)
+
+    /* Get the page of the array. */
+    let paginateArray = queuePaginate.page(args[1] || 1)
+
+    /* If the paginator total is less than the parameter provided. */
+    if (queuePaginate > args[1]) paginateArray = queuePaginate.last()
+
+    /* Map the array. */
+    const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+    /* Making the embed. */
+    const queueEmbed = new MessageEmbed()
+      .setColor(this.client.utils.randColor())
+      .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+      .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+      .setTimestamp()
+      .setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+
+    /* Finally send the embed of the queue. */
+    return message.reply({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+
+    /*
     try {
       const queueEmbed = new FieldsEmbed()
         .setArray(songs)
@@ -40,7 +69,7 @@ module.exports = class CommandQueue extends Command {
         .setChannel(message.channel)
         .setElementsPerPage(7)
         .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name.length > 35 ? song.name.slice(0, 35) + '...' : song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`)
+        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => `${song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name.length > 35 ? song.name.slice(0, 35) + '...' : song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`}`)
         .setPage(1)
         .setNavigationEmojis({
           back: '◀',
@@ -77,5 +106,6 @@ module.exports = class CommandQueue extends Command {
         message.say('error', err.message, err.name)
       }
     }
+    */
   }
 }
