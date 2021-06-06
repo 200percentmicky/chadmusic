@@ -48,15 +48,17 @@ module.exports = class CommandQueue extends Command {
     if (queuePaginate > args[1]) paginateArray = queuePaginate.last()
 
     /* Map the array. */
-    const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+    const queueMap = songs.length > 0
+      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+      : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`
 
     /* Making the embed. */
     const queueEmbed = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+      .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queueMap}`)
       .setTimestamp()
-      .setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+      .setFooter(`${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
 
     /* Finally send the embed of the queue. */
     return message.reply({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
