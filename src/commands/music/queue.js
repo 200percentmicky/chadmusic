@@ -45,7 +45,7 @@ module.exports = class CommandQueue extends Command {
     let paginateArray = queuePaginate.page(args[1] || 1)
 
     /* If the paginator total is less than the parameter provided. */
-    if (queuePaginate > args[1]) paginateArray = queuePaginate.last()
+    if (queuePaginate < args[1]) paginateArray = queuePaginate.last()
 
     /* Map the array. */
     const queueMap = songs.length > 0
