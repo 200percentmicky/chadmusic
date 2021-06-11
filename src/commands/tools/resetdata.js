@@ -64,7 +64,7 @@ module.exports = class CommandResetData extends Command {
           if (interaction.customID === 'no_data') {
             collector.stop()
             await msg.delete()
-            return message.react(process.env.EMOJI_OK)
+            return message.react(process.env.REACTION_OK)
           }
         })
 
@@ -107,7 +107,7 @@ module.exports = class CommandResetData extends Command {
           if (interaction.customID === 'no_modlog') {
             collector.stop()
             await msg.delete()
-            return message.react(process.env.EMOJI_OK)
+            return message.react(process.env.REACTION_OK)
           }
         })
 
