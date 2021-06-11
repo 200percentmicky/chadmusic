@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 const { Paginator } = require('array-paginator')
 // const { FieldsEmbed } = require('discord-paginationembed')
 
@@ -19,7 +19,6 @@ module.exports = class CommandQueue extends Command {
   }
 
   async exec (message) {
-    const args = message.content.split(/ +/g)
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
@@ -42,26 +41,225 @@ module.exports = class CommandQueue extends Command {
     const queuePaginate = new Paginator(songs, 10)
 
     /* Get the page of the array. */
-    let paginateArray = queuePaginate.page(args[1] || 1)
-
-    /* If the paginator total is less than the parameter provided. */
-    if (queuePaginate > args[1]) paginateArray = queuePaginate.last()
+    const paginateArray = queuePaginate.page(1)
 
     /* Map the array. */
     const queueMap = songs.length > 0
       ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
-      : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`
+      : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`
 
     /* Making the embed. */
     const queueEmbed = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queueMap}`)
+      .setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queueMap}`)
       .setTimestamp()
       .setFooter(`${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
 
+    /* Creating the buttons to interact with the queue. */
+
+    // First Page
+    const firstPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('First Page')
+      .setEmoji('⏮')
+      .setCustomID('first_page')
+
+    // Previous Page
+    const previousPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('Previous')
+      .setEmoji('⏪')
+      .setCustomID('previous_page')
+
+    // Next Page
+    const nextPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('Next')
+      .setEmoji('⏩')
+      .setCustomID('next_page')
+
+    // Last Page
+    const lastPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('Last Page')
+      .setEmoji('⏭')
+      .setCustomID('last_page')
+
+    // Jump to Page
+    const pageJump = new MessageButton()
+      .setStyle('PRIMARY')
+      .setLabel('Jump to Page')
+      .setEmoji('↗')
+      .setCustomID('page_jump')
+
+    // Cancel
+    const cancelButton = new MessageButton()
+      .setStyle('DANGER')
+      .setLabel('Close')
+      .setEmoji(process.env.EMOJI_ERROR)
+      .setCustomID('cancel_button')
+
+    /* Row of buttons! */
+    const buttonRow = new MessageActionRow()
+      .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+    /* Rand out of room for the cancel button, so... */
+    const cancelRow = new MessageActionRow()
+      .addComponents(cancelButton)
+
+    const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
     /* Finally send the embed of the queue. */
-    return message.reply({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+    const msg = await message.reply({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+
+    /* Button Collector */
+    const filter = interaction => interaction.user.id === message.author.id
+    const collector = await msg.createMessageComponentInteractionCollector(filter, {
+      time: 30000
+    })
+
+    collector.on('collect', async interaction => {
+      // First Page Button
+      if (interaction.customID === 'first_page') {
+        const paginateArray = queuePaginate.first()
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+        /* Making the embed. */
+        queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+        await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+        collector.resetTimer({
+          time: 30000,
+          idle: 30000
+        })
+      }
+
+      // Previous Page Button
+      if (interaction.customID === 'previous_page') {
+        const paginateArray = queuePaginate.previous()
+        if (!queuePaginate.hasPrevious()) {
+          collector.resetTimer({
+            time: 30000,
+            idle: 30000
+          })
+        } else {
+          /* Map the array. */
+          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+          /* Making the embed. */
+          queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+          queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+          await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+          collector.resetTimer({
+            time: 30000,
+            idle: 30000
+          })
+        }
+      }
+
+      // Next Page Button
+      if (interaction.customID === 'next_page') {
+        const paginateArray = queuePaginate.next()
+        if (!queuePaginate.hasNext()) {
+          collector.resetTimer({
+            time: 30000,
+            idle: 30000
+          })
+        } else {
+          /* Map the array. */
+          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+          /* Making the embed. */
+          queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+          queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+          await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+          collector.resetTimer({
+            time: 30000,
+            idle: 30000
+          })
+        }
+      }
+
+      // Last Page Button
+      if (interaction.customID === 'last_page') {
+        const paginateArray = queuePaginate.last()
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+        /* Making the embed. */
+        queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+        await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+        collector.resetTimer({
+          time: 30000,
+          idle: 30000
+        })
+      }
+
+      // Jump to Page Button
+      if (interaction.customID === 'page_jump') {
+        message.reply('↗ Type the page number you would like to go to.').then(async pageMsg => {
+          const filter = m => m.author.id === message.author.id && !isNaN(m.content)
+          message.channel.awaitMessages(filter, {
+            max: 1,
+            time: 15000,
+            errors: ['time']
+          }).then(async collected => {
+            const msg2 = collected.first()
+            const pageNumber = parseInt(msg2.content)
+            if (pageNumber >= queuePaginate.total) {
+              const paginateArray = queuePaginate.last()
+              /* Map the array. */
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+              /* Making the embed. */
+              queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+              queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+              await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+              msg2.delete()
+              pageMsg.delete()
+            } else if (pageNumber <= queuePaginate.total) {
+              const paginateArray = queuePaginate.first()
+              /* Map the array. */
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+              /* Making the embed. */
+              queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+              queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+              await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+              msg2.delete()
+              pageMsg.delete()
+            }
+
+            const paginateArray = queuePaginate.page(pageNumber)
+            /* Map the array. */
+            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+
+            /* Making the embed. */
+            queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+            queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+            await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+            msg2.delete()
+            pageMsg.delete()
+          }).catch(async () => {
+            await pageMsg.delete()
+          })
+        })
+      }
+
+      // Cancel Button
+      if (interaction.customID === 'cancel_button') {
+        collector.stop()
+        await msg.delete()
+        return message.react(process.env.REACTION_OK)
+      }
+    })
+
+    collector.on('end', async () => {
+      await msg.edit({ components: [] })
+    })
 
     /*
     try {
@@ -83,7 +281,7 @@ module.exports = class CommandQueue extends Command {
       queueEmbed.embed
         .setColor(this.client.utils.randColor())
         .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`${process.env.EMOJI_OK}**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+        .setDescription(`<:pMusic:815331262255595610>**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
         .setTimestamp()
         .setFooter('\u200b') // Ironically required if .setPageIndicator() is using 'footer'.
 
@@ -95,7 +293,7 @@ module.exports = class CommandQueue extends Command {
           message.channel.send(new MessageEmbed()
             .setColor(this.client.utils.randColor())
             .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-            .setDescription(`${process.env.EMOJI_OK} **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
+            .setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
             .addField('The queue is empty.', 'Start adding some songs! 😉')
             .setTimestamp()
           )

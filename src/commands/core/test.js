@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = class CommandTest extends Command {
   constructor () {
@@ -33,6 +33,22 @@ module.exports = class CommandTest extends Command {
 
           await message.channel.send({ embed }) // Wait for the embed to be sent
         }
+        break
+      }
+
+      case 'button': {
+        const actionRow = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setStyle('PRIMARY')
+              .setLabel('This button does nothing.')
+              .setDisabled(true),
+            new MessageButton()
+              .setStyle('DANGER')
+              .setLabel('Click here to end the world!')
+              .setEmoji('💣')
+          )
+        message.channel.send('Buttons', { components: [actionRow] })
         break
       }
 
