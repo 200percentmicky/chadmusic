@@ -1,5 +1,6 @@
 const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
+const { MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = class CommandResetData extends Command {
   constructor () {
@@ -29,66 +30,88 @@ module.exports = class CommandResetData extends Command {
 
     switch (args[1]) {
       case 'settings': {
-        await message.say('warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning').then(msg => {
-          const filter = (reaction, user) => {
-            return [process.env.REACTION_OK, process.env.REACTION_ERROR].includes(reaction.emoji.name) && user.id === message.author.id
+        const yesButton = new MessageButton()
+          .setStyle('SUCCESS')
+          .setLabel('Yes')
+          .setEmoji(process.env.EMOJI_OK)
+          .setCustomID('yes_data')
+
+        const noButton = new MessageButton()
+          .setStyle('DANGER')
+          .setLabel('No')
+          .setEmoji(process.env.EMOJI_ERROR)
+          .setCustomID('no_data')
+
+        const buttonRow = new MessageActionRow().addComponents(yesButton, noButton)
+
+        const msg = await message.say('warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', [buttonRow])
+
+        const filter = interaction => interaction.user.id === message.author.id
+
+        const collector = await msg.createMessageComponentInteractionCollector(filter, {
+          time: 30000
+        })
+
+        collector.on('collect', async interaction => {
+          if (interaction.customID === 'yes_data') {
+            interaction.defer()
+            msg.delete()
+            await this.client.settings.clear(interaction.guild.id)
+            collector.stop()
+            message.say('ok', 'The settings for this server have been cleared.')
           }
 
-          msg.react('✅')
-          msg.react('❌')
-
-          msg.awaitReactions(filter, {
-            max: 1,
-            time: 30000,
-            errors: ['time']
-          }).then(async collected => {
-            const reaction = collected.first()
-
-            if (reaction.emoji.name === '✅') {
-              msg.delete()
-              message.channel.startTyping()
-              await this.client.settings.clear(message.guild.id)
-              message.say('ok', 'All settings have been reverted to defaults.')
-              message.channel.stopTyping(true)
-            } else {
-              msg.delete()
-            }
-          }).catch(() => {
-            msg.delete()
-          })
+          if (interaction.customID === 'no_data') {
+            collector.stop()
+            await msg.delete()
+            return message.react(process.env.EMOJI_OK)
+          }
         })
+
+        collector.on('end', () => msg.delete())
         break
       }
 
       case 'modlog': {
-        await message.say('warn', 'You are about to reset the case count for this server. Are you sure you want to do this?', 'Warning').then(msg => {
-          const filter = (reaction, user) => {
-            return [process.env.REACTION_OK, process.env.REACTION_ERROR].includes(reaction.emoji.name) && user.id === message.author.id
+        const yesButton = new MessageButton()
+          .setStyle('SUCCESS')
+          .setLabel('Yes')
+          .setEmoji(process.env.EMOJI_OK)
+          .setCustomID('yes_modlog')
+
+        const noButton = new MessageButton()
+          .setStyle('DANGER')
+          .setLabel('No')
+          .setEmoji(process.env.EMOJI_ERROR)
+          .setCustomID('no_modlog')
+
+        const buttonRow = new MessageActionRow().addComponents(yesButton, noButton)
+
+        const msg = await message.say('warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', [buttonRow])
+
+        const filter = interaction => interaction.user.id === message.author.id
+
+        const collector = await msg.createMessageComponentInteractionCollector(filter, {
+          time: 30000
+        })
+
+        collector.on('collect', async interaction => {
+          if (interaction.customID === 'yes_modlog') {
+            interaction.defer()
+            msg.delete()
+            await this.client.modlog.set(interaction.guild.id, [])
+            collector.stop()
+            message.say('ok', 'The modlog case count in this server has been reset.')
           }
 
-          msg.react('✅')
-          msg.react('❌')
-
-          msg.awaitReactions(filter, {
-            max: 1,
-            time: 30000,
-            errors: ['time']
-          }).then(async collected => {
-            const reaction = collected.first()
-
-            if (reaction.emoji.name === '✅') {
-              msg.delete()
-              message.channel.startTyping()
-              await this.client.modlog.set(message.guild.id, []) // Set to an empty array instead of deleting the database.
-              message.say('ok', 'The modlog\'s case count has been reset.')
-              message.channel.stopTyping(true)
-            } else {
-              msg.delete()
-            }
-          }).catch(() => {
-            msg.delete()
-          })
+          if (interaction.customID === 'no_modlog') {
+            collector.stop()
+            await msg.delete()
+            return message.react(process.env.EMOJI_OK)
+          }
         })
+
+        collector.on('end', () => msg.delete())
         break
       }
     }

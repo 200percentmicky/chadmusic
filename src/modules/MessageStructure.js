@@ -6,7 +6,7 @@
 const { MessageEmbed, Message } = require('discord.js')
 
 module.exports = class MessageStructure extends Message {
-  say (type, description, title) {
+  say (type, description, title, buttons) {
     /* The color of the embed */
     const embedColor = {
       ok: process.env.COLOR_OK,
@@ -45,14 +45,14 @@ module.exports = class MessageStructure extends Message {
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     if (this.channel.type === 'dm') { /* DMs will always have embed links. */
-      return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+      return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
     } else {
       if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
         return this.reply(title
           ? `${embedEmoji[type]} **${title}** | ${description}`
           : `${embedEmoji[type]} ${type === 'error' ? '**Command Error** | ' : ''}${description}`
         , { allowedMentions: { repliedUser: false } })
-      } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+      } else return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
     }
   }
 
@@ -68,7 +68,7 @@ module.exports = class MessageStructure extends Message {
   }
 
   /* Custom Embed */
-  custom (emoji, color, description, title) {
+  custom (emoji, color, description, title, buttons) {
     const embed = new MessageEmbed()
       .setColor(color)
 
@@ -87,7 +87,7 @@ module.exports = class MessageStructure extends Message {
           ? `${emoji} **${title}** | ${description}`
           : `${emoji} ${description}`
         , { allowedMentions: { repliedUser: false } })
-      } else return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+      } else return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
     }
   }
 
