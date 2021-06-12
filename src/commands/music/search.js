@@ -78,7 +78,7 @@ module.exports = class CommandSearch extends Command {
 
     message.channel.startTyping()
     this.client.player.search(search).then(results => {
-      const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})\n`)
+      const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n')
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
         .setAuthor('Which track do you wanna play?', message.author.avatarURL({ dynamic: true }))
@@ -96,7 +96,15 @@ module.exports = class CommandSearch extends Command {
           collected.first().delete()
           if (collected.first().content === 'CANCEL'.toLowerCase()) return
           message.channel.startTyping(5)
-          const selected = results[parseInt(collected.first().content - 1)].url
+          let selected = results[parseInt(collected.first().content - 1)].url
+          if (parseInt(collected.first().content) < 0) {
+            selected = results[0].url
+            await message.say('info', `Your input was \`${collected.first().content}\`. The 1st result was queued instead.`)
+          }
+          if (parseInt(collected.first().content) > 10) {
+            selected = results[9].url
+            await message.say('info', `Your input was \`${collected.first().content}\`. The 10th result was queued instead.`)
+          }
           await this.client.player.play(message, selected)
           message.react(process.env.REACTION_OK)
           return message.channel.stopTyping(true)

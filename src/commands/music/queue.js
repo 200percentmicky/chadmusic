@@ -28,6 +28,9 @@ module.exports = class CommandQueue extends Command {
 
     const queue = this.client.player.getQueue(message)
     const vc = message.member.voice.channel
+
+    if (!vc) return message.say('error', 'You are not in a voice channel.')
+
     const currentVc = this.client.voice.connections.get(message.guild.id)
 
     if (!this.client.player.isPlaying(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
@@ -45,7 +48,7 @@ module.exports = class CommandQueue extends Command {
 
     /* Map the array. */
     const queueMap = songs.length > 0
-      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
       : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`
 
     /* Making the embed. */
@@ -124,7 +127,7 @@ module.exports = class CommandQueue extends Command {
       if (interaction.customID === 'first_page') {
         const paginateArray = queuePaginate.first()
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -146,7 +149,7 @@ module.exports = class CommandQueue extends Command {
           })
         } else {
           /* Map the array. */
-          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
           /* Making the embed. */
           queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -169,7 +172,7 @@ module.exports = class CommandQueue extends Command {
           })
         } else {
           /* Map the array. */
-          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
           /* Making the embed. */
           queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -186,7 +189,7 @@ module.exports = class CommandQueue extends Command {
       if (interaction.customID === 'last_page') {
         const paginateArray = queuePaginate.last()
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -212,7 +215,7 @@ module.exports = class CommandQueue extends Command {
             if (pageNumber >= queuePaginate.total) {
               const paginateArray = queuePaginate.last()
               /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -223,7 +226,7 @@ module.exports = class CommandQueue extends Command {
             } else if (pageNumber <= queuePaginate.total) {
               const paginateArray = queuePaginate.first()
               /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -235,7 +238,7 @@ module.exports = class CommandQueue extends Command {
 
             const paginateArray = queuePaginate.page(pageNumber)
             /* Map the array. */
-            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
             /* Making the embed. */
             queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
