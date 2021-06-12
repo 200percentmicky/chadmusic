@@ -97,13 +97,12 @@ module.exports = class CommandSearch extends Command {
           if (collected.first().content === 'CANCEL'.toLowerCase()) return
           message.channel.startTyping(5)
           let selected = results[parseInt(collected.first().content - 1)].url
-          if (parseInt(collected.first().content) < 0) {
-            selected = results[0].url
-            await message.say('info', `Your input was \`${collected.first().content}\`. The 1st result was queued instead.`)
-          }
-          if (parseInt(collected.first().content) > 10) {
+          if (collected.first().content > 10) {
             selected = results[9].url
-            await message.say('info', `Your input was \`${collected.first().content}\`. The 10th result was queued instead.`)
+            message.say('info', `Your input was \`${collected.first().content}\`. The 10th result was queued instead.`)
+          } else if (collected.first().content <= 0) {
+            selected = results[0].url
+            message.say('info', `Your input was \`${collected.first().content}\`. The 1st result was queued instead.`)
           }
           await this.client.player.play(message, selected)
           message.react(process.env.REACTION_OK)
