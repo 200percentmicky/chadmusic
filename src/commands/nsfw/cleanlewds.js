@@ -33,7 +33,7 @@ module.exports = class CommandCleanLewds extends Command {
         .setImage(wholesomePic[0].image)
         .setTimestamp()
         .setFooter(`r/${wholesomePic[0].subreddit}`)
-      message.channel.send({ embeds: [embed] })
+      message.channel.send({ embed: [embed] })
     } catch (err) {
       message.say('error', err.message, 'Reddit API Error')
       return message.channel.stopTyping(true)

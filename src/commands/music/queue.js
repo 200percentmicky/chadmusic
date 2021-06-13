@@ -114,7 +114,7 @@ module.exports = class CommandQueue extends Command {
     const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
     /* Finally send the embed of the queue. */
-    const msg = await message.reply({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
+    const msg = await message.reply({ embed: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
 
     /* Button Collector */
     const filter = interaction => interaction.user.id === message.author.id

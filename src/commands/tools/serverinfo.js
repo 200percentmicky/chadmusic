@@ -63,6 +63,6 @@ module.exports = class CommandServerInfo extends Command {
       .addField(':person_raising_hand: Members', `${message.guild.members.cache.size}`, true)
       .addField('🔐 Security', `**Verification Level:** ${verifyLevels[message.guild.verificationLevel]}\n**Content Filter:** ${filterLevels[message.guild.explicitContentFilter]}`, true)
       // .addField('🏷 Roles', roles)
-    message.channel.send({ embeds: [embed] }) // A work in progress...
+    message.channel.send({ embed: [embed] }) // A work in progress...
   }
 }

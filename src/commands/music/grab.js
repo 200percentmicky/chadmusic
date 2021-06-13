@@ -28,7 +28,7 @@ module.exports = class CommandGrab extends Command {
         .setThumbnail(song.thumbnail)
         .addField('Duration', `${song.formattedDuration}`)
         .setTimestamp()
-      message.author.send({ embeds: [embed] })
+      message.author.send({ embed: [embed] })
       return message.react(process.env.REACTION_OK)
     } catch (err) {
       if (err.name === 'DiscordAPIError') message.say('error', 'Unable to save this song. You are currently not accepting Direct Messages.')

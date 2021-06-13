@@ -56,7 +56,7 @@ module.exports = class CommandVolume extends Command {
         .setColor(process.env.COLOR_WARN)
         .setDescription(`${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+      return message.reply({ embed: [embed], allowedMentions: { repliedUser: false } })
     } else {
       return message.say('ok', `Volume has been set to **${newVolume}%**.`)
     }
