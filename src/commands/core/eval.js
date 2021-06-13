@@ -44,10 +44,10 @@ module.exports = class CommandEval extends Command {
         }
         return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled))
       } else {
-        message.channel.send(`// ✅ Evaluated in ${end} ms.\n${clean(evaled)}`, { code: 'js', split: true })
+        message.channel.send({ content: `// ✅ Evaluated in ${end} ms.\n${clean(evaled)}`, code: 'js', split: true })
       }
     } catch (err) {
-      message.channel.send(`// ❌ Error during eval\n${err.name}: ${err.message}`, { code: 'js', split: true })
+      message.channel.send({ content: `// ❌ Error during eval\n${err.name}: ${err.message}`, code: 'js', split: true })
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       errorChannel.send(new MessageEmbed()
         .setColor(process.env.COLOR_WARN)

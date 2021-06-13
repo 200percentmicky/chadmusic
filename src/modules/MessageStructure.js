@@ -127,6 +127,6 @@ module.exports = class MessageStructure extends Message {
     }
 
     await errorChannel.send({ embeds: [embed] })
-    return errorChannel.send(error, { code: 'js', split: true })
+    return errorChannel.send({ content: error, code: 'js', split: true })
   }
 }

@@ -57,7 +57,7 @@ module.exports = class CommandDebug extends Command {
       ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
     `
 
-    message.channel.send(data, { code: 'asciidoc', split: true })
+    message.channel.send({ content: data, code: 'asciidoc', split: true })
     return message.channel.stopTyping(true)
   }
 }
