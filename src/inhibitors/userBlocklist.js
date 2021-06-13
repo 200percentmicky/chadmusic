@@ -10,7 +10,7 @@ module.exports = class InhibitorUserBlocklist extends Inhibitor {
 
   async exec (message) {
     const blocklist = await this.client.blocklist.get('user')
-    if (blocklist == null) blocklist.set('user', [])
+    if (blocklist == null) this.client.blocklist.set('user', [])
     return blocklist.includes(message.member.user.id)
   }
 }
