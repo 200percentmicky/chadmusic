@@ -6,7 +6,7 @@
 const { MessageEmbed, Message } = require('discord.js')
 
 module.exports = class MessageStructure extends Message {
-  say (type, description, title, buttons) {
+  say (type, description, title, footer, buttons) {
     /* The color of the embed */
     const embedColor = {
       ok: process.env.COLOR_OK,
@@ -37,6 +37,8 @@ module.exports = class MessageStructure extends Message {
       embed.setDescription(`${embedEmoji[type]} ${description}`)
     }
 
+    if (footer) embed.setFooter(`${footer}`)
+
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     if (this.channel.type === 'dm') { /* DMs will always have embed links. */
@@ -63,7 +65,7 @@ module.exports = class MessageStructure extends Message {
   }
 
   /* Custom Embed */
-  custom (emoji, color, description, title, buttons) {
+  custom (emoji, color, description, title, footer, buttons) {
     const embed = new MessageEmbed()
       .setColor(color)
 
@@ -73,6 +75,8 @@ module.exports = class MessageStructure extends Message {
     } else {
       embed.setDescription(`${emoji} ${description}`)
     }
+
+    if (footer) embed.setFooter(`${footer}`)
 
     if (this.channel.type === 'dm') {
       return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
