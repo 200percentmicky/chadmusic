@@ -34,12 +34,7 @@ module.exports = class MessageStructure extends Message {
       embed.setTitle(`${embedEmoji[type]} ${title}`)
       embed.setDescription(`${description}`)
     } else {
-      if (type === 'error') {
-        embed.setTitle(`${embedEmoji[type]} Command Error`)
-        embed.setDescription(`${description}`)
-      } else {
-        embed.setDescription(`${embedEmoji[type]} ${description}`)
-      }
+      embed.setDescription(`${embedEmoji[type]} ${description}`)
     }
 
     /* No embed */
@@ -50,7 +45,7 @@ module.exports = class MessageStructure extends Message {
       if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
         return this.reply(title
           ? `${embedEmoji[type]} **${title}** | ${description}`
-          : `${embedEmoji[type]} ${type === 'error' ? '**Command Error** | ' : ''}${description}`
+          : `${embedEmoji[type]} ${description}`
         , { allowedMentions: { repliedUser: false } })
       } else return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
     }

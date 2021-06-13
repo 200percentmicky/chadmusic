@@ -20,11 +20,11 @@ module.exports = class SurferReady extends Listener {
     const channels = this.client.channels.cache.size
     const users = this.client.users.cache.size
 
-    this.client.logger.info('[Ready!<3♪] Let\'s party!!')
-    this.client.logger.info('Client: %s (%d)', this.client.user.tag, this.client.user.id)
-    this.client.logger.info('Owner: %s (%d)', owner.tag, owner.id)
-    this.client.logger.info('Currently surfing with %s concurrent users.', users)
+    this.client.logger.info('Logged in as %s (%d)', this.client.user.tag, this.client.user.id)
+    this.client.logger.info('The owner of this application is %s (%d)', owner.tag, owner.id)
     this.client.logger.info('I can see %s server(s) with %d channels I have access to.', guilds, channels)
+    this.client.logger.info('Currently surfing with %s concurrent users.', users)
+    this.client.logger.info('[Ready!<3♪] Let\'s party!!')
 
     return activity()
   }

@@ -129,6 +129,7 @@ class WaveBot extends AkairoClient {
     /* Data Management */
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
     this.modlog = new Database(process.env.MONGO_URI_MODLOG)
+    this.blocklist = new Database(process.env.MONGO_URI_BLOCKLIST)
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {

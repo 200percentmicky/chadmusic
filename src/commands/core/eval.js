@@ -16,6 +16,7 @@ module.exports = class CommandEval extends Command {
   }
 
   async exec (message) {
+    const t1 = process.hrtime()
     const clean = text => {
       if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
     }
@@ -25,11 +26,14 @@ module.exports = class CommandEval extends Command {
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(await (async () => code)())
+      let evaled = eval(await (async () => { return code })())
 
       if (typeof evaled !== 'string') {
         evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 })
       }
+
+      const t2 = process.hrtime(t1)
+      const end = (t2[0] * 1000000000 + t2[1]) / 1000000
 
       if (code.includes('.token')) {
         await message.react(process.env.REACTION_WARN)
@@ -38,14 +42,12 @@ module.exports = class CommandEval extends Command {
         } catch (err) {
           if (err.name === 'DiscordAPIError') return
         }
-        return console.log(clean(evaled))
+        return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled))
       } else {
-        await message.react(process.env.REACTION_OK)
-        return message.channel.send(clean(evaled), { code: 'js', split: true })
+        message.channel.send(`// ✅ Evaluated in ${end} ms.\n${clean(evaled)}`, { code: 'js', split: true })
       }
     } catch (err) {
-      message.react(process.env.REACTION_ERROR)
-      message.channel.send(`${err.name}: ${err.message}`, { code: 'js', split: true })
+      message.channel.send(`// ❌ Error during eval\n${err.name}: ${err.message}`, { code: 'js', split: true })
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       errorChannel.send(new MessageEmbed()
         .setColor(process.env.COLOR_WARN)
