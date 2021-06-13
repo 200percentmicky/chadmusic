@@ -4,7 +4,6 @@ const si = require('systeminformation')
 const { stripIndents } = require('common-tags')
 const prettyBytes = require('pretty-bytes')
 
-const main = require('../../../package.json')
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package')
 const distubeversion = require('../../../node_modules/distube/package')
@@ -33,7 +32,6 @@ module.exports = class CommandDebug extends Command {
     === Project Wave ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
              Node.js :: ${process.version}
-         Bot Version :: ${main.version}
           Discord.js :: ${discordversion.version}
     Akairo Framework :: ${akairoversion.version}
           DisTube.js :: ${distubeversion.version}

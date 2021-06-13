@@ -3,7 +3,6 @@ const { MessageEmbed } = require('discord.js')
 const { stripIndents } = require('common-tags')
 
 // Mainly for version info...
-const main = require('../../../package.json')
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package.json')
 const distubeversion = require('../../../node_modules/distube/package.json')
@@ -29,7 +28,6 @@ module.exports = class CommandAbout extends Command {
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
-      **Bot Version:** ${main.version}
       **Discord.js:** ${discordversion.version}
       **Akairo Framework:** ${akairoversion.version}
       **DisTube.js:** ${distubeversion.version}
