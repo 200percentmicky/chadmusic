@@ -31,7 +31,7 @@ module.exports = class CommandTest extends Command {
             .setColor(this.client.utils.randColor())
             .setDescription(`${chunk}`)
 
-          await message.channel.send({ embed }) // Wait for the embed to be sent
+          await message.channel.send({ embeds: [embed] }) // Wait for the embed to be sent
         }
         break
       }

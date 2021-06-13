@@ -24,7 +24,7 @@ module.exports = class InviteCommand extends Command {
       msg = `${process.env.EMOJI_CUTIE} **Here's my invite link. Enjoy!**\n<${invite}>\n🆘 **Support Server**\n${server}`
       return message.channel.send(msg)
     } else {
-      return message.channel.send(msg)
+      return message.channel.send({ embeds: [msg] })
     }
   }
 }

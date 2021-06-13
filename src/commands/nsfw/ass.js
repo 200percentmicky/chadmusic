@@ -26,14 +26,14 @@ module.exports = class CommandAss extends Command {
         total: '1',
         subreddit: ['ass']
       })
-      message.channel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
         .setAuthor(`${boodyPic[0].title}`, message.author.avatarURL({ dynamic: true }), boodyPic[0].postLink)
         .setDescription(`**[Click here if the image isn't loading.](${boodyPic[0].image})**`)
         .setImage(boodyPic[0].image)
         .setTimestamp()
         .setFooter(`r/${boodyPic[0].subreddit}`)
-      )
+      message.channel.send({ embeds: [embed] })
     } catch (err) {
       message.say('error', err.message, 'Reddit API Error')
       return message.channel.stopTyping(true)

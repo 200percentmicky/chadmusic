@@ -26,14 +26,14 @@ module.exports = class CommandCleanLewds extends Command {
         total: '1',
         subreddit: ['WholesomeLewds']
       })
-      message.channel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
         .setAuthor(`${wholesomePic[0].title}`, message.author.avatarURL({ dynamic: true }), wholesomePic[0].postLink)
         .setDescription(`**[Click here if the image isn't loading.](${wholesomePic[0].image})**`)
         .setImage(wholesomePic[0].image)
         .setTimestamp()
         .setFooter(`r/${wholesomePic[0].subreddit}`)
-      )
+      message.channel.send({ embeds: [embed] })
     } catch (err) {
       message.say('error', err.message, 'Reddit API Error')
       return message.channel.stopTyping(true)

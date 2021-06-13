@@ -36,12 +36,12 @@ module.exports = class CommandAvatar extends Command {
 
       const sizes = `**[Small](${serverurl}${small}) | [Medium](${serverurl}${medium}) | [Large](${serverurl}${large}) | [XLarge](${serverurl}${xlarge})**`
 
-      return message.channel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(0xFF597D)
         .setAuthor(`Server Icon for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setImage(serverurl + large)
         .addField('Sizes:', `${sizes}`)
-      )
+      return message.channel.send({ embeds: [embed] })
     }
 
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1]) || message.member
@@ -58,7 +58,7 @@ module.exports = class CommandAvatar extends Command {
       .addField('Sizes:', `${sizes}`)
 
     if (!args[1]) { // For the author only.
-      return message.channel.send(embed)
+      return message.channel.send({ embeds: [embed] })
     }
 
     // Does this member exist?
@@ -74,6 +74,6 @@ module.exports = class CommandAvatar extends Command {
     }
 
     // Finally show off an avatar!
-    return message.channel.send(embed)
+    return message.channel.send({ embeds: [embed] })
   }
 }

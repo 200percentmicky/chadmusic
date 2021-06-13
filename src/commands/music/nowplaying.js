@@ -34,7 +34,7 @@ module.exports = class CommandNowPlaying extends Command {
     const song = queue.songs[0]
     const total = song.duration + '000'
     const current = queue.currentTime
-    return message.channel.send(new MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(`${queue.formattedCurrentTime} [${splitBar(total, current, 17)[0]}] ${song.formattedDuration}`)
@@ -45,6 +45,6 @@ module.exports = class CommandNowPlaying extends Command {
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
-    )
+    return message.channel.send({ embeds: [embed] })
   }
 }

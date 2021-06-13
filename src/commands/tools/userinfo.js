@@ -48,6 +48,6 @@ module.exports = class CommandUserInfo extends Command {
       .addField('✨ Account Created:', `${joinPlatform}`, true)
       .addField('🤖 Bot Account?', `${member.user.bot ? 'Yes' : 'No'}`, true)
       .addField('🏷 Server Roles:', `${serverRoles}`)
-    return message.channel.send(embed)
+    return message.channel.send({ embeds: [embed] })
   }
 }

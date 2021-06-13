@@ -21,7 +21,7 @@ module.exports = class CommandCovid extends Command {
     fetch('https://api.covid19api.com/summary', { method: 'GET' })
       .then(res => res.json())
       .then(json => {
-        message.channel.send(new MessageEmbed()
+        const embed = new MessageEmbed()
           .setColor(this.client.utils.randColor())
           .setTitle('☣ Covid-19 Statistics')
           .setThumbnail('https://cdn.discordapp.com/attachments/375453081631981568/702036051371491358/597px-SARS-CoV-2_without_background.png')
@@ -36,7 +36,7 @@ module.exports = class CommandCovid extends Command {
           **Recovered:** ${json.Global.NewRecovered}
           `)
           .setFooter('Credit: covid19api.com')
-        )
+        message.channel.send({ embeds: [embed] })
       })
       .catch(err => {
         message.say('error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')

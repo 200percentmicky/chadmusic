@@ -37,6 +37,6 @@ module.exports = class CommandAbout extends Command {
       `, true)
       .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
       .setFooter(`Created by ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
-    return message.channel.send(aboutembed)
+    return message.channel.send({ embeds: [aboutembed] })
   }
 }
