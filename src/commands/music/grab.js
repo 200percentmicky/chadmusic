@@ -20,7 +20,7 @@ module.exports = class CommandGrab extends Command {
     const song = queue.songs[0]
 
     try {
-      message.author.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
         .setAuthor('Song saved!', 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png')
         .setTitle(song.name)
@@ -28,7 +28,7 @@ module.exports = class CommandGrab extends Command {
         .setThumbnail(song.thumbnail)
         .addField('Duration', `${song.formattedDuration}`)
         .setTimestamp()
-      )
+      message.author.send({ embeds: [embed] })
       return message.react(process.env.REACTION_OK)
     } catch (err) {
       if (err.name === 'DiscordAPIError') message.say('error', 'Unable to save this song. You are currently not accepting Direct Messages.')

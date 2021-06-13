@@ -54,13 +54,13 @@ module.exports = class CommandSoftban extends Command {
     const randomResponse = responses[Math.floor(Math.random() * responses.length)]
 
     try {
-      await member.user.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(this.client.color.softban)
         .setAuthor(`You have been softbanned from ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`**Reason:** ${reason}`)
         .setTimestamp()
         .setFooter(`${message.author.tag} • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
-      )
+      await member.user.send({ embeds: [embed] })
     } catch (err) {
       return
     } finally {

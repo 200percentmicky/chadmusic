@@ -49,13 +49,13 @@ module.exports = class CommandEval extends Command {
     } catch (err) {
       message.channel.send({ content: `// ❌ Error during eval\n${err.name}: ${err.message}`, code: 'js', split: true })
       const errorChannel = this.client.channels.cache.get('603735567733227531')
-      errorChannel.send(new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(process.env.COLOR_WARN)
         .setTitle(process.env.EMOJI_WARN + 'eval() Error')
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
         .setTimestamp()
-      )
+      errorChannel.send({ embeds: [embed] })
     }
   }
 }

@@ -18,7 +18,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
     if (!voiceLogChannel) return
 
     if (!oldState.channel) {
-      return voiceLogChannel.send(new MessageEmbed()
+      const embedJoin = new MessageEmbed()
         .setColor(0x78B159)
         .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🟢 Joined Voice Channel')
@@ -30,11 +30,11 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
         \`\`\`
         `)
         .setTimestamp()
-      )
+      return voiceLogChannel.send({ embeds: [embedJoin] })
     }
 
     if (!newState.channel) {
-      const embed = new MessageEmbed()
+      const embedLeave = new MessageEmbed()
         .setColor(0xDD2E44)
         .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🔴 Left Voice Channel')
@@ -54,11 +54,11 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
                 else if (audit) embed.addField('Moderator', x.executor.toString(), true);
             });
             */
-      return voiceLogChannel.send(embed)
+      return voiceLogChannel.send({ embeds: [embedLeave] })
     }
 
     if (oldState.channel !== newState.channel) {
-      const embed = new MessageEmbed()
+      const embedMoved = new MessageEmbed()
         .setColor(0x55ACEE)
         .setAuthor(`${newState.member.user.tag}`, newState.member.user.avatarURL({ dynamic: true }))
         .setTitle('🔵 Moved Voice Channels')
@@ -78,7 +78,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
                 else if (audit) embed.addField('Moderator', x.executor.toString(), true);
             });
             */
-      return voiceLogChannel.send(embed)
+      return voiceLogChannel.send({ embeds: [embedMoved] })
     }
   }
 }
