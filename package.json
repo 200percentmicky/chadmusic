@@ -1,6 +1,6 @@
 {
   "name": "projectwave",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "New JS bot. Let's see how this goes.",
   "main": "index.js",
   "scripts": {
