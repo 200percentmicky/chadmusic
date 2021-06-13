@@ -106,6 +106,6 @@ module.exports = class CommandSettings extends Command {
       */
       .setTimestamp()
 
-    return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
   }
 }

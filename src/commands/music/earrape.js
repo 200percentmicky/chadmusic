@@ -52,7 +52,7 @@ module.exports = class CommandEarrape extends Command {
         .setColor(process.env.COLOR_OK)
         .setDescription(`🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`)
         .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+      return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
     }
   }
 }
