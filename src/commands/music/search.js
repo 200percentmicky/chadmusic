@@ -85,7 +85,7 @@ module.exports = class CommandSearch extends Command {
         .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
-      message.channel.send({ embed: [embed] }).then(msg => {
+      message.channel.send({ embeds: [embed] }).then(msg => {
         const filter = m => m.author.id === message.author.id && (!isNaN(m.content) || m.content === 'CANCEL'.toLowerCase())
         message.channel.awaitMessages(filter, {
           max: 1,

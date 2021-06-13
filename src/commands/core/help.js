@@ -101,7 +101,7 @@ module.exports = class CommandHelp extends Command {
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
-        return message.channel.send({ embed: [commandEmbed] })
+        return message.channel.send({ embeds: [commandEmbed] })
       } else return
     }
 
@@ -122,6 +122,6 @@ module.exports = class CommandHelp extends Command {
       field.value = `${field.value}`
       helpEmbed.fields.push(field)
     })
-    return message.channel.send({ embed: [helpEmbed] })
+    return message.channel.send({ embeds: [helpEmbed] })
   }
 }

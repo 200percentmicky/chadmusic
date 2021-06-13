@@ -30,6 +30,6 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
       `)
       .setThumbnail(member.user.avatarURL() + '?size=2048')
       .setTimestamp()
-    memberLogChannel.send({ embed: [left] })
+    memberLogChannel.send({ embeds: [left] })
   }
 }

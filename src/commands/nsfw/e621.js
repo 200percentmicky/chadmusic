@@ -43,7 +43,7 @@ module.exports = class CommandE621 extends Command {
           .setTimestamp()
           .setFooter(i.booru.domain)
         if (i.file_url.endsWith('.webm' || '.mp4')) result.attachFiles([i.file_url])
-        message.channel.send({ embed: [result] })
+        message.channel.send({ embeds: [result] })
       })
     } catch (err) {
       message.say('error', err.message, '`Booru API Error.`')

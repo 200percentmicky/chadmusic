@@ -44,9 +44,9 @@ module.exports = class ListenerPlaySong extends Listener {
       .setTimestamp()
 
     if (!message.channel) {
-      textChannel.send({ embed: [songNow] })
+      textChannel.send({ embeds: [songNow] })
     } else {
-      message.channel.send({ embed: [songNow] })
+      message.channel.send({ embeds: [songNow] })
     }
   }
 }
