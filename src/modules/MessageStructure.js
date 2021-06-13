@@ -42,14 +42,14 @@ module.exports = class MessageStructure extends Message {
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     if (this.channel.type === 'dm') { /* DMs will always have embed links. */
-      return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
+      return this.reply({ embed: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
     } else {
       if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
         return this.reply(title
           ? `${embedEmoji[type]} **${title}** | ${description}`
           : `${embedEmoji[type]} ${description}`
         , { allowedMentions: { repliedUser: false } })
-      } else return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
+      } else return this.reply({ embed: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
     }
   }
 
@@ -61,7 +61,7 @@ module.exports = class MessageStructure extends Message {
       .setColor(process.env.COLOR_INFO)
       .setTitle(`${process.env.EMOJI_INFO} Usage`)
       .setDescription(`\`${guildPrefix}${syntax}\``)
-    this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+    this.reply({ embed: [embed], allowedMentions: { repliedUser: false } })
   }
 
   /* Custom Embed */
@@ -79,14 +79,14 @@ module.exports = class MessageStructure extends Message {
     if (footer) embed.setFooter(`${footer}`)
 
     if (this.channel.type === 'dm') {
-      return this.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+      return this.reply({ embed: [embed], allowedMentions: { repliedUser: false } })
     } else {
       if (!this.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS'])) {
         return this.reply(title
           ? `${emoji} **${title}** | ${description}`
           : `${emoji} ${description}`
         , { allowedMentions: { repliedUser: false } })
-      } else return this.reply({ embed: embed, components: buttons || [], allowedMentions: { repliedUser: false } })
+      } else return this.reply({ embed: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
     }
   }
 
@@ -126,7 +126,7 @@ module.exports = class MessageStructure extends Message {
       embed.setTitle(`${process.env.EMOJI_ERROR} ${title}`)
     }
 
-    await errorChannel.send(embed)
+    await errorChannel.send({ embed: [embed] })
     return errorChannel.send(error, { code: 'js', split: true })
   }
 }
