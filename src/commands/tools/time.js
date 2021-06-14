@@ -91,7 +91,7 @@ module.exports = class CommandTime extends Command {
 
     message.react(emoji[clock.hour()])
     return message.reply({
-      embeds: [embed],
+      embed: embed,
       allowedMentions: {
         repliedUser: true
       }

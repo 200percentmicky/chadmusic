@@ -27,7 +27,7 @@ module.exports = class CommandRestart extends Command {
       .setTitle('🔁 Restart')
       .setDescription(`\`\`\`js\n${restartReport}\`\`\``)
       .setTimestamp()
-    await errChannel.send({ embeds: [embed] })
+    await errChannel.send({ embed: embed })
     this.client.logger.info('[Restart] %s', restartReport)
     this.client.logger.warn('Shutting down...')
     this.client.destroy()

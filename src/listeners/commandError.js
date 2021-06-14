@@ -19,7 +19,7 @@ module.exports = class ListenerCommandError extends Listener {
         .setTitle('💢 Bruh Moment')
         .setDescription(`Something bad happened while executing \`${command.id}\`.\n\`\`\`js\n${error.name}: ${error.message}\`\`\``)
         .setFooter('An error report was sent to the bot owner.')
-      message.reply({ embeds: [guru], allowedMentions: { repliedUser: false } })
+      message.reply({ embed: guru, allowedMentions: { repliedUser: false } })
     } else {
       const guru = stripIndents`
       :woman_in_lotus_position: **Guru Meditation**

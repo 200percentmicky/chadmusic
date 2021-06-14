@@ -30,7 +30,7 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
         \`\`\`
         `)
         .setTimestamp()
-      memberLogChannel.send({ embeds: [nickname] })
+      memberLogChannel.send({ embed: nickname })
     }
 
     // TODO: Add more info from guildMemberUpdate
