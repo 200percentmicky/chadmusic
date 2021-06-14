@@ -67,6 +67,7 @@ module.exports = class CommandQueue extends Command {
       .setLabel('First Page')
       .setEmoji('⏮')
       .setCustomID('first_page')
+      .setDisabled(true) // Since the embed opens on the first page.
 
     // Previous Page
     const previousPage = new MessageButton()
@@ -74,6 +75,7 @@ module.exports = class CommandQueue extends Command {
       .setLabel('Previous')
       .setEmoji('⏪')
       .setCustomID('previous_page')
+      .setDisabled(true) // Since the embed opens on the first page.
 
     // Next Page
     const nextPage = new MessageButton()
@@ -125,6 +127,23 @@ module.exports = class CommandQueue extends Command {
     collector.on('collect', async interaction => {
       // First Page Button
       if (interaction.customID === 'first_page') {
+        /* Enable and disable buttons */
+        nextPage.setDisabled(false)
+        lastPage.setDisabled(false)
+        if (!queuePaginate.hasPrevious()) {
+          firstPage.setDisabled(true)
+          previousPage.setDisabled(true)
+        }
+        /* Row of buttons! */
+        const buttonRow = new MessageActionRow()
+          .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+        /* Rand out of room for the cancel button, so... */
+        const cancelRow = new MessageActionRow()
+          .addComponents(cancelButton)
+
+        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
         const paginateArray = queuePaginate.first()
         /* Map the array. */
         const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
@@ -132,7 +151,7 @@ module.exports = class CommandQueue extends Command {
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -141,60 +160,111 @@ module.exports = class CommandQueue extends Command {
 
       // Previous Page Button
       if (interaction.customID === 'previous_page') {
+        /* Need to make sure all buttons are available */
+        nextPage.setDisabled(false)
+        lastPage.setDisabled(false)
+        firstPage.setDisabled(false)
+        previousPage.setDisabled(false)
         const paginateArray = queuePaginate.previous()
         if (!queuePaginate.hasPrevious()) {
-          collector.resetTimer({
-            time: 30000,
-            idle: 30000
-          })
-        } else {
-          /* Map the array. */
-          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
-
-          /* Making the embed. */
-          queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
-          queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-          await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+          firstPage.setDisabled(true)
+          previousPage.setDisabled(true)
           collector.resetTimer({
             time: 30000,
             idle: 30000
           })
         }
-      }
+        /* Row of buttons! */
+        const buttonRow = new MessageActionRow()
+          .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
 
-      // Next Page Button
-      if (interaction.customID === 'next_page') {
-        const paginateArray = queuePaginate.next()
-        if (!queuePaginate.hasNext()) {
-          collector.resetTimer({
-            time: 30000,
-            idle: 30000
-          })
-        } else {
-          /* Map the array. */
-          const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+        /* Rand out of room for the cancel button, so... */
+        const cancelRow = new MessageActionRow()
+          .addComponents(cancelButton)
 
-          /* Making the embed. */
-          queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
-          queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-          await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
-          collector.resetTimer({
-            time: 30000,
-            idle: 30000
-          })
-        }
-      }
+        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
-      // Last Page Button
-      if (interaction.customID === 'last_page') {
-        const paginateArray = queuePaginate.last()
         /* Map the array. */
         const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        collector.resetTimer({
+          time: 30000,
+          idle: 30000
+        })
+      }
+
+      // Next Page Button
+      if (interaction.customID === 'next_page') {
+        /* Need to make sure all buttons are available */
+        nextPage.setDisabled(false)
+        lastPage.setDisabled(false)
+        firstPage.setDisabled(false)
+        previousPage.setDisabled(false)
+        const paginateArray = queuePaginate.next()
+        if (!queuePaginate.hasNext()) {
+          nextPage.setDisabled(true)
+          lastPage.setDisabled(true)
+        }
+
+        /* Row of buttons! */
+        const buttonRow = new MessageActionRow()
+          .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+        /* Rand out of room for the cancel button, so... */
+        const cancelRow = new MessageActionRow()
+          .addComponents(cancelButton)
+
+        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
+        /* Making the embed. */
+        queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        collector.resetTimer({
+          time: 30000,
+          idle: 30000
+        })
+      }
+
+      // Last Page Button
+      if (interaction.customID === 'last_page') {
+        /* Enable and disable buttons */
+        firstPage.setDisabled(false)
+        previousPage.setDisabled(false)
+        const paginateArray = queuePaginate.last()
+        if (!queuePaginate.hasNext()) {
+          nextPage.setDisabled(true)
+          lastPage.setDisabled(true)
+          collector.resetTimer({
+            time: 30000,
+            idle: 30000
+          })
+        }
+
+        /* Row of buttons! */
+        const buttonRow = new MessageActionRow()
+          .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+        /* Rand out of room for the cancel button, so... */
+        const cancelRow = new MessageActionRow()
+          .addComponents(cancelButton)
+
+        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
+        /* Making the embed. */
+        queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
+        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
+        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -204,6 +274,10 @@ module.exports = class CommandQueue extends Command {
       // Jump to Page Button
       if (interaction.customID === 'page_jump') {
         message.reply('↗ Type the page number you would like to go to.').then(async pageMsg => {
+          nextPage.setDisabled(false)
+          lastPage.setDisabled(false)
+          firstPage.setDisabled(false)
+          previousPage.setDisabled(false)
           const filter = m => m.author.id === message.author.id && !isNaN(m.content)
           message.channel.awaitMessages(filter, {
             max: 1,
@@ -214,27 +288,64 @@ module.exports = class CommandQueue extends Command {
             const pageNumber = parseInt(msg2.content)
             if (pageNumber >= queuePaginate.total) {
               const paginateArray = queuePaginate.last()
+              if (!queuePaginate.hasNext()) {
+                nextPage.setDisabled(true)
+                lastPage.setDisabled(true)
+              }
+              /* Row of buttons! */
+              const buttonRow = new MessageActionRow()
+                .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+              /* Rand out of room for the cancel button, so... */
+              const cancelRow = new MessageActionRow()
+                .addComponents(cancelButton)
+
+              const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
               /* Map the array. */
               const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-              await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+              await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
               pageMsg.delete()
             } else if (pageNumber <= queuePaginate.total) {
               const paginateArray = queuePaginate.first()
+              if (!queuePaginate.hasPrevious()) {
+                firstPage.setDisabled(true)
+                previousPage.setDisabled(true)
+              }
+              /* Row of buttons! */
+              const buttonRow = new MessageActionRow()
+                .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+              /* Rand out of room for the cancel button, so... */
+              const cancelRow = new MessageActionRow()
+                .addComponents(cancelButton)
+
+              const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
+
               /* Map the array. */
               const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-              await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+              await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
               pageMsg.delete()
             }
+            /* Row of buttons! */
+            const buttonRow = new MessageActionRow()
+              .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
+
+            /* Rand out of room for the cancel button, so... */
+            const cancelRow = new MessageActionRow()
+              .addComponents(cancelButton)
+
+            const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
             const paginateArray = queuePaginate.page(pageNumber)
             /* Map the array. */
@@ -243,9 +354,13 @@ module.exports = class CommandQueue extends Command {
             /* Making the embed. */
             queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
             queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-            await interaction.message.edit({ embed: queueEmbed, allowedMentions: { repliedUser: false } })
+            await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
             msg2.delete()
             pageMsg.delete()
+            collector.resetTimer({
+              time: 30000,
+              idle: 30000
+            })
           }).catch(async () => {
             await pageMsg.delete()
           })
