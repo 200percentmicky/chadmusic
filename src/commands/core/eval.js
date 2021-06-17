@@ -1,6 +1,16 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
 const { Eval } = require('../../aliases.json')
+
+/* eslint-disable no-unused-vars */
+const Discord = require('discord.js')
+const dayjs = require('dayjs')
+const moment = require('moment-timezone')
+const _ = require('lodash')
+const __ = require('underscore')
+const prettyBytes = require('pretty-bytes')
+const prettyMs = require('pretty-ms')
+const colonNotation = require('colon-notation')
+const commonTags = require('common-tags')
 
 module.exports = class CommandEval extends Command {
   constructor () {
@@ -9,7 +19,18 @@ module.exports = class CommandEval extends Command {
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',
-        usage: '<code>'
+        usage: '<code>',
+        details: commonTags.stripIndents`
+        **Loaded Packages:**
+        \`Discord\` - discord.js
+        \`dayjs\` - day.js
+        \`moment\` - moment-timezone
+        \`_\` - lodash
+        \`__\` - underscore
+        \`prettyBytes\` - pretty-bytes
+        \`prettyMs\` - prettyMs
+        \`colonNotation\` - colon-notation
+        \`commonTags\` - common-tags`
       },
       category: '💻 Core'
     })
@@ -49,7 +70,7 @@ module.exports = class CommandEval extends Command {
     } catch (err) {
       message.channel.send({ content: `// ❌ Error during eval\n${err.name}: ${err.message}`, code: 'js', split: true })
       const errorChannel = this.client.channels.cache.get('603735567733227531')
-      const embed = new MessageEmbed()
+      const embed = new Discord.MessageEmbed()
         .setColor(process.env.COLOR_WARN)
         .setTitle(process.env.EMOJI_WARN + 'eval() Error')
         .setDescription(`Input: \`${code}\``)
