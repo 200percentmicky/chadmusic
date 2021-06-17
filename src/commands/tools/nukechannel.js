@@ -1,6 +1,5 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
-const { Embeds } = require('discord-paginationembed')
+const { MessageButton, MessageActionRow, Permissions } = require('discord.js')
 
 module.exports = class CommandNukeChannel extends Command {
   constructor () {
@@ -11,12 +10,59 @@ module.exports = class CommandNukeChannel extends Command {
         text: 'Nukes all messages in a channel.'
       },
       channel: 'guild',
-      userPermissions: ['MANAGE_CHANNELS'],
-      clientPermissions: ['MANAGE_CHANNELS']
+      userPermissions: ['MANAGE_CHANNELS']
     })
   }
 
-  exec (message) {
+  async exec (message) {
+    if (!message.guild.me.permissions.any(Permissions.FLAGS.MANAGE_CHANNELS)) {
+      // Must be guild wide.
+      return message.say('warn', 'I require one of my roles to have the **Manage Channel** permission for this command to work properly.')
+    }
+
+    const nukeButton = new MessageButton()
+      .setCustomID('nuke_yes')
+      .setStyle('SUCCESS')
+      .setLabel('Nuke this channel!')
+      .setEmoji('☢')
+
+    const cancelButton = new MessageButton()
+      .setCustomID('nuke_no')
+      .setStyle('DANGER')
+      .setLabel('Cancel')
+      .setEmoji(process.env.EMOJI_ERROR)
+
+    const buttonRow = new MessageActionRow()
+      .addComponents(nukeButton, cancelButton)
+
+    const msg = await message.say('warn', 'Nuking this channel will delete all messages sent here. This action cannot be undone. Do you wish to proceed?', 'Warning', null, [buttonRow])
+
+    const filter = interaction => interaction.user.id === message.author.id
+
+    const collector = await msg.createMessageComponentInteractionCollector(filter, {
+      time: 30000
+    })
+
+    collector.on('collect', async interaction => {
+      if (interaction.customID === 'nuke_yes') {
+        await message.channel.clone({
+          name: message.channel.name,
+          type: 'text',
+          topic: message.channel.topic,
+          reason: `${message.author.tag} nuked this channel.`
+        })
+        await message.channel.delete()
+      }
+
+      if (interaction.customID === 'nuke_no') {
+        collector.stop()
+        await msg.delete()
+        return message.react(process.env.REACTION_OK)
+      }
+    })
+
+    collector.on('end', () => msg.delete())
+    /*
     const embeds = []
 
     for (let i = 1; i <= 1; ++i) {
@@ -57,5 +103,6 @@ module.exports = class CommandNukeChannel extends Command {
       .on('finish', () => { })
 
     embed.build()
+    */
   }
 }

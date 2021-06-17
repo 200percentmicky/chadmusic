@@ -44,7 +44,7 @@ module.exports = class CommandResetData extends Command {
 
         const buttonRow = new MessageActionRow().addComponents(yesButton, noButton)
 
-        const msg = await message.say('warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', [buttonRow])
+        const msg = await message.say('warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow])
 
         const filter = interaction => interaction.user.id === message.author.id
 
@@ -87,7 +87,7 @@ module.exports = class CommandResetData extends Command {
 
         const buttonRow = new MessageActionRow().addComponents(yesButton, noButton)
 
-        const msg = await message.say('warn', 'You are about to reset the moderation case count for this server. Are you sure you want to do this?', 'Warning', [buttonRow])
+        const msg = await message.say('warn', 'You are about to reset the moderation case count for this server. Are you sure you want to do this?', 'Warning', null, [buttonRow])
 
         const filter = interaction => interaction.user.id === message.author.id
 

@@ -127,6 +127,11 @@ module.exports = class CommandQueue extends Command {
     collector.on('collect', async interaction => {
       // First Page Button
       if (interaction.customID === 'first_page') {
+        const paginateArray = queuePaginate.first()
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
         /* Enable and disable buttons */
         nextPage.setDisabled(false)
         lastPage.setDisabled(false)
@@ -143,10 +148,6 @@ module.exports = class CommandQueue extends Command {
           .addComponents(cancelButton)
 
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
-
-        const paginateArray = queuePaginate.first()
-        /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -160,19 +161,19 @@ module.exports = class CommandQueue extends Command {
 
       // Previous Page Button
       if (interaction.customID === 'previous_page') {
+        const paginateArray = queuePaginate.previous()
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
         /* Need to make sure all buttons are available */
         nextPage.setDisabled(false)
         lastPage.setDisabled(false)
         firstPage.setDisabled(false)
         previousPage.setDisabled(false)
-        const paginateArray = queuePaginate.previous()
         if (!queuePaginate.hasPrevious()) {
           firstPage.setDisabled(true)
           previousPage.setDisabled(true)
-          collector.resetTimer({
-            time: 30000,
-            idle: 30000
-          })
         }
         /* Row of buttons! */
         const buttonRow = new MessageActionRow()
@@ -183,9 +184,6 @@ module.exports = class CommandQueue extends Command {
           .addComponents(cancelButton)
 
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
-
-        /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
@@ -199,12 +197,16 @@ module.exports = class CommandQueue extends Command {
 
       // Next Page Button
       if (interaction.customID === 'next_page') {
+        const paginateArray = queuePaginate.next()
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
         /* Need to make sure all buttons are available */
         nextPage.setDisabled(false)
         lastPage.setDisabled(false)
         firstPage.setDisabled(false)
         previousPage.setDisabled(false)
-        const paginateArray = queuePaginate.next()
         if (!queuePaginate.hasNext()) {
           nextPage.setDisabled(true)
           lastPage.setDisabled(true)
@@ -220,9 +222,6 @@ module.exports = class CommandQueue extends Command {
 
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
-        /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
-
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
@@ -235,10 +234,14 @@ module.exports = class CommandQueue extends Command {
 
       // Last Page Button
       if (interaction.customID === 'last_page') {
+        const paginateArray = queuePaginate.last()
+
+        /* Map the array. */
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
         /* Enable and disable buttons */
         firstPage.setDisabled(false)
         previousPage.setDisabled(false)
-        const paginateArray = queuePaginate.last()
         if (!queuePaginate.hasNext()) {
           nextPage.setDisabled(true)
           lastPage.setDisabled(true)
@@ -258,9 +261,6 @@ module.exports = class CommandQueue extends Command {
 
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
-        /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
-
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
@@ -273,11 +273,7 @@ module.exports = class CommandQueue extends Command {
 
       // Jump to Page Button
       if (interaction.customID === 'page_jump') {
-        message.reply('↗ Type the page number you would like to go to.').then(async pageMsg => {
-          nextPage.setDisabled(false)
-          lastPage.setDisabled(false)
-          firstPage.setDisabled(false)
-          previousPage.setDisabled(false)
+        message.reply('What page do you wanna go to?').then(async pageMsg => {
           const filter = m => m.author.id === message.author.id && !isNaN(m.content)
           message.channel.awaitMessages(filter, {
             max: 1,
@@ -288,6 +284,15 @@ module.exports = class CommandQueue extends Command {
             const pageNumber = parseInt(msg2.content)
             if (pageNumber >= queuePaginate.total) {
               const paginateArray = queuePaginate.last()
+
+              /* Map the array. */
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
+              nextPage.setDisabled(false)
+              lastPage.setDisabled(false)
+              firstPage.setDisabled(false)
+              previousPage.setDisabled(false)
+
               if (!queuePaginate.hasNext()) {
                 nextPage.setDisabled(true)
                 lastPage.setDisabled(true)
@@ -302,9 +307,6 @@ module.exports = class CommandQueue extends Command {
 
               const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
-              /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
-
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
@@ -313,10 +315,20 @@ module.exports = class CommandQueue extends Command {
               pageMsg.delete()
             } else if (pageNumber <= queuePaginate.total) {
               const paginateArray = queuePaginate.first()
+
+              /* Map the array. */
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
+              nextPage.setDisabled(false)
+              lastPage.setDisabled(false)
+              firstPage.setDisabled(false)
+              previousPage.setDisabled(false)
+
               if (!queuePaginate.hasPrevious()) {
                 firstPage.setDisabled(true)
                 previousPage.setDisabled(true)
               }
+
               /* Row of buttons! */
               const buttonRow = new MessageActionRow()
                 .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
@@ -327,9 +339,6 @@ module.exports = class CommandQueue extends Command {
 
               const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
-              /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
-
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
@@ -337,6 +346,24 @@ module.exports = class CommandQueue extends Command {
               msg2.delete()
               pageMsg.delete()
             }
+
+            const paginateArray = queuePaginate.page(pageNumber)
+            /* Map the array. */
+            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
+
+            nextPage.setDisabled(false)
+            lastPage.setDisabled(false)
+            firstPage.setDisabled(false)
+            previousPage.setDisabled(false)
+
+            if (!queuePaginate.hasPrevious()) {
+              firstPage.setDisabled(true)
+              previousPage.setDisabled(true)
+            } else if (!queuePaginate.hasNext()) {
+              nextPage.setDisabled(true)
+              lastPage.setDisabled(true)
+            }
+
             /* Row of buttons! */
             const buttonRow = new MessageActionRow()
               .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
@@ -346,10 +373,6 @@ module.exports = class CommandQueue extends Command {
               .addComponents(cancelButton)
 
             const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
-
-            const paginateArray = queuePaginate.page(pageNumber)
-            /* Map the array. */
-            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:**  [${song.name}](${song.url})\n${song.user} \`${song.formattedDuration}\``).join('\n\n')
 
             /* Making the embed. */
             queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
