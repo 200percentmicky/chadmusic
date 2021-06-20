@@ -5,8 +5,8 @@ const { toColonNotation } = require('colon-notation')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('settings', {
-      aliases: ['settings'],
+    super('musicsettings', {
+      aliases: ['musicsettings'],
       category: '⚙ Settings',
       description: {
         text: 'Shows you the current settings for this server.'
