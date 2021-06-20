@@ -53,8 +53,12 @@ module.exports = class MessageStructure extends Message {
       embed.setAuthor(`${title}`, urlicons[type])
       embed.setDescription(`${description}`)
     } else {
-      if (type === 'error') embed.setAuthor('Command Error', urlicons.error)
-      embed.setDescription(`${description}`)
+      if (type === 'error') {
+        embed.setAuthor('Command Error', urlicons.error)
+        embed.setDescription(`${description}`)
+      } else {
+        embed.setDescription(`${embedEmoji[type]} ${description}`)
+      }
     }
 
     if (footer) embed.setFooter(`${footer}`)
