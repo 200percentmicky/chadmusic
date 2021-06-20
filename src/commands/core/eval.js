@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const { Eval } = require('../../aliases.json')
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js')
@@ -14,8 +13,8 @@ const commonTags = require('common-tags')
 
 module.exports = class CommandEval extends Command {
   constructor () {
-    super(Eval !== undefined ? Eval[0] : 'eval', {
-      aliases: Eval || ['eval'],
+    super('jseval', {
+      aliases: ['jseval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',

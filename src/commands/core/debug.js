@@ -3,6 +3,7 @@ const { Command } = require('discord-akairo')
 const si = require('systeminformation')
 const { stripIndents } = require('common-tags')
 const prettyBytes = require('pretty-bytes')
+const prettyMs = require('pretty-ms')
 
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package')
@@ -10,8 +11,8 @@ const distubeversion = require('../../../node_modules/distube/package')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
-    super('debug', {
-      aliases: ['debug', 'sysinfo', 'jssysinfo', 'msysinfo'],
+    super('musicdebug', {
+      aliases: ['musicdebug', 'sysinfo', 'jssysinfo', 'msysinfo'],
       category: '💻 Core',
       description: {
         text: 'System statistics about the music bot.'
@@ -35,7 +36,7 @@ module.exports = class CommandDebug extends Command {
           Discord.js :: ${discordversion.version}
     Akairo Framework :: ${akairoversion.version}
           DisTube.js :: ${distubeversion.version}
-              Uptime :: ${this.client.utils.uptime()}
+              Uptime :: ${prettyMs(this.client.uptime, { verbose: true })}
 
     # Hardware Specifications
               CPU :: ${cpu.manufacturer} ${cpu.brand} (${cpu.physicalCores} Cores / ${cpu.cores} Threads)

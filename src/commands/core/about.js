@@ -9,8 +9,8 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandAbout extends Command {
   constructor () {
-    super('about', {
-      aliases: ['about'],
+    super('musicabout', {
+      aliases: ['musicabout'],
       category: '💻 Core',
       description: {
         text: 'Shows information about the bot.'
@@ -23,8 +23,17 @@ module.exports = class CommandAbout extends Command {
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
       .setAuthor('Project Wave', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('Project Wave is my attempted rewrite of a multi-purpose Discord bot. It extends off of ChadMusic with additional commands and features with the goal to replace whats currently running on Poki.')
-      .addField('⚠ Caution', `This bot is a work in progress. Anything you see in this build is not guaranteed to persist into the next. As with all forms of software currently in development, there will be bugs! If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
+      .setDescription(`${this.client.user.username}'s powerful music player based on **[DisTube](https://distube.js.org)**. Type \`;info\` for my main build.`)
+      .addField('✨ Features', stripIndents`
+      :white_small_square: Supports 700+ websites.
+      :white_small_square: Add filters to the player.
+      :white_small_square: Alter filter values during playback.
+      :white_small_square: Unlimited volume! :joy::ok_hand:
+      :white_small_square: DJ commands to control the player.
+      :white_small_square: Queue and track length limits.
+      :white_small_square: And more to come!
+      `)
+      .addField('⚠ Caution', `This bot is a work in progress. As with all forms of software currently in development, there will be bugs! If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}

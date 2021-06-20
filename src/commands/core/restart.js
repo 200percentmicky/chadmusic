@@ -1,11 +1,10 @@
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { restart } = require('../../aliases.json')
 
 module.exports = class CommandRestart extends Command {
   constructor () {
-    super(restart !== undefined ? restart[0] : 'restart', {
-      aliases: restart || ['restart'],
+    super('musicrestart', {
+      aliases: ['musicrestart', 'jsrestart'],
       ownerOnly: true,
       category: '💻 Core',
       description: {

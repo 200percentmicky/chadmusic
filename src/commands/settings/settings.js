@@ -21,13 +21,14 @@ module.exports = class CommandSettings extends Command {
 
     /* All Settings */
     const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
-    const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
+    // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
     const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
     const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
     const maxTime = settings.get(message.guild.id, 'maxTime', null) // Max Song Duration
     const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null) // Max Entries in the Queue
     const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all') // Allow the use of Filters
     const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
+    /*
     const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
     const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
     const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
@@ -37,10 +38,22 @@ module.exports = class CommandSettings extends Command {
     const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
     const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
     const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
+    */
 
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(`Current Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+      .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+      .setTitle('🎶 Music Settings')
+      .setDescription(stripIndents`
+      ⁉ **Music Prefix:** \`${prefix}\`
+      🔖 **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      🎤 **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      ⏲ **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      🔢 **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      📢 **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      🔊 **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      `)
+      /*
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`
       **Time Zone:** ${timezone}
@@ -66,7 +79,6 @@ module.exports = class CommandSettings extends Command {
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
       `)
-      /*
       .addField('🌟 Starboard', stripIndents`
       **Channel:** ${starboard ? `<#${starboard.channelID}>` : 'None'}
       **Emoji:** ${starboard ? starboard.options.emoji : 'Not configured'}
