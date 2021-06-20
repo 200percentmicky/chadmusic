@@ -12,7 +12,7 @@ module.exports = class SurferReady extends Listener {
     const guilds = this.client.guilds.cache.size
     const activity = async () => {
       const serverSize = guilds === '1' ? '1 server' : `${guilds} servers`
-      this.client.user.setActivity(`;help or ${process.env.PREFIX}help | Surfing in ${serverSize}.`)
+      this.client.user.setActivity(`${process.env.PREFIX}help | Surfing in ${serverSize}.`)
     }
     setInterval(activity, 120000)
 
