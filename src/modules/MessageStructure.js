@@ -4,8 +4,19 @@
 // catching any errors that the bot may come across.
 
 const { MessageEmbed, Message } = require('discord.js')
+const icons = require('../urlicon.json')
 
 module.exports = class MessageStructure extends Message {
+  uploadFile (description, file) {
+    if (!file) throw new Error('No file was provided.')
+    const embed = new MessageEmbed()
+      .setColor(process.env.COLOR_OK)
+      .setDescription(`${process.env.EMOJI_OK} ${description}`)
+      .attachFiles(file)
+
+    this.channel.send(embed)
+  }
+
   say (type, description, title, footer, buttons) {
     /* The color of the embed */
     const embedColor = {
@@ -27,14 +38,23 @@ module.exports = class MessageStructure extends Message {
       no: emojiPerms ? process.env.EMOJI_NO : '🚫'
     }
 
+    const urlicons = {
+      ok: icons.ok,
+      warn: icons.warn,
+      error: icons.error,
+      info: icons.info,
+      no: icons.no
+    }
+
     const embed = new MessageEmbed()
       .setColor(embedColor[type])
 
     if (title) { /* The title of the embed, if one is provided. */
-      embed.setTitle(`${embedEmoji[type]} ${title}`)
+      embed.setAuthor(`${title}`, urlicons[type])
       embed.setDescription(`${description}`)
     } else {
-      embed.setDescription(`${embedEmoji[type]} ${description}`)
+      if (type === 'error') embed.setAuthor('Command Error', urlicons.error)
+      embed.setDescription(`${description}`)
     }
 
     if (footer) embed.setFooter(`${footer}`)
