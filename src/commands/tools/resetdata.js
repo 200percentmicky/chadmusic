@@ -1,14 +1,13 @@
-const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = class CommandResetData extends Command {
   constructor () {
-    super('resetdata', {
-      aliases: ['resetdata'],
+    super('resetmusicdata', {
+      aliases: ['resetmusicdata'],
       category: '🔧 Tools',
       description: {
-        text: 'Allows you to reset the bot\'s music settings for this guild.'
+        text: 'Allows you to reset the bot\'s music settings for this server.'
       },
       channel: 'guild',
       userPermissions: ['ADMINISTRATOR']
