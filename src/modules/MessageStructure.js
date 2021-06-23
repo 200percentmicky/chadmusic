@@ -7,14 +7,9 @@ const { MessageEmbed, Message } = require('discord.js')
 const icons = require('../urlicon.json')
 
 module.exports = class MessageStructure extends Message {
-  uploadFile (description, file) {
-    if (!file) throw new Error('No file was provided.')
-    const embed = new MessageEmbed()
-      .setColor(process.env.COLOR_OK)
-      .setDescription(`${process.env.EMOJI_OK} ${description}`)
-      .attachFiles(file)
-
-    this.channel.send(embed)
+  uploadFile (files) {
+    if (!files) throw new Error('No file was provided.')
+    this.channel.send({ files: [files] })
   }
 
   say (type, description, title, footer, buttons) {
