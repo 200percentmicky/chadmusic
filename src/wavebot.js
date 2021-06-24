@@ -55,7 +55,7 @@ logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
-const DisTube = require('../../Poki/chadtube')
+const DisTube = require('distube')
 const moment = require('moment')
 // const Moderator = require('discord-moderator')
 
