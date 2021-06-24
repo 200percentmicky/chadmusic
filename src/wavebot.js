@@ -55,9 +55,9 @@ logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
-const DisTube = require('distube')
+const DisTube = require('../../Poki/chadtube')
 const moment = require('moment')
-const Moderator = require('discord-moderator')
+// const Moderator = require('discord-moderator')
 
 /* Connecting to databases... */
 const { Database } = require('quickmongo')
@@ -120,11 +120,13 @@ class WaveBot extends AkairoClient {
     })
 
     /* Management for mutes and warns. */
+    /*
     this.moderator = new Moderator(this, {
       mutesTableName: 'mutes',
       checkMutesCountdown: 20000,
       warnsTableName: 'warns'
     })
+    */
 
     /* Data Management */
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
@@ -154,8 +156,8 @@ class WaveBot extends AkairoClient {
     this.listeners.setEmitters({
       process: process,
       commandHandler: this.commands,
-      player: this.player,
-      modlog: this.modlog
+      player: this.player
+      // modlog: this.modlog
     })
 
     this.commands.useInhibitorHandler(this.inhibitors)
