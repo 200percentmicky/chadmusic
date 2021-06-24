@@ -1,20 +1,22 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandReverse extends Command {
+module.exports = class CommandCustomFilter extends Command {
   constructor () {
-    super('reverse', {
-      aliases: ['reverse'],
-      category: '🎶 Music',
+    super('customfilter', {
+      aliases: ['customfilter', 'cfilter', 'cf'],
+      category: '📢 Filter',
       description: {
-        text: 'Plays the music in reverse.',
-        usage: '[off]',
+        text: 'Allows you to add a custom FFMPEG filter to the player.',
+        usage: 'customfilter <argument:str>',
         details: stripIndents`
-        \`[off]\` Turns off reverse if its active.
+        \`<argument:str>\` The argument to provide to FFMPEG.
+        ⚠ If the argument is invalid or not supported by FFMPEG, the stream will end.
         `
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      ownerOnly: true
     })
   }
 
@@ -22,7 +24,6 @@ module.exports = class CommandReverse extends Command {
     const args = message.content.split(/ +/g)
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
-    const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters')
     const dj = message.member.roles.cache.has(djRole) ||
       message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
 
@@ -35,11 +36,7 @@ module.exports = class CommandReverse extends Command {
       }
     }
 
-    if (allowFilters === 'dj') {
-      if (!dj) {
-        return message.say('no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
-      }
-    }
+    if (!args[1]) return message.usage('customfilter <argument:str>')
 
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
@@ -51,14 +48,15 @@ module.exports = class CommandReverse extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'reverse', 'off')
-          return message.custom('📢', process.env.COLOR_INFO, '**Reverse** Off')
+          await this.client.player.setFilter(message.guild.id, 'custom', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
         } catch (err) {
-          return message.say('error', '**Reverse** is not applied to the player.')
+          return message.say('error', 'No custom filters are applied to the player.')
         }
       } else {
-        await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse')
-        return message.custom('📢', process.env.COLOR_INFO, '**Reverse** On')
+        const custom = args[1]
+        await this.client.player.setFilter(message.guild.id, 'custom', custom)
+        return message.custom('📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {

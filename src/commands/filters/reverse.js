@@ -1,17 +1,16 @@
 const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandVibrato extends Command {
+module.exports = class CommandReverse extends Command {
   constructor () {
-    super('vibrato', {
-      aliases: ['vibrato'],
-      category: '🎶 Music',
+    super('reverse', {
+      aliases: ['reverse'],
+      category: '📢 Filter',
       description: {
-        text: 'Adds a vibrato filter to the player.',
-        usage: '<depth:int(0.1-1)/off> [frequency:int]',
+        text: 'Plays the music in reverse.',
+        usage: '[off]',
         details: stripIndents`
-        \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
-        \`<frequency:int>\` The frequency of the vibrato.
+        \`[off]\` Turns off reverse if its active.
         `
       },
       channel: 'guild',
@@ -52,29 +51,14 @@ module.exports = class CommandVibrato extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
-          return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
+          await this.client.player.setFilter(message.guild.id, 'reverse', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Reverse** Off')
         } catch (err) {
-          return message.say('error', '**Vibrato** is not applied to the player.')
+          return message.say('error', '**Reverse** is not applied to the player.')
         }
       } else {
-        if (!args[1]) {
-          return message.usage('vibrato <depth:int(0.1-1)/off> [frequency:int]')
-        }
-        const d = args[1]
-        let f = parseInt(args[2])
-        if (d < 0.1 || d > 1 || isNaN(d)) {
-          return message.say('error', 'Depth must be between **0.1** to **1**, or **off**.')
-        }
-        if (!args[2]) f = 5
-        if (isNaN(f)) {
-          return message.say('error', 'Frequency requires a number.')
-        }
-        if (f < 1) {
-          return message.say('error', 'Frequency must be greater than 0.')
-        }
-        await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
-        return message.custom('📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
+        await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse')
+        return message.custom('📢', process.env.COLOR_INFO, '**Reverse** On')
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
