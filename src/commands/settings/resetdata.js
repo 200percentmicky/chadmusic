@@ -5,7 +5,7 @@ module.exports = class CommandResetData extends Command {
   constructor () {
     super('resetmusicdata', {
       aliases: ['resetmusicdata'],
-      category: '🔧 Tools',
+      category: '⚙ Settings',
       description: {
         text: 'Allows you to reset the bot\'s music settings for this server.'
       },
