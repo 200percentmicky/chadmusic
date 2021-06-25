@@ -32,7 +32,6 @@ module.exports = class CommandNowPlaying extends Command {
 
     const queue = this.client.player.getQueue(message)
 
-    const author = queue.songs[0].info.videoDetails.author
     const song = queue.songs[0]
     const total = song.duration + '000'
     const current = queue.currentTime
@@ -47,7 +46,10 @@ module.exports = class CommandNowPlaying extends Command {
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
 
-    if (song.youtube) embed.addField('Channel', `[${author.name}](${author.channel_url})`)
+    if (song.youtube) {
+      const author = queue.songs[0].info.videoDetails.author
+      embed.addField('Channel', `[${author.name}](${author.channel_url})`)
+    }
 
     embed
       .addField('Requested by', `${song.user}`, true)

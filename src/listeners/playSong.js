@@ -15,7 +15,6 @@ module.exports = class ListenerPlaySong extends Listener {
     const textChannel = msg.channel // Again, message sometimes returns 'undefined'.
     const channel = queue.connection.channel // Same.
     const guild = channel.guild // This as well...
-    const author = song.info.videoDetails.author
     // This be some weird shit above...
 
     if (queue.songs.length === 1) { // If someone started a new queue.
@@ -38,7 +37,10 @@ module.exports = class ListenerPlaySong extends Listener {
       .setColor(this.client.utils.randColor())
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
 
-    if (song.youtube) songNow.addField('Channel', `[${author.name}](${author.channel_url})`)
+    if (song.youtube) {
+      const author = song.info.videoDetails.author
+      songNow.addField('Channel', `[${author.name}](${author.channel_url})`)
+    }
 
     songNow
       .addField('Requested by', `${song.user}`, true)
