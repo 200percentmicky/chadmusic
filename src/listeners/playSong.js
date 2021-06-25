@@ -37,7 +37,10 @@ module.exports = class ListenerPlaySong extends Listener {
     const songNow = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
-      .addField('Channel', `[${author.name}](${author.channel_url})`)
+
+    if (song.youtube) songNow.addField('Channel', `[${author.name}](${author.channel_url})`)
+
+    songNow
       .addField('Requested by', `${song.user}`, true)
       .addField('Duration', `${song.isLive ? '📡 **Live**' : prettyms(parseInt(song.duration + '000'), { colonNotation: true })}`, true)
       .setTitle(`${song.name}`)

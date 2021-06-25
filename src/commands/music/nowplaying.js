@@ -46,11 +46,15 @@ module.exports = class CommandNowPlaying extends Command {
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .addField('Channel', `[${author.name}](${author.channel_url})`)
+
+    if (song.youtube) embed.addField('Channel', `[${author.name}](${author.channel_url})`)
+
+    embed
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
+
     return message.channel.send({ embed: embed })
   }
 }
