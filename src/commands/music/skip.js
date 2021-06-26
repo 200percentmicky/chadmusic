@@ -63,7 +63,7 @@ module.exports = class CommandSkip extends Command {
           .setColor(process.env.COLOR_INFO)
           .setDescription('⏭ Skipping?')
           .setFooter(
-            `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip by using '${prefix}skip --force' or '${prefix}skip -f'.` : ''}`,
+            `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
             message.author.avatarURL({ dynamic: true })
           )
         return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
