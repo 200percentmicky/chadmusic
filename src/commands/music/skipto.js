@@ -43,10 +43,13 @@ module.exports = class CommandSkipTo extends Command {
     }
     */
 
+    const queue = this.client.player.getQueue(message)
+    const song = queue.songs[args[1]]
+
     if (currentVc.channel.members.size <= 2) {
       try {
         this.client.player.jump(message, parseInt(args[1]))
-        return message.custom('⏭', process.env.COLOR_INFO, `Skipped to entry \`${args[1]}\``)
+        return message.custom('⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`)
       } catch {
         return message.say('error', 'Not a valid entry in the queue.')
       }
@@ -54,7 +57,7 @@ module.exports = class CommandSkipTo extends Command {
       if (dj) {
         try {
           this.client.player.jump(message, parseInt(args[1]))
-          return message.custom('⏭', process.env.COLOR_INFO, `Skipped to entry \`${args[1]}\``)
+          return message.custom('⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`)
         } catch {
           return message.say('error', 'Not a valid entry in the queue.')
         }
