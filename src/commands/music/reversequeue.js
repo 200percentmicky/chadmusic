@@ -1,6 +1,6 @@
 const { Command } = require('discord-akairo')
 
-module.exports = class CommandStop extends Command {
+module.exports = class CommandReverseQueue extends Command {
   constructor () {
     super('reversequeue', {
       aliases: ['reversequeue', 'rq'],
