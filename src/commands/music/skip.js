@@ -19,7 +19,6 @@ module.exports = class CommandSkip extends Command {
   }
 
   async exec (message) {
-    const args = message.content.split(/ +/g)
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
@@ -38,11 +37,13 @@ module.exports = class CommandSkip extends Command {
     // this.client.player.skip(message)
     // return message.say('⏭', process.env.COLOR_INFO, 'Skipped!')
 
+    /*
     if (args[1] === ('--force' || '-f')) {
       if (!dj) return message.say('error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
       return message.custom('⏭', process.env.COLOR_INFO, 'Skipped!')
     }
+    */
 
     if (currentVc.channel.members.size >= 4) {
       const vcSize = Math.round(currentVc.channel.members.size / 2)
