@@ -44,12 +44,20 @@ module.exports = class CommandSkipTo extends Command {
     */
 
     if (currentVc.channel.members.size <= 2) {
-      this.client.player.jump(message, parseInt(args[1]))
-      return message.custom('⏭', process.env.COLOR_INFO, `Skipped to entry \`${args[1]}\``)
-    } else {
-      if (dj) {
+      try {
         this.client.player.jump(message, parseInt(args[1]))
         return message.custom('⏭', process.env.COLOR_INFO, `Skipped to entry \`${args[1]}\``)
+      } catch {
+        return message.say('error', 'Not a valid entry in the queue.')
+      }
+    } else {
+      if (dj) {
+        try {
+          this.client.player.jump(message, parseInt(args[1]))
+          return message.custom('⏭', process.env.COLOR_INFO, `Skipped to entry \`${args[1]}\``)
+        } catch {
+          return message.say('error', 'Not a valid entry in the queue.')
+        }
       } else {
         return message.say('error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
       }
