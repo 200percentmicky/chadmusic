@@ -49,12 +49,6 @@ module.exports = class CommandRemove extends Command {
         /* Slice original array to get the length. */
         const n = parseInt(queue.songs.slice(start, end).length + 1)
 
-        /* This command is for multiple entries. Tell the user to use the 'remove' command instead. */
-        if (n === 1) {
-          const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX)
-          return message.say('warn', `This command is used to remove multiple entries. Use \`${prefix}remove\` if you want to remove just one entry from the queue.`)
-        }
-
         /* Modify queue to remove the entries. */
         queue.songs.splice(start, n)
 
