@@ -38,6 +38,7 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${channel.name}`, guild.iconURL({ dynamic: true }))
 
     if (song.youtube) {
+      if (song.info.videoDetails.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
       const author = song.info.videoDetails.author
       songNow.addField('Channel', `[${author.name}](${author.channel_url})`)
     }

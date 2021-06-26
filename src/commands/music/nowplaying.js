@@ -47,6 +47,7 @@ module.exports = class CommandNowPlaying extends Command {
       .setThumbnail(song.thumbnail)
 
     if (song.youtube) {
+      if (queue.songs[0].info.videoDetails.age_restricted) embed.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
       const author = queue.songs[0].info.videoDetails.author
       embed.addField('Channel', `[${author.name}](${author.channel_url})`)
     }
