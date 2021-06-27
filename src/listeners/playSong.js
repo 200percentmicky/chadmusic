@@ -23,7 +23,7 @@ module.exports = class ListenerPlaySong extends Listener {
       const maxTime = await this.client.settings.get(message.guild.id, 'maxTime')
       const dj = msg.member.roles.cache.has(djRole) || channel.permissionsFor(msg.member.user.id).has(['MANAGE_CHANNELS'])
       if (!allowAgeRestricted) {
-        queue.songs.pop()
+        this.client.player.stop(message)
         return message.say('no', 'You cannot add **Age Restricted** videos to the queue.')
       }
       if (maxTime) {
