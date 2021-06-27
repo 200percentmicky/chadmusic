@@ -20,12 +20,12 @@ module.exports = class CommandAllowExplicit extends Command {
 
     const settings = this.client.settings
     switch (args[1]) {
-      case 'yes': {
+      case 'on': {
         await settings.set(message.guild.id, 'allowAgeRestricted', true)
         message.say('ok', 'Age restricted content can now be added to the queue.')
         break
       }
-      case 'no': {
+      case 'off': {
         await settings.set(message.guild.id, 'allowAgeRestricted', false)
         message.say('ok', 'Age restricted content can no longer be added to the queue.')
         break
