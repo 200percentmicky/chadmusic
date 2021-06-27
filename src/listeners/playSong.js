@@ -19,8 +19,13 @@ module.exports = class ListenerPlaySong extends Listener {
 
     if (queue.songs.length === 1) { // If someone started a new queue.
       const djRole = await this.client.settings.get(message.guild.id, 'djRole')
+      const allowAgeRestricted = await this.client.settings.get(message.guild.id, 'allowAgeRestricted', true)
       const maxTime = await this.client.settings.get(message.guild.id, 'maxTime')
       const dj = msg.member.roles.cache.has(djRole) || channel.permissionsFor(msg.member.user.id).has(['MANAGE_CHANNELS'])
+      if (!allowAgeRestricted) {
+        queue.songs.pop()
+        return message.say('no', 'You cannot add **Age Restricted** videos to the queue.')
+      }
       if (maxTime) {
         if (!dj) {
           if (parseInt(song.duration + '000') > maxTime) { // DisTube omits the last three digits in the songs duration.

@@ -28,6 +28,11 @@ module.exports = class CommandSettings extends Command {
     const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null) // Max Entries in the Queue
     const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all') // Allow the use of Filters
     const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
+
+    /* ! This setting only affects videos from YouTube. */
+    // All pornographic websites are blocked.
+    const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true) // Allow Explicit Content.
+
     /*
     const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
     const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
@@ -52,6 +57,7 @@ module.exports = class CommandSettings extends Command {
       🔢 **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
       📢 **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
       🔊 **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      🔞 **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
       `)
       /*
       .addField('🌐 General', stripIndents`
