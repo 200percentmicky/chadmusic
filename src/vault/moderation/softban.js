@@ -60,7 +60,7 @@ module.exports = class CommandSoftban extends Command {
         .setDescription(`**Reason:** ${reason}`)
         .setTimestamp()
         .setFooter(`${message.author.tag} • ID: ${message.author.id}`, message.author.avatarURL({ dynamic: true }))
-      await member.user.send({ embed: embed })
+      await member.user.send({ embeds: [embed] })
     } catch (err) {
       return
     } finally {

@@ -30,7 +30,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
         \`\`\`
         `)
         .setTimestamp()
-      return voiceLogChannel.send({ embed: embedJoin })
+      return voiceLogChannel.send({ embeds: [embedJoin] })
     }
 
     if (!newState.channel) {
@@ -54,7 +54,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
                 else if (audit) embed.addField('Moderator', x.executor.toString(), true);
             });
             */
-      return voiceLogChannel.send({ embed: embedLeave })
+      return voiceLogChannel.send({ embeds: [embedLeave] })
     }
 
     if (oldState.channel !== newState.channel) {
@@ -78,7 +78,7 @@ module.exports = class ListenerVoiceStateUpdate extends Listener {
                 else if (audit) embed.addField('Moderator', x.executor.toString(), true);
             });
             */
-      return voiceLogChannel.send({ embed: embedMoved })
+      return voiceLogChannel.send({ embeds: [embedMoved] })
     }
   }
 }

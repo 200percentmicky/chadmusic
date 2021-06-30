@@ -55,7 +55,7 @@ logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
-const DisTube = require('distube')
+const DisTube = require('../../chadtube')
 const moment = require('moment')
 // const Moderator = require('discord-moderator')
 
@@ -108,7 +108,7 @@ class WaveBot extends AkairoClient {
     this.prefix = prefix
     this.logger = logger
     this.si = require('systeminformation')
-    this.player = new DisTube(this, {
+    this.player = new DisTube.DisTube(this, {
       emitNewSongOnly: true,
       leaveOnStop: true,
       leaveOnEmpty: true,

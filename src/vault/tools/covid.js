@@ -36,7 +36,7 @@ module.exports = class CommandCovid extends Command {
           **Recovered:** ${json.Global.NewRecovered}
           `)
           .setFooter('Credit: covid19api.com')
-        message.channel.send({ embed: embed })
+        message.channel.send({ embeds: [embed] })
       })
       .catch(err => {
         message.say('error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')

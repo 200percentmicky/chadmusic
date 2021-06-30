@@ -33,7 +33,7 @@ module.exports = class CommandBoobs extends Command {
         .setImage(tiddyPic[0].image)
         .setTimestamp()
         .setFooter(`r/${tiddyPic[0].subreddit}`)
-      message.channel.send({ embed: embed })
+      message.channel.send({ embeds: [embed] })
     } catch (err) {
       message.say('error', err.message, 'Reddit API Error')
       return message.channel.stopTyping(true)

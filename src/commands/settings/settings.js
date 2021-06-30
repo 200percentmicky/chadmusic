@@ -110,7 +110,7 @@ module.exports = class CommandSettings extends Command {
           ? 'Yes'
           : 'No'
         : 'Not configured'}
-      **Star embed:** ${starboard
+      **Star embeds:** ${starboard
         ? starboard.options.starEmbed === true
           ? 'Yes'
           : 'No'
@@ -124,6 +124,6 @@ module.exports = class CommandSettings extends Command {
       */
       .setTimestamp()
 
-    return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
   }
 }

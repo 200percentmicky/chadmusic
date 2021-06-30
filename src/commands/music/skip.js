@@ -66,7 +66,7 @@ module.exports = class CommandSkip extends Command {
             `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
             message.author.avatarURL({ dynamic: true })
           )
-        return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
       }
     } else {
       this.votes = []

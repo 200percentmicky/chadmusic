@@ -73,7 +73,7 @@ class GuildStructure extends Guild {
 
       if (!modlogChannel) return // The modlog channel doesn't exist.
 
-      return modlogChannel.send({ embed: embed }).then(msg => {
+      return modlogChannel.send({ embeds: [embed] }).then(msg => {
         // Adds a case into the modlog DB.
         // Then it'll be possible to retrieve the case's message ID to edit the modlog case.
         const caseObj = {
@@ -97,7 +97,7 @@ class GuildStructure extends Guild {
           .setTitle(`${emoji.error} Internal Error`)
           .setDescription(`\`\`\`js\n${err}\`\`\``)
           .setTimestamp()
-        errorChannel.send({ embed: embed })
+        errorChannel.send({ embeds: [embed] })
       })
     })
   }

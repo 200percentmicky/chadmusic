@@ -5,7 +5,7 @@ const { stripIndents } = require('common-tags')
 // Mainly for version info...
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package.json')
-const distubeversion = require('../../../node_modules/distube/package.json')
+const distubeversion = require('../../../../chadtube/package.json') // Temporary
 
 module.exports = class CommandAbout extends Command {
   constructor () {
@@ -44,6 +44,6 @@ module.exports = class CommandAbout extends Command {
       `, true)
       .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
       .setFooter(`Created by ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
-    return message.channel.send({ embed: aboutembed })
+    return message.channel.send({ embeds: [aboutembed] })
   }
 }

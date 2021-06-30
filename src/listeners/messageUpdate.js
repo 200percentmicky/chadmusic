@@ -51,6 +51,6 @@ module.exports = class ListenerMessageUpdate extends Listener {
     `)
 
     if (newMessage.channel.id === logChannel) return // Probably a band-aid fix. Inspect further...
-    logChannel.send({ embed: edited })
+    logChannel.send({ embeds: [edited] })
   }
 }

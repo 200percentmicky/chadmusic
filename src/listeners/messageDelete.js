@@ -43,6 +43,6 @@ module.exports = class ListenerMessageDelete extends Listener {
       if (audit) deleted.addField('Moderator', `${x.executor.toString()}`, true)
     })
     if (message.channel.id === logChannel) return // Again, a band-aid fix. Same as messageUpdate.js.
-    logChannel.send({ embed: deleted })
+    logChannel.send({ embeds: [deleted] })
   }
 }

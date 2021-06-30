@@ -53,7 +53,7 @@ module.exports = class CommandSetLog extends Command {
         \`messageUpdate\` When a message was edited in chat.
         \`voiceStateUpdate\` Tracks members joining, moving, and leaving voice channels.
         `)
-      return message.channel.send({ embed: embed })
+      return message.channel.send({ embeds: [embed] })
     }
 
     const logType = { // Again, pure lazy programming.

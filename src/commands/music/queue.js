@@ -116,7 +116,7 @@ module.exports = class CommandQueue extends Command {
     const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
     /* Finally send the embed of the queue. */
-    const msg = await message.reply({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+    const msg = await message.reply({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
 
     /* Button Collector */
     const filter = interaction => interaction.user.id === message.author.id
@@ -152,7 +152,7 @@ module.exports = class CommandQueue extends Command {
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -188,7 +188,7 @@ module.exports = class CommandQueue extends Command {
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -225,7 +225,7 @@ module.exports = class CommandQueue extends Command {
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -264,7 +264,7 @@ module.exports = class CommandQueue extends Command {
         /* Making the embed. */
         queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-        await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+        await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
           time: 30000,
           idle: 30000
@@ -310,7 +310,7 @@ module.exports = class CommandQueue extends Command {
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-              await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+              await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
               pageMsg.delete()
             } else if (pageNumber <= queuePaginate.total) {
@@ -342,7 +342,7 @@ module.exports = class CommandQueue extends Command {
               /* Making the embed. */
               queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-              await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+              await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
               pageMsg.delete()
             }
@@ -377,7 +377,7 @@ module.exports = class CommandQueue extends Command {
             /* Making the embed. */
             queueEmbed.setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**\n\n${queue ? `${queueMap}` : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs! 😉`}`)
             queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
-            await interaction.message.edit({ embed: queueEmbed, components: components, allowedMentions: { repliedUser: false } })
+            await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
             msg2.delete()
             pageMsg.delete()
             collector.resetTimer({

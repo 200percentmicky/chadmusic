@@ -58,6 +58,6 @@ module.exports = class CommandNowPlaying extends Command {
       .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
 
-    return message.channel.send({ embed: embed })
+    return message.channel.send({ embeds: [embed] })
   }
 }

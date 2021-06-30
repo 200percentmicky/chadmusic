@@ -75,7 +75,7 @@ module.exports = class CommandEval extends Command {
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
         .setTimestamp()
-      errorChannel.send({ embed: embed })
+      errorChannel.send({ embeds: [embed] })
     }
   }
 }
