@@ -31,20 +31,33 @@ module.exports = class CommandNowPlaying extends Command {
     else if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     const queue = this.client.player.getQueue(message)
+
     const song = queue.songs[0]
     const total = song.duration + '000'
     const current = queue.currentTime
+
+    const progressBar = splitBar(total, current, 17)[0]
+    const duration = song.isLive ? '📡 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
     const embed = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`${queue.formattedCurrentTime} [${splitBar(total, current, 17)[0]}] ${song.formattedDuration}`)
+      .setDescription(`${duration}`)
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
+
+    if (song.youtube) {
+      if (queue.songs[0].info.videoDetails.age_restricted) embed.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
+      const author = queue.songs[0].info.videoDetails.author
+      embed.addField('Channel', `[${author.name}](${author.channel_url})`)
+    }
+
+    embed
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
+
     return message.channel.send({ embed: embed })
   }
 }

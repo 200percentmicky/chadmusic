@@ -1,14 +1,18 @@
+const { oneLine, stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
-const { oneLine } = require('common-tags')
 
-module.exports = class CommandBassBoost extends Command {
+module.exports = class CommandVibrato extends Command {
   constructor () {
-    super('bassboost', {
-      aliases: ['bassboost', 'bass'],
-      category: '🎶 Music',
+    super('vibrato', {
+      aliases: ['vibrato'],
+      category: '📢 Filter',
       description: {
-        text: 'Boosts the bass of the player.',
-        usage: 'bassboost <gain:int>'
+        text: 'Adds a vibrato filter to the player.',
+        usage: '<depth:int(0.1-1)/off> [frequency:int]',
+        details: stripIndents`
+        \`<depth:int(0.1-1)/off>\` The depth of the vibrato between 0.1-1, or "off" to disable it.
+        \`<frequency:int>\` The frequency of the vibrato.
+        `
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -46,24 +50,31 @@ module.exports = class CommandBassBoost extends Command {
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
     if (currentVc) {
-      if (!args[1]) return message.usage('bassboost <gain:int(1-100)/off>')
-
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
-          return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
+          await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
+          return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
         } catch (err) {
-          return message.say('error', '**Bass Boost** is not applied to the player.')
+          return message.say('error', '**Vibrato** is not applied to the player.')
         }
       } else {
-        const gain = parseInt(args[1])
-
-        if (gain < 1 || gain > 100 || isNaN(gain)) {
-          return message.say('error', 'Bass gain must be between **1** to **100**, or **"off"**.')
+        if (!args[1]) {
+          return message.usage('vibrato <depth:int(0.1-1)/off> [frequency:int]')
         }
-
-        await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`)
-        return message.custom('📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``)
+        const d = args[1]
+        let f = parseInt(args[2])
+        if (d < 0.1 || d > 1 || isNaN(d)) {
+          return message.say('error', 'Depth must be between **0.1** to **1**, or **off**.')
+        }
+        if (!args[2]) f = 5
+        if (isNaN(f)) {
+          return message.say('error', 'Frequency requires a number.')
+        }
+        if (f < 1) {
+          return message.say('error', 'Frequency must be greater than 0.')
+        }
+        await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`)
+        return message.custom('📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
