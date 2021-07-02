@@ -118,7 +118,8 @@ class WaveBot extends AkairoClient {
         highWaterMark: 1 << 25
       },
       youtubeDL: true,
-      updateYouTubeDL: true
+      updateYouTubeDL: true,
+      nsfw: true // Being handled on a per guild basis, not client-wide.
     })
     this.vc = this.player.voices
 
