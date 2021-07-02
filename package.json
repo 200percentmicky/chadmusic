@@ -4,12 +4,13 @@
   "description": "New JS bot. Let's see how this goes.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd node_modules/distube && npm install && tsc"
   },
   "author": "mickykun-ar",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
+    "@discordjs/voice": "^0.5.1",
     "array-paginator": "^1.1.1",
     "axios": "^0.21.1",
     "booru": "^2.4.0",
@@ -27,6 +28,7 @@
     "discord-prefix": "^1.1.0",
     "discord-starboards": "^2.2.3",
     "discord.js": "^13.0.0-dev.64f093f.1625054868",
+    "distube": "github:mickykun-ar/chadtube#v3",
     "dotenv": "^8.6.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",
     "gm": "^1.23.1",
@@ -49,11 +51,13 @@
     "youtube-sr": "^2.0.5"
   },
   "devDependencies": {
+    "@types/node": "^15.14.0",
     "eslint": "^7.26.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "typescript": "^4.3.5"
   }
 }

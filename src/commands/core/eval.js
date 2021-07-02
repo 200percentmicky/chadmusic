@@ -64,10 +64,18 @@ module.exports = class CommandEval extends Command {
         }
         return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled))
       } else {
-        message.channel.send({ content: `// ✅ Evaluated in ${end} ms.\n${clean(evaled)}`, code: 'js', split: true })
+        const result = clean(evaled)
+        if (result.length > 2000) {
+          const compactResult = result.match(/.{1,1960}/g)
+          for (const chunk of compactResult) {
+            await message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${chunk}\`\`\``)
+          }
+        } else {
+          return message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``)
+        }
       }
     } catch (err) {
-      message.channel.send({ content: `// ❌ Error during eval\n${err.name}: ${err.message}`, code: 'js', split: true })
+      message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``)
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       const embed = new Discord.MessageEmbed()
         .setColor(process.env.COLOR_WARN)

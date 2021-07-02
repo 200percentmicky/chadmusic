@@ -8,12 +8,10 @@ module.exports = class ListenerPlayerError extends Listener {
     })
   }
 
-  async exec (message, error) {
-    const args = message.content.split(/ +/g)
+  async exec (channel, error) {
+    const message = channel.messages.cache.find(msg => msg)
     const errsplit = error.message.split(/ +/g)
 
-    // TODO: These should be compressed into an object later.
-    if (errsplit.includes('result!')) return message.say('error', `No results found for \`${args.slice(1).join(' ')}\`.`, 'Player Error')
     if (errsplit.includes('extract') || errsplit.includes('Unsupported')) return message.say('error', 'Not a supported URL or the URL is invalid.', 'Player Error')
     if (errsplit.includes('403')) return message.say('error', 'URL returned HTTP 403 (Forbidden)')
     if (errsplit.includes('416')) return message.say('error', 'Received `Status code: 416 [Range Not Satisfiable]`. This is a weird response. Please try again.', 'Player Error')

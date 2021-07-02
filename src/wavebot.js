@@ -55,7 +55,7 @@ logger.info('Loading libraries...')
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
-const DisTube = require('../../chadtube')
+const DisTube = require('distube')
 const moment = require('moment')
 // const Moderator = require('discord-moderator')
 
@@ -114,10 +114,13 @@ class WaveBot extends AkairoClient {
       leaveOnEmpty: true,
       leaveOnFinish: true,
       youtubeCookie: process.env.YOUTUBE_COOKIE,
-      highWaterMark: 1 << 25,
+      ytdlOptions: {
+        highWaterMark: 1 << 25
+      },
       youtubeDL: true,
-      updateYouTubeDL: false
+      updateYouTubeDL: true
     })
+    this.vc = this.player.voices
 
     /* Management for mutes and warns. */
     /*
