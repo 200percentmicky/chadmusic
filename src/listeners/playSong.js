@@ -1,5 +1,5 @@
 const { Listener } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Permissions } = require('discord.js')
 const prettyms = require('pretty-ms')
 
 module.exports = class ListenerPlaySong extends Listener {
@@ -23,7 +23,7 @@ module.exports = class ListenerPlaySong extends Listener {
       const maxTime = await this.client.settings.get(guild.id, 'maxTime')
 
       // Check if this member is a DJ
-      const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS'])
+      const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS)
       if (!allowAgeRestricted) {
         this.client.player.stop(message)
         return message.say('no', 'You cannot add **Age Restricted** videos to the queue.')
