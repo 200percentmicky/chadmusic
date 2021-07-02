@@ -45,18 +45,18 @@ module.exports = class CommandPlay extends Command {
     // eslint-disable-next-line no-useless-escape
     if (pornPattern(text)) return message.say('no', 'The URL you\'re requesting to play is not allowed.')
 
-    const currentVc = this.client.voice.connections.get(message.guild.id)
+    const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+      const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT)
       if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)
 
       if (vc.type === 'stage') {
-        await vc.join() // Must be awaited only if the VC is a Stage Channel.
+        await this.client.vc.join(vc) // Must be awaited only if the VC is a Stage Channel.
         const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
         if (!stageMod) {
-          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK'])
+          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK)
           if (!requestToSpeak) {
-            vc.leave()
+            this.client.vc.leave(message)
             return message.say('no', `Missing **Request to Speak** permission for <#${vc.id}>.`)
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true)
@@ -66,10 +66,10 @@ module.exports = class CommandPlay extends Command {
           await message.guild.me.voice.setSuppressed(false)
         }
       } else {
-        vc.join()
+        this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc._channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     message.channel.startTyping(5)
@@ -118,7 +118,7 @@ module.exports = class CommandPlay extends Command {
 
       // eslint-disable-next-line no-useless-escape
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
-      const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
+      const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)
       message.react(emojiPerms ? process.env.REACTION_OK : '✅')
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
