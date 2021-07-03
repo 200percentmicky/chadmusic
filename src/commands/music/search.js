@@ -30,7 +30,7 @@ module.exports = class CommandSearch extends Command {
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
     message.channel.startTyping()
-    const currentVc = this.client.voice.connections.get(message.guild.id)
+    const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
       if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)

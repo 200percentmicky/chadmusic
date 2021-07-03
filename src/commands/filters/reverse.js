@@ -47,7 +47,7 @@ module.exports = class CommandReverse extends Command {
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return message.say('warn', 'Nothing is currently playing on this server.')
 
-    const currentVc = this.client.voice.connections.get(message.guild.id)
+    const currentVc = this.client.vc.get(vc)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {

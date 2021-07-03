@@ -28,7 +28,7 @@ module.exports = class CommandSummon extends Command {
     const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
     if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)
 
-    const currentVc = this.client.voice.connections.get(message.guild.id)
+    const currentVc = this.client.vc.get(vc)
     if (currentVc) {
       if (vc.id !== currentVc.id) return message.say('error', 'I\'m currently binded to a different voice channel.')
       else return message.say('info', 'I\'m already in a voice channel. Let\'s get this party started!')

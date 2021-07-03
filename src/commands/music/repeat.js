@@ -28,11 +28,11 @@ module.exports = class CommandRepeat extends Command {
     const vc = message.member.voice.channel
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
-    const currentVc = this.client.voice.connections.get(message.guild.id)
+    const currentVc = this.client.vc.get(vc)
 
-    if (!this.client.player.isPlaying(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
+    if (!this.client.player.getQueue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
 
-    if (currentVc.channel.members.size <= 2 || dj) {
+    if (vc.members.size <= 2 || dj) {
       switch (args[1]) {
         case 'off': {
           await player.setRepeatMode(message, 0)

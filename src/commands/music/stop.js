@@ -30,7 +30,7 @@ module.exports = class CommandStop extends Command {
     if (!this.client.player.getQueue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
     else if (vc.id !== currentVc._channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
-    if (currentVc.channel.members.size <= 2 || dj) {
+    if (vc.members.size <= 2 || dj) {
       this.client.player.stop(message)
       this.client.vc.leave(message)
       return message.custom('⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.')
