@@ -78,7 +78,7 @@ module.exports = class CommandPlay extends Command {
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
       if (queue) {
-        const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id)
+        const maxQueueLimit = await this.client.settings.get(message.guild.id, 'maxQueueLimit', null)
         if (maxQueueLimit) {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
           if (queueMemberSize >= maxQueueLimit) {
