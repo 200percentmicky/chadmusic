@@ -3,15 +3,29 @@
 // provide a commands usage if no arguments are provided to some commands, as well as
 // catching any errors that the bot may come across.
 
-const { MessageEmbed, Message } = require('discord.js')
-const icons = require('../urlicon.json')
+const { MessageButton, MessageEmbed, Message } = require('discord.js')
 
 module.exports = class MessageStructure extends Message {
+  /**
+   * Allows you to upload a file with an embed attached.
+   *
+   * @param {string[]} files The file(s) to upload as an Ar ray 
+   */
   uploadFile (files) {
     if (!files) throw new Error('No file was provided.')
-    this.channel.send({ files: [files] })
+    this.channel.send({ files: files })
   }
 
+  /**
+   * Allows you to create a window alert style UI utilizing Embeds, or a standard text message if the bot doesn't have the **Embed Links** permission.
+   *
+   * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
+   * @param {string} description The overall message.
+   * @param {string} title [Optional] The title of the embed or message.
+   * @param {string} footer [Optional] The footer of the embed.
+   * @param {MessageButton[]} buttons [Optional] The buttons to apply to the message when utilizing `Discord.MessageButton`
+   * @returns {(MessageEmbed|Message)} The message to reply to the user.
+   */
   say (type, description, title, footer, buttons) {
     /* The color of the embed */
     const embedColor = {
@@ -33,27 +47,14 @@ module.exports = class MessageStructure extends Message {
       no: emojiPerms ? process.env.EMOJI_NO : '🚫'
     }
 
-    const urlicons = {
-      ok: icons.ok,
-      warn: icons.warn,
-      error: icons.error,
-      info: icons.info,
-      no: icons.no
-    }
-
     const embed = new MessageEmbed()
       .setColor(embedColor[type])
 
     if (title) { /* The title of the embed, if one is provided. */
-      embed.setAuthor(`${title}`, urlicons[type])
+      embed.setTitle(`${embedEmoji[type]} ${title}`)
       embed.setDescription(`${description}`)
     } else {
-      if (type === 'error') {
-        embed.setAuthor('Command Error', urlicons.error)
-        embed.setDescription(`${description}`)
-      } else {
-        embed.setDescription(`${embedEmoji[type]} ${description}`)
-      }
+      embed.setDescription(`${embedEmoji[type]} ${description}`)
     }
 
     if (footer) embed.setFooter(`${footer}`)
@@ -67,23 +68,38 @@ module.exports = class MessageStructure extends Message {
         return this.reply(title
           ? `${embedEmoji[type]} **${title}** | ${description}`
           : `${embedEmoji[type]} ${description}`
-        , { allowedMentions: { repliedUser: false } })
+        , { components: buttons || [], allowedMentions: { repliedUser: false } })
       } else return this.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
     }
   }
 
-  /* Command Usage Embed */
-  // Used if no argument was provided to some commands.
+  /**
+   * A UI element that returns the overall usage of the command if no arguments were provided.
+   *
+   * Example: `play <url|search>`
+   *
+   * @param {string} syntax The usage of the command
+   * @returns {MessageEmbed} The embed containg the usage of the command.
+   */
   usage (syntax) {
     const guildPrefix = this.client.settings.get(this.id, 'prefix', process.env.PREFIX)
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_INFO)
       .setTitle(`${process.env.EMOJI_INFO} Usage`)
       .setDescription(`\`${guildPrefix}${syntax}\``)
-    this.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+    return this.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
   }
 
-  /* Custom Embed */
+  /**
+   * A custom varient of `<Message>.say()` that allows you to input a custom emoji. If the bot has the **Embed Links** permission, a custom color can be provided to the embed.
+   * @param {string} emoji The emoji of the message.
+   * @param {number} color [Optional] The color of the embed, if the bot has the **Embed Links** permission.
+   * @param {string} description The overall message.
+   * @param {string} title [Optional] The title of the message.
+   * @param {string} footer [Optional] The footer of the message.
+   * @param {MessageButton[]} buttons [Optional] The buttons to apply to the message when utilizing `Discord.MessageButton`
+   * @returns {(MessageEmbed|Message)} The message to reply to the user.
+   */
   custom (emoji, color, description, title, footer, buttons) {
     const embed = new MessageEmbed()
       .setColor(color)
@@ -112,10 +128,21 @@ module.exports = class MessageStructure extends Message {
   // TODO: Replace this. This is only useful for my case.
   // Error Handling. Used to send to the support server.
   // This will not be useful if self-hosting this bot.
+
+  /**
+   * A function that sends an error report to the given bug reports channel, if one was provided in the `.env` file.
+   *
+   * @param {*} type The type of bug report. Supported are `error` for errors, and `warn` for warnings.
+   * @param {*} command [Optional] The command of the bug report.
+   * @param {*} title The title of the bug report.
+   * @param {*} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
+   * @returns {MessageEmbed} The overall bug report.
+   */
   async recordError (type, command, title, error) {
     // Consider replacing the channel ID for your own error reporting
     // channel until the feature is supported in the configs.
     const errorChannel = this.client.channels.cache.get(process.env.BUG_CHANNEL)
+    if (!errorChannel) return
     const embed = new MessageEmbed()
       .setTimestamp()
       .addField('Server', `${this.channel.type === 'dm'

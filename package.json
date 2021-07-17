@@ -28,7 +28,7 @@
     "discord-prefix": "^1.1.0",
     "discord-starboards": "^2.2.3",
     "discord.js": "^13.0.0-dev.64f093f.1625054868",
-    "distube": "github:mickykun-ar/chadtube#v3",
+    "distube": "^3.0.0-alpha.15",
     "dotenv": "^8.6.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",
     "gm": "^1.23.1",
