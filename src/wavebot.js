@@ -1,12 +1,20 @@
-/// Project Wave
-
-/* Main File */
+/// ChadMusic Plus!
+/// A powerful music bot for your badass Discord server.
 
 'use strict'
 
-/* Winston Logging */
+const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
+const prefix = require('discord-prefix')
+const { Structures, Intents } = require('discord.js')
+const DisTube = require('distube')
+const moment = require('moment')
 const chalk = require('chalk')
 const { createLogger, format, transports } = require('winston')
+const utils = require('bot-utils')
+const mongoose = require('mongoose')
+const si = require('systeminformation')
+
+// Winston Logger
 const logger = createLogger({
   format: format.combine(
     format.splat(),
@@ -23,7 +31,8 @@ const logger = createLogger({
   ]
 })
 
-/* Stops logging to console if in production */
+// Log everything to the console as long as the application is not
+// in "production" as stated in the .env file.
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.Console({
     format: format.combine(
@@ -42,26 +51,14 @@ logger.info('//////////////////////////////////')
 logger.info('    * * * Project Wave * * *')
 logger.info('//////////////////////////////////')
 logger.info('Bot Version: %s', version)
-// Looks like shit lol.
 
-/* Version check */
-// Discord.js require Node > 14
+// Some dependencies such as Discord.js itself now require Node.JS version 14 or above.
 if (process.versions.node < '14.0.0') {
   logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
   process.exit(1)
 }
 
-logger.info('Loading libraries...')
-const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
-const prefix = require('discord-prefix')
-const { Structures, Intents } = require('discord.js')
-const DisTube = require('distube')
-const moment = require('moment')
-// const Moderator = require('discord-moderator')
-
 /* Connecting to databases... */
-const { Database } = require('quickmongo')
-const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI_MAIN, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -69,23 +66,14 @@ mongoose.connect(process.env.MONGO_URI_MAIN, {
 mongoose.connection.on('error', error => logger.error('[Mongoose] Connection Error: %s', error))
   .on('ready', () => logger.info('[Mongoose] Connection established!'))
 
-// const config = require('./config.json')
-const emoji = require('./emoji.json')
-const color = require('./colorcode.json')
-const urlicon = require('./urlicon.json')
-
-/* Message Structure */
-// a.k.a. The pretty embeds lol
+// Extending the 'Message' class for the bot's UI.
 Structures.extend('Message', () => {
   const MessageStructure = require('./modules/MessageStructure.js')
   return MessageStructure
 })
-Structures.extend('Guild', () => {
-  const GuildStructure = require('./modules/GuildStructure.js')
-  return GuildStructure
-})
 
 /* Main Client */
+// The main overall client of the bot extending off of the 'AkairoClient' class.
 class WaveBot extends AkairoClient {
   constructor () {
     super({
@@ -96,18 +84,16 @@ class WaveBot extends AkairoClient {
       intents: new Intents(Intents.ALL)
     })
 
-    /* Configuration files. */
-    // this.config = config
-    this.emoji = emoji
-    this.color = color
-    this.urlicon = urlicon
-
     /* Packages */
-    this.utils = require('bot-utils')
+    // Calling packages that can be used throughout the client.
+    this.utils = utils
     this.moment = moment
     this.prefix = prefix
     this.logger = logger
-    this.si = require('systeminformation')
+    this.si = si
+
+    /* DisTube Player */
+    // The meat and potatoes of the bot. Runs off of a fork that may remove some core features.
     this.player = new DisTube.DisTube(this, {
       emitNewSongOnly: true,
       leaveOnStop: true,
@@ -121,21 +107,10 @@ class WaveBot extends AkairoClient {
       updateYouTubeDL: true,
       nsfw: true // Being handled on a per guild basis, not client-wide.
     })
-    this.vc = this.player.voices
-
-    /* Management for mutes and warns. */
-    /*
-    this.moderator = new Moderator(this, {
-      mutesTableName: 'mutes',
-      checkMutesCountdown: 20000,
-      warnsTableName: 'warns'
-    })
-    */
+    this.vc = this.player.voices // @discordjs/voice
 
     /* Data Management */
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
-    this.modlog = new Database(process.env.MONGO_URI_MODLOG)
-    this.blocklist = new Database(process.env.MONGO_URI_BLOCKLIST)
 
     /* Load all commands */
     this.commands = new CommandHandler(this, {
@@ -150,9 +125,13 @@ class WaveBot extends AkairoClient {
       handleEdits: true,
       allowMention: true
     })
+
+    /* Load all Listeners */
     this.listeners = new ListenerHandler(this, {
       directory: './src/listeners'
     })
+
+    /* Load all Inhibitors */
     this.inhibitors = new InhibitorHandler(this, {
       directory: './src/inhibitors'
     })
@@ -161,7 +140,6 @@ class WaveBot extends AkairoClient {
       process: process,
       commandHandler: this.commands,
       player: this.player
-      // modlog: this.modlog
     })
 
     this.commands.useInhibitorHandler(this.inhibitors)
