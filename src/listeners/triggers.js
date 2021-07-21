@@ -1,5 +1,4 @@
 const { Listener } = require('discord-akairo')
-const { bruh } = require('./bruh.json')
 
 // This is just a test to see if listeners can only have one file per event.
 // If this works, I would like to have multiple files listening to the 'message' event.
@@ -15,7 +14,7 @@ module.exports = class ListenerTriggers extends Listener {
     if (message.author.bot) return // Glitched to hell lmao
 
     const phrases = {
-      ayy: 'lmao',
+      ayy: 'lmao'
     }
 
     if (phrases[message.content.toLowerCase()]) {

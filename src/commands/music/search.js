@@ -36,7 +36,7 @@ module.exports = class CommandSearch extends Command {
       if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)
 
       if (vc.type === 'stage') {
-        await vc.join() // Must be awaited only if the VC is a Stage Channel.
+        await this.client.vc.join(message.member.voice.channel) // Must be awaited only if the VC is a Stage Channel.
         const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
         if (!stageMod) {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK'])
@@ -51,7 +51,7 @@ module.exports = class CommandSearch extends Command {
           await message.guild.me.voice.setSuppressed(false)
         }
       } else {
-        vc.join()
+        this.client.vc.join(message.member.voice.channel)
       }
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
@@ -85,13 +85,27 @@ module.exports = class CommandSearch extends Command {
         .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
-      message.channel.send({ embed: embed }).then(msg => {
-        const filter = m => m.author.id === message.author.id && (!isNaN(m.content) || m.content === 'CANCEL'.toLowerCase())
-        message.channel.awaitMessages(filter, {
-          max: 1,
-          time: 30000,
-          errors: ['time']
-        }).then(async collected => {
+      message.channel.send({ embeds: [embed] }).then(async msg => {
+        const filter = m => m.author.id === message.author.id
+        const collector = await message.channel.createMessageCollector(filter, { time: 30000 })
+
+        collector.on('collect', m => {
+          if (isNaN(m.content)) {
+            if (m.content === 'cancel') {
+              collector.stop()
+            } else {
+              message.say('error', 'Selection must be a number. Please try again.')
+              collector.resetTimer({
+                time: 30000,
+                idle: 30000
+              })
+            }
+          } else {
+            collector.stop()
+          }
+        })
+
+        collector.on('end', async collected => {
           msg.delete()
           collected.first().delete()
           if (collected.first().content === 'CANCEL'.toLowerCase()) return
@@ -107,8 +121,6 @@ module.exports = class CommandSearch extends Command {
           await this.client.player.play(message, selected)
           message.react(process.env.REACTION_OK)
           return message.channel.stopTyping(true)
-        }).catch(() => {
-          return msg.delete()
         })
       })
     })
