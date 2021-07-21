@@ -16,8 +16,6 @@ module.exports = class ListenerTriggers extends Listener {
 
     const phrases = {
       ayy: 'lmao',
-      bruh: bruh[Math.floor(Math.random() * bruh.length)],
-      senpai: `${message.author.toString()}-senpai! <3`
     }
 
     if (phrases[message.content.toLowerCase()]) {
