@@ -36,7 +36,7 @@ module.exports = class CommandDisconnect extends Command {
         return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
       }
 
-      if (this.client.player.isPlaying(message)) {
+      if (this.client.player.queue(message)) {
         this.client.player.stop(message)
       }
       vc.leave()
