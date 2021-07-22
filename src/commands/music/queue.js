@@ -65,7 +65,7 @@ module.exports = class CommandQueue extends Command {
     const firstPage = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('First Page')
-      .setEmoji('⏮')
+      .setEmoji(process.env.FIRST_PAGE)
       .setCustomID('first_page')
       .setDisabled(true) // Since the embed opens on the first page.
 
@@ -73,7 +73,7 @@ module.exports = class CommandQueue extends Command {
     const previousPage = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Previous')
-      .setEmoji('⏪')
+      .setEmoji(process.env.PREVIOUS_PAGE)
       .setCustomID('previous_page')
       .setDisabled(true) // Since the embed opens on the first page.
 
@@ -81,28 +81,28 @@ module.exports = class CommandQueue extends Command {
     const nextPage = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Next')
-      .setEmoji('⏩')
+      .setEmoji(process.env.NEXT_PAGE)
       .setCustomID('next_page')
 
     // Last Page
     const lastPage = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Last Page')
-      .setEmoji('⏭')
+      .setEmoji(process.env.LAST_PAGE)
       .setCustomID('last_page')
 
     // Jump to Page
     const pageJump = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Jump to Page')
-      .setEmoji('↗')
+      .setEmoji(process.env.JUMP_PAGE)
       .setCustomID('page_jump')
 
     // Cancel
     const cancelButton = new MessageButton()
       .setStyle('DANGER')
       .setLabel('Close')
-      .setEmoji(process.env.EMOJI_ERROR)
+      .setEmoji(process.env.CLOSE)
       .setCustomID('cancel_button')
 
     /* Row of buttons! */
