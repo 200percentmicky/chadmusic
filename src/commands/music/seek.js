@@ -29,7 +29,7 @@ module.exports = class CommandSeek extends Command {
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
 
-    if (!this.client.player.queue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
+    if (!this.client.player.getQueue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
 
     if (currentVc.channel.members.size <= 2 || dj) {
       if (!args[1]) return message.usage('seek <time>')

@@ -28,7 +28,7 @@ module.exports = class CommandRemove extends Command {
     if (!vc) return message.say('error', 'You are not in a voice channel.')
 
     const currentVc = this.client.voice.connections.get(message.guild.id)
-    if (!this.client.player.queue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
+    if (!this.client.player.getQueue(message) || !currentVc) return message.say('warn', 'Nothing is currently playing in this server.')
     else if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     if (!args[1]) return message.usage('remove <int:queue_entry/starting> [int:end]')
