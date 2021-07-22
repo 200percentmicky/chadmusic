@@ -85,7 +85,7 @@ module.exports = class CommandSearch extends Command {
         .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
-      message.channel.send({ embeds: [embed] }).then(async msg => {
+      message.channel.send({ embed: embed }).then(async msg => {
         const filter = m => m.author.id === message.author.id
         const collector = await message.channel.createMessageCollector(filter, { time: 30000 })
 
