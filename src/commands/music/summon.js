@@ -34,7 +34,7 @@ module.exports = class CommandSummon extends Command {
       else return message.say('info', 'I\'m already in a voice channel. Let\'s get this party started!')
     } else {
       if (vc.type === 'stage') {
-        await vc.join() // Must be awaited only if the VC is a Stage Channel.
+        await this.client.vc.join(vc) // Must be awaited only if the VC is a Stage Channel.
         message.custom('📥', 0x77B255, `Joined \`${vc.name}\``)
         const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
         if (!stageMod) {
@@ -50,7 +50,7 @@ module.exports = class CommandSummon extends Command {
           await message.guild.me.voice.setSuppressed(false)
         }
       } else {
-        vc.join()
+        this.client.vc.join(vc)
       }
       return message.custom('📥', 0x77B255, `Joined <#${vc.id}>`)
     }

@@ -6,7 +6,7 @@
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
 const { Structures, Intents } = require('discord.js')
-const DisTube = require('distube')
+const DisTube = require('../../chadtube/dist').default
 const moment = require('moment')
 const chalk = require('chalk')
 const { createLogger, format, transports } = require('winston')
@@ -94,7 +94,7 @@ class WaveBot extends AkairoClient {
 
     /* DisTube Player */
     // The meat and potatoes of the bot. Runs off of a fork that may remove some core features.
-    this.player = new DisTube.DisTube(this, {
+    this.player = new DisTube(this, {
       emitNewSongOnly: true,
       leaveOnStop: true,
       leaveOnEmpty: true,

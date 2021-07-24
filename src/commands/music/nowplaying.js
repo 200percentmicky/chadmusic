@@ -46,6 +46,11 @@ module.exports = class CommandNowPlaying extends Command {
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
 
+    if (queue.paused) {
+      const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX)
+      embed.addField('⏸ Paused', `Type '${prefix}resume' to resume playback.`)
+    }
+
     if (song.youtube) {
       if (queue.songs[0].info.videoDetails.age_restricted) embed.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
       const author = queue.songs[0].info.videoDetails.author
@@ -55,7 +60,7 @@ module.exports = class CommandNowPlaying extends Command {
     embed
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
-      .addField('📢 Filters', `${queue.filter != null ? queue.filter.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
+      .addField('📢 Filters', `${queue.filters != null ? queue.filters.map(x => `**${x.name}:** ${x.value}`) : 'None'}`)
       .setTimestamp()
 
     return message.channel.send({ embeds: [embed] })

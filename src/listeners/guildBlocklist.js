@@ -9,6 +9,7 @@ module.exports = class ListenerGuildBlocklist extends Listener {
   }
 
   async exec (message) {
+    return
     const guildBlocklist = await this.client.blocklist.get('guild')
     if (guildBlocklist == null) this.client.blocklist.set('guild', [])
     if (guildBlocklist.includes(message.guild.id)) {

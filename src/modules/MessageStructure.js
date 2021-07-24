@@ -3,13 +3,15 @@
 // provide a commands usage if no arguments are provided to some commands, as well as
 // catching any errors that the bot may come across.
 
-const { MessageButton, MessageEmbed, Message } = require('discord.js')
+// eslint-disable-next-line no-unused-vars
+const { MessageActionRow, MessageEmbed, Message } = require('discord.js')
 
 module.exports = class MessageStructure extends Message {
   /**
    * Allows you to upload a file with an embed attached.
    *
-   * @param {string[]} files The file(s) to upload as an Ar ray 
+   * @param {string[]} files The file(s) to upload as an Array
+   * @returns - An embed with the attachment provided.
    */
   uploadFile (files) {
     if (!files) throw new Error('No file was provided.')
@@ -17,13 +19,13 @@ module.exports = class MessageStructure extends Message {
   }
 
   /**
-   * Allows you to create a window alert style UI utilizing Embeds, or a standard text message if the bot doesn't have the **Embed Links** permission.
+   * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
    *
    * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
    * @param {string} description The overall message.
    * @param {string} title [Optional] The title of the embed or message.
    * @param {string} footer [Optional] The footer of the embed.
-   * @param {MessageButton[]} buttons [Optional] The buttons to apply to the message when utilizing `Discord.MessageButton`
+   * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
    * @returns {(MessageEmbed|Message)} The message to reply to the user.
    */
   say (type, description, title, footer, buttons) {
@@ -76,7 +78,7 @@ module.exports = class MessageStructure extends Message {
   /**
    * A UI element that returns the overall usage of the command if no arguments were provided.
    *
-   * Example: `play <url|search>`
+   * @example message.usage('play <url|search>');
    *
    * @param {string} syntax The usage of the command
    * @returns {MessageEmbed} The embed containg the usage of the command.
@@ -97,7 +99,7 @@ module.exports = class MessageStructure extends Message {
    * @param {string} description The overall message.
    * @param {string} title [Optional] The title of the message.
    * @param {string} footer [Optional] The footer of the message.
-   * @param {MessageButton[]} buttons [Optional] The buttons to apply to the message when utilizing `Discord.MessageButton`
+   * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
    * @returns {(MessageEmbed|Message)} The message to reply to the user.
    */
   custom (emoji, color, description, title, footer, buttons) {
@@ -132,10 +134,10 @@ module.exports = class MessageStructure extends Message {
   /**
    * A function that sends an error report to the given bug reports channel, if one was provided in the `.env` file.
    *
-   * @param {*} type The type of bug report. Supported are `error` for errors, and `warn` for warnings.
-   * @param {*} command [Optional] The command of the bug report.
-   * @param {*} title The title of the bug report.
-   * @param {*} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
+   * @param {string} type The type of bug report. Supported are `error` for errors, and `warn` for warnings.
+   * @param {string} command [Optional] The command of the bug report.
+   * @param {string} title The title of the bug report.
+   * @param {string} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
    * @returns {MessageEmbed} The overall bug report.
    */
   async recordError (type, command, title, error) {

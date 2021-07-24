@@ -52,7 +52,7 @@ module.exports = class CommandVibrato extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'vibrato', 'off')
+          await this.client.player.setFilter(message.guild.id, 'vibrato', false)
           return message.custom('📢', process.env.COLOR_INFO, '**Vibrato** Off')
         } catch (err) {
           return message.say('error', '**Vibrato** is not applied to the player.')

@@ -34,7 +34,7 @@ module.exports = class CommandPlayNow extends Command {
       if (!permissions) return message.say('no', `Missing **Connect** permission for <#${vc.id}>`)
 
       if (vc.type === 'stage') {
-        await vc.join() // Must be awaited only if the VC is a Stage Channel.
+        await this.client.vc.join(vc) // Must be awaited only if the VC is a Stage Channel.
         const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
         if (!stageMod) {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK'])
@@ -49,7 +49,7 @@ module.exports = class CommandPlayNow extends Command {
           await message.guild.me.voice.setSuppressed(false)
         }
       } else {
-        vc.join()
+        this.client.vc.join(vc)
       }
     } else {
       if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')

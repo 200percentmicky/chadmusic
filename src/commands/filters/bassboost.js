@@ -50,7 +50,7 @@ module.exports = class CommandBassBoost extends Command {
 
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'bassboost', 'off')
+          await this.client.player.setFilter(message.guild.id, 'bassboost', false)
           return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
         } catch (err) {
           return message.say('error', '**Bass Boost** is not applied to the player.')

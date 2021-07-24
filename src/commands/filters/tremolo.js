@@ -52,7 +52,7 @@ module.exports = class CommandTremolo extends Command {
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'tremolo', 'off')
+          await this.client.player.setFilter(message.guild.id, 'tremolo', false)
           return message.custom('📢', process.env.COLOR_INFO, '**Tremolo** Off')
         } catch (err) {
           return message.say('error', '**Tremolo** is not applied to the player.')

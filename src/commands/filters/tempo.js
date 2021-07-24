@@ -46,7 +46,7 @@ module.exports = class CommandTempo extends Command {
 
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
-          await this.client.player.setFilter(message.guild.id, 'asetrate', 'off')
+          await this.client.player.setFilter(message.guild.id, 'asetrate', false)
           return message.custom('📢', process.env.COLOR_INFO, '**Tempo** Reverted')
         } catch (err) {
           return message.say('error', '**Tempo** is not applied to the player.')
