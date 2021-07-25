@@ -10,6 +10,6 @@ module.exports = class ListenerInitQueue extends Listener {
 
   async exec (queue) {
     queue.autoplay = false
-    queue.volume = 100
+    queue.volume = 50
   }
 }
