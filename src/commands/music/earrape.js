@@ -46,8 +46,9 @@ module.exports = class CommandEarrape extends Command {
 
     const earrape = 69420 // 😂👌👌💯
     const volume = this.client.player.getQueue(message).volume
+    const defaultVolume = this.client.settings.get(message.guild.id, 'defaultVolume', 100)
     if (volume >= 5000) {
-      this.client.player.setVolume(message, 100)
+      this.client.player.setVolume(message, defaultVolume)
       return message.say('ok', 'Volume has been set to **100%** 😌😏')
     } else {
       this.client.player.setVolume(message, earrape)

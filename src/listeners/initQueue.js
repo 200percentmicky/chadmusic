@@ -10,6 +10,6 @@ module.exports = class ListenerInitQueue extends Listener {
 
   async exec (queue) {
     queue.autoplay = false
-    queue.volume = 50
+    queue.volume = this.client.settings.get(queue.textChannel.guild.id, 'defaultVolume', 100)
   }
 }

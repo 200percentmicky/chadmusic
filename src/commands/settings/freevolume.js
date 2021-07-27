@@ -17,11 +17,12 @@ module.exports = class CommandFreeVolume extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
+    const volume = this.client.settings.get(message.guild.id, 'defaultVolume', 100)
     if (!args[1]) return message.usage('freevolume <toggle:on/off>')
     if (args[1] === 'OFF'.toLowerCase()) {
       const queue = this.client.player.getQueue(message)
       if (queue) {
-        if (queue.volume > 200) this.client.player.setVolume(message, 100)
+        if (queue.volume > 200) this.client.player.setVolume(message, volume)
       }
       await this.client.settings.set(message.guild.id, 'allowFreeVolume', false)
       return message.say('ok', 'Unlimited Volume has been **disabled**. Volume is now limited to **200%**.')
