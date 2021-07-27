@@ -21,8 +21,11 @@ module.exports = class CommandTag extends Command {
     const args = message.content.split(/ +/g)
     if (!args[0]) return message.usage('tag <name>')
 
-    const tag = this.client.tags.get(message.guild.id, args[1])
-    if (!tag) return message.say('error', `\`${args[1]}\` is not a valid tag on this server.`)
-    return message.channel.send(tag.text)
+    try {
+      const tag = this.client.tags.get(message.guild.id, args[1])
+      return message.channel.send(tag.text)
+    } catch {
+      message.say('error', `\`${args[1]}\` is not a valid tag on this server.`)
+    }
   }
 }
