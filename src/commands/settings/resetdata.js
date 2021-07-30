@@ -29,7 +29,7 @@ module.exports = class CommandResetData extends Command {
 
     const buttonRow = new MessageActionRow().addComponents(yesButton, noButton)
 
-    const msg = await message.say('warn', 'You are about to revert the bot\'s music settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow])
+    const msg = await this.client.ui.say(message, 'warn', 'You are about to revert the bot\'s music settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow])
 
     const filter = interaction => interaction.user.id === message.author.id
 
@@ -43,7 +43,7 @@ module.exports = class CommandResetData extends Command {
         msg.delete()
         await this.client.settings.clear(interaction.guild.id)
         collector.stop()
-        message.say('ok', 'The settings for this server have been cleared.')
+        this.client.ui.say(message, 'ok', 'The settings for this server have been cleared.')
       }
 
       if (interaction.customID === 'no_data') {

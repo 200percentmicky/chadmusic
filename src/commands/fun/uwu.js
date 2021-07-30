@@ -24,7 +24,7 @@ module.exports = class CommandUWU extends Command {
         text = lastMsg.last().content
         return message.channel.send(uwu(text))
       } catch (err) {
-        return message.say('warn', uwu('There is no message for me to uwufy!'))
+        return this.client.ui.say(message, 'warn', uwu('There is no message for me to uwufy!'))
       }
     }
     return message.channel.send(uwu(text))

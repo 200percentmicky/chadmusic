@@ -16,22 +16,22 @@ module.exports = class CommandAllowExplicit extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    if (!args[1]) return message.usage('allowexplicit <toggle:on/off>')
+    if (!args[1]) return this.client.ui.usage(message, 'allowexplicit <toggle:on/off>')
 
     const settings = this.client.settings
     switch (args[1]) {
       case 'on': {
         await settings.set(message.guild.id, 'allowAgeRestricted', true)
-        message.say('ok', 'Age restricted content can now be added to the queue.')
+        this.client.ui.say(message, 'ok', 'Age restricted content can now be added to the queue.')
         break
       }
       case 'off': {
         await settings.set(message.guild.id, 'allowAgeRestricted', false)
-        message.say('ok', 'Age restricted content can no longer be added to the queue.')
+        this.client.ui.say(message, 'ok', 'Age restricted content can no longer be added to the queue.')
         break
       }
       default: {
-        message.say('error', 'Toggle must be **on** or **off**.')
+        this.client.ui.say(message, 'error', 'Toggle must be **on** or **off**.')
         break
       }
     }

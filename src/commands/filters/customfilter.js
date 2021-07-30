@@ -29,38 +29,38 @@ module.exports = class CommandCustomFilter extends Command {
 
     if (djMode) {
       if (!dj) {
-        return message.say('no', oneLine`
+        return this.client.ui.say(message, 'no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
           permission to use music commands at this time.
         `)
       }
     }
 
-    if (!args[1]) return message.usage('customfilter <argument:str>')
+    if (!args[1]) return this.client.ui.usage(message, 'customfilter <argument:str>')
 
     const vc = message.member.voice.channel
-    if (!vc) return message.say('error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
-    if (!queue) return message.say('warn', 'Nothing is currently playing on this server.')
+    if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
 
     const currentVc = this.client.vc.get(vc)
     if (currentVc) {
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
           await this.client.player.setFilter(message.guild.id, 'custom', false)
-          return message.custom('📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
+          return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed')
         } catch (err) {
-          return message.say('error', 'No custom filters are applied to the player.')
+          return this.client.ui.say(message, 'error', 'No custom filters are applied to the player.')
         }
       } else {
         const custom = args[1]
         await this.client.player.setFilter(message.guild.id, 'custom', custom)
-        return message.custom('📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
+        return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return message.say('error', oneLine`
+        return this.client.ui.say(message, 'error', oneLine`
           You must be in the same voice channel that I\'m in to use that command.
         `)
       }

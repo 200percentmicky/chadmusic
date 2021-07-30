@@ -13,6 +13,7 @@ const { createLogger, format, transports } = require('winston')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
 const si = require('systeminformation')
+const ui = require('./modules/WaveUI')
 
 // Winston Logger
 const logger = createLogger({
@@ -85,6 +86,7 @@ class WaveBot extends AkairoClient {
     this.prefix = prefix
     this.logger = logger
     this.si = si
+    this.ui = ui
 
     /* DisTube Player */
     // The meat and potatoes of the bot. Runs off of a fork that may remove some core features.

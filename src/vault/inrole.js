@@ -21,7 +21,7 @@ module.exports = class CommandInRole extends Command {
     const role = message.mentions.roles.first() ||
             message.guild.roles.cache.get(args[1]) ||
             message.guild.roles.cache.find(val => val.name === args.slice(1).join(' '))
-    if (!role) return message.say('error', `\`${args.slice(1).join(' ')}\` is not a valid role on this server.`)
+    if (!role) return this.client.ui.say(message, 'error', `\`${args.slice(1).join(' ')}\` is not a valid role on this server.`)
     const memberList = role.members.array()
 
     const embed = new FieldsEmbed()

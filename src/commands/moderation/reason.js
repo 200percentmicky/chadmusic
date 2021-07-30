@@ -23,12 +23,12 @@ module.exports = class CommandReason extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    if (!args[1]) return message.usage('reason <case_number> <reason>')
+    if (!args[1]) return this.client.ui.usage(message, 'reason <case_number> <reason>')
     const reason = args.slice(2).join(' ')
 
     const caseNumber = parseInt(args[1] - 1)
     const modlogCase = await this.client.modlog.get(`${message.guild.id}`).then(x => x[caseNumber])
-    if (!modlogCase) return message.say('error', 'That case does not exist.')
+    if (!modlogCase) return this.client.ui.say(message, 'error', 'That case does not exist.')
     const modlogSettings = this.client.settings.get(message.guild.id, 'modlog')
     const modlogChannel = message.guild.channels.cache.find(val => val.id === modlogSettings)
     const type = modlogCase.type
@@ -93,11 +93,11 @@ module.exports = class CommandReason extends Command {
 
       if (authorRolePosition > modRolePosition || message.guild.ownerID === message.author.id) {
         // Must include a reason.
-        if (!reason) return message.say('warn', 'Please provide a new reason for the case.')
+        if (!reason) return this.client.ui.say(message, 'warn', 'Please provide a new reason for the case.')
         if (message.author.id !== modlogCase.mod_id) embed.addField('Amended', message.author.tag)
       } else {
         // In case that the member is not an admin.
-        return message.say('error', `Case **${args[1]}** is not your case.`)
+        return this.client.ui.say(message, 'error', `Case **${args[1]}** is not your case.`)
       }
     }
 
@@ -112,13 +112,13 @@ module.exports = class CommandReason extends Command {
     `)
 
     // Must include a reason.
-    if (!reason) return message.say('warn', 'Please provide a new reason for the case.')
+    if (!reason) return this.client.ui.say(message, 'warn', 'Please provide a new reason for the case.')
     await msg.edit(embed)
-    return message.say('ok', `Case **${args[1]}** has been updated.`)
+    return this.client.ui.say(message, 'ok', `Case **${args[1]}** has been updated.`)
 
     /*
         }).catch(err => {
-            return message.say('error', 'Case does not exist or the audit entry has expired.');
+            return this.client.ui.say(message, 'error', 'Case does not exist or the audit entry has expired.');
         });
         */
   }

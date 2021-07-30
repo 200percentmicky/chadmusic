@@ -61,7 +61,7 @@ const say = (msg, type, description, title, footer, buttons) => {
 /**
  * A UI element that returns the overall usage of the command if no arguments were provided.
  *
- * @example message.usage(message, 'play <url|search>');
+ * @example this.client.ui.usage(message, message, 'play <url|search>');
  * @param {Message} msg A MessageResolvable | `Discord.Message`
  * @param {string} syntax The usage of the command
  * @returns {MessageEmbed} The embed containg the usage of the command.

@@ -25,7 +25,7 @@ module.exports = class CommandBassBoost extends Command {
 
     if (djMode) {
       if (!dj) {
-        return message.say('no', oneLine`
+        return this.client.ui.say(message, 'no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
           permission to use music commands at this time.
         `)
@@ -34,40 +34,40 @@ module.exports = class CommandBassBoost extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return message.say('no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
+        return this.client.ui.say(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.')
       }
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return message.say('error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
-    if (!queue) return message.say('warn', 'Nothing is currently playing on this server.')
+    if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
 
     const currentVc = this.client.vc.get(vc)
     if (currentVc) {
-      if (!args[1]) return message.usage('bassboost <gain:int(1-100)/off>')
+      if (!args[1]) return this.client.ui.usage(message, 'bassboost <gain:int(1-100)/off>')
 
       if (args[1] === 'OFF'.toLowerCase()) {
         try {
           await this.client.player.setFilter(message.guild.id, 'bassboost', false)
-          return message.custom('📢', process.env.COLOR_INFO, '**Bass Boost** Off')
+          return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off')
         } catch (err) {
-          return message.say('error', '**Bass Boost** is not applied to the player.')
+          return this.client.ui.say(message, 'error', '**Bass Boost** is not applied to the player.')
         }
       } else {
         const gain = parseInt(args[1])
 
         if (gain < 1 || gain > 100 || isNaN(gain)) {
-          return message.say('error', 'Bass gain must be between **1** to **100**, or **"off"**.')
+          return this.client.ui.say(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.')
         }
 
         await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`)
-        return message.custom('📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``)
+        return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return message.say('error', oneLine`
+        return this.client.ui.say(message, 'error', oneLine`
           You must be in the same voice channel that I\'m in to use that command.
         `)
       }

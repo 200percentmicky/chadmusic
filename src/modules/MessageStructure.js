@@ -78,7 +78,7 @@ module.exports = class MessageStructure extends Message {
   /**
    * A UI element that returns the overall usage of the command if no arguments were provided.
    *
-   * @example message.usage('play <url|search>');
+   * @example this.client.ui.usage(message, 'play <url|search>');
    *
    * @param {string} syntax The usage of the command
    * @returns {MessageEmbed} The embed containg the usage of the command.

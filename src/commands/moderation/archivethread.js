@@ -40,19 +40,19 @@ module.exports = class CommandArchiveThread extends Command {
             4: 10080
           }
           await message.channel.setAutoArchiveDuration(threadTime[args.time], `${message.member.user.tag}${args.reason ? `: ${args.reason}` : ''}`)
-          return message.say('ok', `Auto Archive duration set to **${threadTime[args.time]}** minutes`)
+          return this.client.ui.say(message, 'ok', `Auto Archive duration set to **${threadTime[args.time]}** minutes`)
         } catch {
           if (args.time === 3 && !message.guild.features.includes('THREE_DAY_THREAD_ARCHIVE')) {
-            return message.say('error', 'The server is missing the **3 Day Thread Archive** feature.')
+            return this.client.ui.say(message, 'error', 'The server is missing the **3 Day Thread Archive** feature.')
           }
           if (args.time === 4 && !message.guild.features.includes('SEVEN_DAY_THREAD_ARCHIVE')) {
-            return message.say('error', 'The server is missing the **1 Week Thread Archive** feature.')
+            return this.client.ui.say(message, 'error', 'The server is missing the **1 Week Thread Archive** feature.')
           }
         }
       }
       await message.channel.setLocked(true, `${message.member.user.tag}${args.reason ? `: ${args.reason}` : ''}`)
     } else {
-      return message.say('error', 'This is not a thread.')
+      return this.client.ui.say(message, 'error', 'This is not a thread.')
     }
   }
 }

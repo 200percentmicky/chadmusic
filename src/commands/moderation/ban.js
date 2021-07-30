@@ -23,16 +23,16 @@ module.exports = class CommandBan extends Command {
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
 
     if (!args[1]) {
-      return message.usage('ban <@user> [days] [reason]')
+      return this.client.ui.usage(message, 'ban <@user> [days] [reason]')
     }
 
     if (!member) {
       // Such a mortal doesn't exist.
-      return message.say('warn', `\`${args[1]}\` is not a valid member or user ID.`)
+      return this.client.ui.say(message, 'warn', `\`${args[1]}\` is not a valid member or user ID.`)
     }
 
     if (!member.bannable) { // Can't ban them, or you tried banning yourself. lol
-      return message.say('error', member === message.member
+      return this.client.ui.say(message, 'error', member === message.member
         ? 'You cannot ban yourself from the server.'
         : `Unable to ban **${member.user.tag}**.`
       )
@@ -68,7 +68,7 @@ module.exports = class CommandBan extends Command {
       return
     } finally {
       await member.ban({ days: days, reason: `${message.author.tag}: ${reason}` })
-      message.custom('🔨', this.client.color.ban, randomResponse)
+      this.client.ui.custom(message, '🔨', this.client.color.ban, randomResponse)
       message.guild.recordCase('ban', message.author.id, member.user.id, reason)
     }
   }

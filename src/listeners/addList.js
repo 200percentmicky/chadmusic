@@ -9,6 +9,6 @@ module.exports = class ListenerAddList extends Listener {
   }
 
   async exec (message, queue, playlist) {
-    message.say('ok', `Added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'} to the queue.`)
+    this.client.ui.say(message, 'ok', `Added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'} to the queue.`)
   }
 }

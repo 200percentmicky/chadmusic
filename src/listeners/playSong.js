@@ -26,7 +26,7 @@ module.exports = class ListenerPlaySong extends Listener {
       const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS)
       if (!allowAgeRestricted) {
         this.client.player.stop(message)
-        return message.say('no', 'You cannot add **Age Restricted** videos to the queue.')
+        return this.client.ui.say(message, 'no', 'You cannot add **Age Restricted** videos to the queue.')
       }
       if (maxTime) {
         if (!dj) {
@@ -37,7 +37,7 @@ module.exports = class ListenerPlaySong extends Listener {
             // Stupid fix.
             if (message.content.includes(this.client.prefix.getPrefix(guild.id) + ('skip' || 's'))) return
             this.client.player.stop(message)
-            return message.say('no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
+            return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
           }
         }
       }

@@ -20,11 +20,11 @@ module.exports = class CommandDeleteTag extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     if (!args[1]) {
-      return message.usage('deletetag <name>')
+      return this.client.ui.usage(message, 'deletetag <name>')
     }
 
     const tag = this.client.tags.get(message.guild.id, args[1])
-    if (!tag) return message.say('warn', `The tag \`${args[1]}\` does not exist on this server.`)
+    if (!tag) return this.client.ui.say(message, 'warn', `The tag \`${args[1]}\` does not exist on this server.`)
     if (message.author.id !== tag.user_id) {
       if (message.channel.permissionsFor(message.author.id).has(['MANAGE_GUILD'])) {
         if (this.client.settings.get(message.guild.id, 'taglog')) {
@@ -32,13 +32,13 @@ module.exports = class CommandDeleteTag extends Command {
           tagLog.send(`🏷 **${message.author.tag}** (ID: ${message.author.id}) deleted the tag: \`${args[1]}\`.`) // May convert this into an embed later, but this will do.
         }
         await this.client.tags.delete(message.guild.id, args[1])
-        return message.say('ok', `Deleted the tag \`${args[1]}\`.`)
+        return this.client.ui.say(message, 'ok', `Deleted the tag \`${args[1]}\`.`)
       } else {
-        return message.say('no', 'That\'s not your tag. Only members with the **Manage Server** permission can delete other tags.')
+        return this.client.ui.say(message, 'no', 'That\'s not your tag. Only members with the **Manage Server** permission can delete other tags.')
       }
     } else {
       await this.client.tags.delete(message.guild.id, args[1])
-      message.say('ok', `Deleted the tag \`${args[1]}\`.`)
+      this.client.ui.say(message, 'ok', `Deleted the tag \`${args[1]}\`.`)
       if (this.client.settings.get(message.guild.id, 'taglog')) {
         const tagLog = message.guild.channels.cache.get(this.client.settings.get(message.guild.id, 'taglog'))
         return tagLog.send(`🏷 **${message.author.tag}** (ID: ${message.author.id}) deleted the tag: \`${args[1]}\`.`)
