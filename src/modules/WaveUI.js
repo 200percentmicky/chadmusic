@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { Message, MessageEmbed, MessageActionRow } = require('discord.js')
 
 /**
@@ -112,4 +113,52 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
   }
 }
 
-module.exports = { say, usage, custom }
+/**
+ * A function that sends an error report to the given bug reports channel, if one was provided in the `.env` file.
+ *
+ * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {string} type The type of bug report. Supported are `error` for errors, and `warn` for warnings.
+ * @param {string} command [Optional] The command of the bug report.
+ * @param {string} title The title of the bug report.
+ * @param {string} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
+ * @returns {MessageEmbed} The overall bug report.
+ */
+const recordError = async (msg, type, command, title, error) => {
+  // Consider replacing the channel ID for your own error reporting
+  // channel until the feature is supported in the configs.
+  const errorChannel = msg.channel.client.channels.cache.get(process.env.BUG_CHANNEL)
+  if (!errorChannel) return
+  const embed = new MessageEmbed()
+    .setTimestamp()
+    .addField('Server', `${msg.channel.type === 'dm'
+      ? 'Direct Message'
+      : msg.guild.name + '\nID: ' + msg.guild.id}`, true
+    )
+    .addField('Channel', `${msg.channel.type === 'dm'
+      ? 'Direct Message'
+      : msg.channel.name + '\nID: ' + msg.channel.id}`, true
+    )
+
+  if (command) {
+    // I was rather lazy with this one. I'm not sure if Akairo is able to
+    // provide what command is invoked. Hard coding seems to not be an issue atm...
+    embed.addField('Command', `${command}`, true)
+  }
+
+  if (type === 'warning') {
+    msg.channel.client.logger.warn(error)
+    embed.setColor(process.env.COLOR_WARN)
+    embed.setTitle(`${process.env.EMOJI_WARN} ${title}`)
+  }
+
+  if (type === 'error') {
+    msg.channel.client.logger.error(error)
+    embed.setColor(process.env.COLOR_ERROR)
+    embed.setTitle(`${process.env.EMOJI_ERROR} ${title}`)
+  }
+
+  await errorChannel.send({ embeds: [embed] })
+  return errorChannel.send({ content: error, code: 'js', split: true })
+}
+
+module.exports = { say, usage, custom, recordError }

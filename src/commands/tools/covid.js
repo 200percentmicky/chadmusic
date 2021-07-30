@@ -40,7 +40,7 @@ module.exports = class CommandCovid extends Command {
       })
       .catch(err => {
         this.client.ui.say(message, 'error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')
-        return message.recordError('warning', 'covid', 'Covid19Api Error', err.stack)
+        return this.client.ui.recordError(message, 'warning', 'covid', 'Covid19Api Error', err.stack)
       })
   }
 }

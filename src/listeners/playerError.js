@@ -19,6 +19,6 @@ module.exports = class ListenerPlayerError extends Listener {
     if (errsplit.includes('format')) return this.client.ui.say(message, 'error', 'Cannot find a format of the video to play. The owner of the video has disabled playback on other websites, or the video is unavailable.', 'Player Error')
     if (error.name.includes('Error [VOICE_CONNECTION_TIMEOUT]')) return this.client.ui.say(message, 'error', 'The connection was not established within 15 seconds. Please try again later.', 'Voice Connection Timeout')
     this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${error.name}: ${error.message}\`\`\``, 'Player Error')
-    message.recordError('error', 'None', 'Player Error', error.stack)
+    this.client.ui.recordError(message, 'error', 'None', 'Player Error', error.stack)
   }
 }

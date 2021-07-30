@@ -30,6 +30,6 @@ module.exports = class ListenerCommandError extends Listener {
       `
       message.reply(guru, { allowedMentions: { repliedUser: false } })
     }
-    message.recordError('error', command, 'Command Error', error.stack)
+    this.client.ui.recordError(message, 'error', command, 'Command Error', error.stack)
   }
 }

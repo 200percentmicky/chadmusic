@@ -98,7 +98,7 @@ module.exports = class CommandNukeChannel extends Command {
         // it's a function of Message.
         // Also, ignore any Discord API Errors.
         if (err.name === 'TypeError' || err.name === 'DiscordAPIError') return
-        message.recordError('error', 'nukechannel', 'Command Error', err.stack)
+        this.client.ui.recordError(message, 'error', 'nukechannel', 'Command Error', err.stack)
       })
       .on('finish', () => { })
 
