@@ -23,7 +23,7 @@ module.exports = class CommandDebug extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     if (args[1]) return
-    message.channel.startTyping()
+    message.channel.sendTyping()
     const cpu = await si.cpu()
     const osSi = await si.osInfo()
     const memory = await si.mem()
@@ -59,6 +59,6 @@ module.exports = class CommandDebug extends Command {
     `
 
     message.channel.send({ content: data, code: 'asciidoc', split: true })
-    return message.channel.stopTyping(true)
+    
   }
 }

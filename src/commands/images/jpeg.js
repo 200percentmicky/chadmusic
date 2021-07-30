@@ -33,7 +33,7 @@ module.exports = class CommandJPEG extends Command {
     const imageQuality = parseInt(args[1])
     if (imageQuality > 100 || imageQuality < 1) return this.client.ui.say(message, 'error', 'Image quality must be between **1-100**.')
 
-    message.channel.startTyping(5)
+    message.channel.sendTyping()
     const imageData = await axios({
       url: attachment.url,
       responseType: 'arraybuffer'
@@ -45,12 +45,12 @@ module.exports = class CommandJPEG extends Command {
       .toBuffer('JPG', (err, buffer) => {
         if (err) {
           this.client.ui.say(message, 'error', err.message)
-          return message.channel.stopTyping(true)
+          
         }
         const newJPEG = new MessageAttachment(buffer, `jpeg_${args[1]}.jpg`)
 
         message.uploadFile(newJPEG)
-        return message.channel.stopTyping(true)
+        
       })
   }
 }

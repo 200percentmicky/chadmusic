@@ -58,11 +58,10 @@ module.exports = class CommandPlayNow extends Command {
     if (vc.members.size <= 3 || dj) {
       if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
-      message.channel.startTyping(5)
+      message.channel.sendTyping()
       // eslint-disable-next-line no-useless-escape
       await this.client.player.playSkip(message, text.replace(/(^\<+|\>+$)/g, ''))
       message.react(process.env.REACTION_OK)
-      return message.channel.stopTyping(true)
     } else {
       return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }

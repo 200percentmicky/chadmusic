@@ -72,7 +72,7 @@ module.exports = class CommandPlay extends Command {
       if (vc.id !== currentVc._channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
-    message.channel.startTyping(5)
+    message.channel.sendTyping()
     const queue = this.client.player.getQueue(message.guild.id)
 
     // These limitations should not affect a member with DJ permissions.
@@ -83,7 +83,6 @@ module.exports = class CommandPlay extends Command {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
           if (queueMemberSize >= maxQueueLimit) {
             this.client.ui.say(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
-            return message.channel.stopTyping(true)
           }
         }
       }
@@ -123,8 +122,6 @@ module.exports = class CommandPlay extends Command {
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
       return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
-    } finally {
-      message.channel.stopTyping(true)
     }
   }
 }

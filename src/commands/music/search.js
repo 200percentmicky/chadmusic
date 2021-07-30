@@ -29,7 +29,7 @@ module.exports = class CommandSearch extends Command {
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
-    message.channel.startTyping()
+    message.channel.sendTyping()
     const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
@@ -57,7 +57,7 @@ module.exports = class CommandSearch extends Command {
       if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
-    message.channel.startTyping()
+    message.channel.sendTyping()
     const queue = this.client.player.getQueue(message.guild.id)
 
     if (!args[1]) return this.client.ui.usage(message, 'search <query>')
@@ -70,13 +70,12 @@ module.exports = class CommandSearch extends Command {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
           if (queueMemberSize >= maxQueueLimit) {
             this.client.ui.say(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
-            return message.channel.stopTyping(true)
           }
         }
       }
     }
 
-    message.channel.startTyping()
+    message.channel.sendTyping()
     this.client.player.search(search).then(results => {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n')
       const embed = new MessageEmbed()
@@ -95,7 +94,7 @@ module.exports = class CommandSearch extends Command {
           msg.delete()
           collected.first().delete()
           if (collected.first().content === 'CANCEL'.toLowerCase()) return
-          message.channel.startTyping(5)
+          message.channel.sendTyping()
           let selected = results[parseInt(collected.first().content - 1)].url
           if (collected.first().content > 10) {
             selected = results[9].url
@@ -106,13 +105,10 @@ module.exports = class CommandSearch extends Command {
           }
           await this.client.player.play(message, selected)
           message.react(process.env.REACTION_OK)
-          return message.channel.stopTyping(true)
         }).catch(() => {
           return msg.delete()
         })
       })
     })
-
-    return message.channel.stopTyping(true)
   }
 }
