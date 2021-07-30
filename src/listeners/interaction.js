@@ -1,10 +1,10 @@
 const { Listener } = require('discord-akairo')
 
-module.exports = class ListenerInteraction extends Listener {
+module.exports = class ListenerInteractionCreate extends Listener {
   constructor () {
-    super('interaction', {
+    super('interactionCreate', {
       emitter: 'client',
-      event: 'interaction'
+      event: 'interactionCreate'
     })
   }
 
