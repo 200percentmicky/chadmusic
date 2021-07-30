@@ -66,7 +66,7 @@ module.exports = class CommandQueue extends Command {
       .setStyle('PRIMARY')
       .setLabel('First Page')
       .setEmoji('⏮')
-      .setCustomID('first_page')
+      .setCustomId('first_page')
       .setDisabled(true) // Since the embed opens on the first page.
 
     // Previous Page
@@ -74,7 +74,7 @@ module.exports = class CommandQueue extends Command {
       .setStyle('PRIMARY')
       .setLabel('Previous')
       .setEmoji('⏪')
-      .setCustomID('previous_page')
+      .setCustomId('previous_page')
       .setDisabled(true) // Since the embed opens on the first page.
 
     // Next Page
@@ -82,28 +82,28 @@ module.exports = class CommandQueue extends Command {
       .setStyle('PRIMARY')
       .setLabel('Next')
       .setEmoji('⏩')
-      .setCustomID('next_page')
+      .setCustomId('next_page')
 
     // Last Page
     const lastPage = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Last Page')
       .setEmoji('⏭')
-      .setCustomID('last_page')
+      .setCustomId('last_page')
 
     // Jump to Page
     const pageJump = new MessageButton()
       .setStyle('PRIMARY')
       .setLabel('Jump to Page')
       .setEmoji('↗')
-      .setCustomID('page_jump')
+      .setCustomId('page_jump')
 
     // Cancel
     const cancelButton = new MessageButton()
       .setStyle('DANGER')
       .setLabel('Close')
       .setEmoji(process.env.EMOJI_ERROR)
-      .setCustomID('cancel_button')
+      .setCustomId('cancel_button')
 
     /* Row of buttons! */
     const buttonRow = new MessageActionRow()
@@ -126,7 +126,7 @@ module.exports = class CommandQueue extends Command {
 
     collector.on('collect', async interaction => {
       // First Page Button
-      if (interaction.customID === 'first_page') {
+      if (interaction.customId === 'first_page') {
         const paginateArray = queuePaginate.first()
 
         /* Map the array. */
@@ -160,7 +160,7 @@ module.exports = class CommandQueue extends Command {
       }
 
       // Previous Page Button
-      if (interaction.customID === 'previous_page') {
+      if (interaction.customId === 'previous_page') {
         const paginateArray = queuePaginate.previous()
 
         /* Map the array. */
@@ -196,7 +196,7 @@ module.exports = class CommandQueue extends Command {
       }
 
       // Next Page Button
-      if (interaction.customID === 'next_page') {
+      if (interaction.customId === 'next_page') {
         const paginateArray = queuePaginate.next()
 
         /* Map the array. */
@@ -233,7 +233,7 @@ module.exports = class CommandQueue extends Command {
       }
 
       // Last Page Button
-      if (interaction.customID === 'last_page') {
+      if (interaction.customId === 'last_page') {
         const paginateArray = queuePaginate.last()
 
         /* Map the array. */
@@ -272,7 +272,7 @@ module.exports = class CommandQueue extends Command {
       }
 
       // Jump to Page Button
-      if (interaction.customID === 'page_jump') {
+      if (interaction.customId === 'page_jump') {
         message.reply('What page do you wanna go to?').then(async pageMsg => {
           const filter = m => m.author.id === message.author.id && !isNaN(m.content)
           message.channel.awaitMessages(filter, {
@@ -391,7 +391,7 @@ module.exports = class CommandQueue extends Command {
       }
 
       // Cancel Button
-      if (interaction.customID === 'cancel_button') {
+      if (interaction.customId === 'cancel_button') {
         collector.stop()
         await msg.delete()
         return message.react(process.env.REACTION_OK)
