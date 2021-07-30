@@ -4,7 +4,7 @@ module.exports = class ListenerGuildBlocklist extends Listener {
   constructor () {
     super('guildBlocklist', {
       emitter: 'client',
-      event: 'message'
+      event: 'messageCreate'
     })
   }
 

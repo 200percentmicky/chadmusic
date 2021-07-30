@@ -5,7 +5,7 @@ module.exports = class ListenerNoInvites extends Listener {
   constructor () {
     super('noInvites', {
       emitter: 'client',
-      event: 'message'
+      event: 'messageCreate'
     })
   }
 

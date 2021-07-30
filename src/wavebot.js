@@ -5,7 +5,7 @@
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const prefix = require('discord-prefix')
-const { Structures, Intents } = require('discord.js')
+const { Intents } = require('discord.js')
 const DisTube = require('../../chadtube/dist').default
 const moment = require('moment')
 const chalk = require('chalk')
@@ -66,12 +66,6 @@ mongoose.connect(process.env.MONGO_URI_MAIN, {
 mongoose.connection.on('error', error => logger.error('[Mongoose] Connection Error: %s', error))
   .on('ready', () => logger.info('[Mongoose] Connection established!'))
 
-// Extending the 'Message' class for the bot's UI.
-Structures.extend('Message', () => {
-  const MessageStructure = require('./modules/MessageStructure.js')
-  return MessageStructure
-})
-
 /* Main Client */
 // The main overall client of the bot extending off of the 'AkairoClient' class.
 class WaveBot extends AkairoClient {
@@ -81,7 +75,7 @@ class WaveBot extends AkairoClient {
     }, {
       disableMentions: 'true',
       restTimeOffset: 175,
-      intents: new Intents(Intents.ALL)
+      intents: new Intents(32767)
     })
 
     /* Packages */
