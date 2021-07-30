@@ -24,13 +24,12 @@ module.exports = class CommandE621 extends Command {
 
     if (!args[1]) return
 
-    message.channel.startTyping()
+    message.channel.sendTyping()
 
     const imgs = await Booru.search('e621', [tags], { limit: 1, random: true })
     if (imgs.length === 0) {
       tags = args.slice(1).join(' ')
       this.client.ui.say(message, 'warn', `No results for \`${tags}\``)
-      return message.channel.stopTyping(true)
     }
 
     try {
@@ -48,6 +47,5 @@ module.exports = class CommandE621 extends Command {
     } catch (err) {
       this.client.ui.say(message, 'error', err.message, '`Booru API Error.`')
     }
-    return message.channel.stopTyping()
   }
 }

@@ -17,7 +17,7 @@ module.exports = class CommandCovid extends Command {
   }
 
   async exec (message) {
-    message.channel.startTyping()
+    message.channel.sendTyping()
     fetch('https://api.covid19api.com/summary', { method: 'GET' })
       .then(res => res.json())
       .then(json => {
@@ -42,6 +42,5 @@ module.exports = class CommandCovid extends Command {
         this.client.ui.say(message, 'error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')
         return message.recordError('warning', 'covid', 'Covid19Api Error', err.stack)
       })
-    return message.channel.stopTyping()
   }
 }

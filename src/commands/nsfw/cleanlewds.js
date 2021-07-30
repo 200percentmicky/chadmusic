@@ -19,7 +19,7 @@ module.exports = class CommandCleanLewds extends Command {
   async exec (message) {
     if (!message.channel.nsfw) return this.client.ui.custom(message, '🔞', this.client.color.no, 'This command must be used in a NSFW channel.')
 
-    message.channel.startTyping()
+    message.channel.sendTyping()
     try {
       const wholesomePic = await reddit.fetch({
         type: 'custom',
@@ -36,8 +36,6 @@ module.exports = class CommandCleanLewds extends Command {
       message.channel.send({ embeds: [embed] })
     } catch (err) {
       this.client.ui.say(message, 'error', err.message, 'Reddit API Error')
-      return message.channel.stopTyping(true)
     }
-    return message.channel.stopTyping()
   }
 }
