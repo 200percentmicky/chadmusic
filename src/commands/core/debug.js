@@ -20,6 +20,8 @@ module.exports = class CommandDebug extends Command {
     })
   }
 
+  // TODO: Replace systeminformation with Node 'os' module.
+
   async exec (message) {
     const args = message.content.split(/ +/g)
     if (args[1]) return
@@ -30,7 +32,7 @@ module.exports = class CommandDebug extends Command {
     const user = os.userInfo()
 
     const data = stripIndents`
-    === Project Wave ===
+    === ChadMusic ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
              Node.js :: ${process.version}
           Discord.js :: ${discordversion.version}
@@ -59,6 +61,5 @@ module.exports = class CommandDebug extends Command {
     `
 
     message.channel.send({ content: data, code: 'asciidoc', split: true })
-    
   }
 }

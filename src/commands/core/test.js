@@ -48,7 +48,7 @@ module.exports = class CommandTest extends Command {
               .setLabel('Click here to end the world!')
               .setEmoji('💣')
           )
-        message.channel.send('Buttons', { components: [actionRow] })
+        message.channel.send({ content: 'Pretty buttons!', components: [actionRow] })
         break
       }
 

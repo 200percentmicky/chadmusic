@@ -10,7 +10,7 @@ module.exports = class CommandRestart extends Command {
       description: {
         text: 'Attempts to restart the bot.',
         usage: '[reason]',
-        details: '`[reason]` The reason for the restarting the bot.'
+        details: '`[reason]` The reason for restarting the bot.'
       }
     })
   }

@@ -1,3 +1,14 @@
+/**
+ * There's a lot of commented stuff in this script. This use to be a mutli-purpose
+ * bot, but I've lost the interest to maintain it since I'm already maintaining a
+ * alternative to what my original plans were to be. Just keeping them around
+ * in case I change my mind down the road.
+ *
+ * I've already learned so much because of this, but I would like to try out
+ * something new. This new project I hope to achieve one of these days. Hell, maybe
+ * even soon if I play my cards right.
+ */
+
 const { stripIndents } = require('common-tags')
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
@@ -19,9 +30,9 @@ module.exports = class CommandSettings extends Command {
   async exec (message) {
     const settings = this.client.settings
 
-    /* All Settings */
-    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
-    const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
+    // All Settings
+    // const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
+    // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
     const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
     const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
     const maxTime = settings.get(message.guild.id, 'maxTime', null) // Max Song Duration
@@ -30,38 +41,41 @@ module.exports = class CommandSettings extends Command {
     const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
     const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100) // Default Volume
 
-    /* ! This setting only affects videos from YouTube. */
+    // ! This setting only affects videos from YouTube.
     // All pornographic websites are blocked.
     const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true) // Allow Explicit Content.
 
-    const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
-    const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
-    const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
-    const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
-    const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
-    const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
-    const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
-    const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
-    const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
+    // const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
+    // const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
+    // const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
+    // const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
+    // const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
+    // const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
+    // const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
+    // const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
+    // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
-      .setTitle('⚙ Settings')
+      .setTitle('🎶 Music Settings')
+      /*
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`
       **Time Zone:** ${timezone}
       `)
-      .addField('🎶 Music', stripIndents`
-      **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-      **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-      **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-      **Default Volume:** ${defaultVolume}
+      */
+      .setDescription(stripIndents`
+      **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      **🕰 Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+      **🗣 Default Volume:** ${defaultVolume}
       `)
+      /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
       **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
@@ -75,7 +89,6 @@ module.exports = class CommandSettings extends Command {
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
       `)
-      /*
       .addField('🌟 Starboard', stripIndents`
       **Channel:** ${starboard ? `<#${starboard.channelID}>` : 'None'}
       **Emoji:** ${starboard ? starboard.options.emoji : 'Not configured'}

@@ -10,8 +10,8 @@ const distubeversion = require('../../../node_modules/distube/package.json') // 
 
 module.exports = class CommandAbout extends Command {
   constructor () {
-    super('about', {
-      aliases: ['about'],
+    super('musicabout', {
+      aliases: ['musicabout'],
       category: '💻 Core',
       description: {
         text: 'Shows information about the bot.'
@@ -24,8 +24,19 @@ module.exports = class CommandAbout extends Command {
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
       .setAuthor(`About ${this.client.user.username}`, this.client.user.avatarURL({ dynamic: true }))
-      .setDescription("Micky-kun's multi-purpose Discord bot that's also a cute alien girl!")
-      .addField('⚠ Caution', `This bot is a work in progress. As with all forms of software currently in development, there will be bugs! If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
+      .setDescription('A powerful badass music bot for your bad ass Discord server!')
+      .addField('✨ Features', stripIndents`
+      ▫ Supports up to 700+ websites.
+      ▫ Add multiple filters to the player.
+      ▫ Alter filter values during playback.
+      ▫ Unlimited volume! 😂👌
+      ▫ DJ commands to control the player.
+      ▫ Queue and track length limits.
+      ▫ Advanced queue management.
+      ▫ ???
+      ▫ Profit, bitches!
+      `)
+      .addField('⚠ This bot is still a work in progress.', `As with all forms of software currently in development, there will be 🐛 **bugs!** If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}

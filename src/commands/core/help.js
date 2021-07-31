@@ -1,12 +1,11 @@
 /* eslint-disable no-var */
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { help } = require('../../aliases.json')
 
 module.exports = class CommandHelp extends Command {
   constructor () {
-    super(help !== undefined ? help[0] : 'help', {
-      aliases: help || ['help'],
+    super('help', {
+      aliases: ['help'],
       description: {
         text: 'You\'re looking at it! Displays info about available commands.',
         usage: '[command]',
