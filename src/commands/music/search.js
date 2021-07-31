@@ -84,29 +84,34 @@ module.exports = class CommandSearch extends Command {
         .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')
 
-      message.channel.send({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
+      message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
         const filter = m => m.author.id === message.author.id
-        message.channel.awaitMessages(filter, {
+        const collector = message.channel.createMessageCollector({
+          filter,
           max: 1,
           time: 30000,
           errors: ['time']
-        }).then(async collected => {
-          msg.delete()
-          collected.first().delete()
-          if (collected.first().content === 'CANCEL'.toLowerCase()) return
+        })
+
+        collector.on('collect', async collected => {
+          collector.stop()
+          collected.delete()
+          if (collected.content === 'CANCEL'.toLowerCase()) return
           message.channel.sendTyping()
-          let selected = results[parseInt(collected.first().content - 1)].url
-          if (collected.first().content > 10) {
+          let selected = results[parseInt(collected.content - 1)].url
+          if (collected.content > 10) {
             selected = results[9].url
-            this.client.ui.say(message, 'info', `Your input was \`${collected.first().content}\`. The 10th result was queued instead.`)
-          } else if (collected.first().content <= 0) {
+            this.client.ui.say(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`)
+          } else if (collected.content <= 0) {
             selected = results[0].url
-            this.client.ui.say(message, 'info', `Your input was \`${collected.first().content}\`. The 1st result was queued instead.`)
+            this.client.ui.say(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`)
           }
           await this.client.player.play(message, selected)
           message.react(process.env.REACTION_OK)
-        }).catch(() => {
-          return msg.delete()
+        })
+
+        collector.on('end', () => {
+          msg.delete()
         })
       })
     })

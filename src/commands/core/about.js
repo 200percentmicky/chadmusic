@@ -21,9 +21,10 @@ module.exports = class CommandAbout extends Command {
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
+    const chadUrl = 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(`About ${this.client.user.username}`, this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setDescription('A powerful badass music bot for your bad ass Discord server!')
       .addField('✨ Features', stripIndents`
       ▫ Supports up to 700+ websites.
@@ -45,7 +46,7 @@ module.exports = class CommandAbout extends Command {
       **DisTube.js:** ${distubeversion.version}
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
-      .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
+      .setThumbnail(chadUrl)
       .setFooter(`Created by ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send({ embeds: [aboutembed] })
   }
