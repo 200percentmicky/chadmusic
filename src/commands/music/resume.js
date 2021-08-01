@@ -21,6 +21,13 @@ module.exports = class CommandResume extends Command {
       if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
     }
 
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    if (textChannel) {
+      if (textChannel !== message.channel.id) {
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+      }
+    }
+
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 

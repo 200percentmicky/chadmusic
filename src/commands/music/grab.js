@@ -19,6 +19,13 @@ module.exports = class CommandGrab extends Command {
     const queue = this.client.player.getQueue(message)
     const song = queue.songs[0]
 
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    if (textChannel) {
+      if (textChannel !== message.channel.id) {
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+      }
+    }
+
     try {
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())

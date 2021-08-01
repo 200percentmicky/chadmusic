@@ -24,6 +24,13 @@ module.exports = class CommandDisconnect extends Command {
       }
     }
 
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    if (textChannel) {
+      if (textChannel !== message.channel.id) {
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+      }
+    }
+
     const vc = message.member.voice.channel
     const currentVc = this.client.vc.get(message.member.voice.channel)
     if (!currentVc) {
