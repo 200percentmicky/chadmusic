@@ -33,6 +33,8 @@ module.exports = class CommandSettings extends Command {
     // All pornographic websites are blocked.
     const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true) // Allow Explicit Content.
 
+    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100)
+
     /*
     const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
     const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
@@ -58,6 +60,7 @@ module.exports = class CommandSettings extends Command {
       📢 **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
       🔊 **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
       🔞 **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+      🗣 **Default Volume:** ${defaultVolume}
       `)
       /*
       .addField('🌐 General', stripIndents`
