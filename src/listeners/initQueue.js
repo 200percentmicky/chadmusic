@@ -9,8 +9,7 @@ module.exports = class ListenerInitQueue extends Listener {
   }
 
   async exec (queue) {
-    const guild = queue.textChannel.guild
     queue.autoplay = false
-    queue.volume = parseInt(this.client.settings.get(guild.id, 'defaultVolume', 100))
+    queue.volume = parseInt(this.client.settings.get(queue.textChannel.guild.id, 'defaultVolume', 100))
   }
 }
