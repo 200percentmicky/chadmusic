@@ -32,7 +32,7 @@ module.exports = class CommandDebug extends Command {
     const user = os.userInfo()
 
     const data = stripIndents`
-    === ChadMusic ===
+    === Project Wave ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
              Node.js :: ${process.version}
           Discord.js :: ${discordversion.version}

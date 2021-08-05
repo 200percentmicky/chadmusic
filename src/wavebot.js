@@ -1,4 +1,4 @@
-/// ChadMusic Plus!
+/// Project Wave Plus!
 /// A powerful music bot for your badass Discord server.
 
 'use strict'
@@ -49,13 +49,13 @@ if (process.env.NODE_ENV !== 'production') {
 // Say hello!
 const { version } = require('../package.json')
 logger.info('//////////////////////////////////')
-logger.info('    * * * ChadMusic * * *')
+logger.info('    * * * Project Wave * * *')
 logger.info('//////////////////////////////////')
 logger.info('Bot Version: %s', version)
 
 // Some dependencies such as Discord.js itself now require Node.JS version 14 or above.
 if (process.versions.node < '14.0.0') {
-  logger.error('ChadMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
+  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
   process.exit(1)
 }
 

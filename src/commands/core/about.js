@@ -21,22 +21,10 @@ module.exports = class CommandAbout extends Command {
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
-    const chadUrl = 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('A powerful badass music bot for your bad ass Discord server!')
-      .addField('✨ Features', stripIndents`
-      ▫ Supports up to 700+ websites.
-      ▫ Add multiple filters to the player.
-      ▫ Alter filter values during playback.
-      ▫ Unlimited volume! 😂👌
-      ▫ DJ commands to control the player.
-      ▫ Queue and track length limits.
-      ▫ Advanced queue management.
-      ▫ ???
-      ▫ Profit, bitches!
-      `)
+      .setAuthor(`About ${this.client.user.username}`, this.client.user.avatarURL({ dynamic: true }))
+      .setDescription("Micky-kun's multi-purpose Discord bot that's also a cure alien girl!")
       .addField('⚠ This bot is still a work in progress.', `As with all forms of software currently in development, there will be 🐛 **bugs!** If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
@@ -46,8 +34,8 @@ module.exports = class CommandAbout extends Command {
       **DisTube.js:** ${distubeversion.version}
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
-      .setThumbnail(chadUrl)
-      .setFooter(`Created by ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
+      .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
+      .setFooter(`The owner of this instance is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send({ embeds: [aboutembed] })
   }
 }
