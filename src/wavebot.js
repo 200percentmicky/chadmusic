@@ -1,6 +1,5 @@
 /**
  * Project Wave
- * Micky-kun's mutli-purpose Discord bot that's also a cute alien girl!
  *
  * MIT License
  *
