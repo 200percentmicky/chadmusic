@@ -22,7 +22,7 @@ module.exports = class CommandCreateTag extends Command {
     const args = message.content.split(/ +/g)
     const text = args.slice(2).join(' ')
     if (!args[0]) {
-      return message.usage('createtag <name> <content>')
+      return this.client.ui.usage(message, 'createtag <name> <content>')
     }
 
     const tag = this.client.tags.get(args[1])
@@ -32,7 +32,7 @@ module.exports = class CommandCreateTag extends Command {
         creator: message.author.id,
         tag_name: args[1]
       }, args[1])
-      message.say('ok', `Created the tag \`${args[1]}\`.`)
+      this.client.ui.say(message, 'ok', `Created the tag \`${args[1]}\`.`)
       if (this.client.settings.get(message.guild.id, 'taglog')) {
         const tagLog = message.guild.channels.cache.get(this.client.settings.get(message.guild.id, 'taglog'))
         return tagLog.send(stripIndent`
@@ -41,7 +41,7 @@ module.exports = class CommandCreateTag extends Command {
         `) // May convert this into an embed later, but this will do.
       }
     } else {
-      return message.say('warn', `\`${args[1]}\` is already a tag on this server.`)
+      return this.client.ui.say(message, 'warn', `\`${args[1]}\` is already a tag on this server.`)
     }
   }
 }

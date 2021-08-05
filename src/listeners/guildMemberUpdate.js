@@ -17,6 +17,7 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
     const memberLogChannel = this.client.channels.cache.find(val => val.id === settings)
     if (!memberLogChannel) return
     // 33C5FF
+
     // Nickname Change
     if (newMember.nickname !== oldMember.nickname) {
       const nickname = new MessageEmbed()
@@ -33,6 +34,20 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
       memberLogChannel.send({ embeds: [nickname] })
     }
 
-    // TODO: Add more info from guildMemberUpdate
+    // Username and Tag Number Change
+    if (newMember.user.tag !== oldMember.user.tag) {
+      const tag = new MessageEmbed()
+        .setColor(0xF29500)
+        .setAuthor(newMember.user.tag, newMember.user.avatarURL())
+        .setTitle('📛 Username Change')
+        .setDescription(`**Before:** ${oldMember.user.tag}\n**After:** ${newMember.user.tag}`)
+        .addField('ID', stripIndents`
+        \`\`\`js
+        User: ${newMember.user.id}
+        \`\`\`
+        `)
+        .setTimestamp()
+      memberLogChannel.send({ embeds: [tag] })
+    }
   }
 }

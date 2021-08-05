@@ -23,10 +23,10 @@ module.exports = class CommandTest extends Command {
       if (message.author.id === this.client.config.owner) {
         text = args.slice(2).join(' ')
         if (!target.permissionsFor(this.client.user.id).has(['SEND_MESSAGES'])) {
-          return message.say('error', `Missing **Send Messages** permission for Channel ID: \`${args[1]}\``)
+          return this.client.ui.say(message, 'error', `Missing **Send Messages** permission for Channel ID: \`${args[1]}\``)
         }
         await target.send(text)
-        return message.say('ok', `I sent your message to Channel ID: \`${args[1]}\``)
+        return this.client.ui.say(message, 'ok', `I sent your message to Channel ID: \`${args[1]}\``)
       } else {
         text = args.slice(1).join(' ')
         return message.channel.send(text)

@@ -35,7 +35,7 @@ module.exports = class CommandAss extends Command {
         .setFooter(`r/${boodyPic[0].subreddit}`)
       message.channel.send({ embed: embed })
     } catch (err) {
-      message.say('error', err.message, 'Reddit API Error')
+      this.client.ui.say(message, 'error', err.message, 'Reddit API Error')
       return message.channel.stopTyping(true)
     }
     return message.channel.stopTyping()

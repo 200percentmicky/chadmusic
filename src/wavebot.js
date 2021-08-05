@@ -1,5 +1,29 @@
-/// Project Wave Plus!
-/// A powerful music bot for your badass Discord server.
+/**
+ * Project Wave
+ * Micky-kun's mutli-purpose Discord bot that's also a cute alien girl!
+ *
+ * MIT License
+ *
+ * Copyright (c) 2021 Michael L. Dickerson | Twitter: @200percentmicky | Discord: Micky-kun#3836
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 'use strict'
 
@@ -33,7 +57,8 @@ const logger = createLogger({
 })
 
 // Log everything to the console as long as the application is not
-// in "production" as stated in the .env file.
+// in "production" as stated in the .env file. Otherwise, if the
+// aplication is in "production", send all logs to a file.
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.Console({
     format: format.combine(
@@ -55,7 +80,7 @@ logger.info('Bot Version: %s', version)
 
 // Some dependencies such as Discord.js itself now require Node.JS version 14 or above.
 if (process.versions.node < '14.0.0') {
-  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation. Aborting...', '14.0.0', process.versions.node)
+  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '14.0.0', process.versions.node)
   process.exit(1)
 }
 
@@ -67,8 +92,7 @@ mongoose.connect(process.env.MONGO_URI_MAIN, {
 mongoose.connection.on('error', error => logger.error('[Mongoose] Connection Error: %s', error))
   .on('ready', () => logger.info('[Mongoose] Connection established!'))
 
-/* Main Client */
-// The main overall client of the bot extending off of the 'AkairoClient' class.
+// Let's boogie!
 class WaveBot extends AkairoClient {
   constructor () {
     super({
@@ -79,7 +103,6 @@ class WaveBot extends AkairoClient {
       intents: new Intents(32767)
     })
 
-    /* Packages */
     // Calling packages that can be used throughout the client.
     this.utils = utils
     this.moment = moment
@@ -88,8 +111,7 @@ class WaveBot extends AkairoClient {
     this.si = si
     this.ui = ui
 
-    /* DisTube Player */
-    // The meat and potatoes of the bot. Runs off of a fork that may remove some core features.
+    // Music Player. This is a forked version of DisTube.
     this.player = new DisTube(this, {
       emitNewSongOnly: true,
       leaveOnStop: true,
@@ -105,10 +127,10 @@ class WaveBot extends AkairoClient {
     })
     this.vc = this.player.voices // @discordjs/voice
 
-    /* Data Management */
+    // Bot Settings.
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
 
-    /* Load all commands */
+    // Create Command Handler
     this.commands = new CommandHandler(this, {
       directory: './src/commands',
       prefix: message => {
@@ -122,34 +144,36 @@ class WaveBot extends AkairoClient {
       allowMention: true
     })
 
-    /* Load all Listeners */
+    // Create Listener Handler
     this.listeners = new ListenerHandler(this, {
       directory: './src/listeners'
     })
 
-    /* Load all Inhibitors */
+    // Create Inhibitor Handler
     this.inhibitors = new InhibitorHandler(this, {
       directory: './src/inhibitors'
     })
 
+    // Set custom emitters
     this.listeners.setEmitters({
       process: process,
       commandHandler: this.commands,
       player: this.player
     })
 
-    this.commands.useInhibitorHandler(this.inhibitors)
-    this.commands.useListenerHandler(this.listeners)
+    this.commands.useInhibitorHandler(this.inhibitors) // Use all Inhibitors.
+    this.commands.useListenerHandler(this.listeners) // Use all Listeners.
 
-    this.commands.loadAll()
-    this.listeners.loadAll()
+    this.commands.loadAll() // Load all Inhibitors
+    this.listeners.loadAll() // Load all Listeners.
 
+    // In the case of production, load all Inhibitors.
     if (process.env.NODE_ENV === 'production') {
       this.inhibitors.loadAll()
     }
   }
 
-  /* Load Mongoose Provider */
+  // This is required to load the mongoose provider.
   async login (token) {
     await this.settings.init()
     return super.login(token)

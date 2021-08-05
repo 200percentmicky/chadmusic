@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo')
-const { FieldsEmbed } = require('discord-paginationembed')
+const { Paginator } = require('array-paginator')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandInRole extends Command {
   constructor () {
@@ -19,32 +20,52 @@ module.exports = class CommandInRole extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     const role = message.mentions.roles.first() ||
-            message.guild.roles.cache.get(args[1]) ||
-            message.guild.roles.cache.find(val => val.name === args.slice(1).join(' '))
-    if (!role) return this.client.ui.say(message, 'error', `\`${args.slice(1).join(' ')}\` is not a valid role on this server.`)
+      message.guild.roles.cache.get(args[1]) ||
+      message.guild.roles.cache.find(val => val.name === args.slice(1).join(' '))
+    if (!role) return message.say('error', `\`${args.slice(1).join(' ')}\` is not a valid role on this server.`)
+
+    // A list of all members in an array
     const memberList = role.members.array()
 
-    const embed = new FieldsEmbed()
-      .setArray(memberList)
-      .setAuthorizedUsers(message.author.id)
-      .setChannel(message.channel)
-      .setElementsPerPage(8)
-      .setPage(1)
-      .setPageIndicator('footer')
-      .setNavigationEmojis({
-        back: '◀',
-        jump: '↗',
-        forward: '▶',
-        delete: '❌'
-      })
-      .formatField(`${memberList.length} member${memberList === 1 ? ' has' : 's have'} this role.`, member => member.user.tag)
-      .setTimeout(60000)
+    // Paginator utilizing the array
+    const paginator = new Paginator(memberList, 10)
 
-    embed.embed
+    // Page 1 of the Paginator
+    const paginatorArray = paginator.page(1)
+
+    // The map of the first page
+    const roleMap = memberList.length > 0
+      ? paginatorArray.map(x => x)
+      : 'Nothing to show here...'
+
+    const embed = new MessageEmbed()
       .setColor(role.color)
       .setAuthor(`${role.name}`)
-      .setFooter(null) // This is required if you use .setPageIndicator('footer').
+      .setTitle(`${memberList.length} member${memberList === 1 ? ' has' : 's have'} this role.`)
+      .setDescription(roleMap)
 
-    embed.build()
+    if (memberList.length > 0) {
+      embed.setFooter(`Page ${paginator.current} of ${paginator.total}`)
+    }
+
+    // Previous Page
+    const previousPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setEmoji(process.env.PREVIOUS_PAGE)
+      .setCustomId('previous_page')
+      .setDisabled(true) // Since the embed opens on the first page.
+
+    // Next Page
+    const nextPage = new MessageButton()
+      .setStyle('PRIMARY')
+      .setEmoji(process.env.NEXT_PAGE)
+      .setCustomId('next_page')
+
+    // Cancel
+    const cancelButton = new MessageButton()
+      .setStyle('DANGER')
+      .setEmoji(process.env.CLOSE)
+      .setCustomId('cancel_button')
+
   }
 }

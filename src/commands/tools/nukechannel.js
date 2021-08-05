@@ -17,7 +17,7 @@ module.exports = class CommandNukeChannel extends Command {
   async exec (message) {
     if (!message.guild.me.permissions.any(Permissions.FLAGS.MANAGE_CHANNELS)) {
       // Must be guild wide.
-      return message.say('warn', 'I require one of my roles to have the **Manage Channel** permission for this command to work properly.')
+      return this.client.ui.say(message, 'warn', 'I require one of my roles to have the **Manage Channel** permission for this command to work properly.')
     }
 
     const nukeButton = new MessageButton()
@@ -35,7 +35,7 @@ module.exports = class CommandNukeChannel extends Command {
     const buttonRow = new MessageActionRow()
       .addComponents(nukeButton, cancelButton)
 
-    const msg = await message.say('warn', 'Nuking this channel will delete all messages sent here. This action cannot be undone. Do you wish to proceed?', 'Warning', null, [buttonRow])
+    const msg = await this.client.ui.say(message, 'warn', 'Nuking this channel will delete all messages sent here. This action cannot be undone. Do you wish to proceed?', 'Warning', null, [buttonRow])
 
     const filter = interaction => interaction.user.id === message.author.id
 

@@ -28,7 +28,7 @@ module.exports = class CommandRule34 extends Command {
     const imgs = await Booru.search('rule34', [tags], { limit: 1, random: true })
     if (imgs.length === 0) {
       tags = args.slice(1).join(' ')
-      message.say('warn', `No results for \`${tags}\``)
+      this.client.ui.say(message, 'warn', `No results for \`${tags}\``)
       return message.channel.stopTyping(true)
     };
 
@@ -45,7 +45,7 @@ module.exports = class CommandRule34 extends Command {
         message.channel.send({ embed: result })
       })
     } catch (err) {
-      message.say('error', err.message, 'Booru API Error')
+      this.client.ui.say(message, 'error', err.message, 'Booru API Error')
     }
     return message.channel.stopTyping(true)
   }

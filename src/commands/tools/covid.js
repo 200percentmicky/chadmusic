@@ -39,7 +39,7 @@ module.exports = class CommandCovid extends Command {
         message.channel.send({ embed: embed })
       })
       .catch(err => {
-        message.say('error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')
+        this.client.ui.say(message, 'error', `\`\`\`js${err}\`\`\``, '`Covid19Api Error`')
         return message.recordError('warning', 'covid', 'Covid19Api Error', err.stack)
       })
     return message.channel.stopTyping()

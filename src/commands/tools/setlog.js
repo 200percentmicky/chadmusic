@@ -68,7 +68,7 @@ module.exports = class CommandSetLog extends Command {
     }
 
     if (!logType[args[1]]) {
-      return message.say('warn', stripIndents`
+      return this.client.ui.say(message, 'warn', stripIndents`
             \`${args[1]}\` is not a valid log you can set.
 
             **Available Logs:**
@@ -88,15 +88,15 @@ module.exports = class CommandSetLog extends Command {
     // Use NONE to remove the log from the server.
     if (args[2] === 'NONE'.toLowerCase()) {
       await this.client.settings.delete(message.guild.id, args[1])
-      return message.say('ok', `${logType[args[1]]} will no longer be sent to a channel.`)
+      return this.client.ui.say(message, 'ok', `${logType[args[1]]} will no longer be sent to a channel.`)
     }
 
     try {
       const channel = args[2] ? message.mentions.channels.first() || message.guild.channels.cache.get(args[2]) : message.channel
       await this.client.settings.set(message.guild.id, args[1], channel.id)
-      return message.say('ok', `Added ${logType[args[1]]} to ${channel.toString()}.`)
+      return this.client.ui.say(message, 'ok', `Added ${logType[args[1]]} to ${channel.toString()}.`)
     } catch (err) {
-      message.say('error', err.message)
+      this.client.ui.say(message, 'error', err.message)
       return message.recordError('error', 'setlog', 'Command Error', err.stack)
     }
   }

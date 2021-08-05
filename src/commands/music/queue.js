@@ -110,7 +110,7 @@ module.exports = class CommandQueue extends Command {
     const buttonRow = new MessageActionRow()
       .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump)
 
-    /* Rand out of room for the cancel button, so... */
+    /* Ran out of room for the cancel button, so... */
     const cancelRow = new MessageActionRow()
       .addComponents(cancelButton)
 

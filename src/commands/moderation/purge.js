@@ -23,17 +23,17 @@ module.exports = class CommandPurge extends Command {
   }
 
   async exec (message, args) {
-    if (!args) return message.usage('purge <number:2-100>')
+    if (!args) return this.client.ui.usage(message, 'purge <number:2-100>')
     message.delete()
     if (args.deleteCount) {
       try {
         message.channel.bulkDelete(args.deleteCount)
         return
       } catch (err) {
-        return message.say('error', err.message)
+        return this.client.ui.say(message, 'error', err.message)
       }
     } else {
-      return message.say('warn', 'Number must be between 2 and 100.')
+      return this.client.ui.say(message, 'warn', 'Number must be between 2 and 100.')
     }
   }
 }

@@ -31,7 +31,7 @@ module.exports = class CommandAvatar extends Command {
     if (args[1] === 'guild' || args[1] === 'server') {
       const serverurl = message.guild.iconURL({ dynamic: true })
       if (!serverurl) {
-        return message.say('warn', 'This server doesn\'t have an icon.')
+        return this.client.ui.say(message, 'warn', 'This server doesn\'t have an icon.')
       }
 
       const sizes = `**[Small](${serverurl}${small}) | [Medium](${serverurl}${medium}) | [Large](${serverurl}${large}) | [XLarge](${serverurl}${xlarge})**`
@@ -62,14 +62,14 @@ module.exports = class CommandAvatar extends Command {
     }
 
     // Does this member exist?
-    if (!member) return message.say('warn', `\`${args[1]}\` is not a valid member.`)
+    if (!member) return this.client.ui.say(message, 'warn', `\`${args[1]}\` is not a valid member.`)
 
     // Check's to see if a URL is present.
     if (!pfpurl) {
       if (message.author) {
-        return message.say('warn', 'You don\'t have an avatar set.')
+        return this.client.ui.say(message, 'warn', 'You don\'t have an avatar set.')
       } else {
-        return message.say('warn', 'This member doesn\'t have an avatar.')
+        return this.client.ui.say(message, 'warn', 'This member doesn\'t have an avatar.')
       }
     }
 
