@@ -1,5 +1,5 @@
 /**
- * Project Wave
+ * Project Wave - The Chad Music Bot
  *
  * MIT License
  *
@@ -27,7 +27,6 @@
 'use strict'
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
-const prefix = require('discord-prefix')
 const { Intents } = require('discord.js')
 const DisTube = require('../../chadtube/dist').default
 const moment = require('moment')
@@ -35,6 +34,7 @@ const chalk = require('chalk')
 const { createLogger, format, transports } = require('winston')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
+const { Database } = require('quickmongo')
 const si = require('systeminformation')
 const ui = require('./modules/WaveUI')
 
@@ -72,14 +72,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Say hello!
 const { version } = require('../package.json')
-logger.info('//////////////////////////////////')
+logger.info('/////////////////////////////////')
 logger.info('    * * * Project Wave * * *')
-logger.info('//////////////////////////////////')
+logger.info('/////////////////////////////////')
 logger.info('Bot Version: %s', version)
 
-// Some dependencies such as Discord.js itself now require Node.JS version 14 or above.
-if (process.versions.node < '14.0.0') {
-  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '14.0.0', process.versions.node)
+// Some dependencies such as Discord.js itself now require Node.JS version 16 or above.
+if (process.versions.node < '16.0.0') {
+  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '16.0.0', process.versions.node)
   process.exit(1)
 }
 
@@ -99,13 +99,12 @@ class WaveBot extends AkairoClient {
     }, {
       disableMentions: 'true',
       restTimeOffset: 175,
-      intents: new Intents(32767)
+      intents: new Intents(5783)
     })
 
     // Calling packages that can be used throughout the client.
     this.utils = utils
     this.moment = moment
-    this.prefix = prefix
     this.logger = logger
     this.si = si
     this.ui = ui
@@ -128,6 +127,12 @@ class WaveBot extends AkairoClient {
 
     // Bot Settings.
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
+
+    // Moderation Logs
+    this.modlog = new Database(process.env.MONGO_URI_MODLOG, 'modlog')
+
+    // Guild Tags
+    this.tags = new Database(process.env.MONGO_URI_TAGS, 'tags')
 
     // Create Command Handler
     this.commands = new CommandHandler(this, {
@@ -157,7 +162,8 @@ class WaveBot extends AkairoClient {
     this.listeners.setEmitters({
       process: process,
       commandHandler: this.commands,
-      player: this.player
+      player: this.player,
+      modlog: this.modlog
     })
 
     this.commands.useInhibitorHandler(this.inhibitors) // Use all Inhibitors.

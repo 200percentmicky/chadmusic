@@ -11,11 +11,11 @@ const distubeversion = require('../../../node_modules/distube/package.json')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
-    super('musicdebug', {
-      aliases: ['musicdebug', 'sysinfo', 'jssysinfo', 'msysinfo'],
+    super('debug', {
+      aliases: ['debug', 'sysinfo'],
       category: '💻 Core',
       description: {
-        text: 'System statistics about the music bot.'
+        text: 'Shows system statistics about the bot.'
       }
     })
   }
@@ -30,10 +30,12 @@ module.exports = class CommandDebug extends Command {
     const osSi = await si.osInfo()
     const memory = await si.mem()
     const user = os.userInfo()
+    const owner = this.client.users.cache.get(this.client.ownerID)
 
     const data = stripIndents`
-    === Project Wave ===
+    === ChadMusic - The Chad Music Bot ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
+               Owner :: ${owner.tag} (ID: ${owner.id})
              Node.js :: ${process.version}
           Discord.js :: ${discordversion.version}
     Akairo Framework :: ${akairoversion.version}
@@ -60,6 +62,6 @@ module.exports = class CommandDebug extends Command {
       ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
     `
 
-    message.channel.send({ content: data, code: 'asciidoc', split: true })
+    message.channel.send({ content: `\`\`\`asciidoc\n${data}\`\`\`` })
   }
 }

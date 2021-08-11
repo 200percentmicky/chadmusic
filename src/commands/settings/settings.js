@@ -6,10 +6,10 @@ const { toColonNotation } = require('colon-notation')
 module.exports = class CommandSettings extends Command {
   constructor () {
     super('settings', {
-      aliases: ['musicsettings'],
+      aliases: ['settings'],
       category: '⚙ Settings',
       description: {
-        text: 'Shows you the current settings for this server.'
+        text: 'Shows you the current settings of the bot for this server.'
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']

@@ -10,8 +10,8 @@ const distubeversion = require('../../../node_modules/distube/package.json') // 
 
 module.exports = class CommandAbout extends Command {
   constructor () {
-    super('musicabout', {
-      aliases: ['musicabout'],
+    super('about', {
+      aliases: ['about'],
       category: '💻 Core',
       description: {
         text: 'Shows information about the bot.'
@@ -23,8 +23,19 @@ module.exports = class CommandAbout extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
       .setColor(process.env.COLOR_BLOOD)
-      .setAuthor(`About ${this.client.user.username}`, this.client.user.avatarURL({ dynamic: true }))
-      .setDescription("Micky-kun's multi-purpose Discord bot that's also a cure alien girl!")
+      .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
+      .setDescription('A badass music bot for your badass Discord server.')
+      .addField('✨ Features', stripIndents`
+      :white_small_square: Supports up to 700+ websites.
+      :white_small_square: Add multiple filters to the player.
+      :white_small_square: Alter filter values during playback.
+      :white_small_square: Unlimited volume! :joy::ok_hand:
+      :white_small_square: DJ commands to control the player.
+      :white_small_square: Queue and track length limits.
+      :white_small_square: Advanced queue management.
+      :white_small_square: ???
+      :white_small_square: Profit, bitches!
+      `)
       .addField('⚠ This bot is still a work in progress.', `As with all forms of software currently in development, there will be 🐛 **bugs!** If you come across any, please feel free to report any bugs to the **[support server](${process.env.SERVER_INVITE})**.`)
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
