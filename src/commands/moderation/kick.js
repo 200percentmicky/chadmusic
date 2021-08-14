@@ -24,7 +24,8 @@ module.exports = class CommandKick extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
+    const member = await message.mentions.members.first() ||
+      await message.guild.members.fetch(args[1])
 
     if (!args[1]) {
       return this.client.ui.usage(message, 'kick <@user> [reason]')
@@ -55,7 +56,7 @@ module.exports = class CommandKick extends Command {
 
     try {
       const embed = new MessageEmbed()
-        .setColor(this.client.color.ban)
+        .setColor(this.client.color.kick)
         .setAuthor(`You have been kicked from ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`**Reason:** ${reason}`)
         .setTimestamp()
@@ -66,7 +67,7 @@ module.exports = class CommandKick extends Command {
     } finally {
       await member.kick(`${message.author.tag}: ${reason}`)
       this.client.ui.custom(message, '👢', this.client.color.kick, randomResponse)
-      message.guild.recordCase('kick', message.author.id, member.user.id, reason)
+      this.client.modcase.create(message.guild, 'kick', message.author.id, member.user.id, reason)
     }
   }
 }

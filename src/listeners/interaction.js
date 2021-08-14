@@ -9,7 +9,7 @@ module.exports = class ListenerInteractionCreate extends Listener {
   }
 
   async exec (interaction) {
-    if (!interaction.isMessageComponent() && interaction.componentType !== 'BUTTON') return
+    if (!interaction.isMessageComponent()) return
     interaction.deferUpdate()
   }
 }

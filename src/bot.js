@@ -30,45 +30,14 @@ const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, Mongoos
 const { Intents } = require('discord.js')
 const DisTube = require('../../chadtube/dist').default
 const moment = require('moment')
-const chalk = require('chalk')
-const { createLogger, format, transports } = require('winston')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
 const { Database } = require('quickmongo')
 const si = require('systeminformation')
 const ui = require('./modules/WaveUI')
-
-// Winston Logger
-const logger = createLogger({
-  format: format.combine(
-    format.splat(),
-    format.timestamp(),
-    format.label({ label: '==>' }),
-    format.printf(({ timestamp, label, level, message }) => {
-      return `[${timestamp}] ${label} ${level}: ${message}`
-    })
-  ),
-  transports: [
-    new transports.File({
-      filename: 'console.log'
-    })
-  ]
-})
-
-// Log everything to the console as long as the application is not
-// in "production" as stated in the .env file. Otherwise, if the
-// aplication is in "production", send all logs to a file.
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    format: format.combine(
-      format.colorize(),
-      format.simple(),
-      format.printf(({ timestamp, label, level, message }) => {
-        return `${chalk.black.cyan(`[${timestamp}]`)} ${label} ${level}: ${message}`
-      })
-    )
-  }))
-}
+const logger = require('./modules/winstonLogger')
+const WaveModlog = require('./modules/WaveModlog')
+const color = require('./colorcode.json')
 
 // Say hello!
 const { version } = require('../package.json')
@@ -78,8 +47,8 @@ logger.info('/////////////////////////////////')
 logger.info('Bot Version: %s', version)
 
 // Some dependencies such as Discord.js itself now require Node.JS version 16 or above.
-if (process.versions.node < '16.0.0') {
-  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '16.0.0', process.versions.node)
+if (process.versions.node < '16.6.0') {
+  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '16.6.0', process.versions.node)
   process.exit(1)
 }
 
@@ -108,6 +77,8 @@ class WaveBot extends AkairoClient {
     this.logger = logger
     this.si = si
     this.ui = ui
+    this.modcase = WaveModlog
+    this.color = color
 
     // Music Player. This is a forked version of DisTube.
     this.player = new DisTube(this, {

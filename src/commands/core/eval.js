@@ -13,8 +13,8 @@ const commonTags = require('common-tags')
 
 module.exports = class CommandEval extends Command {
   constructor () {
-    super('jseval', {
-      aliases: ['jseval'],
+    super('eval', {
+      aliases: ['eval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',
@@ -46,7 +46,7 @@ module.exports = class CommandEval extends Command {
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(await (async () => { return code })())
+      let evaled = eval(code)
 
       if (typeof evaled !== 'string') {
         evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 })

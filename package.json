@@ -25,7 +25,7 @@
     "discord-anti-spam": "^2.5.1",
     "discord-moderator": "^1.1.0",
     "discord-starboards": "^2.2.3",
-    "discord.js": "^13.0.1",
+    "discord.js": "^13.1.0",
     "distube": "^3.0.0-alpha.17",
     "dotenv": "^8.6.0",
     "fluent-ffmpeg": "github:fluent-ffmpeg/node-fluent-ffmpeg",

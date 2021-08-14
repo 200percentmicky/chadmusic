@@ -20,7 +20,8 @@ module.exports = class CommandBan extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
+    const member = await message.mentions.members.first() ||
+      await message.guild.members.fetch(args[1])
 
     if (!args[1]) {
       return this.client.ui.usage(message, 'ban <@user> [days] [reason]')
@@ -69,7 +70,7 @@ module.exports = class CommandBan extends Command {
     } finally {
       await member.ban({ days: days, reason: `${message.author.tag}: ${reason}` })
       this.client.ui.custom(message, '🔨', this.client.color.ban, randomResponse)
-      message.guild.recordCase('ban', message.author.id, member.user.id, reason)
+      this.client.modcase.create(message.guild, 'ban', message.author.id, member.user.id, reason)
     }
   }
 }

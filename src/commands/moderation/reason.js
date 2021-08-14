@@ -26,8 +26,8 @@ module.exports = class CommandReason extends Command {
     if (!args[1]) return this.client.ui.usage(message, 'reason <case_number> <reason>')
     const reason = args.slice(2).join(' ')
 
-    const caseNumber = parseInt(args[1] - 1)
-    const modlogCase = await this.client.modlog.get(`${message.guild.id}`).then(x => x[caseNumber])
+    const caseNumber = parseInt(args[1])
+    const modlogCase = await this.client.modlog.get(`${message.guild.id}.${caseNumber}`)
     if (!modlogCase) return this.client.ui.say(message, 'error', 'That case does not exist.')
     const modlogSettings = this.client.settings.get(message.guild.id, 'modlog')
     const modlogChannel = message.guild.channels.cache.find(val => val.id === modlogSettings)
@@ -65,7 +65,6 @@ module.exports = class CommandReason extends Command {
 
     const __type = `${emojiType[type]} ${_type}`
     const __reason = `**Reason:** ${reason}\n`
-    const __lastModified = this.client.moment(new Date()).format('ddd, MMM D, YYYY k:mm:ss')
 
     const embed = new MessageEmbed()
       .setColor(colors[type])
@@ -75,7 +74,7 @@ module.exports = class CommandReason extends Command {
       .addField('User', `${lastKnownUser}`, true)
       .addField('Action', `${__type}`, true)
       .setTimestamp()
-      .setFooter(`Case ${modlogCase.caseid}`)
+      .setFooter(`Case ${modlogCase.case_id}`)
 
     if (modlogCase.type === 'mute') {
       const _duration = prettyms(modlogCase.duration, { verbose: true })
@@ -101,7 +100,7 @@ module.exports = class CommandReason extends Command {
       }
     }
 
-    embed.addField('Last Modified', `${__lastModified}`)
+    embed.addField('Last Modified', `<t:${Math.floor(Date.now() / 1000)}:F>`)
 
     embed.addField('ID', stripIndents`
     \`\`\`js\n
@@ -113,7 +112,7 @@ module.exports = class CommandReason extends Command {
 
     // Must include a reason.
     if (!reason) return this.client.ui.say(message, 'warn', 'Please provide a new reason for the case.')
-    await msg.edit(embed)
+    await msg.edit({ embeds: [embed] })
     return this.client.ui.say(message, 'ok', `Case **${args[1]}** has been updated.`)
 
     /*

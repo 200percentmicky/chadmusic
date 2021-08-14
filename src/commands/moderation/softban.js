@@ -24,7 +24,8 @@ module.exports = class CommandSoftban extends Command {
 
   async exec (message) {
     const args = message.content.split(/ +/g)
-    const member = message.mentions.members.first() || message.guild.members.cache.get(args[1])
+    const member = await message.mentions.members.first() ||
+      await message.guild.members.fetch(args[1])
 
     if (!args[1]) {
       return this.client.ui.usage(message, 'softban <@user> [reason]')
@@ -38,7 +39,7 @@ module.exports = class CommandSoftban extends Command {
     if (!member.bannable) {
       return this.client.ui.say(message, 'error', member === message.member
         ? 'You cannot softban yourself from the server.'
-        : `Unable to softban **${member.user.username}**#${member.user.discriminator}.`
+        : `Unable to softban **${member.user.tag}**.`
       )
     }
 
@@ -47,8 +48,8 @@ module.exports = class CommandSoftban extends Command {
 
     const responses = [
       `And like that, **${member.user.tag}** has been softbanned!`,
-      `**${message.user.tag}** has been softbanned.`,
-      `Softbanned **${message.user.tag}** for posting something silly.`
+      `**${member.user.tag}** has been softbanned.`,
+      `Softbanned **${member.user.tag}** for posting something silly.`
     ]
 
     const randomResponse = responses[Math.floor(Math.random() * responses.length)]
@@ -67,7 +68,7 @@ module.exports = class CommandSoftban extends Command {
       await member.ban({ days: 1, reason: `${message.author.tag}: ${reason}` })
       await message.guild.members.unban(member.user.id)
       this.client.ui.custom(message, '💨', this.client.color.softban, randomResponse)
-      message.guild.recordCase('softban', message.author.id, member.user.id, reason)
+      this.client.modcase.create(message.guild, 'softban', message.author.id, member.user.id, reason)
     }
   }
 }

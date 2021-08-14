@@ -1,17 +1,29 @@
 const color = require('../colorcode.json')
 const emoji = require('../emoji.json')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Guild, GuildMember, User } = require('discord.js')
 const prettyms = require('pretty-ms')
 const { stripIndents } = require('common-tags')
 
-const modlog = async (msg, type, modid, userid, reason, duration) => {
-  /* Gets the mod log for the guild. */
-  msg.client.modlog.get(msg.guild.id).then(modlog => {
-    /* Initialize array if modlog is null */
-    if (modlog == null) msg.client.modlog.set(msg.guild.id, [])
-
-    /* Gets the current amount of entries in the mod log. */
-    const caseid = parseInt(modlog.length)
+/**
+ * Creates a case in the modlog for a server.
+ * @param {Message} msg Instance of `Discord.Message`
+ * @param {string} type The case type.
+ * @param {GuildMember} modid The moderator's User ID. Instance of `Discord.GuildMember`.
+ * @param {User} userid The User ID of the offender. Instance of `Discord.User`.
+ * @param {string} reason The reason for the case.
+ * @param {number} duration If the case type is `mute`, the duration of the mute in milliseconds.
+ */
+const create = (guild, type, modid, userid, reason, duration) => {
+  if (!(guild instanceof Guild)) throw new TypeError('msg must be an instance of Guild.')
+  guild.client.modlog.get(guild.id).then(modlog => {
+    // Gets the entire size of the guild's modlog, and parses a number for the case's creation.
+    // What the fuck am I doing?
+    let caseid
+    try {
+      caseid = Object.keys(modlog).length
+    } catch {
+      caseid = 0
+    }
 
     // Embed colors!
     const colors = {
@@ -21,8 +33,10 @@ const modlog = async (msg, type, modid, userid, reason, duration) => {
       unban: color.unban
     }
 
-    const moderator = msg.client.members.cache.get(modid) // The moderators user ID.
-    const user = msg.client.users.cache.find(val => val.id === userid) // The affected users ID.
+    const moderator = guild.members.cache.get(modid) // The moderators user ID.
+    if (!(moderator instanceof GuildMember)) throw new TypeError('modid must be an instance of GuildMember.')
+    const user = guild.client.users.cache.find(val => val.id === userid) || 'Unknown' // The affected users ID.
+    if (!(user instanceof User)) throw new TypeError('userid must be an instance of User.')
 
     const _type = type.charAt(0).toUpperCase() + type.slice(1)
     const emojiType = {
@@ -35,7 +49,7 @@ const modlog = async (msg, type, modid, userid, reason, duration) => {
     }
 
     // Used to construct the embed.
-    const prefix = msg.client.settings.get(msg.guild.id, 'prefix') || process.env.PREFIX
+    const prefix = guild.client.settings.get(guild.id, 'prefix') || process.env.PREFIX
     if (!reason) reason = `No reason provided. Type \`${prefix}reason ${caseid + 1}\` to add it.`
 
     const __type = `${emojiType[type]} ${_type}`
@@ -56,8 +70,8 @@ const modlog = async (msg, type, modid, userid, reason, duration) => {
       embed.addField('Duration', _duration)
     }
 
-    const modlogSetting = msg.client.settings.get(msg.guild.id, 'modlog') // The modlog channel.
-    const modlogChannel = msg.guild.channels.cache.get(modlogSetting) // Get's the modlog channel for the guild.
+    const modlogSetting = guild.client.settings.get(guild.id, 'modlog') // The modlog channel.
+    const modlogChannel = guild.channels.cache.get(modlogSetting) // Get's the modlog channel for the guild.
 
     embed.addField('ID', stripIndents`
     \`\`\`js\n
@@ -78,14 +92,15 @@ const modlog = async (msg, type, modid, userid, reason, duration) => {
         user_tag: user.tag,
         user_avatar: user.avatarURL({ dynamic: true }),
         user_id: userid,
-        duration: duration || null
+        duration: duration || null,
+        case_id: caseid + 1
       }
 
-      msg.client.modlog.push(`${msg.guild.id}.${caseid + 1}`, caseObj)
+      msg.client.modlog.set(`${msg.guild.id}.${caseid + 1}`, caseObj)
     }).catch(err => {
       // Some stupid shit happened idk...
       if (err.name === 'DiscordAPIError') return
-      const errorChannel = msg.client.channels.cache.find(val => val.id === '603735567733227531')
+      const errorChannel = guild.client.channels.cache.find(val => val.id === '603735567733227531')
       const embed = new MessageEmbed()
         .setColor(color.error)
         .setTitle(`${emoji.error} Internal Error`)
@@ -96,4 +111,4 @@ const modlog = async (msg, type, modid, userid, reason, duration) => {
   })
 }
 
-module.exports = modlog
+module.exports = { create }
