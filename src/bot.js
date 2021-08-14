@@ -28,7 +28,7 @@
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const { Intents } = require('discord.js')
-const DisTube = require('../../chadtube/dist').default
+const DisTube = require('../chadtube/dist').default
 const moment = require('moment')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
