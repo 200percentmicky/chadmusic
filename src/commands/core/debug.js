@@ -7,7 +7,7 @@ const prettyMs = require('pretty-ms')
 
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package.json')
-const distubeversion = require('../../../node_modules/distube/package.json')
+const distubeversion = require('../../../chadtube/package.json')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
