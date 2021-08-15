@@ -6,7 +6,7 @@ const prettyms = require('pretty-ms')
 // Mainly for version info...
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
 const discordversion = require('../../../node_modules/discord.js/package.json')
-const distubeversion = require('../../../node_modules/distube/package.json') // Temporary
+const distubeversion = require('../../../chadtube/package.json') // Temporary
 
 module.exports = class CommandAbout extends Command {
   constructor () {
