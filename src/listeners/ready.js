@@ -22,6 +22,7 @@ module.exports = class SurferReady extends Listener {
     // Disables eval if DEV is set to false.
     if (process.env.DEV === 'true') {
       this.client.commands.remove('meval')
+      this.client.commands.remove('mshell')
     }
 
     this.client.logger.info('Logged in as %s (%d)', this.client.user.tag, this.client.user.id)
