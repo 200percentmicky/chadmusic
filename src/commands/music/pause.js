@@ -38,7 +38,7 @@ module.exports = class CommandPause extends Command {
     if (vc.members.size <= 2 || dj) {
       await this.client.player.pause(message)
       const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX)
-      return this.client.ui.custom(message, '⏸', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}play to resume playback.`)
+      return this.client.ui.custom(message, '⏸', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}resume to resume playback.`)
     } else {
       return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
