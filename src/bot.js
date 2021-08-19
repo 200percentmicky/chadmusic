@@ -1,5 +1,5 @@
 /**
- * Project Wave - The Chad Music Bot
+ * ChadMusic - The Chad Music Bot
  *
  * MIT License
  *
@@ -28,7 +28,7 @@
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const { Intents } = require('discord.js')
-const DisTube = require('../../chadtube/dist').default
+const DisTube = require('../chadtube/dist').default
 const moment = require('moment')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
@@ -40,14 +40,14 @@ const color = require('./colorcode.json')
 
 // Say hello!
 const { version } = require('../package.json')
-logger.info('/////////////////////////////////')
-logger.info('    * * * Project Wave * * *')
-logger.info('/////////////////////////////////')
+logger.info('/////////////////////////////')
+logger.info('    * * * ChadMusic * * *')
+logger.info('/////////////////////////////')
 logger.info('Bot Version: %s', version)
 
 // Some dependencies such as Discord.js itself now require Node.JS version 16 or above.
 if (process.versions.node < '16.6.0') {
-  logger.error('Project Wave requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '16.6.0', process.versions.node)
+  logger.error('ChadMusic requires at least Node.js v%s. You have v%s installed. Please update your existing Node installation.', '16.6.0', process.versions.node)
   process.exit(1)
 }
 
