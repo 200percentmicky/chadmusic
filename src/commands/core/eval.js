@@ -13,8 +13,8 @@ const commonTags = require('common-tags')
 
 module.exports = class CommandEval extends Command {
   constructor () {
-    super('eval', {
-      aliases: ['eval'],
+    super('meval', {
+      aliases: ['meval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',

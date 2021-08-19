@@ -11,8 +11,8 @@ const distubeversion = require('../../../chadtube/package.json')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
-    super('debug', {
-      aliases: ['debug', 'sysinfo'],
+    super('musicdebug', {
+      aliases: ['musicdebug'],
       category: '💻 Core',
       description: {
         text: 'Shows system statistics about the bot.'
