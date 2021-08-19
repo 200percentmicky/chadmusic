@@ -5,8 +5,8 @@ const { toColonNotation } = require('colon-notation')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('settings', {
-      aliases: ['settings'],
+    super('musicsettings', {
+      aliases: ['musicsettings', 'msettings'],
       category: '⚙ Settings',
       description: {
         text: 'Shows you the current settings of the bot for this server.'
@@ -56,7 +56,7 @@ module.exports = class CommandSettings extends Command {
       **Time Zone:** ${timezone}
       `)
       */
-      .addField('🎶 Music', stripIndents`
+      .setDescription(stripIndents`
       **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
       **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
       **🕰 Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
