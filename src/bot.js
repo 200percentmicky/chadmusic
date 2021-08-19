@@ -28,11 +28,10 @@
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const { Intents } = require('discord.js')
-const DisTube = require('../chadtube/dist').default
+const DisTube = require('../../chadtube/dist').default
 const moment = require('moment')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
-const { Database } = require('quickmongo')
 const si = require('systeminformation')
 const ui = require('./modules/WaveUI')
 const logger = require('./modules/winstonLogger')
@@ -82,28 +81,22 @@ class WaveBot extends AkairoClient {
 
     // Music Player. This is a forked version of DisTube.
     this.player = new DisTube(this, {
-      emitNewSongOnly: true,
-      leaveOnStop: true,
-      leaveOnEmpty: true,
-      leaveOnFinish: true,
+      emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
+      leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
+      leaveOnEmpty: process.env.LEAVE_ON_EMPTY === 'true' || false,
+      leaveOnFinish: process.env.LEAVE_ON_FINISH === 'true' || false,
       youtubeCookie: process.env.YOUTUBE_COOKIE,
       ytdlOptions: {
         highWaterMark: 1 << 25
       },
-      youtubeDL: true,
-      updateYouTubeDL: false,
+      youtubeDL: process.env.USE_YOUTUBE_DL === 'true' || false,
+      updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
       nsfw: true // Being handled on a per guild basis, not client-wide.
     })
     this.vc = this.player.voices // @discordjs/voice
 
     // Bot Settings.
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))
-
-    // Moderation Logs
-    this.modlog = new Database(process.env.MONGO_URI_MODLOG, 'modlog')
-
-    // Guild Tags
-    this.tags = new Database(process.env.MONGO_URI_TAGS, 'tags')
 
     // Create Command Handler
     this.commands = new CommandHandler(this, {
@@ -133,8 +126,7 @@ class WaveBot extends AkairoClient {
     this.listeners.setEmitters({
       process: process,
       commandHandler: this.commands,
-      player: this.player,
-      modlog: this.modlog
+      player: this.player
     })
 
     this.commands.useInhibitorHandler(this.inhibitors) // Use all Inhibitors.
@@ -144,7 +136,7 @@ class WaveBot extends AkairoClient {
     this.listeners.loadAll() // Load all Listeners.
 
     // In the case of production, load all Inhibitors.
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.DEV === 'true') {
       this.inhibitors.loadAll()
     }
   }

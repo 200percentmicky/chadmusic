@@ -21,7 +21,7 @@ const logger = createLogger({
 // Log everything to the console as long as the application is not
 // in "production" as stated in the .env file. Otherwise, if the
 // aplication is in "production", send all logs to a file.
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.DEV === 'true') {
   logger.add(new transports.Console({
     format: format.combine(
       format.colorize(),

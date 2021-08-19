@@ -9,7 +9,7 @@ module.exports = class ListenerDebug extends Listener {
   }
 
   async exec (debug) {
-    if (process.env.NODE_ENV === 'production') return
+    if (process.env.DEV === 'true') return
     this.client.logger.info(debug)
   }
 }
