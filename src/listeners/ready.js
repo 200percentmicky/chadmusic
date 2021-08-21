@@ -19,11 +19,19 @@ module.exports = class SurferReady extends Listener {
       this.client.commands.remove('invite')
     }
 
-    // Disables eval if DEV is set to false.
-    if (process.env.DEV === 'true') {
+    // Disbales the eval command is USE_EVAL is not 'true'.
+    if (process.env.USE_EVAL !== 'true') {
       this.client.commands.remove('meval')
+    }
+
+    // Disables the shell command if USE_SHELL is not 'true'.
+    if (process.env.USE_SHELL !== 'true') {
       this.client.commands.remove('mshell')
     }
+
+    // seek isn't working. Unsure if its the voice library or youtube-dl.
+    // I'll enable it once it's fixed.
+    this.client.commands.remove('seek')
 
     this.client.logger.info('Logged in as %s (%d)', this.client.user.tag, this.client.user.id)
     this.client.logger.info('The owner of this application is %s (%d)', owner.tag, owner.id)
