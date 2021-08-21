@@ -35,6 +35,9 @@ module.exports = class CommandPlayNow extends Command {
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
+    const queue = this.client.player.getQueue(message)
+    if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.')
+
     const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
@@ -67,7 +70,7 @@ module.exports = class CommandPlayNow extends Command {
 
       message.channel.sendTyping()
       // eslint-disable-next-line no-useless-escape
-      await this.client.player.playSkip(message, text.replace(/(^\<+|\>+$)/g, ''))
+      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''), { skip: true })
       message.react(process.env.REACTION_OK)
     } else {
       return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
