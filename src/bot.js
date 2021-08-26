@@ -29,6 +29,7 @@
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo')
 const { Intents } = require('discord.js')
 const DisTube = require('../chadtube/dist').default
+const { SpotifyPlugin } = require('@distube/spotify')
 const moment = require('moment')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
@@ -81,6 +82,11 @@ class WaveBot extends AkairoClient {
 
     // Music Player. This is a forked version of DisTube.
     this.player = new DisTube(this, {
+      plugins: [
+        new SpotifyPlugin({
+          emitEventsAfterFetching: true
+        })
+      ],
       emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
       leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
       leaveOnEmpty: process.env.LEAVE_ON_EMPTY === 'true' || false,
