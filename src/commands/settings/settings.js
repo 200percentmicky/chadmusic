@@ -5,8 +5,8 @@ const { toColonNotation } = require('colon-notation')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('musicsettings', {
-      aliases: ['musicsettings', 'msettings'],
+    super('settings', {
+      aliases: ['settings'],
       category: '⚙ Settings',
       description: {
         text: 'Shows you the current settings of the bot for this server.'
@@ -20,7 +20,7 @@ module.exports = class CommandSettings extends Command {
     const settings = this.client.settings
 
     // All Settings
-    // const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
+    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
     // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
     const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
     const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
@@ -30,7 +30,7 @@ module.exports = class CommandSettings extends Command {
     const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
     const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100) // Default Volume
     const textChannel = settings.get(message.guild.id, 'textChannel', null) // Text Channel
-    const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
+    // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
     // ! This setting only affects videos from YouTube.
     // All pornographic websites are blocked.
@@ -57,6 +57,7 @@ module.exports = class CommandSettings extends Command {
       `)
       */
       .setDescription(stripIndents`
+      **⁉ Prefix:** \`${prefix}\`
       **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
       **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
       **🕰 Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
@@ -66,8 +67,8 @@ module.exports = class CommandSettings extends Command {
       **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
       **🗣 Default Volume:** ${defaultVolume}
       **📺 Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
-      **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
       `)
+      // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
       /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}

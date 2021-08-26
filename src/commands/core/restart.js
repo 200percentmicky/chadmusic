@@ -3,8 +3,8 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandRestart extends Command {
   constructor () {
-    super('mrestart', {
-      aliases: ['mrestart', 'jsrestart'],
+    super('restart', {
+      aliases: ['restart', 'jsrestart'],
       ownerOnly: true,
       category: '💻 Core',
       description: {

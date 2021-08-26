@@ -10,8 +10,8 @@ const distubeversion = require('../../../chadtube/package.json') // Temporary
 
 module.exports = class CommandAbout extends Command {
   constructor () {
-    super('musicabout', {
-      aliases: ['musicabout'],
+    super('about', {
+      aliases: ['about'],
       category: '💻 Core',
       description: {
         text: 'Shows information about the bot.'

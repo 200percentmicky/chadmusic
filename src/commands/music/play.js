@@ -124,8 +124,6 @@ module.exports = class CommandPlay extends Command {
 
       // eslint-disable-next-line no-useless-escape
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
-      const emojiPerms = message.channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)
-      message.react(emojiPerms ? process.env.REACTION_OK : '✅')
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
       return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')

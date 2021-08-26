@@ -3,8 +3,8 @@ const { exec } = require('child_process')
 
 module.exports = class CommandShell extends Command {
   constructor () {
-    super('mshell', {
-      aliases: ['mshell'],
+    super('shell', {
+      aliases: ['shell'],
       description: {
         text: 'Execute shell precesses.',
         usage: 'shell <cmd>',
