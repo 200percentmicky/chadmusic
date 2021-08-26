@@ -40,11 +40,12 @@ module.exports = class CommandSeek extends Command {
 
     if (vc.members.size <= 2 || dj) {
       if (!args[1]) return this.client.ui.usage(message, 'seek <time>')
-      const time = toMilliseconds(args[1])
-      if (isNaN(time)) {
-        return this.client.ui.say(message, 'error', `\`${time}\` is not a valid time interval.`)
+      try {
+        const time = toMilliseconds(args[1])
+        this.client.player.seek(message.guild, parseInt(Math.floor(time / 1000)))
+      } catch {
+        this.client.ui.say(message, 'error', 'Track time must be in colon notation. Example: `4:30`')
       }
-      await this.client.player.seek(message, parseInt(time))
       return message.react(process.env.REACTION_OK)
     } else {
       return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
