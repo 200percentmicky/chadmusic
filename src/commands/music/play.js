@@ -1,7 +1,5 @@
 const { Command } = require('discord-akairo')
 const { Permissions } = require('discord.js')
-// const { MessageEmbed } = require('discord.js');
-// const YouTube = require('youtube-sr');
 
 function pornPattern (url) {
   // ! TODO: Come up with a better regex lol
@@ -47,10 +45,9 @@ module.exports = class CommandPlay extends Command {
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
-    if (!text) return this.client.ui.usage(message, 'play <URL|search>')
+    if (!text && !message.attachments.first()) return this.client.ui.usage('play <url/search/attachment>')
 
-    // eslint-disable-next-line no-useless-escape
-    if (pornPattern(text)) return this.client.ui.say(message, 'no', 'The URL you\'re requesting to play is not allowed.')
+    if (pornPattern(text)) return this.client.ui.say(message, 'no', "The URL you're requesting to play is not allowed.")
 
     const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
@@ -96,34 +93,8 @@ module.exports = class CommandPlay extends Command {
     }
 
     try {
-      /* Keeping this around just in case.
-      const urlPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-      const urlRegex = new RegExp(urlPattern);
-      if (text.match(urlRegex))
-      {
-        try {
-          const playlistPattern = /https?:\/\/(www\.)?(youtu(be)?)\.[a-zA-Z0-9()]{1,6}\b\/(playlist)([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-          const playlistRegex = new RegExp(playlistPattern);
-          if (text.match(playlistRegex))
-          {
-            await this.client.player.play(message, text);
-            message.react(process.env.REACTION_OK);
-          } else {
-            const result = await YouTube.search(text, { limit: 1 });
-            await this.client.player.play(message, `https://youtu.be/${result[0].id}`);
-            message.react(process.env.REACTION_OK);
-          }
-        } catch(err) {
-          return this.client.ui.say(message, 'error', `No results found for \`${text}\``, 'Track Error');
-        }
-      } else {
-        await this.client.player.play(message, text);
-        message.react(process.env.REACTION_OK);
-      }
-      */
-
-      // eslint-disable-next-line no-useless-escape
-      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''))
+      /* eslint-disable-next-line no-useless-escape */
+      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
       return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')

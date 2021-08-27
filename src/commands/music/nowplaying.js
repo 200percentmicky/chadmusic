@@ -2,6 +2,14 @@ const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
 const { splitBar } = require('string-progressbar')
 
+const isAttachment = (url) => {
+  // ! TODO: Come up with a better regex lol
+  // eslint-disable-next-line no-useless-escape
+  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g
+  const urlRegex = new RegExp(urlPattern)
+  return url.match(urlRegex)
+}
+
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
     super('nowplaying', {
@@ -44,7 +52,7 @@ module.exports = class CommandNowPlaying extends Command {
     const current = queue.currentTime
 
     const progressBar = splitBar(total, current, 17)[0]
-    const duration = song.isLive ? '📡 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
+    const duration = song.isLive ? '🔴 **Live**' : isAttachment(song.url) ? '📎 **File Upload**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
     const embed = new MessageEmbed()
       .setColor(this.client.utils.randColor())
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
@@ -58,10 +66,13 @@ module.exports = class CommandNowPlaying extends Command {
       embed.addField('⏸ Paused', `Type '${prefix}resume' to resume playback.`)
     }
 
+    if (song.age_restricted) {
+      embed.addField('Explicit', '🔞 This track is **Age Restricted**')
+    }
+
     if (song.youtube) {
-      if (queue.songs[0].info.videoDetails.age_restricted) embed.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
       const author = queue.songs[0].info.videoDetails.author
-      embed.addField('Channel', `[${author.name}](${author.channel_url})`)
+      embed.addField('Channel', `[${author.name}](${author.channel_url})` || 'N/A')
     }
 
     embed

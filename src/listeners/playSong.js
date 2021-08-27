@@ -2,6 +2,14 @@ const { Listener } = require('discord-akairo')
 const { MessageEmbed, Permissions } = require('discord.js')
 const prettyms = require('pretty-ms')
 
+const isAttachment = (url) => {
+  // ! TODO: Come up with a better regex lol
+  // eslint-disable-next-line no-useless-escape
+  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g
+  const urlRegex = new RegExp(urlPattern)
+  return url.match(urlRegex)
+}
+
 module.exports = class ListenerPlaySong extends Listener {
   constructor () {
     super('playSong', {
@@ -51,15 +59,31 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }))
 
     if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
+    if (song.youtube) songNow.addField('Channel', `[${author.name}](${author.url})` || 'N/A')
+    if (isAttachment(song.url)) songNow.setDescription('📎 **File Upload**')
 
     songNow
-      .addField('Channel', `[${author.name}](${author.url})`)
       .addField('Requested by', `${song.user}`, true)
-      .addField('Duration', `${song.isLive ? '📡 **Live**' : song.formattedDuration}`, true)
+      .addField('Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
       .setTitle(`${song.name}`)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
       .setTimestamp()
+
+    if (isAttachment(song.url)) {
+      const supportedFormats = [
+        'mp3',
+        'mp4',
+        'webm',
+        'ogg',
+        'wav'
+      ]
+      // This is to prevent the event from being called. This is already
+      // checked in the 'addSong' event.
+      if (!supportedFormats.some(element => song.url.endsWith(element))) {
+        return
+      }
+    }
 
     if (!message.channel) {
       channel.send({ embeds: [songNow] })

@@ -2,6 +2,14 @@ const { Listener } = require('discord-akairo')
 const { Permissions } = require('discord.js')
 const prettyms = require('pretty-ms')
 
+const isAttachment = (url) => {
+  // ! TODO: Come up with a better regex lol
+  // eslint-disable-next-line no-useless-escape
+  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g
+  const urlRegex = new RegExp(urlPattern)
+  return url.match(urlRegex)
+}
+
 module.exports = class ListenerAddSong extends Listener {
   constructor () {
     super('addSong', {
@@ -34,6 +42,20 @@ module.exports = class ListenerAddSong extends Listener {
           queue.songs.pop()
           return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
         }
+      }
+    }
+
+    if (isAttachment(song.url)) {
+      const supportedFormats = [
+        'mp3',
+        'mp4',
+        'webm',
+        'ogg',
+        'wav'
+      ]
+      if (!supportedFormats.some(element => song.url.endsWith(element))) {
+        queue.songs.pop()
+        return this.client.ui.say(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
       }
     }
 
