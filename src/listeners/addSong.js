@@ -54,22 +54,22 @@ module.exports = class ListenerAddSong extends Listener {
         'ogg',
         'wav'
       ]
+      if (!supportedFormats.some(element => song.url.endsWith(element))) {
+        queue.songs.pop()
+        return this.client.ui.say(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
+      }
       channel.send(
         {
           embeds: [
             new MessageEmbed()
               .setColor(process.env.COLOR_INFO)
               .setDescription(oneLine`
-              ${process.env.EMOJI_INFO} Support for playback of **📎 Audio and Video Attachments** is a
-              work in progress. Expect issues to arise during this testing phase. Contact the bot owner
-              if any issues occur.
+              ${process.env.EMOJI_INFO} Support for playback of **📎 Audio and Video Attachments** is currently a 
+              work in progress in which bugs may appear during this time. Please contact the bot owner if any issue 
+              arise during playback of attachments.
               `)
           ]
         })
-      if (!supportedFormats.some(element => song.url.endsWith(element))) {
-        queue.songs.pop()
-        return this.client.ui.say(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
-      }
     }
 
     this.client.ui.say(message, 'ok', `Added **${song.name}** to the queue.`)
