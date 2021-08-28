@@ -59,10 +59,10 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }))
 
     if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
-    if (song.youtube) songNow.addField('Channel', `[${author.name}](${author.url})` || 'N/A')
     if (isAttachment(song.url)) songNow.setDescription('📎 **File Upload**')
 
     songNow
+      .addField('Channel', `[${author.name}](${author.url})` || 'N/A')
       .addField('Requested by', `${song.user}`, true)
       .addField('Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
       .setTitle(`${song.name}`)

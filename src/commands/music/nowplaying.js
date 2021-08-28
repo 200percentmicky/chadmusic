@@ -50,6 +50,7 @@ module.exports = class CommandNowPlaying extends Command {
     const song = queue.songs[0]
     const total = song.duration + '000'
     const current = queue.currentTime
+    const author = song.uploader
 
     const progressBar = splitBar(total, current, 17)[0]
     const duration = song.isLive ? '🔴 **Live**' : isAttachment(song.url) ? '📎 **File Upload**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
@@ -70,12 +71,8 @@ module.exports = class CommandNowPlaying extends Command {
       embed.addField('Explicit', '🔞 This track is **Age Restricted**')
     }
 
-    if (song.youtube) {
-      const author = queue.songs[0].info.videoDetails.author
-      embed.addField('Channel', `[${author.name}](${author.channel_url})` || 'N/A')
-    }
-
     embed
+      .addField('Channel', `[${author.name}](${author.url})` || 'N/A')
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.filters.map(x => `**${x.name}:** ${x.value}`)}` : 'None'}`)
