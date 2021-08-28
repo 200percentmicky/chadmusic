@@ -36,8 +36,10 @@ module.exports = class CommandSkip extends Command {
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
+    const queue = this.client.player.getQueue(message.guild)
+
     const currentVc = this.client.vc.get(vc)
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
+    if (!queue || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
     else if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     // For breaking use only.
@@ -60,6 +62,10 @@ module.exports = class CommandSkip extends Command {
       this.votes.push(message.author.id)
       if (neededVotes) {
         this.votes = []
+        if (!queue.songs[1]) {
+          this.client.player.stop(message.guild)
+          return this.client.ui.say(message, "🔚 Reached the end of the queue. I'm outta here!")
+        }
         this.client.player.skip(message)
         return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
       } else {
@@ -77,6 +83,10 @@ module.exports = class CommandSkip extends Command {
       }
     } else {
       this.votes = []
+      if (!queue.songs[1]) {
+        this.client.player.stop(message.guild)
+        return this.client.ui.say(message, "🔚 Reached the end of the queue. I'm outta here!")
+      }
       this.client.player.skip(message)
       return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
     }
