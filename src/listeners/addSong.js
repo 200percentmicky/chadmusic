@@ -1,5 +1,6 @@
+const { oneLine } = require('common-tags')
 const { Listener } = require('discord-akairo')
-const { Permissions } = require('discord.js')
+const { Permissions, MessageEmbed } = require('discord.js')
 const prettyms = require('pretty-ms')
 
 const isAttachment = (url) => {
@@ -53,6 +54,18 @@ module.exports = class ListenerAddSong extends Listener {
         'ogg',
         'wav'
       ]
+      channel.send(
+        {
+          embeds: [
+            new MessageEmbed()
+              .setColor(process.env.COLOR_INFO)
+              .setDescription(oneLine`
+              ${process.env.EMOJI_INFO} Support for playback of **📎 Audio and Video Attachments** is a
+              work in progress. Expect issues to arise during this testing phase. Contact the bot owner
+              if any issues occur.
+              `)
+          ]
+        })
       if (!supportedFormats.some(element => song.url.endsWith(element))) {
         queue.songs.pop()
         return this.client.ui.say(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
