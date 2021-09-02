@@ -64,8 +64,8 @@ module.exports = class ListenerAddSong extends Listener {
             new MessageEmbed()
               .setColor(process.env.COLOR_INFO)
               .setDescription(oneLine`
-              ${process.env.EMOJI_INFO} Support for playback of **📎 Audio and Video Attachments** is currently a 
-              work in progress in which bugs may appear during this time. Please contact the bot owner if any issue 
+              ${process.env.EMOJI_INFO} Support for playback of **📎 Audio and Video Attachments** is currently a
+              work in progress in which bugs may appear during this time. Please contact the bot owner if any issue
               arise during playback of attachments.
               `)
           ]
