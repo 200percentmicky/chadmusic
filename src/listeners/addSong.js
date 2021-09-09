@@ -24,7 +24,9 @@ module.exports = class ListenerAddSong extends Listener {
     const guild = channel.guild
     const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id)
     const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX)
-    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && x.content.startsWith(prefix)).last()
+
+    // This is annoying.
+    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${this.client.user.id}>`))).last()
 
     const djRole = await this.client.settings.get(guild.id, 'djRole')
     const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true)

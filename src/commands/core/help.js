@@ -14,7 +14,8 @@ module.exports = class CommandHelp extends Command {
       category: '💻 Core',
       args: [
         {
-          id: 'string',
+          type: 'string',
+          id: 'command',
           match: 'content',
           default: null
         }
@@ -24,8 +25,8 @@ module.exports = class CommandHelp extends Command {
   }
 
   async exec (message, args) {
-    const string = args.string
-    const command = this.handler.modules.get(string)
+    const cmdName = args.command
+    const command = this.handler.modules.get(cmdName)
 
     let prefix
     if (message.channel.type === 'dm') {
@@ -36,9 +37,9 @@ module.exports = class CommandHelp extends Command {
       prefix = process.env.PREFIX
     }
 
-    if (string) {
+    if (cmdName) {
       // The command has been found.
-      if (this.handler.modules.has(string)) {
+      if (this.handler.modules.has(cmdName)) {
         const permissions = {
           CREATE_INSTANT_INVITE: 'Create Instant Invite',
           KICK_MEMBERS: 'Kick Members',

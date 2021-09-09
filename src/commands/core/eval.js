@@ -31,18 +31,25 @@ module.exports = class CommandEval extends Command {
         \`colonNotation\` - colon-notation
         \`commonTags\` - common-tags`
       },
-      category: '💻 Core'
+      category: '💻 Core',
+      args: [
+        {
+          type: 'string',
+          id: 'code',
+          match: 'text'
+        }
+      ]
     })
   }
 
-  async exec (message) {
+  async exec (message, args) {
     const t1 = process.hrtime()
     const clean = text => {
       if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
     }
 
-    const args = message.content.split(/ +/g)
-    const code = args.slice(1).join(' ')
+    // const args = message.content.split(/ +/g)
+    const code = args.code
 
     try {
       // eslint-disable-next-line no-eval

@@ -33,7 +33,6 @@ const { SpotifyPlugin } = require('@distube/spotify')
 const moment = require('moment')
 const utils = require('bot-utils')
 const mongoose = require('mongoose')
-const si = require('systeminformation')
 const ui = require('./modules/WaveUI')
 const logger = require('./modules/winstonLogger')
 const WaveModlog = require('./modules/WaveModlog')
@@ -75,7 +74,6 @@ class WaveBot extends AkairoClient {
     this.utils = utils
     this.moment = moment
     this.logger = logger
-    this.si = si
     this.ui = ui
     this.modcase = WaveModlog
     this.color = color
