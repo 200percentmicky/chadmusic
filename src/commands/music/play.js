@@ -20,20 +20,13 @@ module.exports = class CommandPlay extends Command {
         details: '`<url/search>` The URL or search term to load.'
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS'],
-      args: [
-        {
-          type: 'string',
-          id: 'song',
-          match: 'phrase'
-        }
-      ]
+      clientPermissions: ['EMBED_LINKS']
     })
   }
 
-  async exec (message, args) {
-    // const args = message.content.split(/ +/g)
-    const text = args.song
+  async exec (message) {
+    const args = message.content.split(/ +/g)
+    const text = args.slice(1).join(' ')
 
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
