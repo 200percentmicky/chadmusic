@@ -24,7 +24,8 @@ module.exports = class CommandPlay extends Command {
       args: [
         {
           type: 'string',
-          id: 'song'
+          id: 'song',
+          match: 'phrase'
         }
       ]
     })
