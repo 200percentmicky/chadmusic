@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandVolume extends Command {
   constructor () {
@@ -59,11 +58,13 @@ module.exports = class CommandVolume extends Command {
     this.client.player.setVolume(message.guild.id, newVolume)
 
     if (newVolume >= 201) {
-      const embed = new MessageEmbed()
-        .setColor(process.env.COLOR_WARN)
-        .setDescription(`${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`)
-        .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+      return this.client.ui.say(
+        message,
+        'warn',
+        `${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`,
+        null,
+        'Volumes exceeding 200% may cause damage to self and equipment.'
+      )
     } else {
       return this.client.ui.say(message, 'ok', `Volume has been set to **${newVolume}%**.`)
     }

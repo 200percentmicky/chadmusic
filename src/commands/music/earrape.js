@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
 
 module.exports = class CommandEarrape extends Command {
   constructor () {
@@ -59,11 +58,13 @@ module.exports = class CommandEarrape extends Command {
       return this.client.ui.say(message, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`)
     } else {
       this.client.player.setVolume(message, earrape)
-      const embed = new MessageEmbed()
-        .setColor(process.env.COLOR_OK)
-        .setDescription(`🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`)
-        .setFooter('Volumes exceeding 200% may cause damage to self and equipment.')
-      return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+      return this.client.ui.say(
+        message,
+        'ok',
+        `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,
+        null,
+        'Volumes exceeding 200% may cause damage to self and equipment.'
+      )
     }
   }
 }
