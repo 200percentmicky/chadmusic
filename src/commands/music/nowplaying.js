@@ -48,7 +48,7 @@ module.exports = class CommandNowPlaying extends Command {
     const queue = this.client.player.getQueue(message)
 
     const song = queue.songs[0]
-    const total = song.duration + '000'
+    const total = song.duration
     const current = queue.currentTime
     const author = song.uploader
 
