@@ -55,7 +55,7 @@ module.exports = class CommandNowPlaying extends Command {
     const progressBar = splitBar(total, current, 17)[0]
     const duration = song.isLive ? '🔴 **Live**' : isAttachment(song.url) ? '📎 **File Upload**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
     const embed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(`${duration}`)
       .setTitle(song.name)

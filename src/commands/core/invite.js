@@ -17,7 +17,7 @@ module.exports = class InviteCommand extends Command {
     const invite = process.env.BOT_INVITE
     const server = process.env.SERVER_INVITE
     let msg = new MessageEmbed()
-      .setColor(message.guild.me.displayColor)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor('Links!', this.client.user.avatarURL({ dynamic: true }))
       .setDescription(`${process.env.EMOJI_CUTIE} **[Add me to your server!](${invite})**\n🆘 **[Support Server](${server})**`)
       .setFooter('Manage Server permission is required to invite me.')

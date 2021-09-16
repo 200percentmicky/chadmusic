@@ -23,7 +23,7 @@ module.exports = class CommandAbout extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const chadImage = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setDescription('A badass open-source music bot for your badass Discord server.')
       .addField('✨ Features', stripIndents`

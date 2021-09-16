@@ -86,7 +86,7 @@ module.exports = class CommandSearch extends Command {
     this.client.player.search(search).then(results => {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n')
       const embed = new MessageEmbed()
-        .setColor(message.guild.me.displayColor)
+        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor('Which track do you wanna play?', message.author.avatarURL({ dynamic: true }))
         .setDescription(`${resultMap}`)
         .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.')

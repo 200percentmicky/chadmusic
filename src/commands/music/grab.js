@@ -28,7 +28,7 @@ module.exports = class CommandGrab extends Command {
 
     try {
       const embed = new MessageEmbed()
-        .setColor(message.guild.me.displayColor)
+        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor('Song saved!', 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png')
         .setTitle(song.name)
         .setURL(song.url)

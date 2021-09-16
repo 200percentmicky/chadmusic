@@ -65,7 +65,7 @@ module.exports = class CommandQueue extends Command {
 
     /* Making the embed. */
     const queueEmbed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
       .setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
       .setTimestamp()
@@ -433,7 +433,7 @@ module.exports = class CommandQueue extends Command {
         })
 
       queueEmbed.embed
-        .setColor(message.guild.me.displayColor)
+        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`<:pMusic:815331262255595610>**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
         .setTimestamp()
@@ -445,7 +445,7 @@ module.exports = class CommandQueue extends Command {
       if (err.name.includes('TypeError')) {
         if (err.message.includes('Cannot invoke PaginationEmbed class')) {
           message.channel.send(new MessageEmbed()
-            .setColor(message.guild.me.displayColor)
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
             .setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
             .addField('The queue is empty.', 'Start adding some songs! 😉')

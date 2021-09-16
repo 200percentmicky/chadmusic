@@ -28,7 +28,7 @@ module.exports = class CommandTest extends Command {
 
         for (const chunk of arr) { // Loop through every element
           const embed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor)
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setDescription(`${chunk}`)
 
           await message.channel.send({ embeds: [embed] }) // Wait for the embed to be sent
