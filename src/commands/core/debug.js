@@ -11,8 +11,8 @@ const distubeversion = require('../../../chadtube/package.json')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
-    super('musicdebug', {
-      aliases: ['musicdebug'],
+    super('debug', {
+      aliases: ['debug'],
       category: '💻 Core',
       description: {
         text: 'Shows system statistics about the bot.'
@@ -40,6 +40,7 @@ module.exports = class CommandDebug extends Command {
           Discord.js :: ${discordversion.version}
     Akairo Framework :: ${akairoversion.version}
           DisTube.js :: ${distubeversion.version}
+   Voice Connections :: ${this.client.vc.voices.collection.size}
               Uptime :: ${prettyMs(this.client.uptime, { verbose: true })}
 
     # Hardware Specifications

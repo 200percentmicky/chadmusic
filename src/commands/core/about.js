@@ -21,10 +21,11 @@ module.exports = class CommandAbout extends Command {
 
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
+    const chadImage = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
     const aboutembed = new MessageEmbed()
       .setColor(message.guild.me.displayColor)
       .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
-      .setDescription('A badass music bot for your badass Discord server.')
+      .setDescription('A badass open-source music bot for your badass Discord server.')
       .addField('✨ Features', stripIndents`
       :white_small_square: Supports up to 700+ websites.
       :white_small_square: Add multiple filters to the player.
@@ -43,9 +44,10 @@ module.exports = class CommandAbout extends Command {
       **Discord.js:** ${discordversion.version}
       **Akairo Framework:** ${akairoversion.version}
       **DisTube.js:** ${distubeversion.version}
+      **Voice Connections:** ${this.client.vc.voices.collection.size}
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
-      .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
+      .setThumbnail(chadImage)
       .setFooter(`The owner of this instance is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
     return message.channel.send({ embeds: [aboutembed] })
   }
