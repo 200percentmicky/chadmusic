@@ -75,7 +75,7 @@ module.exports = class CommandHelp extends Command {
         }
 
         const commandEmbed = new MessageEmbed()
-          .setColor(process.env.COLOR_BLOOD)
+          .setColor(message.guild.me.displayColor)
           .setAuthor(this.client.user.username + ' Music Commands', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
@@ -106,7 +106,7 @@ module.exports = class CommandHelp extends Command {
     }
 
     const helpEmbed = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor)
       .setAuthor(`${this.client.user.username} Music Commands`, this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${prefix}help [command]`)

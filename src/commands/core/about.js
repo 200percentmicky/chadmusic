@@ -22,7 +22,7 @@ module.exports = class CommandAbout extends Command {
   async exec (message) {
     const owner = this.client.users.cache.get(this.client.ownerID)
     const aboutembed = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor)
       .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
       .setDescription('A badass music bot for your badass Discord server.')
       .addField('✨ Features', stripIndents`

@@ -47,7 +47,7 @@ module.exports = class CommandSettings extends Command {
     // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
     const embed = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .setTitle('🎶 Music Settings')
       /*
