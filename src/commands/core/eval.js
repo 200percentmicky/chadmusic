@@ -2,8 +2,6 @@ const { Command } = require('discord-akairo')
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js')
-const dayjs = require('dayjs')
-const moment = require('moment-timezone')
 const _ = require('lodash')
 const __ = require('underscore')
 const prettyBytes = require('pretty-bytes')
@@ -22,8 +20,6 @@ module.exports = class CommandEval extends Command {
         details: commonTags.stripIndents`
         **Loaded Packages:**
         \`Discord\` - discord.js
-        \`dayjs\` - day.js
-        \`moment\` - moment-timezone
         \`_\` - lodash
         \`__\` - underscore
         \`prettyBytes\` - pretty-bytes
