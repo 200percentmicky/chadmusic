@@ -57,7 +57,7 @@ module.exports = class ListenerPlaySong extends Listener {
     const author = song.uploader // Video Uploader
 
     const songNow = new MessageEmbed()
-      .setColor(this.client.utils.randColor())
+      .setColor(message.guild.me.displayColor)
       .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }))
 
     if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.

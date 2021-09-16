@@ -30,13 +30,9 @@ const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, Mongoos
 const { Intents } = require('discord.js')
 const DisTube = require('../chadtube/dist').default
 const { SpotifyPlugin } = require('@distube/spotify')
-const moment = require('moment')
-const utils = require('bot-utils')
 const mongoose = require('mongoose')
 const ui = require('./modules/WaveUI')
 const logger = require('./modules/winstonLogger')
-const WaveModlog = require('./modules/WaveModlog')
-const color = require('./colorcode.json')
 
 // Say hello!
 const { version } = require('../package.json')
@@ -71,12 +67,8 @@ class WaveBot extends AkairoClient {
     })
 
     // Calling packages that can be used throughout the client.
-    this.utils = utils
-    this.moment = moment
     this.logger = logger
     this.ui = ui
-    this.modcase = WaveModlog
-    this.color = color
 
     // Music Player. This is a forked version of DisTube.
     this.player = new DisTube(this, {
