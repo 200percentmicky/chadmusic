@@ -69,9 +69,7 @@ module.exports = class CommandSkip extends Command {
         this.client.player.skip(message)
         return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
       } else {
-        const prefix = this.client.prefix.getPrefix(message.guild.id)
-          ? this.client.prefix.getPrefix(message.guild.id)
-          : process.env.PREFIX
+        const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX)
         const embed = new MessageEmbed()
           .setColor(process.env.COLOR_INFO)
           .setDescription('⏭ Skipping?')
