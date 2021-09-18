@@ -70,7 +70,7 @@ class WaveBot extends AkairoClient {
     this.logger = logger
     this.ui = ui
 
-    // Music Player. This is a forked version of DisTube.
+    // Music Player.
     this.player = new DisTube(this, {
       plugins: [
         new SpotifyPlugin({
@@ -83,7 +83,8 @@ class WaveBot extends AkairoClient {
       leaveOnFinish: process.env.LEAVE_ON_FINISH === 'true' || false,
       youtubeCookie: process.env.YOUTUBE_COOKIE,
       ytdlOptions: {
-        highWaterMark: 1 << 25
+        quality: 'highestaudio',
+        filter: 'audioonly'
       },
       youtubeDL: process.env.USE_YOUTUBE_DL === 'true' || false,
       updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
