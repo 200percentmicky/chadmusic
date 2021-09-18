@@ -60,6 +60,10 @@ module.exports = class ListenerAddSong extends Listener {
       song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
     }
 
+    // Stupid fix to make sure that the queue doesn't break.
+    // TODO: Fix toColonNotation in queue.js
+    if (song.isLive) song.duration = 1
+
     if (isAttachment(song.url)) {
       const supportedFormats = [
         'mp3',
