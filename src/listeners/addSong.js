@@ -49,7 +49,7 @@ module.exports = class ListenerAddSong extends Listener {
       }
     }
 
-    if (this.client.radio.get(guild.id) && !song.author.name) { // Assuming it's a radio station.
+    if (this.client.radio.get(guild.id) && !song.uploader.name) { // Assuming it's a radio station.
       // Changes the description of the track, in case its a
       // radio station.
       const search = await iheart.search(`${await this.client.radio.get(guild.id)}`)
