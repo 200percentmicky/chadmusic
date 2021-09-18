@@ -55,15 +55,16 @@ module.exports = class ListenerPlaySong extends Listener {
       }
     }
 
-    if (this.client.radio.get(guild.id) && !song.uploader.name) { // Assuming its a radio station.
+    if (await this.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
       // Changes the description of the track, in case its a
       // radio station.
-      const search = await iheart.search(`${await this.client.radio.get(guild.id)}`)
-      const station = search.stations[0]
-      song.name = `${station.name} - ${station.description}`
-      song.isLive = true
-      song.thumbnail = station.logo || station.newlogo
-      song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
+      iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
+        const station = match.stations[0]
+        song.name = `${station.name} - ${station.description}`
+        song.isLive = true
+        song.thumbnail = station.logo || station.newlogo
+        song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
+      })
     }
 
     // Stupid fix to make sure that the queue doesn't break.
