@@ -52,7 +52,8 @@ module.exports = class CommandNowPlaying extends Command {
     const current = queue.currentTime
     const author = song.uploader
 
-    const progressBar = splitBar(total, current, 17)[0]
+    let progressBar
+    if (!song.isLive) progressBar = splitBar(total, current, 17)[0]
     const duration = song.isLive ? '🔴 **Live**' : isAttachment(song.url) ? '📎 **File Upload**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
@@ -71,8 +72,10 @@ module.exports = class CommandNowPlaying extends Command {
       embed.addField('Explicit', '🔞 This track is **Age Restricted**')
     }
 
+    if (author.name) embed.addField('Uploader', `[${author.name}](${author.url})`)
+    if (song.station) embed.addField('Station', `${song.station}`)
+
     embed
-      .addField('Channel', `[${author.name}](${author.url})` || 'N/A')
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.filters.map(x => `**${x.name}:** ${x.value}`)}` : 'None'}`)

@@ -51,7 +51,6 @@ module.exports = class CommandSummon extends Command {
             return this.client.ui.say(message, 'no', `Missing **Request to Speak** permission for <#${vc.id}>.`)
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true)
-            return this.client.ui.say(message, 'info', `Since I'm not a **Stage Moderator** for <#${vc.id}>, please accept my request to speak on stage.`)
           }
         } else {
           await message.guild.me.voice.setSuppressed(false)

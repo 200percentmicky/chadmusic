@@ -2,6 +2,7 @@ const { oneLine } = require('common-tags')
 const { Listener } = require('discord-akairo')
 const { Permissions, MessageEmbed } = require('discord.js')
 const prettyms = require('pretty-ms')
+const iheart = require('iheart')
 
 const isAttachment = (url) => {
   // ! TODO: Come up with a better regex lol
@@ -46,6 +47,17 @@ module.exports = class ListenerAddSong extends Listener {
           return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
         }
       }
+    }
+
+    if (this.client.radio.get(guild.id)) {
+      // Changes the description of the track, in case its a
+      // radio station.
+      const search = await iheart.search(`${await this.client.radio.get(guild.id)}`)
+      const station = search.stations[0]
+      song.name = `${station.name} - ${station.description}`
+      song.isLive = true
+      song.thumbnail = station.logo || station.newlogo
+      song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
     }
 
     if (isAttachment(song.url)) {

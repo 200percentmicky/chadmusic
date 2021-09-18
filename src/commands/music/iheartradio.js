@@ -1,14 +1,16 @@
 const { Command } = require('discord-akairo')
 const { Permissions } = require('discord.js')
+const iheart = require('iheart')
 
-module.exports = class CommandPlayNow extends Command {
+module.exports = class CommandIHeartRadio extends Command {
   constructor () {
-    super('playnow', {
-      aliases: ['playnow', 'pn'],
+    super('iheartradio', {
+      aliases: ['iheartradio', 'ihr'],
       category: '🎶 Music',
       description: {
-        text: 'Plays a song regardless if there is anything currently playing.',
-        usage: 'playnow <URL/search>'
+        text: 'Play a iHeartRadio station.',
+        usage: '<search>',
+        details: '`<search>` The station to search for. The first result is queued.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
@@ -18,6 +20,7 @@ module.exports = class CommandPlayNow extends Command {
   async exec (message) {
     const args = message.content.split(/ +/g)
     const text = args.slice(1).join(' ')
+
     const djMode = this.client.settings.get(message.guild.id, 'djMode')
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
@@ -35,21 +38,20 @@ module.exports = class CommandPlayNow extends Command {
     const vc = message.member.voice.channel
     if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
 
-    const queue = this.client.player.getQueue(message)
-    if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.')
+    if (!text) return this.client.ui.usage('iheartradio <search>')
 
     const currentVc = this.client.vc.get(vc)
     if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
+      const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT)
       if (!permissions) return this.client.ui.say(message, 'no', `Missing **Connect** permission for <#${vc.id}>`)
 
       if (vc.type === 'stage') {
         await this.client.vc.join(vc) // Must be awaited only if the VC is a Stage Channel.
         const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR)
         if (!stageMod) {
-          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK'])
+          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK)
           if (!requestToSpeak) {
-            vc.leave()
+            this.client.vc.leave(message)
             return this.client.ui.say(message, 'no', `Missing **Request to Speak** permission for <#${vc.id}>.`)
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true)
@@ -61,18 +63,36 @@ module.exports = class CommandPlayNow extends Command {
         this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc._channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
-    if (vc.members.size <= 3 || dj) {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    message.channel.sendTyping()
+    const queue = this.client.player.getQueue(message.guild.id)
 
-      message.channel.sendTyping()
-      // eslint-disable-next-line no-useless-escape
-      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''), { skip: true })
-      message.react(process.env.REACTION_OK)
-    } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+    // These limitations should not affect a member with DJ permissions.
+    if (!dj) {
+      if (queue) {
+        const maxQueueLimit = await this.client.settings.get(message.guild.id, 'maxQueueLimit')
+        if (maxQueueLimit) {
+          const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length
+          if (queueMemberSize >= maxQueueLimit) {
+            return this.client.ui.say(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`)
+          }
+        }
+      }
+    }
+
+    try {
+      const search = await iheart.search(text)
+      const station = search.stations[0]
+      const url = await iheart.streamURL(station.id)
+
+      await this.client.radio.set(message.guild.id, text, 20000)
+      console.log(await this.client.radio.get(message.guild.id))
+      return await this.client.player.play(message, url)
+    } catch (err) {
+      this.client.logger.error(err.stack) // Just in case.
+      return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
     }
   }
 }

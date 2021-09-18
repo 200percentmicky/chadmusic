@@ -1,6 +1,7 @@
 const { Listener } = require('discord-akairo')
 const { MessageEmbed, Permissions } = require('discord.js')
 const prettyms = require('pretty-ms')
+const iheart = require('iheart')
 
 const isAttachment = (url) => {
   // ! TODO: Come up with a better regex lol
@@ -54,6 +55,17 @@ module.exports = class ListenerPlaySong extends Listener {
       }
     }
 
+    if (this.client.radio.get(guild.id)) {
+      // Changes the description of the track, in case its a
+      // radio station.
+      const search = await iheart.search(`${await this.client.radio.get(guild.id)}`)
+      const station = search.stations[0]
+      song.name = `${station.name} - ${station.description}`
+      song.isLive = true
+      song.thumbnail = station.logo || station.newlogo
+      song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
+    }
+
     const author = song.uploader // Video Uploader
 
     const songNow = new MessageEmbed()
@@ -62,9 +74,10 @@ module.exports = class ListenerPlaySong extends Listener {
 
     if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**') // Always 'false'. Must be a bug in ytdl-core.
     if (isAttachment(song.url)) songNow.setDescription('📎 **File Upload**')
+    if (author.name) songNow.addField('Uploader', `[${author.name}](${author.url})` || 'N/A')
+    if (song.station) songNow.addField('Station', `${song.station}`)
 
     songNow
-      .addField('Channel', `[${author.name}](${author.url})` || 'N/A')
       .addField('Requested by', `${song.user}`, true)
       .addField('Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
       .setTitle(`${song.name}`)
