@@ -20,6 +20,7 @@ module.exports = class ListenerPlaySong extends Listener {
   }
 
   async exec (queue, song) {
+    if (queue.repeatMode > 0) return
     const channel = queue.textChannel // TextChannel
     const guild = channel.guild // Guild
     const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id) // GuildMember

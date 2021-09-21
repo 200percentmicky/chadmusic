@@ -9,6 +9,9 @@ module.exports = class ListenerClientFinishSong extends Listener {
   }
 
   async exec (queue, song) {
-    this.client.logger.info('Song has finished.')
+    if (queue.repeatMode > 0) {
+      // Temporary fix for repeat mode.
+      await this.client.player.play(queue.textChannel.guild, song.url)
+    }
   }
 }
