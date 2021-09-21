@@ -79,6 +79,7 @@ module.exports = class CommandNowPlaying extends Command {
       .addField('Requested by', `${song.user}`, true)
       .addField('Volume', `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.filters.map(x => `**${x.name}:** ${x.value}`)}` : 'None'}`)
+      .addField('yes', 'lol')
       .setTimestamp()
 
     return message.channel.send({ embeds: [embed] })
