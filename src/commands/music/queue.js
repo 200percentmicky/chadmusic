@@ -60,14 +60,15 @@ module.exports = class CommandQueue extends Command {
 
     /* Map the array. */
     const queueMap = songs.length > 0
-      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n')
+      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` **[${song.name}](${song.url})** - ${song.user} `).join('\n')
       : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`
 
     /* Making the embed. */
     const queueEmbed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+      .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
+      .addField(`${process.env.EMOJI_MUSIC} Currently Playing`, `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``)
       .setTimestamp()
       .setFooter(`${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
 
@@ -158,7 +159,7 @@ module.exports = class CommandQueue extends Command {
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
         /* Making the embed. */
-        queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
@@ -194,7 +195,7 @@ module.exports = class CommandQueue extends Command {
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
         /* Making the embed. */
-        queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
@@ -231,7 +232,7 @@ module.exports = class CommandQueue extends Command {
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
         /* Making the embed. */
-        queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
@@ -270,7 +271,7 @@ module.exports = class CommandQueue extends Command {
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
         /* Making the embed. */
-        queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
         queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
         collector.resetTimer({
@@ -319,7 +320,7 @@ module.exports = class CommandQueue extends Command {
               const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
               /* Making the embed. */
-              queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+              queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
               await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
@@ -351,7 +352,7 @@ module.exports = class CommandQueue extends Command {
               const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
               /* Making the embed. */
-              queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+              queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
               queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
               await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
               msg2.delete()
@@ -386,7 +387,7 @@ module.exports = class CommandQueue extends Command {
             const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow]
 
             /* Making the embed. */
-            queueEmbed.setDescription(`**<:pMusic:815331262255595610> Currently Playing:\n${song.user} \`${song.formattedDuration}\`\n[${song.name}](${song.url})**\n\n${queueMap}**${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}**`)
+            queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
             queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }))
             await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } })
             msg2.delete()
