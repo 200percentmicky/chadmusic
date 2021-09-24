@@ -31,6 +31,7 @@ const { Intents } = require('discord.js')
 const DisTube = require('../chadtube/dist').default
 const { SpotifyPlugin } = require('@distube/spotify')
 const mongoose = require('mongoose')
+const Enmap = require('enmap')
 const Keyv = require('keyv')
 const ui = require('./modules/WaveUI')
 const logger = require('./modules/winstonLogger')
@@ -92,7 +93,8 @@ class WaveBot extends AkairoClient {
       nsfw: true // Being handled on a per guild basis, not client-wide.
     })
     this.vc = this.player.voices // @discordjs/voice
-    this.radio = new Keyv()
+    this.votes = new Enmap()
+    this.radio = new Keyv() // Parse radio info.
 
     // Bot Settings.
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'))

@@ -21,6 +21,7 @@
     "discord.js": "^13.1.0",
     "distube": "^3.0.0-beta.36",
     "dotenv": "^8.6.0",
+    "enmap": "^5.8.7",
     "iheart": "^3.1.1",
     "keyv": "^4.0.3",
     "lodash": "^4.17.21",

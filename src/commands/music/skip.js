@@ -14,8 +14,6 @@ module.exports = class CommandSkip extends Command {
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
     })
-
-    this.votes = new Array(0)
   }
 
   async exec (message) {
@@ -54,14 +52,17 @@ module.exports = class CommandSkip extends Command {
     }
     */
 
+    await this.client.votes.ensure(message.guild.id, [])
+    const votes = this.client.votes.get(message.guild.id)
+
     if (vc.members.size >= 4) {
-      const vcSize = Math.round(Math.floor(vc.members.size / 2))
-      const neededVotes = this.votes.length >= vcSize
-      const votesLeft = vcSize - this.votes.length
-      if (this.votes.includes(message.author.id)) return this.client.ui.say(message, 'warn', 'You already voted to skip.')
-      this.votes.push(message.author.id)
+      const vcSize = Math.floor(vc.members.size / 2)
+      const neededVotes = votes.length >= vcSize
+      const votesLeft = Math.floor(vcSize - votes.length)
+      if (votes.includes(message.author.id)) return this.client.ui.say(message, 'warn', 'You already voted to skip.')
+      this.client.votes.push(message.guild.id, message.author.id)
       if (neededVotes) {
-        this.votes = []
+        await this.client.votes.delete(message.guild.id)
         if (!queue.songs[1]) {
           this.client.player.stop(message.guild)
           return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!")
@@ -80,7 +81,7 @@ module.exports = class CommandSkip extends Command {
         return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
       }
     } else {
-      this.votes = []
+      await this.client.votes.delete(message.guild.id)
       if (!queue.songs[1]) {
         this.client.player.stop(message.guild)
         return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!")

@@ -11,8 +11,6 @@ module.exports = class CommandForceSkip extends Command {
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
     })
-
-    this.votes = new Array(0)
   }
 
   async exec (message) {
@@ -48,6 +46,10 @@ module.exports = class CommandForceSkip extends Command {
       return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
     }
     */
+
+    if (await this.client.votes.has(message.guild.id)) {
+      await this.client.votes.delete(message.guild.id)
+    }
 
     if (vc.members.size <= 2) {
       this.client.player.skip(message)
