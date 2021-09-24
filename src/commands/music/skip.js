@@ -55,7 +55,7 @@ module.exports = class CommandSkip extends Command {
     */
 
     if (vc.members.size >= 4) {
-      const vcSize = Math.round(vc.members.size / 2)
+      const vcSize = Math.round(Math.floor(vc.members.size / 2))
       const neededVotes = this.votes.length >= vcSize
       const votesLeft = vcSize - this.votes.length
       if (this.votes.includes(message.author.id)) return this.client.ui.say(message, 'warn', 'You already voted to skip.')
