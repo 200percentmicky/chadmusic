@@ -61,7 +61,7 @@ module.exports = class CommandVolume extends Command {
       return this.client.ui.say(
         message,
         'warn',
-        `${process.env.EMOJI_WARN} Volume has been set to **${newVolume}%**.`,
+        `Volume has been set to **${newVolume}%**.`,
         null,
         'Volumes exceeding 200% may cause damage to self and equipment.'
       )
