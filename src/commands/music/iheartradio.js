@@ -36,7 +36,7 @@ module.exports = class CommandIHeartRadio extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     if (!text) return this.client.ui.usage('iheartradio <search>')
 
@@ -63,7 +63,7 @@ module.exports = class CommandIHeartRadio extends Command {
         this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc._channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc._channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     message.channel.sendTyping()
@@ -93,7 +93,7 @@ module.exports = class CommandIHeartRadio extends Command {
       return await this.client.player.play(message, url)
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
-      return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
+      return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
     }
   }
 }

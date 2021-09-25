@@ -40,9 +40,9 @@ module.exports = class CommandEarrape extends Command {
     const vc = message.member.voice.channel
     const currentVc = this.client.vc.get(vc)
     if (!vc) {
-      return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+      return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
     } else if (vc.id !== currentVc._channel.id) {
-      return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     const queue = this.client.player.getQueue(message.guild.id)

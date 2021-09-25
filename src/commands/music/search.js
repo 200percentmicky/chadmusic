@@ -34,7 +34,7 @@ module.exports = class CommandSearch extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     message.channel.sendTyping()
     const currentVc = this.client.vc.get(vc)
@@ -60,7 +60,7 @@ module.exports = class CommandSearch extends Command {
         this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     message.channel.sendTyping()

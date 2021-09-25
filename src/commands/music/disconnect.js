@@ -34,13 +34,13 @@ module.exports = class CommandDisconnect extends Command {
     const vc = message.member.voice.channel
     const currentVc = this.client.vc.get(message.member.voice.channel)
     if (!currentVc) {
-      return this.client.ui.say(message, 'error', 'I\'m not in any voice channel.')
+      return this.client.ui.reply(message, 'error', 'I\'m not in any voice channel.')
     }
 
     if (!vc) {
-      return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+      return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
     } else if (vc.id !== currentVc._channel.id) {
-      return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     if (vc.members.size <= 2 || dj) {
@@ -50,7 +50,7 @@ module.exports = class CommandDisconnect extends Command {
       this.client.vc.leave(message)
       return this.client.ui.custom(message, '📤', 0xDD2E44, `Left <#${vc.id}>`)
     } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

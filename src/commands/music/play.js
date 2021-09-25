@@ -43,7 +43,7 @@ module.exports = class CommandPlay extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     if (!text && !message.attachments.first()) return this.client.ui.usage('play <url/search/attachment>')
 
@@ -72,7 +72,7 @@ module.exports = class CommandPlay extends Command {
         this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc._channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc._channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     message.channel.sendTyping()
@@ -96,7 +96,7 @@ module.exports = class CommandPlay extends Command {
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)
     } catch (err) {
       this.client.logger.error(err.stack) // Just in case.
-      return this.client.ui.say(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
+      return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error')
     }
   }
 }

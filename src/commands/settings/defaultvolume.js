@@ -29,11 +29,11 @@ module.exports = class CommandDefaultVolume extends Command {
     }
 
     if (isNaN(volume)) {
-      return this.client.ui.say(message, 'error', 'Default volume must be a number.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be a number.')
     }
 
     if (volume > 200 || volume < 1) {
-      return this.client.ui.say(message, 'error', 'Default volume must be between **1-200**.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.')
     }
 
     await this.client.settings.set(message.guild.id, 'defaultVolume', volume)

@@ -39,7 +39,7 @@ module.exports = class CommandBassBoost extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
@@ -53,13 +53,13 @@ module.exports = class CommandBassBoost extends Command {
           await this.client.player.setFilter(message.guild.id, 'bassboost', false)
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off')
         } catch (err) {
-          return this.client.ui.say(message, 'error', '**Bass Boost** is not applied to the player.')
+          return this.client.ui.reply(message, 'error', '**Bass Boost** is not applied to the player.')
         }
       } else {
         const gain = parseInt(args[1])
 
         if (gain < 1 || gain > 100 || isNaN(gain)) {
-          return this.client.ui.say(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.')
+          return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.')
         }
 
         await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`)
@@ -67,7 +67,7 @@ module.exports = class CommandBassBoost extends Command {
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return this.client.ui.say(message, 'error', oneLine`
+        return this.client.ui.reply(message, 'error', oneLine`
           You must be in the same voice channel that I\'m in to use that command.
         `)
       }

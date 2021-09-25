@@ -33,7 +33,7 @@ module.exports = class CommandPlayNow extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.')
@@ -61,18 +61,18 @@ module.exports = class CommandPlayNow extends Command {
         this.client.vc.join(vc)
       }
     } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
 
     if (vc.members.size <= 3 || dj) {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
       message.channel.sendTyping()
       // eslint-disable-next-line no-useless-escape
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''), { skip: true })
       message.react(process.env.REACTION_OK)
     } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

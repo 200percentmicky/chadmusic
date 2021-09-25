@@ -30,18 +30,18 @@ module.exports = class CommandFilterOff extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
 
     const currentVc = this.client.vc.get(vc)
     if (currentVc) {
-      if (!queue.filters) return this.client.ui.say(message, 'error', 'No filters are currently applied to the player.')
+      if (!queue.filters) return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.')
       await this.client.player.setFilter(message.guild.id, false)
       return this.client.ui.say(message, 'info', 'Removed all filters from the player.')
     } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
   }
 }

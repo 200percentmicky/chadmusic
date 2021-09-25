@@ -33,7 +33,7 @@ module.exports = class CommandTempo extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
@@ -49,21 +49,21 @@ module.exports = class CommandTempo extends Command {
           await this.client.player.setFilter(message.guild.id, 'asetrate', false)
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tempo** Reverted')
         } catch (err) {
-          return this.client.ui.say(message, 'error', '**Tempo** is not applied to the player.')
+          return this.client.ui.reply(message, 'error', '**Tempo** is not applied to the player.')
         }
       }
 
       const rate = parseInt(args[1])
       if (isNaN(rate)) {
-        return this.client.ui.say(message, 'error', 'Tempo requires a number or **off**.')
+        return this.client.ui.reply(message, 'error', 'Tempo requires a number or **off**.')
       }
       if (rate <= 0 || rate >= 21) {
-        return this.client.ui.say(message, 'error', 'Tempo must be between **1-20** or **off**.')
+        return this.client.ui.reply(message, 'error', 'Tempo must be between **1-20** or **off**.')
       }
       await this.client.player.setFilter(message, 'asetrate', `asetrate=${rate}*10000`)
       return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``)
     } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
     }
   }
 }

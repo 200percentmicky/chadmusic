@@ -32,13 +32,13 @@ module.exports = class CommandSkip extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild)
 
     const currentVc = this.client.vc.get(vc)
     if (!queue || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     // For breaking use only.
     // this.client.player.skip(message)
@@ -46,7 +46,7 @@ module.exports = class CommandSkip extends Command {
 
     /*
     if (args[1] === ('--force' || '-f')) {
-      if (!dj) return this.client.ui.say(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
+      if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
       return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
     }

@@ -27,7 +27,7 @@ module.exports = class CommandSetDJ extends Command {
       await this.client.settings.delete(message.guild.id, 'djRole')
       return this.client.ui.say(message, 'ok', 'The DJ role has been removed.')
     }
-    if (!role) return this.client.ui.say(message, 'error', `\`${text}\` is not a valid role.`)
+    if (!role) return this.client.ui.reply(message, 'error', `\`${text}\` is not a valid role.`)
 
     await this.client.settings.set(message.guild.id, 'djRole', role.id)
     return this.client.ui.say(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`)

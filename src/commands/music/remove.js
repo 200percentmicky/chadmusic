@@ -32,11 +32,11 @@ module.exports = class CommandRemove extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const currentVc = this.client.vc.get(vc)
     if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     if (!args[1]) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]')
 
@@ -50,8 +50,8 @@ module.exports = class CommandRemove extends Command {
         const end = parseInt(args[2])
 
         /* Checking if the arguments are numbers. */
-        if (isNaN(start)) return this.client.ui.say(message, 'error', 'Starting position must be a number.')
-        if (isNaN(end)) return this.client.ui.say(message, 'error', 'Ending position must be a number.')
+        if (isNaN(start)) return this.client.ui.reply(message, 'error', 'Starting position must be a number.')
+        if (isNaN(end)) return this.client.ui.reply(message, 'error', 'Ending position must be a number.')
 
         /* Slice original array to get the length. */
         const n = parseInt(queue.songs.slice(start, end).length + 1)
@@ -66,7 +66,7 @@ module.exports = class CommandRemove extends Command {
 
         /* Checking if argument is a number. */
         const n = parseInt(args[1])
-        if (isNaN(n)) return this.client.ui.say(message, 'error', 'Selection must be a number.')
+        if (isNaN(n)) return this.client.ui.reply(message, 'error', 'Selection must be a number.')
 
         /* Modify queue to remove the specified entry. */
         queue.songs.splice(args[1], 1)
@@ -74,7 +74,7 @@ module.exports = class CommandRemove extends Command {
         return this.client.ui.say(message, 'ok', `Removed **${song.name}** from the queue.`)
       }
     } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

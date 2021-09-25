@@ -32,7 +32,7 @@ module.exports = class CommandSeek extends Command {
     const args = message.content.split(/ +/g)
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const currentVc = this.client.vc.get(vc)
 
@@ -44,11 +44,11 @@ module.exports = class CommandSeek extends Command {
         const time = toMilliseconds(args[1])
         this.client.player.seek(message.guild, parseInt(Math.floor(time / 1000)))
       } catch {
-        this.client.ui.say(message, 'error', 'Track time must be in colon notation. Example: `4:30`')
+        this.client.ui.reply(message, 'error', 'Track time must be in colon notation. Example: `4:30`')
       }
       return message.react(process.env.REACTION_OK)
     } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

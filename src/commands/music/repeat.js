@@ -33,7 +33,7 @@ module.exports = class CommandRepeat extends Command {
     const queue = player.getQueue(message)
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const currentVc = this.client.vc.get(vc)
 
@@ -68,7 +68,7 @@ module.exports = class CommandRepeat extends Command {
         }
       }
     } else {
-      return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

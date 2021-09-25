@@ -25,7 +25,7 @@ module.exports = class CommandAllowFilters extends Command {
       await this.client.settings.set(message.guild.id, 'allowFilters', 'all')
       return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **All**.')
     } else {
-      return this.client.ui.say(message, 'error', 'Toggles must be **dj** or **all**')
+      return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**')
     }
   }
 }

@@ -42,7 +42,7 @@ module.exports = class CommandReverse extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
@@ -54,7 +54,7 @@ module.exports = class CommandReverse extends Command {
           await this.client.player.setFilter(message.guild.id, 'reverse', false)
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** Off')
         } catch (err) {
-          return this.client.ui.say(message, 'error', '**Reverse** is not applied to the player.')
+          return this.client.ui.reply(message, 'error', '**Reverse** is not applied to the player.')
         }
       } else {
         await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse')
@@ -62,7 +62,7 @@ module.exports = class CommandReverse extends Command {
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return this.client.ui.say(message, 'error', oneLine`
+        return this.client.ui.reply(message, 'error', oneLine`
           You must be in the same voice channel that I\'m in to use that command.
         `)
       }

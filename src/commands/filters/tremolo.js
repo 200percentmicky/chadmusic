@@ -43,7 +43,7 @@ module.exports = class CommandTremolo extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const queue = this.client.player.getQueue(message.guild.id)
     if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.')
@@ -55,7 +55,7 @@ module.exports = class CommandTremolo extends Command {
           await this.client.player.setFilter(message.guild.id, 'tremolo', false)
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tremolo** Off')
         } catch (err) {
-          return this.client.ui.say(message, 'error', '**Tremolo** is not applied to the player.')
+          return this.client.ui.reply(message, 'error', '**Tremolo** is not applied to the player.')
         }
       } else {
         if (!args[1]) {
@@ -64,21 +64,21 @@ module.exports = class CommandTremolo extends Command {
         const d = parseInt(args[1])
         let f = parseInt(args[2])
         if (d < 0.1 || d > 1 || isNaN(d)) {
-          return this.client.ui.say(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.')
+          return this.client.ui.reply(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.')
         }
         if (!args[2]) f = 5
         if (isNaN(f)) {
-          return this.client.ui.say(message, 'error', 'Frequency requires a number.')
+          return this.client.ui.reply(message, 'error', 'Frequency requires a number.')
         }
         if (f < 1) {
-          return this.client.ui.say(message, 'error', 'Frequency must be greater than 0.')
+          return this.client.ui.reply(message, 'error', 'Frequency must be greater than 0.')
         }
         await this.client.player.setFilter(message.guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`)
         return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``)
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return this.client.ui.say(message, 'error', oneLine`
+        return this.client.ui.reply(message, 'error', oneLine`
           You must be in the same voice channel that I\'m in to use that command.
         `)
       }

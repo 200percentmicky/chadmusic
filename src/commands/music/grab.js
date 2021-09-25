@@ -38,7 +38,7 @@ module.exports = class CommandGrab extends Command {
       message.author.send({ embeds: [embed] })
       return message.react(process.env.REACTION_OK)
     } catch (err) {
-      if (err.name === 'DiscordAPIError') this.client.ui.say(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.')
+      if (err.name === 'DiscordAPIError') this.client.ui.reply(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.')
     }
   }
 }

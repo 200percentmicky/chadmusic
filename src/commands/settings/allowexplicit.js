@@ -31,7 +31,7 @@ module.exports = class CommandAllowExplicit extends Command {
         break
       }
       default: {
-        this.client.ui.say(message, 'error', 'Toggle must be **on** or **off**.')
+        this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.')
         break
       }
     }

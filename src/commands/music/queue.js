@@ -37,12 +37,12 @@ module.exports = class CommandQueue extends Command {
     const queue = this.client.player.getQueue(message)
     const vc = message.member.voice.channel
 
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const currentVc = this.client.vc.get(vc)
 
     if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     /* Getting the entire queue. */
     const songs = queue.songs.slice(1)
@@ -454,11 +454,11 @@ module.exports = class CommandQueue extends Command {
           )
         } else {
           // Different error?
-          this.client.ui.say(message, 'error', err.message, err.name)
+          this.client.ui.reply(message, 'error', err.message, err.name)
         }
       } else {
         // Different error?
-        this.client.ui.say(message, 'error', err.message, err.name)
+        this.client.ui.reply(message, 'error', err.message, err.name)
       }
     }
     */

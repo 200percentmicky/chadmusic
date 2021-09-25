@@ -30,14 +30,14 @@ module.exports = class CommandSummon extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT'])
     if (!permissions) return this.client.ui.say(message, 'no', `Missing **Connect** permission for <#${vc.id}>`)
 
     const currentVc = this.client.vc.get(vc)
     if (currentVc) {
-      if (vc.id !== currentVc.id) return this.client.ui.say(message, 'error', 'I\'m currently binded to a different voice channel.')
+      if (vc.id !== currentVc.id) return this.client.ui.reply(message, 'error', 'I\'m currently binded to a different voice channel.')
       else return this.client.ui.say(message, 'info', 'I\'m already in a voice channel. Let\'s get this party started!')
     } else {
       if (vc.type === 'stage') {

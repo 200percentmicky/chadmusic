@@ -30,7 +30,7 @@ module.exports = class CommandFreeVolume extends Command {
       await this.client.settings.set(message.guild.id, 'allowFreeVolume', true)
       return this.client.ui.say(message, 'ok', 'Unlimited Volume has been **enabled**.')
     } else {
-      return this.client.ui.say(message, 'error', 'Toggle must be **on** or **off**.')
+      return this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.')
     }
   }
 }

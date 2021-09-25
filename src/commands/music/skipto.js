@@ -32,11 +32,11 @@ module.exports = class CommandSkipTo extends Command {
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.say(message, 'error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
     const currentVc = this.client.vc.get(vc)
     if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.say(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
     // For breaking use only.
     // this.client.player.skip(message)
@@ -44,7 +44,7 @@ module.exports = class CommandSkipTo extends Command {
 
     /*
     if (args[1] === ('--force' || '-f')) {
-      if (!dj) return this.client.ui.say(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
+      if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
       return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
     }
@@ -58,7 +58,7 @@ module.exports = class CommandSkipTo extends Command {
         this.client.player.jump(message, parseInt(args[1]))
         return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`)
       } catch {
-        return this.client.ui.say(message, 'error', 'Not a valid entry in the queue.')
+        return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.')
       }
     } else {
       if (dj) {
@@ -66,10 +66,10 @@ module.exports = class CommandSkipTo extends Command {
           this.client.player.jump(message, parseInt(args[1]))
           return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`)
         } catch {
-          return this.client.ui.say(message, 'error', 'Not a valid entry in the queue.')
+          return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.')
         }
       } else {
-        return this.client.ui.say(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+        return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
       }
     }
   }

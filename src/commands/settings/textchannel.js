@@ -19,7 +19,7 @@ module.exports = class CommandTextChannel extends Command {
     if (args[1]) {
       const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1])
       if (!channel) {
-        return this.client.ui.say(message, 'error', `\`${args[1]}\` is not a valid text channel.`)
+        return this.client.ui.reply(message, 'error', `\`${args[1]}\` is not a valid text channel.`)
       } else {
         await this.client.settings.set(message.guild.id, 'textChannel', channel.id)
         return this.client.ui.say(message, 'ok', `<#${channel.id}> will be used for music commands.`)

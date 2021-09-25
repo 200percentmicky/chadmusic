@@ -75,7 +75,7 @@ module.exports = class ListenerAddSong extends Listener {
       ]
       if (!supportedFormats.some(element => song.url.endsWith(element))) {
         queue.songs.pop()
-        return this.client.ui.say(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
+        return this.client.ui.reply(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
       }
     }
 
