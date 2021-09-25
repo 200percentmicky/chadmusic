@@ -35,7 +35,6 @@ const say = (msg, type, description, title, footer, buttons) => {
 
   const embed = new MessageEmbed()
     .setColor(embedColor[type])
-    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
 
   if (title) { /* The title of the embed, if one is provided. */
     embed.setTitle(`${embedEmoji[type]} ${title}`)
@@ -53,8 +52,8 @@ const say = (msg, type, description, title, footer, buttons) => {
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(title
-        ? `\`${msg.author.toString()}\` ${embedEmoji[type]} **${title}** | ${description}`
-        : `\`${msg.author.toString()}\` ${embedEmoji[type]} ${description}`
+        ? `${embedEmoji[type]} **${title}** | ${description}`
+        : `${embedEmoji[type]} ${description}`
       , { components: buttons || [], allowedMentions: { repliedUser: false } })
     } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
   }
@@ -72,7 +71,6 @@ const usage = (msg, syntax) => {
   const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix', process.env.PREFIX)
   const embed = new MessageEmbed()
     .setColor(process.env.COLOR_INFO)
-    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
     .setTitle(`${process.env.EMOJI_INFO} Usage`)
     .setDescription(`\`${guildPrefix}${syntax}\``)
   if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
@@ -97,7 +95,6 @@ const usage = (msg, syntax) => {
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
   const embed = new MessageEmbed()
     .setColor(color)
-    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
 
   if (title) { /* The title of the embed, if one is provided. */
     embed.setTitle(`${emoji} ${title}`)
@@ -113,8 +110,8 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(title
-        ? `\`${msg.author.tag}\` ${emoji} **${title}** | ${description}`
-        : `\`${msg.author.tag}\` ${emoji} ${description}`
+        ? `${emoji} **${title}** | ${description}`
+        : `${emoji} ${description}`
       , { allowedMentions: { repliedUser: false } })
     } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
   }
