@@ -10,7 +10,7 @@ const { Message, MessageEmbed, MessageActionRow } = require('discord.js')
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
  * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
- * @returns {(MessageEmbed|Message)} The message to reply to the user.
+ * @returns {(MessageEmbed|Message)} The message to send in the channel.
  */
 const say = (msg, type, description, title, footer, buttons) => {
   /* The color of the embed */
@@ -35,6 +35,7 @@ const say = (msg, type, description, title, footer, buttons) => {
 
   const embed = new MessageEmbed()
     .setColor(embedColor[type])
+    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
 
   if (title) { /* The title of the embed, if one is provided. */
     embed.setTitle(`${embedEmoji[type]} ${title}`)
@@ -48,14 +49,77 @@ const say = (msg, type, description, title, footer, buttons) => {
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
+    return msg.reply({ embeds: [embed], components: buttons || [] })
+  } else {
+    if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
+      return msg.channel.send(title
+        ? `\`${msg.author.toString()}\` ${embedEmoji[type]} **${title}** | ${description}`
+        : `\`${msg.author.toString()}\` ${embedEmoji[type]} ${description}`
+      , { components: buttons || [], allowedMentions: { repliedUser: false } })
+    } else return msg.channel.send({ embeds: [embed], components: buttons || [] })
+  }
+}
+
+// Copying and pasting, but so far it does what I want it to do.
+// I was going to make a function, but buttons might be removed from it if I do.
+// TODO: Create core embed and fallback UI function soon.
+
+/**
+ * Fucntions the same way as `Message.say()` but replies to the user that ran the command.
+ *
+ * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
+ * @param {string} description The overall message.
+ * @param {string} title [Optional] The title of the embed or message.
+ * @param {string} footer [Optional] The footer of the embed.
+ * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @returns {(MessageEmbed|Message)} The message to reply to the user.
+ */
+const reply = (msg, type, description, title, footer, buttons) => {
+  /* The color of the embed */
+  const embedColor = {
+    ok: process.env.COLOR_OK,
+    warn: process.env.COLOR_WARN,
+    error: process.env.COLOR_ERROR,
+    info: process.env.COLOR_INFO,
+    no: process.env.COLOR_NO
+  }
+
+  /* The emoji of the embed */
+  // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
+  const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS'])
+  const embedEmoji = {
+    ok: emojiPerms ? process.env.EMOJI_OK : '✅',
+    warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+    error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+    info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
+    no: emojiPerms ? process.env.EMOJI_NO : '🚫'
+  }
+
+  const embed = new MessageEmbed()
+    .setColor(embedColor[type])
+    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
+
+  if (title) { /* The title of the embed, if one is provided. */
+    embed.setTitle(`${embedEmoji[type]} ${title}`)
+    embed.setDescription(`${description}`)
+  } else {
+    embed.setDescription(`${embedEmoji[type]} ${description}`)
+  }
+
+  if (footer) embed.setFooter(`${footer}`)
+
+  /* No embed */
+  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+  if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+    return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: true } })
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(title
-        ? `${embedEmoji[type]} **${title}** | ${description}`
-        : `${embedEmoji[type]} ${description}`
+        ? `\`${msg.author.toString()}\` ${embedEmoji[type]} **${title}** | ${description}`
+        : `\`${msg.author.toString()}\` ${embedEmoji[type]} ${description}`
       , { components: buttons || [], allowedMentions: { repliedUser: false } })
-    } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
+    } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: true } })
   }
 }
 
@@ -71,6 +135,7 @@ const usage = (msg, syntax) => {
   const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix', process.env.PREFIX)
   const embed = new MessageEmbed()
     .setColor(process.env.COLOR_INFO)
+    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
     .setTitle(`${process.env.EMOJI_INFO} Usage`)
     .setDescription(`\`${guildPrefix}${syntax}\``)
   if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
@@ -95,6 +160,7 @@ const usage = (msg, syntax) => {
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
   const embed = new MessageEmbed()
     .setColor(color)
+    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
 
   if (title) { /* The title of the embed, if one is provided. */
     embed.setTitle(`${emoji} ${title}`)
@@ -110,8 +176,8 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(title
-        ? `${emoji} **${title}** | ${description}`
-        : `${emoji} ${description}`
+        ? `\`${msg.author.tag}\` ${emoji} **${title}** | ${description}`
+        : `\`${msg.author.tag}\` ${emoji} ${description}`
       , { allowedMentions: { repliedUser: false } })
     } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } })
   }
@@ -165,4 +231,4 @@ const recordError = async (msg, type, command, title, error) => {
   return errorChannel.send({ content: error, code: 'js', split: true })
 }
 
-module.exports = { say, usage, custom, recordError }
+module.exports = { say, reply, usage, custom, recordError }
