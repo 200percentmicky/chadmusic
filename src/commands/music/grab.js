@@ -19,19 +19,26 @@ module.exports = class CommandGrab extends Command {
     const queue = this.client.player.getQueue(message)
     const song = queue.songs[0]
 
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    if (textChannel) {
+      if (textChannel !== message.channel.id) {
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+      }
+    }
+
     try {
       const embed = new MessageEmbed()
-        .setColor(this.client.utils.randColor())
+        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor('Song saved!', 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png')
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
         .addField('Duration', `${song.formattedDuration}`)
         .setTimestamp()
-      message.author.send({ embed: embed })
+      message.author.send({ embeds: [embed] })
       return message.react(process.env.REACTION_OK)
     } catch (err) {
-      if (err.name === 'DiscordAPIError') message.say('error', 'Unable to save this song. You are currently not accepting Direct Messages.')
+      if (err.name === 'DiscordAPIError') this.client.ui.reply(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.')
     }
   }
 }

@@ -47,12 +47,12 @@ module.exports = class CommandMissingPermissions extends Listener {
     const userPerms = await missing.map(missing => permissions[missing]).join(', ')
 
     if (type === 'client') {
-      return message.say('warn', `I require the **${clientPerms}** permission(s) to execute that command.`)
+      return this.client.ui.say(message, 'warn', `I require the **${clientPerms}** permission(s) to execute that command.`)
     }
 
     if (type === 'user') {
-      if (command.userPermissions === 'ADMINISTRATOR') return message.say('no', 'Only server administrators can use that command.')
-      else return message.say('no', `You need the **${userPerms}** permission(s) to use that command.`)
+      if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.say(message, 'no', 'Only server administrators can use that command.')
+      else return this.client.ui.say(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`)
     }
   }
 }

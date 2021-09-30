@@ -6,36 +6,41 @@ const prettyBytes = require('pretty-bytes')
 const prettyMs = require('pretty-ms')
 
 const akairoversion = require('../../../node_modules/discord-akairo/package.json')
-const discordversion = require('../../../node_modules/discord.js/package')
-const distubeversion = require('../../../node_modules/distube/package')
+const discordversion = require('../../../node_modules/discord.js/package.json')
+const distubeversion = require('../../../chadtube/package.json')
 
 module.exports = class CommandDebug extends Command {
   constructor () {
-    super('musicdebug', {
-      aliases: ['musicdebug', 'sysinfo', 'jssysinfo', 'msysinfo'],
+    super('debug', {
+      aliases: ['debug'],
       category: '💻 Core',
       description: {
-        text: 'System statistics about the music bot.'
+        text: 'Shows system statistics about the bot.'
       }
     })
   }
 
+  // TODO: Replace systeminformation with Node 'os' module.
+
   async exec (message) {
     const args = message.content.split(/ +/g)
     if (args[1]) return
-    message.channel.startTyping()
+    message.channel.sendTyping()
     const cpu = await si.cpu()
     const osSi = await si.osInfo()
     const memory = await si.mem()
     const user = os.userInfo()
+    const owner = this.client.users.cache.get(this.client.ownerID)
 
     const data = stripIndents`
-    === Project Wave ===
+    === ChadMusic - The Chad Music Bot ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
+               Owner :: ${owner.tag} (ID: ${owner.id})
              Node.js :: ${process.version}
           Discord.js :: ${discordversion.version}
     Akairo Framework :: ${akairoversion.version}
           DisTube.js :: ${distubeversion.version}
+   Voice Connections :: ${this.client.vc.voices.collection.size}
               Uptime :: ${prettyMs(this.client.uptime, { verbose: true })}
 
     # Hardware Specifications
@@ -58,7 +63,6 @@ module.exports = class CommandDebug extends Command {
       ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
     `
 
-    message.channel.send({ content: data, code: 'asciidoc', split: true })
-    return message.channel.stopTyping(true)
+    message.channel.send({ content: `\`\`\`asciidoc\n${data}\`\`\`` })
   }
 }

@@ -2,8 +2,6 @@ const { Command } = require('discord-akairo')
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js')
-const dayjs = require('dayjs')
-const moment = require('moment-timezone')
 const _ = require('lodash')
 const __ = require('underscore')
 const prettyBytes = require('pretty-bytes')
@@ -13,8 +11,8 @@ const commonTags = require('common-tags')
 
 module.exports = class CommandEval extends Command {
   constructor () {
-    super('jseval', {
-      aliases: ['jseval'],
+    super('eval', {
+      aliases: ['eval'],
       ownerOnly: true,
       description: {
         text: 'Executes Javascript code.',
@@ -22,8 +20,6 @@ module.exports = class CommandEval extends Command {
         details: commonTags.stripIndents`
         **Loaded Packages:**
         \`Discord\` - discord.js
-        \`dayjs\` - day.js
-        \`moment\` - moment-timezone
         \`_\` - lodash
         \`__\` - underscore
         \`prettyBytes\` - pretty-bytes
@@ -31,22 +27,29 @@ module.exports = class CommandEval extends Command {
         \`colonNotation\` - colon-notation
         \`commonTags\` - common-tags`
       },
-      category: '💻 Core'
+      category: '💻 Core',
+      args: [
+        {
+          type: 'string',
+          id: 'code',
+          match: 'text'
+        }
+      ]
     })
   }
 
-  async exec (message) {
+  async exec (message, args) {
     const t1 = process.hrtime()
     const clean = text => {
       if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
     }
 
-    const args = message.content.split(/ +/g)
-    const code = args.slice(1).join(' ')
+    // const args = message.content.split(/ +/g)
+    const code = args.code
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(await (async () => { return code })())
+      let evaled = eval(code)
 
       if (typeof evaled !== 'string') {
         evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 })
@@ -64,10 +67,18 @@ module.exports = class CommandEval extends Command {
         }
         return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled))
       } else {
-        message.channel.send({ content: `// ✅ Evaluated in ${end} ms.\n${clean(evaled)}`, code: 'js', split: true })
+        const result = clean(evaled)
+        if (result.length > 2000) {
+          const compactResult = result.match(/.{1,1960}/g)
+          for (const chunk of compactResult) {
+            await message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${chunk}\`\`\``)
+          }
+        } else {
+          return message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``)
+        }
       }
     } catch (err) {
-      message.channel.send({ content: `// ❌ Error during eval\n${err.name}: ${err.message}`, code: 'js', split: true })
+      message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``)
       const errorChannel = this.client.channels.cache.get('603735567733227531')
       const embed = new Discord.MessageEmbed()
         .setColor(process.env.COLOR_WARN)
@@ -75,7 +86,7 @@ module.exports = class CommandEval extends Command {
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
         .setTimestamp()
-      errorChannel.send({ embed: embed })
+      errorChannel.send({ embeds: [embed] })
     }
   }
 }

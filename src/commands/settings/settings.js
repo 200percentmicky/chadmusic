@@ -5,11 +5,11 @@ const { toColonNotation } = require('colon-notation')
 
 module.exports = class CommandSettings extends Command {
   constructor () {
-    super('musicsettings', {
-      aliases: ['musicsettings'],
+    super('settings', {
+      aliases: ['settings'],
       category: '⚙ Settings',
       description: {
-        text: 'Shows you the current settings for this server.'
+        text: 'Shows you the current settings of the bot for this server.'
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']
@@ -19,7 +19,7 @@ module.exports = class CommandSettings extends Command {
   async exec (message) {
     const settings = this.client.settings
 
-    /* All Settings */
+    // All Settings
     const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
     // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
     const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
@@ -28,53 +28,48 @@ module.exports = class CommandSettings extends Command {
     const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null) // Max Entries in the Queue
     const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all') // Allow the use of Filters
     const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
+    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100) // Default Volume
+    const textChannel = settings.get(message.guild.id, 'textChannel', null) // Text Channel
+    // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
-    /* ! This setting only affects videos from YouTube. */
+    // ! This setting only affects videos from YouTube.
     // All pornographic websites are blocked.
     const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true) // Allow Explicit Content.
 
-    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100)
-
-    /*
-    const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
-    const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
-    const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
-    const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
-    const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
-    const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
-    const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
-    const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
-    const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
-    */
+    // const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
+    // const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
+    // const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
+    // const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
+    // const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
+    // const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
+    // const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
+    // const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
+    // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
     const embed = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .setTitle('🎶 Music Settings')
-      .setDescription(stripIndents`
-      ⁉ **Music Prefix:** \`${prefix}\`
-      🔖 **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      🎤 **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      ⏲ **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-      🔢 **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      📢 **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      🔊 **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-      🔞 **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-      🗣 **Default Volume:** ${defaultVolume}
-      `)
       /*
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`
       **Time Zone:** ${timezone}
       `)
-      .addField('🎶 Music', stripIndents`
-      **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-      **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      */
+      .setDescription(stripIndents`
+      **⁉ Prefix:** \`${prefix}\`
+      **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      **🕰 Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+      **🗣 Default Volume:** ${defaultVolume}
+      **📺 Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
       `)
+      // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
+      /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
       **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
@@ -113,7 +108,7 @@ module.exports = class CommandSettings extends Command {
           ? 'Yes'
           : 'No'
         : 'Not configured'}
-      **Star embed:** ${starboard
+      **Star embeds:** ${starboard
         ? starboard.options.starEmbed === true
           ? 'Yes'
           : 'No'
@@ -127,6 +122,6 @@ module.exports = class CommandSettings extends Command {
       */
       .setTimestamp()
 
-    return message.reply({ embed: embed, allowedMentions: { repliedUser: false } })
+    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
   }
 }

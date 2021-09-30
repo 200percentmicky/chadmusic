@@ -17,14 +17,15 @@ module.exports = class InviteCommand extends Command {
     const invite = process.env.BOT_INVITE
     const server = process.env.SERVER_INVITE
     let msg = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor('Links!', this.client.user.avatarURL({ dynamic: true }))
       .setDescription(`${process.env.EMOJI_CUTIE} **[Add me to your server!](${invite})**\n🆘 **[Support Server](${server})**`)
+      .setFooter('Manage Server permission is required to invite me.')
     if (!message.channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
-      msg = `${process.env.EMOJI_CUTIE} **Here's my invite link. Enjoy!**\n<${invite}>\n🆘 **Support Server**\n${server}`
-      return message.channel.send(msg)
+      msg = `**Links!**\n\n${process.env.EMOJI_CUTIE} **Add me to your server!**\n<${invite}>\n🆘 **Support Server**\n${server}\n\n**Manage Server** permission is required to invite me.`
+      return message.channel.send({ content: `${msg}` })
     } else {
-      return message.channel.send({ embed: msg })
+      return message.channel.send({ embeds: [msg] })
     }
   }
 }

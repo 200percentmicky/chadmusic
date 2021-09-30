@@ -19,22 +19,29 @@ module.exports = class CommandShuffle extends Command {
     const djRole = this.client.settings.get(message.guild.id, 'djRole')
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
     if (djMode) {
-      if (!dj) return message.say('no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+    }
+
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    if (textChannel) {
+      if (textChannel !== message.channel.id) {
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+      }
     }
 
     const vc = message.member.voice.channel
-    if (!vc) return message.say('error', 'You are not in a voice channel.')
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
 
-    const currentVc = this.client.voice.connections.get(message.guild.id)
-    if (currentVc.channel.members.size <= 2 || dj) {
-      if (vc.id !== currentVc.channel.id) return message.say('error', 'You must be in the same voice channel that I\'m in to use that command.')
+    const currentVc = this.client.vc.get(vc)
+    if (vc.members.size <= 2 || dj) {
+      if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
 
       const queue = this.client.player.getQueue(message)
-      if (!queue) return message.say('warn', 'Nothing is currently playing in this server.')
+      if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
       this.client.player.shuffle(message)
-      return message.say('ok', `**${queue.songs.length - 1}** entries have been shuffled.`)
+      return this.client.ui.say(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`)
     } else {
-      return message.say('error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
     }
   }
 }

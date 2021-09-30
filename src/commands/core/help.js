@@ -1,12 +1,11 @@
 /* eslint-disable no-var */
 const { Command } = require('discord-akairo')
 const { MessageEmbed } = require('discord.js')
-const { help } = require('../../aliases.json')
 
 module.exports = class CommandHelp extends Command {
   constructor () {
-    super(help !== undefined ? help[0] : 'help', {
-      aliases: help || ['help'],
+    super('help', {
+      aliases: ['help'],
       description: {
         text: 'You\'re looking at it! Displays info about available commands.',
         usage: '[command]',
@@ -15,7 +14,8 @@ module.exports = class CommandHelp extends Command {
       category: '💻 Core',
       args: [
         {
-          id: 'string',
+          type: 'string',
+          id: 'command',
           match: 'content',
           default: null
         }
@@ -25,8 +25,8 @@ module.exports = class CommandHelp extends Command {
   }
 
   async exec (message, args) {
-    const string = args.string
-    const command = this.handler.modules.get(string)
+    const cmdName = args.command
+    const command = this.handler.modules.get(cmdName)
 
     let prefix
     if (message.channel.type === 'dm') {
@@ -37,9 +37,9 @@ module.exports = class CommandHelp extends Command {
       prefix = process.env.PREFIX
     }
 
-    if (string) {
+    if (cmdName) {
       // The command has been found.
-      if (this.handler.modules.has(string)) {
+      if (this.handler.modules.has(cmdName)) {
         const permissions = {
           CREATE_INSTANT_INVITE: 'Create Instant Invite',
           KICK_MEMBERS: 'Kick Members',
@@ -75,7 +75,7 @@ module.exports = class CommandHelp extends Command {
         }
 
         const commandEmbed = new MessageEmbed()
-          .setColor(process.env.COLOR_BLOOD)
+          .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
           .setAuthor(this.client.user.username + ' Music Commands', this.client.user.avatarURL({ dynamic: true }))
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
@@ -101,12 +101,12 @@ module.exports = class CommandHelp extends Command {
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
-        return message.channel.send({ embed: commandEmbed })
+        return message.channel.send({ embeds: [commandEmbed] })
       } else return
     }
 
     const helpEmbed = new MessageEmbed()
-      .setColor(process.env.COLOR_BLOOD)
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${this.client.user.username} Music Commands`, this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
       .setFooter(`To learn more about a command, use ${prefix}help [command]`)
@@ -122,6 +122,6 @@ module.exports = class CommandHelp extends Command {
       field.value = `${field.value}`
       helpEmbed.fields.push(field)
     })
-    return message.channel.send({ embed: helpEmbed })
+    return message.channel.send({ embeds: [helpEmbed] })
   }
 }

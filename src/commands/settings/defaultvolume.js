@@ -11,27 +11,32 @@ module.exports = class CommandDefaultVolume extends Command {
         details: '`<int:volume|1-200>` The new volume for the server.'
       },
       clientPermissions: ['EMBED_LINKS'],
-      userPermissions: ['MANAGE_GUILD']
+      userPermissions: ['MANAGE_GUILD'],
+      args: [
+        {
+          id: 'volume',
+          type: 'string'
+        }
+      ]
     })
   }
 
-  async exec (message) {
-    const args = message.content.split(/ +/g)
-    const volume = parseInt(args[1])
+  async exec (message, args) {
+    const volume = parseInt(args.volume)
 
     if (!volume) {
-      return message.usage('defaultvolume <int:volume|1-200>')
+      return this.client.ui.usage(message, 'defaultvolume <int:volume|1-200>')
     }
 
     if (isNaN(volume)) {
-      return message.say('error', 'Default volume must be a number.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be a number.')
     }
 
     if (volume > 200 || volume < 1) {
-      return message.say('error', 'Default volume must be between **1-200**.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.')
     }
 
     await this.client.settings.set(message.guild.id, 'defaultVolume', volume)
-    return message.say('ok', `The default volume is now **${volume}%**.`)
+    return this.client.ui.say(message, 'ok', `The default volume is now **${volume}%**.`)
   }
 }

@@ -4,7 +4,7 @@ module.exports = class ListenerGetPrefix extends Listener {
   constructor () {
     super('getPrefix', {
       emitter: 'client',
-      event: 'message'
+      event: 'messageCreate'
     })
   }
 

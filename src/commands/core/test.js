@@ -28,10 +28,10 @@ module.exports = class CommandTest extends Command {
 
         for (const chunk of arr) { // Loop through every element
           const embed = new MessageEmbed()
-            .setColor(this.client.utils.randColor())
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setDescription(`${chunk}`)
 
-          await message.channel.send({ embed: embed }) // Wait for the embed to be sent
+          await message.channel.send({ embeds: [embed] }) // Wait for the embed to be sent
         }
         break
       }
@@ -48,12 +48,12 @@ module.exports = class CommandTest extends Command {
               .setLabel('Click here to end the world!')
               .setEmoji('💣')
           )
-        message.channel.send('Buttons', { components: [actionRow] })
+        message.channel.send({ content: 'Pretty buttons!', components: [actionRow] })
         break
       }
 
       default: {
-        message.say('ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗')
+        this.client.ui.say(message, 'ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗')
       }
     }
   }

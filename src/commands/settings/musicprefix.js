@@ -21,9 +21,9 @@ module.exports = class CommandPrefix extends Command {
 
     if (!args[1]) {
       await this.client.settings.delete(message.guild.id, 'prefix')
-      return message.say('ok', `The prefix has been reset to \`${process.env.PREFIX}\``)
+      return this.client.ui.say(message, 'ok', `The prefix has been reset to \`${process.env.PREFIX}\``)
     }
     await this.client.settings.set(message.guild.id, 'prefix', prefix)
-    return message.say('ok', `The prefix has been set to \`${prefix}\``)
+    return this.client.ui.say(message, 'ok', `The prefix has been set to \`${prefix}\``)
   }
 }
