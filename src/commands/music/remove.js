@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const { Command } = require('discord-akairo');
 
 module.exports = class CommandRemove extends Command {
   constructor () {
@@ -12,69 +12,69 @@ module.exports = class CommandRemove extends Command {
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
-    })
+    });
   }
 
   async exec (message) {
-    const args = message.content.split(/ +/g)
-    const djMode = this.client.settings.get(message.guild.id, 'djMode')
-    const djRole = this.client.settings.get(message.guild.id, 'djRole')
-    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS'])
+    const args = message.content.split(/ +/g);
+    const djMode = this.client.settings.get(message.guild.id, 'djMode');
+    const djRole = this.client.settings.get(message.guild.id, 'djRole');
+    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
     if (djMode) {
-      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode')
+      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
     }
 
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 
-    const vc = message.member.voice.channel
-    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.')
+    const vc = message.member.voice.channel;
+    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
-    const currentVc = this.client.vc.get(vc)
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.')
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.')
+    const currentVc = this.client.vc.get(vc);
+    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+    else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
-    if (!args[1]) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]')
+    if (!args[1]) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]');
 
     if (vc.members.size <= 2 || dj) {
-      const queue = this.client.player.getQueue(message)
+      const queue = this.client.player.getQueue(message);
 
       /* Remove multiple entries from the queue. */
       if (args[2]) {
         /* Parsing arguments as numbers */
-        const start = parseInt(args[1])
-        const end = parseInt(args[2])
+        const start = parseInt(args[1]);
+        const end = parseInt(args[2]);
 
         /* Checking if the arguments are numbers. */
-        if (isNaN(start)) return this.client.ui.reply(message, 'error', 'Starting position must be a number.')
-        if (isNaN(end)) return this.client.ui.reply(message, 'error', 'Ending position must be a number.')
+        if (isNaN(start)) return this.client.ui.reply(message, 'error', 'Starting position must be a number.');
+        if (isNaN(end)) return this.client.ui.reply(message, 'error', 'Ending position must be a number.');
 
         /* Slice original array to get the length. */
-        const n = parseInt(queue.songs.slice(start, end).length + 1)
+        const n = parseInt(queue.songs.slice(start, end).length + 1);
 
         /* Modify queue to remove the entries. */
-        queue.songs.splice(start, n)
+        queue.songs.splice(start, n);
 
-        return this.client.ui.say(message, 'ok', `Removed **${n}** entries from the queue.`)
+        return this.client.ui.say(message, 'ok', `Removed **${n}** entries from the queue.`);
       } else {
         /* Removing only one entry from the queue. */
-        const song = queue.songs[args[1]]
+        const song = queue.songs[args[1]];
 
         /* Checking if argument is a number. */
-        const n = parseInt(args[1])
-        if (isNaN(n)) return this.client.ui.reply(message, 'error', 'Selection must be a number.')
+        const n = parseInt(args[1]);
+        if (isNaN(n)) return this.client.ui.reply(message, 'error', 'Selection must be a number.');
 
         /* Modify queue to remove the specified entry. */
-        queue.songs.splice(args[1], 1)
+        queue.songs.splice(args[1], 1);
 
-        return this.client.ui.say(message, 'ok', `Removed **${song.name}** from the queue.`)
+        return this.client.ui.say(message, 'ok', `Removed **${song.name}** from the queue.`);
       }
     } else {
-      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!')
+      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');
     }
   }
-}
+};

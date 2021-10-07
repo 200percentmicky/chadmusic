@@ -1,13 +1,13 @@
-const os = require('os')
-const { Command } = require('discord-akairo')
-const si = require('systeminformation')
-const { stripIndents } = require('common-tags')
-const prettyBytes = require('pretty-bytes')
-const prettyMs = require('pretty-ms')
+const os = require('os');
+const { Command } = require('discord-akairo');
+const si = require('systeminformation');
+const { stripIndents } = require('common-tags');
+const prettyBytes = require('pretty-bytes');
+const prettyMs = require('pretty-ms');
 
-const akairoversion = require('../../../node_modules/discord-akairo/package.json')
-const discordversion = require('../../../node_modules/discord.js/package.json')
-const distubeversion = require('../../../chadtube/package.json')
+const akairoversion = require('../../../node_modules/discord-akairo/package.json');
+const discordversion = require('../../../node_modules/discord.js/package.json');
+const distubeversion = require('../../../chadtube/package.json');
 
 module.exports = class CommandDebug extends Command {
   constructor () {
@@ -17,20 +17,20 @@ module.exports = class CommandDebug extends Command {
       description: {
         text: 'Shows system statistics about the bot.'
       }
-    })
+    });
   }
 
   // TODO: Replace systeminformation with Node 'os' module.
 
   async exec (message) {
-    const args = message.content.split(/ +/g)
-    if (args[1]) return
-    message.channel.sendTyping()
-    const cpu = await si.cpu()
-    const osSi = await si.osInfo()
-    const memory = await si.mem()
-    const user = os.userInfo()
-    const owner = this.client.users.cache.get(this.client.ownerID)
+    const args = message.content.split(/ +/g);
+    if (args[1]) return;
+    message.channel.sendTyping();
+    const cpu = await si.cpu();
+    const osSi = await si.osInfo();
+    const memory = await si.mem();
+    const user = os.userInfo();
+    const owner = this.client.users.cache.get(this.client.ownerID);
 
     const data = stripIndents`
     === ChadMusic - The Chad Music Bot ===
@@ -61,8 +61,8 @@ module.exports = class CommandDebug extends Command {
               User :: ${user.username}
              Shell :: ${user.shell}
       ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
-    `
+    `;
 
-    message.channel.send({ content: `\`\`\`asciidoc\n${data}\`\`\`` })
+    message.channel.send({ content: `\`\`\`asciidoc\n${data}\`\`\`` });
   }
-}
+};

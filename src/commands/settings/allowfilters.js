@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const { Command } = require('discord-akairo');
 
 module.exports = class CommandAllowFilters extends Command {
   constructor () {
@@ -12,20 +12,20 @@ module.exports = class CommandAllowFilters extends Command {
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']
-    })
+    });
   }
 
   async exec (message) {
-    const args = message.content.split(/ +/g)
-    if (!args[1]) return this.client.ui.usage(message, 'allowfilters <toggle:all/dj>')
+    const args = message.content.split(/ +/g);
+    if (!args[1]) return this.client.ui.usage(message, 'allowfilters <toggle:all/dj>');
     if (args[1] === 'DJ'.toLowerCase()) {
-      await this.client.settings.set(message.guild.id, 'allowFilters', 'dj')
-      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **DJ only**.')
+      await this.client.settings.set(message.guild.id, 'allowFilters', 'dj');
+      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **DJ only**.');
     } else if (args[1] === 'ALL'.toLowerCase()) {
-      await this.client.settings.set(message.guild.id, 'allowFilters', 'all')
-      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **All**.')
+      await this.client.settings.set(message.guild.id, 'allowFilters', 'all');
+      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **All**.');
     } else {
-      return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**')
+      return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**');
     }
   }
-}
+};

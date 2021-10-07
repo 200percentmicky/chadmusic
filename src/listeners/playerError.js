@@ -1,16 +1,16 @@
-const { Listener } = require('discord-akairo')
-const { MessageEmbed, Permissions } = require('discord.js')
+const { Listener } = require('discord-akairo');
+const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = class ListenerPlayerError extends Listener {
   constructor () {
     super('playerError', {
       emitter: 'player',
       event: 'error'
-    })
+    });
   }
 
   async exec (channel, error) {
-    const errsplit = error.message.split(/ +/g)
+    const errsplit = error.message.split(/ +/g);
 
     const knownErrors = {
       result: 'No results found.',
@@ -24,31 +24,31 @@ module.exports = class ListenerPlayerError extends Listener {
       Cookie: 'Cookie header used in the request has expired.',
       format: 'Cannot find a format of the video to play. The owner of the video has disabled playback on other websites, or the video is unavailable.',
       'Error [VOICE_CONNECTION_TIMEOUT]': 'The connection was not established within 15 seconds.'
-    }
+    };
 
-    let formattedError = 'An unknown error occured:'
+    let formattedError = 'An unknown error occured:';
     const embed = new MessageEmbed()
       .setColor(process.env.COLOR_ERROR)
-      .setTitle(`${process.env.EMOJI_ERROR} Player Error`)
+      .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
 
-    const linkPerms = channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.EMBED_LINKS)
+    const linkPerms = channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.EMBED_LINKS);
 
     // Iterates through the split error message. If it finds a match, it will
     // return an easier to understand message. Otherwise, return a more detailed
     // error message.
     for (let i = 0; i < errsplit.length; i++) {
       if (knownErrors[errsplit[i]]) {
-        formattedError = knownErrors[errsplit[i]]
-        break
+        formattedError = knownErrors[errsplit[i]];
+        break;
       }
     }
 
-    embed.setDescription(`${formattedError}\n\`\`\`js\n${error.name}: ${error.message}\`\`\``)
+    embed.setDescription(`${formattedError}\n\`\`\`js\n${error.name}: ${error.message}\`\`\``);
 
     channel.send(linkPerms
       ? { embeds: [embed] }
       : { content: `${process.env.EMOJI_ERROR} **Player Error**\n${formattedError}\`\`\`js\n${error.name}: ${error.message}\`\`\`` }
-    )
+    );
 
     /*
     if (errsplit.includes('extract') || errsplit.includes('Unsupported')) return this.client.ui.reply(message, 'error', 'Not a supported URL or the URL is invalid.', 'Player Error')
@@ -59,4 +59,4 @@ module.exports = class ListenerPlayerError extends Listener {
     if (error.name.includes('Error [VOICE_CONNECTION_TIMEOUT]')) return this.client.ui.reply(message, 'error', 'The connection was not established within 15 seconds. Please try again later.', 'Voice Connection Timeout')
     */
   }
-}
+};

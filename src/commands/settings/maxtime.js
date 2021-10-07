@@ -1,5 +1,5 @@
-const { Command } = require('discord-akairo')
-const { toMilliseconds } = require('colon-notation')
+const { Command } = require('discord-akairo');
+const { toMilliseconds } = require('colon-notation');
 
 module.exports = class CommandMaxTime extends Command {
   constructor () {
@@ -19,22 +19,22 @@ module.exports = class CommandMaxTime extends Command {
           type: 'string'
         }
       ]
-    })
+    });
   }
 
   async exec (message, args) {
-    const time = args.time
-    if (!time) return this.client.ui.usage(message, 'maxtime <duration|0/none/off>')
+    const time = args.time;
+    if (!time) return this.client.ui.usage(message, 'maxtime <duration|0/none/off>');
 
     if (time === 0 || time === 'NONE'.toLowerCase() || time === 'OFF'.toLowerCase()) {
-      await this.client.settings.delete(message.guild.id, 'maxTime')
-      return this.client.ui.say(message, 'ok', 'Max time has been disabled.')
+      await this.client.settings.delete(message.guild.id, 'maxTime');
+      return this.client.ui.say(message, 'ok', 'Max time has been disabled.');
     }
 
-    const notation = toMilliseconds(time)
-    if (!notation) return message.error(`\`${time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`)
+    const notation = toMilliseconds(time);
+    if (!notation) return message.error(`\`${time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
 
-    await this.client.settings.set(message.guild.id, 'maxTime', notation)
-    return this.client.ui.say(message, 'ok', `Max time has been set to \`${time}\``)
+    await this.client.settings.set(message.guild.id, 'maxTime', notation);
+    return this.client.ui.say(message, 'ok', `Max time has been set to \`${time}\``);
   }
-}
+};

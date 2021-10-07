@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const { Command } = require('discord-akairo');
 
 module.exports = class CommandDefaultVolume extends Command {
   constructor () {
@@ -18,25 +18,25 @@ module.exports = class CommandDefaultVolume extends Command {
           type: 'string'
         }
       ]
-    })
+    });
   }
 
   async exec (message, args) {
-    const volume = parseInt(args.volume)
+    const volume = parseInt(args.volume);
 
     if (!volume) {
-      return this.client.ui.usage(message, 'defaultvolume <int:volume|1-200>')
+      return this.client.ui.usage(message, 'defaultvolume <int:volume|1-200>');
     }
 
     if (isNaN(volume)) {
-      return this.client.ui.reply(message, 'error', 'Default volume must be a number.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be a number.');
     }
 
     if (volume > 200 || volume < 1) {
-      return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.')
+      return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.');
     }
 
-    await this.client.settings.set(message.guild.id, 'defaultVolume', volume)
-    return this.client.ui.say(message, 'ok', `The default volume is now **${volume}%**.`)
+    await this.client.settings.set(message.guild.id, 'defaultVolume', volume);
+    return this.client.ui.say(message, 'ok', `The default volume is now **${volume}%**.`);
   }
-}
+};

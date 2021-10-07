@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const guildSchema = new Schema({
   id: {
@@ -9,6 +9,6 @@ const guildSchema = new Schema({
     type: Object,
     required: true
   }
-}, { minimize: false })
+}, { minimize: false });
 
-module.exports = model('settings', guildSchema)
+module.exports = model('settings', guildSchema);

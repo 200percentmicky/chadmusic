@@ -1,14 +1,14 @@
-const { Listener } = require('discord-akairo')
+const { Listener } = require('discord-akairo');
 
 module.exports = class ListenerGuildDelete extends Listener {
   constructor () {
     super('guildDelete', {
       emitter: 'client',
       event: 'guildDelete'
-    })
+    });
   }
 
   async exec (guild) {
-    this.client.settings.clear(guild.id)
+    this.client.settings.clear(guild.id);
   }
-}
+};

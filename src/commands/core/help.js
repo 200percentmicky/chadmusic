@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
-const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { Command } = require('discord-akairo');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class CommandHelp extends Command {
   constructor () {
@@ -21,20 +21,20 @@ module.exports = class CommandHelp extends Command {
         }
       ],
       clientPermissions: ['EMBED_LINKS']
-    })
+    });
   }
 
   async exec (message, args) {
-    const cmdName = args.command
-    const command = this.handler.modules.get(cmdName)
+    const cmdName = args.command;
+    const command = this.handler.modules.get(cmdName);
 
-    let prefix
+    let prefix;
     if (message.channel.type === 'dm') {
       prefix = this.client.prefix.getPrefix(message.guild.id)
         ? this.client.prefix.getPrefix(message.guild.id)
-        : process.env.PREFIX
+        : process.env.PREFIX;
     } else {
-      prefix = process.env.PREFIX
+      prefix = process.env.PREFIX;
     }
 
     if (cmdName) {
@@ -72,7 +72,7 @@ module.exports = class CommandHelp extends Command {
           MANAGE_ROLES: 'Manage Roles',
           MANAGE_WEBHOOKS: 'Manage Webhooks',
           MANAGE_EMOJIS: 'Manage Emojis'
-        }
+        };
 
         const commandEmbed = new MessageEmbed()
           .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
@@ -80,20 +80,20 @@ module.exports = class CommandHelp extends Command {
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
           .setTimestamp()
-          .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }))
-        if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.')
-        if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.')
-        if (command.category) commandEmbed.addField('Category', `${command.category}`, true)
+          .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }));
+        if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.');
+        if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.');
+        if (command.category) commandEmbed.addField('Category', `${command.category}`, true);
         // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
-        if (command.aliases.length > 1) commandEmbed.addField('Aliases', `${command.aliases}`, true)
+        if (command.aliases.length > 1) commandEmbed.addField('Aliases', `${command.aliases}`, true);
 
         // This gonna be a bruh moment.
         // It do be Yandere Simulator lol
-        if (command.userPermissions) var userPerms = await command.userPermissions.map(user => permissions[user]).join(', ')
-        if (command.clientPermissions) var clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ')
-        const _uPerms = command.userPermissions ? `**User:** ${userPerms}\n` : ''
-        const _bPerms = command.clientPermissions ? `**Bot:** ${clientPerms}` : ''
-        if (userPerms || clientPerms) commandEmbed.addField('Permissions', `${_uPerms}${_bPerms}`)
+        if (command.userPermissions) var userPerms = await command.userPermissions.map(user => permissions[user]).join(', ');
+        if (command.clientPermissions) var clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ');
+        const _uPerms = command.userPermissions ? `**User:** ${userPerms}\n` : '';
+        const _bPerms = command.clientPermissions ? `**Bot:** ${clientPerms}` : '';
+        if (userPerms || clientPerms) commandEmbed.addField('Permissions', `${_uPerms}${_bPerms}`);
 
         /*
         if (command.clientPermissions) {
@@ -101,27 +101,27 @@ module.exports = class CommandHelp extends Command {
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
 
-        return message.channel.send({ embeds: [commandEmbed] })
-      } else return
+        return message.channel.send({ embeds: [commandEmbed] });
+      } else return;
     }
 
     const helpEmbed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${this.client.user.username} Music Commands`, this.client.user.avatarURL({ dynamic: true }))
       .setTimestamp()
-      .setFooter(`To learn more about a command, use ${prefix}help [command]`)
+      .setFooter(`To learn more about a command, use ${prefix}help [command]`);
 
     this.handler.categories.forEach((value, key) => {
       const field = {
         name: key,
         value: ''
-      }
+      };
       value.forEach((commands) => {
-        field.value += `\`${commands.id}\` `
-      })
-      field.value = `${field.value}`
-      helpEmbed.fields.push(field)
-    })
-    return message.channel.send({ embeds: [helpEmbed] })
+        field.value += `\`${commands.id}\` `;
+      });
+      field.value = `${field.value}`;
+      helpEmbed.fields.push(field);
+    });
+    return message.channel.send({ embeds: [helpEmbed] });
   }
-}
+};

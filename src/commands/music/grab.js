@@ -1,5 +1,5 @@
-const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { Command } = require('discord-akairo');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class CommandGrab extends Command {
   constructor () {
@@ -11,18 +11,18 @@ module.exports = class CommandGrab extends Command {
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS']
-    })
+    });
   }
 
   async exec (message) {
     // Grab will not be affected by DJ Mode.
-    const queue = this.client.player.getQueue(message)
-    const song = queue.songs[0]
+    const queue = this.client.player.getQueue(message);
+    const song = queue.songs[0];
 
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null)
+    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`)
+        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 
@@ -34,11 +34,11 @@ module.exports = class CommandGrab extends Command {
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
         .addField('Duration', `${song.formattedDuration}`)
-        .setTimestamp()
-      message.author.send({ embeds: [embed] })
-      return message.react(process.env.REACTION_OK)
+        .setTimestamp();
+      message.author.send({ embeds: [embed] });
+      return message.react(process.env.REACTION_OK);
     } catch (err) {
-      if (err.name === 'DiscordAPIError') this.client.ui.reply(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.')
+      if (err.name === 'DiscordAPIError') this.client.ui.reply(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.');
     }
   }
-}
+};

@@ -5,7 +5,7 @@
         "node": true
     },
     "extends": [
-        "standard"
+        "semistandard"
     ],
     "parserOptions": {
         "ecmaVersion": 12

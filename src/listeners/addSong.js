@@ -1,41 +1,41 @@
-const { Listener } = require('discord-akairo')
-const { Permissions } = require('discord.js')
-const prettyms = require('pretty-ms')
-const iheart = require('iheart')
+const { Listener } = require('discord-akairo');
+const { Permissions } = require('discord.js');
+const prettyms = require('pretty-ms');
+const iheart = require('iheart');
 
 const isAttachment = (url) => {
   // ! TODO: Come up with a better regex lol
   // eslint-disable-next-line no-useless-escape
-  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g
-  const urlRegex = new RegExp(urlPattern)
-  return url.match(urlRegex)
-}
+  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+  const urlRegex = new RegExp(urlPattern);
+  return url.match(urlRegex);
+};
 
 module.exports = class ListenerAddSong extends Listener {
   constructor () {
     super('addSong', {
       emitter: 'player',
       event: 'addSong'
-    })
+    });
   }
 
   async exec (queue, song) {
-    if (queue.repeatMode > 0) return
-    const channel = queue.textChannel
-    const guild = channel.guild
-    const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id)
-    const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX)
+    if (queue.repeatMode > 0) return;
+    const channel = queue.textChannel;
+    const guild = channel.guild;
+    const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
+    const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
 
     // This is annoying.
-    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${this.client.user.id}>`))).last()
+    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${this.client.user.id}>`))).last();
 
-    const djRole = await this.client.settings.get(guild.id, 'djRole')
-    const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true)
-    const maxTime = await this.client.settings.get(guild.id, 'maxTime')
-    const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS)
+    const djRole = await this.client.settings.get(guild.id, 'djRole');
+    const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true);
+    const maxTime = await this.client.settings.get(guild.id, 'maxTime');
+    const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
     if (!allowAgeRestricted) {
-      queue.songs.pop()
-      return this.client.ui.say(message, 'no', 'You cannot add **Age Restricted** videos to the queue.')
+      queue.songs.pop();
+      return this.client.ui.say(message, 'no', 'You cannot add **Age Restricted** videos to the queue.');
     }
     if (maxTime) {
       if (!dj) {
@@ -43,8 +43,8 @@ module.exports = class ListenerAddSong extends Listener {
         // Using Math.floor() to round down.
         // Still need to apend '000' to be accurate.
         if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-          queue.songs.pop()
-          return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`)
+          queue.songs.pop();
+          return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
         }
       }
     }
@@ -53,17 +53,17 @@ module.exports = class ListenerAddSong extends Listener {
       // Changes the description of the track, in case its a
       // radio station.
       iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
-        const station = match.stations[0]
-        song.name = `${station.name} - ${station.description}`
-        song.isLive = true
-        song.thumbnail = station.logo || station.newlogo
-        song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`
-      })
+        const station = match.stations[0];
+        song.name = `${station.name} - ${station.description}`;
+        song.isLive = true;
+        song.thumbnail = station.logo || station.newlogo;
+        song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`;
+      });
     }
 
     // Stupid fix to make sure that the queue doesn't break.
     // TODO: Fix toColonNotation in queue.js
-    if (song.isLive) song.duration = 1
+    if (song.isLive) song.duration = 1;
 
     if (isAttachment(song.url)) {
       const supportedFormats = [
@@ -72,13 +72,13 @@ module.exports = class ListenerAddSong extends Listener {
         'webm',
         'ogg',
         'wav'
-      ]
+      ];
       if (!supportedFormats.some(element => song.url.endsWith(element))) {
-        queue.songs.pop()
-        return this.client.ui.reply(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`)
+        queue.songs.pop();
+        return this.client.ui.reply(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`);
       }
     }
 
-    this.client.ui.say(message, 'ok', `Added **${song.name}** to the queue.`)
+    this.client.ui.say(message, 'ok', `Added **${song.name}** to the queue.`);
   }
-}
+};

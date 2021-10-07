@@ -1,11 +1,11 @@
-const { Listener } = require('discord-akairo')
+const { Listener } = require('discord-akairo');
 
 module.exports = class CommandMissingPermissions extends Listener {
   constructor () {
     super('missingPermissions', {
       emitter: 'commandHandler',
       event: 'missingPermissions'
-    })
+    });
   }
 
   async exec (message, command, type, missing) {
@@ -41,18 +41,18 @@ module.exports = class CommandMissingPermissions extends Listener {
       MANAGE_ROLES: 'Manage Roles',
       MANAGE_WEBHOOKS: 'Manage Webhooks',
       MANAGE_EMOJIS: 'Manage Emojis'
-    }
+    };
 
-    const clientPerms = await missing.map(missing => permissions[missing]).join(', ')
-    const userPerms = await missing.map(missing => permissions[missing]).join(', ')
+    const clientPerms = await missing.map(missing => permissions[missing]).join(', ');
+    const userPerms = await missing.map(missing => permissions[missing]).join(', ');
 
     if (type === 'client') {
-      return this.client.ui.say(message, 'warn', `I require the **${clientPerms}** permission(s) to execute that command.`)
+      return this.client.ui.say(message, 'warn', `I require the **${clientPerms}** permission(s) to execute that command.`);
     }
 
     if (type === 'user') {
-      if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.say(message, 'no', 'Only server administrators can use that command.')
-      else return this.client.ui.say(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`)
+      if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.say(message, 'no', 'Only server administrators can use that command.');
+      else return this.client.ui.say(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`);
     }
   }
-}
+};

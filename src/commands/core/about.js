@@ -1,12 +1,12 @@
-const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
-const { stripIndents } = require('common-tags')
-const prettyms = require('pretty-ms')
+const { Command } = require('discord-akairo');
+const { MessageEmbed } = require('discord.js');
+const { stripIndents } = require('common-tags');
+const prettyms = require('pretty-ms');
 
 // Mainly for version info...
-const akairoversion = require('../../../node_modules/discord-akairo/package.json')
-const discordversion = require('../../../node_modules/discord.js/package.json')
-const distubeversion = require('../../../chadtube/package.json') // Temporary
+const akairoversion = require('../../../node_modules/discord-akairo/package.json');
+const discordversion = require('../../../node_modules/discord.js/package.json');
+const distubeversion = require('../../../chadtube/package.json'); // Temporary
 
 module.exports = class CommandAbout extends Command {
   constructor () {
@@ -16,12 +16,12 @@ module.exports = class CommandAbout extends Command {
       description: {
         text: 'Shows information about the bot.'
       }
-    })
+    });
   }
 
   async exec (message) {
-    const owner = this.client.users.cache.get(this.client.ownerID)
-    const chadImage = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+    const owner = this.client.users.cache.get(this.client.ownerID);
+    const chadImage = 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png';
     const aboutembed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor('ChadMusic - The Chad Music Bot', this.client.user.avatarURL({ dynamic: true }))
@@ -48,7 +48,7 @@ module.exports = class CommandAbout extends Command {
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
       .setThumbnail(chadImage)
-      .setFooter(`The owner of this instance is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }))
-    return message.channel.send({ embeds: [aboutembed] })
+      .setFooter(`The owner of this instance is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }));
+    return message.channel.send({ embeds: [aboutembed] });
   }
-}
+};

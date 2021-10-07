@@ -1,13 +1,13 @@
-const { Command } = require('discord-akairo')
+const { Command } = require('discord-akairo');
 
 /* eslint-disable no-unused-vars */
-const Discord = require('discord.js')
-const _ = require('lodash')
-const __ = require('underscore')
-const prettyBytes = require('pretty-bytes')
-const prettyMs = require('pretty-ms')
-const colonNotation = require('colon-notation')
-const commonTags = require('common-tags')
+const Discord = require('discord.js');
+const _ = require('lodash');
+const __ = require('underscore');
+const prettyBytes = require('pretty-bytes');
+const prettyMs = require('pretty-ms');
+const colonNotation = require('colon-notation');
+const commonTags = require('common-tags');
 
 module.exports = class CommandEval extends Command {
   constructor () {
@@ -35,58 +35,58 @@ module.exports = class CommandEval extends Command {
           match: 'text'
         }
       ]
-    })
+    });
   }
 
   async exec (message, args) {
-    const t1 = process.hrtime()
+    const t1 = process.hrtime();
     const clean = text => {
-      if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)) } else { return text }
-    }
+      if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); } else { return text; }
+    };
 
     // const args = message.content.split(/ +/g)
-    const code = args.code
+    const code = args.code;
 
     try {
       // eslint-disable-next-line no-eval
-      let evaled = eval(code)
+      let evaled = eval(code);
 
       if (typeof evaled !== 'string') {
-        evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 })
+        evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 });
       }
 
-      const t2 = process.hrtime(t1)
-      const end = (t2[0] * 1000000000 + t2[1]) / 1000000
+      const t2 = process.hrtime(t1);
+      const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
       if (code.includes('.token')) {
-        await message.react(process.env.REACTION_WARN)
+        await message.react(process.env.REACTION_WARN);
         try {
-          message.author.send(clean(evaled))
+          message.author.send(clean(evaled));
         } catch (err) {
-          if (err.name === 'DiscordAPIError') return
+          if (err.name === 'DiscordAPIError') return;
         }
-        return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled))
+        return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled));
       } else {
-        const result = clean(evaled)
+        const result = clean(evaled);
         if (result.length > 2000) {
-          const compactResult = result.match(/.{1,1960}/g)
+          const compactResult = result.match(/.{1,1960}/g);
           for (const chunk of compactResult) {
-            await message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${chunk}\`\`\``)
+            await message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${chunk}\`\`\``);
           }
         } else {
-          return message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``)
+          return message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``);
         }
       }
     } catch (err) {
-      message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``)
-      const errorChannel = this.client.channels.cache.get('603735567733227531')
+      message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``);
+      const errorChannel = this.client.channels.cache.get('603735567733227531');
       const embed = new Discord.MessageEmbed()
         .setColor(process.env.COLOR_WARN)
         .setTitle(process.env.EMOJI_WARN + 'eval() Error')
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
-        .setTimestamp()
-      errorChannel.send({ embeds: [embed] })
+        .setTimestamp();
+      errorChannel.send({ embeds: [embed] });
     }
   }
-}
+};

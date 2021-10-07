@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const { Command } = require('discord-akairo');
 
 module.exports = class PingCommand extends Command {
   constructor () {
@@ -8,14 +8,14 @@ module.exports = class PingCommand extends Command {
         text: 'Shows the bot\'s latency to Discord.'
       },
       category: '💻 Core'
-    })
+    });
   }
 
   async exec (message) {
-    const ping = await message.channel.send(process.env.EMOJI_LOADING + 'Ping?')
+    const ping = await message.channel.send(process.env.EMOJI_LOADING + 'Ping?');
 
-    const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt)
+    const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt);
 
-    await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``)
+    await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩: \`${timeDiff}ms.\`\n💟: \`${Math.round(this.client.ws.ping)}ms.\``);
   }
-}
+};

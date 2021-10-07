@@ -1,7 +1,7 @@
-const { stripIndents } = require('common-tags')
-const { Command } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
-const { toColonNotation } = require('colon-notation')
+const { stripIndents } = require('common-tags');
+const { Command } = require('discord-akairo');
+const { MessageEmbed } = require('discord.js');
+const { toColonNotation } = require('colon-notation');
 
 module.exports = class CommandSettings extends Command {
   constructor () {
@@ -13,28 +13,28 @@ module.exports = class CommandSettings extends Command {
       },
       clientPermissions: ['EMBED_LINKS'],
       userPermissions: ['MANAGE_GUILD']
-    })
+    });
   }
 
   async exec (message) {
-    const settings = this.client.settings
+    const settings = this.client.settings;
 
     // All Settings
-    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX) // Server Prefix
+    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX); // Server Prefix
     // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
-    const djRole = settings.get(message.guild.id, 'djRole', null) // DJ Role
-    const djMode = settings.get(message.guild.id, 'djMode', false) // Toggle DJ Mode
-    const maxTime = settings.get(message.guild.id, 'maxTime', null) // Max Song Duration
-    const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null) // Max Entries in the Queue
-    const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all') // Allow the use of Filters
-    const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true) // Unlimited Volume
-    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100) // Default Volume
-    const textChannel = settings.get(message.guild.id, 'textChannel', null) // Text Channel
+    const djRole = settings.get(message.guild.id, 'djRole', null); // DJ Role
+    const djMode = settings.get(message.guild.id, 'djMode', false); // Toggle DJ Mode
+    const maxTime = settings.get(message.guild.id, 'maxTime', null); // Max Song Duration
+    const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null); // Max Entries in the Queue
+    const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all'); // Allow the use of Filters
+    const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true); // Unlimited Volume
+    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100); // Default Volume
+    const textChannel = settings.get(message.guild.id, 'textChannel', null); // Text Channel
     // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
     // ! This setting only affects videos from YouTube.
     // All pornographic websites are blocked.
-    const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true) // Allow Explicit Content.
+    const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
     // const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
     // const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
@@ -120,8 +120,8 @@ module.exports = class CommandSettings extends Command {
         : 'Not configured'}
       `)
       */
-      .setTimestamp()
+      .setTimestamp();
 
-    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } })
+    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
   }
-}
+};
