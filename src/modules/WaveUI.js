@@ -132,12 +132,12 @@ const reply = (msg, type, description, title, footer, buttons) => {
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: type === 'error' || false } });
+    return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(stringUI(embedEmoji[type], title || null, description || null)
-        , { components: buttons || [], allowedMentions: { repliedUser: type === 'error' || false } });
-    } else return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: type === 'error' || false } });
+        , { components: buttons || [], allowedMentions: { repliedUser: false } });
+    } else return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
   }
 };
 
@@ -205,7 +205,6 @@ const usage = (msg, syntax) => {
   const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix', process.env.PREFIX);
   const embed = new MessageEmbed()
     .setColor(process.env.COLOR_INFO)
-    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`)
     .setTitle(`${process.env.EMOJI_INFO} Usage`)
     .setDescription(`\`${guildPrefix}${syntax}\``);
   if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
