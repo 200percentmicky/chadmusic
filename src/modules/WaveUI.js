@@ -247,11 +247,9 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
     return msg.reply({ embeds: [embedUI(color, emoji || null, title || null, description || null, footer || null)], allowedMentions: { repliedUser: false } });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-      return msg.reply(title
-        ? `${emoji} **${title}** | ${description}`
-        : `${emoji} ${description}`
-      , { allowedMentions: { repliedUser: false } });
-    } else return msg.reply({ embeds: [embed], components: buttons || [], allowedMentions: { repliedUser: false } });
+      return msg.reply(stringUI(emoji || null, title || null, description || null)
+        , { allowedMentions: { repliedUser: false } });
+    } else return msg.reply({ embeds: [embedUI(color, emoji || null, title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
   }
 };
 
