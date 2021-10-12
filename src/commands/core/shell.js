@@ -21,7 +21,7 @@ module.exports = class CommandShell extends Command {
     const controller = new AbortController();
     const { signal } = controller;
 
-    if (!args[1]) return this.client.ui.usage('shell <cmd>');
+    if (!args[1]) return this.client.ui.usage(message, 'shell <cmd>');
 
     // sudo must not be used outside of a terminal environment.
     if (args.includes('sudo')) {

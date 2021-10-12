@@ -38,7 +38,7 @@ module.exports = class CommandIHeartRadio extends Command {
     const vc = message.member.voice.channel;
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
-    if (!text) return this.client.ui.usage('iheartradio <search>');
+    if (!text) return this.client.ui.usage(message, 'iheartradio <search>');
 
     const currentVc = this.client.vc.get(vc);
     if (!currentVc) {

@@ -45,7 +45,7 @@ module.exports = class CommandPlay extends Command {
     const vc = message.member.voice.channel;
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
-    if (!text && !message.attachments.first()) return this.client.ui.usage('play <url/search/attachment>');
+    if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
     if (pornPattern(text)) return this.client.ui.say(message, 'no', "The URL you're requesting to play is not allowed.");
 
