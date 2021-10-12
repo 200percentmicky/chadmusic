@@ -11,7 +11,8 @@ class CommandPing extends SlashCommand {
   }
 
   async run (ctx) {
-    return ctx.send(`${process.env.EMOJI_OK} **Pong!**`);
+    const client = this.creator.client;
+    return ctx.send(`${process.env.EMOJI_OK} **Pong!** \`${Math.round(client.ws.ping)}ms.\``);
   }
 }
 
