@@ -38,7 +38,7 @@ module.exports = class CommandEarrape extends Command {
 
     // This command should not be limited by the DJ Role. Must be a toggable setting.
     const vc = message.member.voice.channel;
-    const currentVc = this.client.vc.get(vc);
+    const currentVc = this.client.vc.get(message.guild.id);
     if (!vc) {
       return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
     } else if (vc.id !== currentVc._channel.id) {
