@@ -2,6 +2,9 @@ const { Listener } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 const prettyms = require('pretty-ms');
 const iheart = require('iheart');
+const ffprobe = require('ffprobe');
+const ffprobeStatic = require('ffprobe-static');
+const { toColonNotation } = require('colon-notation');
 
 const isAttachment = (url) => {
   // ! TODO: Come up with a better regex lol
@@ -27,7 +30,7 @@ module.exports = class ListenerAddSong extends Listener {
     const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
 
     // This is annoying.
-    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${this.client.user.id}>`))).last();
+    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && x.content.startsWith(prefix)).last();
 
     const djRole = await this.client.settings.get(guild.id, 'djRole');
     const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true);
@@ -52,7 +55,7 @@ module.exports = class ListenerAddSong extends Listener {
     if (await this.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
       // Changes the description of the track, in case its a
       // radio station.
-      iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
+      await iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
         const station = match.stations[0];
         song.name = `${station.name} - ${station.description}`;
         song.isLive = true;
@@ -76,6 +79,13 @@ module.exports = class ListenerAddSong extends Listener {
       if (!supportedFormats.some(element => song.url.endsWith(element))) {
         queue.songs.pop();
         return this.client.ui.reply(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`);
+      } else {
+        await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
+          const time = Math.floor(info.streams[0].duration);
+          song.duration = time;
+          song.formattedDuration = toColonNotation(time + '000');
+          song.isFile = true;
+        });
       }
     }
 

@@ -2,14 +2,6 @@ const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 
-const isAttachment = (url) => {
-  // ! TODO: Come up with a better regex lol
-  // eslint-disable-next-line no-useless-escape
-  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-  const urlRegex = new RegExp(urlPattern);
-  return url.match(urlRegex);
-};
-
 module.exports = class CommandNowPlaying extends Command {
   constructor () {
     super('nowplaying', {
@@ -54,7 +46,7 @@ module.exports = class CommandNowPlaying extends Command {
 
     let progressBar;
     if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
-    const duration = song.isLive ? '🔴 **Live**' : isAttachment(song.url) ? '📎 **File Upload**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
+    const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))

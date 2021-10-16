@@ -1,7 +1,6 @@
 const { Listener } = require('discord-akairo');
 const { MessageEmbed, Permissions } = require('discord.js');
 const prettyms = require('pretty-ms');
-const iheart = require('iheart');
 
 const isAttachment = (url) => {
   // ! TODO: Come up with a better regex lol
@@ -56,18 +55,6 @@ module.exports = class ListenerPlaySong extends Listener {
       }
     }
 
-    if (await this.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
-      // Changes the description of the track, in case its a
-      // radio station.
-      iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
-        const station = match.stations[0];
-        song.name = `${station.name} - ${station.description}`;
-        song.isLive = true;
-        song.thumbnail = station.logo || station.newlogo;
-        song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`;
-      });
-    }
-
     // Stupid fix to make sure that the queue doesn't break.
     // TODO: Fix toColonNotation in queue.js
     if (song.isLive) song.duration = 1;
@@ -79,7 +66,7 @@ module.exports = class ListenerPlaySong extends Listener {
       .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }));
 
     if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
-    if (isAttachment(song.url)) songNow.setDescription('📎 **File Upload**');
+    if (song.isFile) songNow.setDescription('📎 **File Upload**');
     if (author.name) songNow.addField('Uploader', `[${author.name}](${author.url})` || 'N/A');
     if (song.station) songNow.addField('Station', `${song.station}`);
 
