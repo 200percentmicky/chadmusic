@@ -41,14 +41,26 @@ module.exports = class CommandTest extends Command {
           .addComponents(
             new MessageButton()
               .setStyle('PRIMARY')
+              .setLabel('Click me!')
+              .setCustomId('test_button'),
+            new MessageButton()
+              .setStyle('SECONDARY')
               .setLabel('This button does nothing.')
+              .setCustomId('nothing_button')
               .setDisabled(true),
             new MessageButton()
               .setStyle('DANGER')
               .setLabel('Click here to end the world!')
+              .setCustomId('holy_shit')
               .setEmoji('💣')
           );
         message.channel.send({ content: 'Pretty buttons!', components: [actionRow] });
+        break;
+      }
+
+      case 'music': {
+        await this.client.player.play(message, 'undertale megalovania');
+        this.client.ui.custom(message, '🎶', null, "Playing some jams. If megalovania isn't playing, then you're gonna have a bad time.");
         break;
       }
 
