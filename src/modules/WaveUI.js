@@ -15,7 +15,7 @@ let baseEmbed = {};
  */
 const embedUI = (color, emoji, title, desc, footer) => {
   baseEmbed = {
-    color: color,
+    color: parseInt(color),
     title: null,
     description: `${emoji} ${desc}`,
     footer: null
@@ -46,6 +46,15 @@ const stringUI = (emoji, title, desc) => {
   return msgString;
 };
 
+// Embed colors
+const embedColor = {
+  ok: process.env.COLOR_OK,
+  warn: process.env.COLOR_WARN,
+  error: process.env.COLOR_ERROR,
+  info: process.env.COLOR_INFO,
+  no: process.env.COLOR_NO
+};
+
 /**
  * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
  *
@@ -60,15 +69,6 @@ const stringUI = (emoji, title, desc) => {
 const say = (msg, type, description, title, footer, buttons) => {
   if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-  /* The color of the embed */
-  const embedColor = {
-    ok: process.env.COLOR_OK,
-    warn: process.env.COLOR_WARN,
-    error: process.env.COLOR_ERROR,
-    info: process.env.COLOR_INFO,
-    no: process.env.COLOR_NO
-  };
-
   /* The emoji of the embed */
   // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
   const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
@@ -82,21 +82,29 @@ const say = (msg, type, description, title, footer, buttons) => {
 
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [] });
+    return msg.channel.send({
+      embeds: [embed],
+      components: buttons || []
+    });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-      return msg.reply(stringUI(embedEmoji[type], title || null, description || null), { components: buttons || [] });
-    } else return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [] });
+      return msg.channel.send({
+        content: stringUI(embedEmoji[type], title || null, description || null),
+        components: buttons || []
+      });
+    } else {
+      return msg.channel.send({
+        embeds: [embed],
+        components: buttons || []
+      });
+    }
   }
 };
 
-// Copying and pasting, but so far it does what I want it to do.
-// I was going to make a function, but buttons might be removed from it if I do.
-// TODO: Create core embed and fallback UI function soon.
-
 /**
- * Functions the same way as `Message.say()` but replies to the user that ran the command.
+ * Similar to `Message.say()` but replies to the user instead.
  *
  * @param {Message} msg A MessageResolvable | `Discord.Message`
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
@@ -104,19 +112,10 @@ const say = (msg, type, description, title, footer, buttons) => {
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
  * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
- * @returns {Message} The message to reply to the user.
+ * @returns {Message} The message to send in the channel.
  */
 const reply = (msg, type, description, title, footer, buttons) => {
   if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
-
-  /* The color of the embed */
-  const embedColor = {
-    ok: process.env.COLOR_OK,
-    warn: process.env.COLOR_WARN,
-    error: process.env.COLOR_ERROR,
-    info: process.env.COLOR_INFO,
-    no: process.env.COLOR_NO
-  };
 
   /* The emoji of the embed */
   // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
@@ -131,18 +130,38 @@ const reply = (msg, type, description, title, footer, buttons) => {
 
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
+    return msg.channel.send({
+      embeds: [embed],
+      components: buttons || [],
+      allowedMentions: {
+        repliedUser: true
+      }
+    });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-      return msg.reply(stringUI(embedEmoji[type], title || null, description || null)
-        , { components: buttons || [], allowedMentions: { repliedUser: false } });
-    } else return msg.reply({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
+      return msg.channel.send({
+        content: stringUI(embedEmoji[type], title || null, description || null),
+        components: buttons || [],
+        allowedMentions: {
+          repliedUser: true
+        }
+      });
+    } else {
+      return msg.channel.send({
+        embeds: [embed],
+        components: buttons || [],
+        allowedMentions: {
+          repliedUser: true
+        }
+      });
+    }
   }
 };
 
 /**
- * Functions the same as `Message.say()`, but is used strictly for slash commands as an interaction. This function relies on the `slash-create` package as a peer dependency, and should be converted for use with `discord.js` instead.
+ * Functions the same as `this.client.ui.say(message, )`, but is used strictly for slash commands as an interaction. This function relies on the `slash-create` package as a peer dependency, and should be converted for use with `discord.js` instead.
  *
  * @param {slash.CommandContext} ctx The CommandContext interaction.
  * @param {Client} client The instance of `Discord.Client`.
@@ -179,15 +198,23 @@ const ctx = (ctx, client, type, description, title, footer, buttons) => {
     no: emojiPerms ? process.env.EMOJI_NO : '🚫'
   };
 
+  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
   if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return ctx.send({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [] });
+    return ctx.send({
+      embeds: [embed],
+      components: buttons || []
+    });
   } else {
     if (!channel.permissionsFor(client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
-      return ctx.send(stringUI(embedEmoji[type], title || null, description || null)
-        , { components: buttons || [] });
-    } else return ctx.send({ embeds: [embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null)], components: buttons || [] });
+      return ctx.send(stringUI(embedEmoji[type], title || null, description || null), { components: buttons || [] });
+    } else {
+      return ctx.send({
+        embeds: [embed],
+        components: buttons || []
+      });
+    }
   }
 };
 
@@ -229,26 +256,27 @@ const usage = (msg, syntax) => {
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
   if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-  const embed = new MessageEmbed()
-    .setColor(color)
-    .setAuthor(`${msg.author.tag}`, `${msg.author.avatarURL({ dynamic: true })}`);
-
-  if (title) { /* The title of the embed, if one is provided. */
-    embed.setTitle(`${emoji} ${title}`);
-    embed.setDescription(`${description}`);
-  } else {
-    embed.setDescription(`${emoji} ${description}`);
-  }
-
-  if (footer) embed.setFooter(`${footer}`);
-
+  const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') {
-    return msg.reply({ embeds: [embedUI(color, emoji || null, title || null, description || null, footer || null)], allowedMentions: { repliedUser: false } });
+    return msg.reply({
+      embeds: [embed],
+      allowedMentions: {
+        repliedUser: false
+      }
+    });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
       return msg.reply(stringUI(emoji || null, title || null, description || null)
         , { allowedMentions: { repliedUser: false } });
-    } else return msg.reply({ embeds: [embedUI(color, emoji || null, title || null, description || null, footer || null)], components: buttons || [], allowedMentions: { repliedUser: false } });
+    } else {
+      return msg.reply({
+        embeds: [embed],
+        components: buttons || [],
+        allowedMentions: {
+          repliedUser: false
+        }
+      });
+    }
   }
 };
 
@@ -288,13 +316,13 @@ const recordError = async (msg, type, command, title, error) => {
 
   if (type === 'warning') {
     msg.channel.client.logger.warn(error);
-    embed.setColor(process.env.COLOR_WARN);
+    embed.setColor(parseInt(process.env.COLOR_WARN));
     embed.setTitle(`${process.env.EMOJI_WARN} ${title}`);
   }
 
   if (type === 'error') {
     msg.channel.client.logger.error(error);
-    embed.setColor(process.env.COLOR_ERROR);
+    embed.setColor(parseInt(process.env.COLOR_ERROR));
     embed.setTitle(`${process.env.EMOJI_ERROR} ${title}`);
   }
 
