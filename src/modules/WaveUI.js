@@ -145,7 +145,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
         content: stringUI(embedEmoji[type], title || null, description || null),
         components: buttons || [],
         allowedMentions: {
-          repliedUser: true
+          repliedUser: false
         }
       });
     } else {
@@ -153,7 +153,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
         embeds: [embed],
         components: buttons || [],
         allowedMentions: {
-          repliedUser: true
+          repliedUser: false
         }
       });
     }
