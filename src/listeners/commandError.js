@@ -15,11 +15,11 @@ module.exports = class ListenerCommandError extends Listener {
     const perms = message.channel.permissionsFor(this.client.user.id).has(['EMBED_LINKS']);
     if (perms) {
       const guru = new MessageEmbed()
-        .setColor(process.env.COLOR_ERROR)
+        .setColor(0xFF0000)
         .setTitle('💢 Bruh Moment')
         .setDescription(`Something bad happened while executing \`${command.id}\`.\n\`\`\`js\n${error.name}: ${error.message}\`\`\``)
         .setFooter('An error report was sent to the bot owner.');
-      message.reply({ embeds: [guru], allowedMentions: { repliedUser: false } });
+      message.reply({ embeds: [guru], allowedMentions: { repliedUser: true } });
     } else {
       const guru = stripIndents`
       :woman_in_lotus_position: **Guru Meditation**
@@ -28,7 +28,7 @@ module.exports = class ListenerCommandError extends Listener {
       ${error.name}: ${error.message}
       \`\`\`
       `;
-      message.reply(guru, { allowedMentions: { repliedUser: false } });
+      message.reply(guru, { allowedMentions: { repliedUser: true } });
     }
     this.client.ui.recordError(message, 'error', command, 'Command Error', error.stack);
   }
