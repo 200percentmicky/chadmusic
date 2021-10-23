@@ -1,5 +1,4 @@
 const { Listener } = require('discord-akairo');
-const { Permissions } = require('discord.js');
 
 module.exports = class ListenerNoInvites extends Listener {
   constructor () {
@@ -11,7 +10,7 @@ module.exports = class ListenerNoInvites extends Listener {
 
   async exec (message) {
     const noinvite = this.client.settings.get(message.guild.id, 'noInvites');
-    if (message.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
+    if (message.member.permissions.FLAGS.MANAGE_MESSAGES) return;
 
     if (noinvite) {
       const msg = message.content.split(/ +/g);
