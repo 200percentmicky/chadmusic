@@ -132,7 +132,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
   const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.channel.send({
+    return msg.reply({
       embeds: [embed],
       components: buttons || [],
       allowedMentions: {
@@ -141,7 +141,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
     });
   } else {
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-      return msg.channel.send({
+      return msg.reply({
         content: stringUI(embedEmoji[type], title || null, description || null),
         components: buttons || [],
         allowedMentions: {
@@ -149,7 +149,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
         }
       });
     } else {
-      return msg.channel.send({
+      return msg.reply({
         embeds: [embed],
         components: buttons || [],
         allowedMentions: {
@@ -177,15 +177,6 @@ const ctx = (ctx, client, type, description, title, footer, buttons) => {
   if (!(client instanceof Client)) throw new TypeError('Parameter "client" must be an instance of "Client".');
 
   const channel = client.channels.cache.get(ctx.channelID);
-
-  /* The color of the embed */
-  const embedColor = {
-    ok: process.env.COLOR_OK,
-    warn: process.env.COLOR_WARN,
-    error: process.env.COLOR_ERROR,
-    info: process.env.COLOR_INFO,
-    no: process.env.COLOR_NO
-  };
 
   /* The emoji of the embed */
   // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
@@ -237,7 +228,7 @@ const usage = (msg, syntax) => {
   if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
     return msg.reply(`${process.env.EMOJI_INFO} **Usage** | \`${guildPrefix}${syntax}\``);
   } else {
-    return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: true } });
+    return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
   }
 };
 
