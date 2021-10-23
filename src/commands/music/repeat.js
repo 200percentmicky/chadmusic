@@ -18,13 +18,13 @@ module.exports = class CommandRepeat extends Command {
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
     if (djMode) {
-      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
+      if (!dj) return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
     }
 
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 

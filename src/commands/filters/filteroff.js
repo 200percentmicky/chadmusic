@@ -20,12 +20,12 @@ module.exports = class CommandFilterOff extends Command {
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
 
     if (djMode) {
-      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.');
+      if (!dj) return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.');
     }
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.say(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
       }
     }
 

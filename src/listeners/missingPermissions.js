@@ -51,8 +51,8 @@ module.exports = class CommandMissingPermissions extends Listener {
     }
 
     if (type === 'user') {
-      if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.say(message, 'no', 'Only server administrators can use that command.');
-      else return this.client.ui.say(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`);
+      if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.reply(message, 'no', 'Only server administrators can use that command.');
+      else return this.client.ui.reply(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`);
     }
   }
 };

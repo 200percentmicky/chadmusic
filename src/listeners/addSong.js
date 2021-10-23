@@ -38,7 +38,7 @@ module.exports = class ListenerAddSong extends Listener {
     const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
     if (!allowAgeRestricted) {
       queue.songs.pop();
-      return this.client.ui.say(message, 'no', 'You cannot add **Age Restricted** videos to the queue.');
+      return this.client.ui.reply(message, 'no', 'You cannot add **Age Restricted** videos to the queue.');
     }
     if (maxTime) {
       if (!dj) {
@@ -47,7 +47,7 @@ module.exports = class ListenerAddSong extends Listener {
         // Still need to apend '000' to be accurate.
         if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
           queue.songs.pop();
-          return this.client.ui.say(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
+          return this.client.ui.reply(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
         }
       }
     }

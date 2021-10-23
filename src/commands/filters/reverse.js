@@ -28,7 +28,7 @@ module.exports = class CommandReverse extends Command {
 
     if (djMode) {
       if (!dj) {
-        return this.client.ui.say(message, 'no', oneLine`
+        return this.client.ui.reply(message, 'no', oneLine`
           DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
           permission to use music commands at this time.
         `);
@@ -37,7 +37,7 @@ module.exports = class CommandReverse extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.say(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
       }
     }
 

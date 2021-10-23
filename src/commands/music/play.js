@@ -32,13 +32,13 @@ module.exports = class CommandPlay extends Command {
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
     if (djMode) {
-      if (!dj) return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
+      if (!dj) return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
     }
 
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 
@@ -47,12 +47,12 @@ module.exports = class CommandPlay extends Command {
 
     if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-    if (pornPattern(text)) return this.client.ui.say(message, 'no', "The URL you're requesting to play is not allowed.");
+    if (pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
 
     const currentVc = this.client.vc.get(vc);
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
-      if (!permissions) return this.client.ui.say(message, 'no', `Missing **Connect** permission for <#${vc.id}>`);
+      if (!permissions) return this.client.ui.reply(message, 'no', `Missing **Connect** permission for <#${vc.id}>`);
 
       if (vc.type === 'stage') {
         await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
@@ -61,7 +61,7 @@ module.exports = class CommandPlay extends Command {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
           if (!requestToSpeak) {
             this.client.vc.leave(message);
-            return this.client.ui.say(message, 'no', `Missing **Request to Speak** permission for <#${vc.id}>.`);
+            return this.client.ui.reply(message, 'no', `Missing **Request to Speak** permission for <#${vc.id}>.`);
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true);
           }
@@ -85,7 +85,7 @@ module.exports = class CommandPlay extends Command {
         if (maxQueueLimit) {
           const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
           if (queueMemberSize >= maxQueueLimit) {
-            return this.client.ui.say(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+            return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
           }
         }
       }

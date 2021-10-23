@@ -20,20 +20,20 @@ module.exports = class CommandEarrape extends Command {
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
     if (djMode) {
       if (!dj) {
-        return this.client.ui.say(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.');
+        return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.');
       }
     }
 
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 
     const allowFreeVolume = await this.client.settings.get(message.guild.id, 'allowFreeVolume', true);
     if (!allowFreeVolume) {
-      return this.client.ui.say(message, 'no', 'This command cannot be used because **Unlimited Volume** is disabled.');
+      return this.client.ui.reply(message, 'no', 'This command cannot be used because **Unlimited Volume** is disabled.');
     }
 
     // This command should not be limited by the DJ Role. Must be a toggable setting.

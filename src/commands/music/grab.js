@@ -22,7 +22,7 @@ module.exports = class CommandGrab extends Command {
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.say(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
       }
     }
 
