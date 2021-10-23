@@ -44,7 +44,7 @@ module.exports = class CommandResetData extends Command {
         interaction.defer();
         await this.client.settings.clear(interaction.guild.id);
         collector.stop();
-        this.client.ui.say(message, 'ok', 'The settings for this server have been cleared.');
+        this.client.ui.reply(message, 'ok', 'The settings for this server have been cleared.');
       }
 
       if (interaction.customID === 'no_data') {

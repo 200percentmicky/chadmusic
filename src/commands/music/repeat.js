@@ -43,27 +43,27 @@ module.exports = class CommandRepeat extends Command {
       switch (args[1]) {
         case 'off': {
           await player.setRepeatMode(message, 0);
-          this.client.ui.say(message, 'ok', 'Repeat has been disabled.');
+          this.client.ui.reply(message, 'ok', 'Repeat has been disabled.');
           break;
         }
         case 'song': {
           await player.setRepeatMode(message, 1);
-          this.client.ui.say(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
+          this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
           break;
         }
         case 'queue': {
           await player.setRepeatMode(message, 2);
-          this.client.ui.say(message, 'ok', 'Enabled repeat to **🔁 Repeat Queue**');
+          this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔁 Repeat Queue**');
           break;
         }
         default: {
           if (queue.repeatMode !== 0) {
             await player.setRepeatMode(message, 0);
-            this.client.ui.say(message, 'ok', 'Repeat has been disabled.');
+            this.client.ui.reply(message, 'ok', 'Repeat has been disabled.');
             break;
           }
           await player.setRepeatMode(message, 1);
-          this.client.ui.say(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
+          this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
           break;
         }
       }

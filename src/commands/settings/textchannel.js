@@ -22,11 +22,11 @@ module.exports = class CommandTextChannel extends Command {
         return this.client.ui.reply(message, 'error', `\`${args[1]}\` is not a valid text channel.`);
       } else {
         await this.client.settings.set(message.guild.id, 'textChannel', channel.id);
-        return this.client.ui.say(message, 'ok', `<#${channel.id}> will be used for music commands.`);
+        return this.client.ui.reply(message, 'ok', `<#${channel.id}> will be used for music commands.`);
       }
     } else {
       await this.client.settings.delete(message.guild.id, 'textChannel');
-      return this.client.ui.say(message, 'ok', 'All text channels will be used for music commands.');
+      return this.client.ui.reply(message, 'ok', 'All text channels will be used for music commands.');
     }
   }
 };

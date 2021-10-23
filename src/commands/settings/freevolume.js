@@ -25,10 +25,10 @@ module.exports = class CommandFreeVolume extends Command {
         if (queue.volume > 200) this.client.player.setVolume(message, volume);
       }
       await this.client.settings.set(message.guild.id, 'allowFreeVolume', false);
-      return this.client.ui.say(message, 'ok', 'Unlimited Volume has been **disabled**. Volume is now limited to **200%**.');
+      return this.client.ui.reply(message, 'ok', 'Unlimited Volume has been **disabled**. Volume is now limited to **200%**.');
     } else if (args[1] === 'ON'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, 'allowFreeVolume', true);
-      return this.client.ui.say(message, 'ok', 'Unlimited Volume has been **enabled**.');
+      return this.client.ui.reply(message, 'ok', 'Unlimited Volume has been **enabled**.');
     } else {
       return this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
     }

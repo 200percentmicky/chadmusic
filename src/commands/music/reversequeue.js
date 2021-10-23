@@ -51,7 +51,7 @@ module.exports = class CommandReverseQueue extends Command {
       /* Finally, push the new queue into the player's queue. */
       Array.prototype.push.apply(queue.songs, newQueue);
 
-      return this.client.ui.say(message, 'ok', 'The order of the queue has been reversed.');
+      return this.client.ui.reply(message, 'ok', 'The order of the queue has been reversed.');
     } else {
       return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');
     }

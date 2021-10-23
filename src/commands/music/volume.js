@@ -66,7 +66,7 @@ module.exports = class CommandVolume extends Command {
         'Volumes exceeding 200% may cause damage to self and equipment.'
       );
     } else {
-      return this.client.ui.say(message, 'ok', `Volume has been set to **${newVolume}%**.`);
+      return this.client.ui.reply(message, 'ok', `Volume has been set to **${newVolume}%**.`);
     }
   }
 };

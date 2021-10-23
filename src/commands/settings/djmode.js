@@ -23,10 +23,10 @@ module.exports = class CommandDJMode extends Command {
     if (!args[1]) return this.client.ui.usage(message, 'djmode <toggle:on/off>');
     if (args[1] === 'ON'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, 'djMode', true);
-      return this.client.ui.say(message, 'ok', 'DJ Mode has been **enabled**.');
+      return this.client.ui.reply(message, 'ok', 'DJ Mode has been **enabled**.');
     } else if (args[1] === 'OFF'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, 'djMode', false);
-      return this.client.ui.say(message, 'ok', 'DJ Mode has been **disabled**.');
+      return this.client.ui.reply(message, 'ok', 'DJ Mode has been **disabled**.');
     } else {
       return this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
     }

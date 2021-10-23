@@ -20,10 +20,10 @@ module.exports = class CommandAllowFilters extends Command {
     if (!args[1]) return this.client.ui.usage(message, 'allowfilters <toggle:all/dj>');
     if (args[1] === 'DJ'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, 'allowFilters', 'dj');
-      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **DJ only**.');
+      return this.client.ui.reply(message, 'ok', 'Allow Filters has been set to **DJ only**.');
     } else if (args[1] === 'ALL'.toLowerCase()) {
       await this.client.settings.set(message.guild.id, 'allowFilters', 'all');
-      return this.client.ui.say(message, 'ok', 'Allow Filters has been set to **All**.');
+      return this.client.ui.reply(message, 'ok', 'Allow Filters has been set to **All**.');
     } else {
       return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**');
     }

@@ -59,7 +59,7 @@ module.exports = class CommandRemove extends Command {
         /* Modify queue to remove the entries. */
         queue.songs.splice(start, n);
 
-        return this.client.ui.say(message, 'ok', `Removed **${n}** entries from the queue.`);
+        return this.client.ui.reply(message, 'ok', `Removed **${n}** entries from the queue.`);
       } else {
         /* Removing only one entry from the queue. */
         const song = queue.songs[args[1]];
@@ -71,7 +71,7 @@ module.exports = class CommandRemove extends Command {
         /* Modify queue to remove the specified entry. */
         queue.songs.splice(args[1], 1);
 
-        return this.client.ui.say(message, 'ok', `Removed **${song.name}** from the queue.`);
+        return this.client.ui.reply(message, 'ok', `Removed **${song.name}** from the queue.`);
       }
     } else {
       return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');

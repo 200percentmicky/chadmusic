@@ -65,7 +65,7 @@ module.exports = class CommandTest extends Command {
       }
 
       default: {
-        this.client.ui.say(message, 'ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗');
+        this.client.ui.reply(message, 'ok','Yay! I\'m working as I should! What was I suppose to do again? 😗');
       }
     }
   }

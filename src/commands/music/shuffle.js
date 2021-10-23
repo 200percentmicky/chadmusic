@@ -39,7 +39,7 @@ module.exports = class CommandShuffle extends Command {
       const queue = this.client.player.getQueue(message);
       if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
       this.client.player.shuffle(message);
-      return this.client.ui.say(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
+      return this.client.ui.reply(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
     } else {
       return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');
     }
