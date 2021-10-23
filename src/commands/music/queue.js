@@ -60,7 +60,7 @@ module.exports = class CommandQueue extends Command {
 
     /* Map the array. */
     const queueMap = songs.length > 0
-      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` **[${song.name}](${song.url})** - ${song.user} `).join('\n')
+      ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
       : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
 
     /* Making the embed. */
@@ -139,7 +139,7 @@ module.exports = class CommandQueue extends Command {
         const paginateArray = queuePaginate.first();
 
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
         /* Enable and disable buttons */
         nextPage.setDisabled(false);
@@ -173,7 +173,7 @@ module.exports = class CommandQueue extends Command {
         const paginateArray = queuePaginate.previous();
 
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
         /* Need to make sure all buttons are available */
         nextPage.setDisabled(false);
@@ -209,7 +209,7 @@ module.exports = class CommandQueue extends Command {
         const paginateArray = queuePaginate.next();
 
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
         /* Need to make sure all buttons are available */
         nextPage.setDisabled(false);
@@ -246,7 +246,7 @@ module.exports = class CommandQueue extends Command {
         const paginateArray = queuePaginate.last();
 
         /* Map the array. */
-        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
         /* Enable and disable buttons */
         firstPage.setDisabled(false);
@@ -298,7 +298,7 @@ module.exports = class CommandQueue extends Command {
               const paginateArray = queuePaginate.last();
 
               /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
               nextPage.setDisabled(false);
               lastPage.setDisabled(false);
@@ -329,7 +329,7 @@ module.exports = class CommandQueue extends Command {
               const paginateArray = queuePaginate.first();
 
               /* Map the array. */
-              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+              const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
               nextPage.setDisabled(false);
               lastPage.setDisabled(false);
@@ -361,7 +361,7 @@ module.exports = class CommandQueue extends Command {
 
             const paginateArray = queuePaginate.page(pageNumber);
             /* Map the array. */
-            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** \`${song.formattedDuration}\` [${song.name}](${song.url}) - ${song.user} `).join('\n');
+            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
             nextPage.setDisabled(false);
             lastPage.setDisabled(false);
