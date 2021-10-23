@@ -32,10 +32,10 @@ module.exports = class ListenerAddList extends Listener {
         // in the array, so we don't need to subtract the number to get
         // the correct element.
         queue.songs.splice(allowedLimit, playlist.songs.length - maxQueueLimit);
-        return this.client.ui.say(message, 'ok', `Found the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'}. However, only the first ${maxQueueLimit > 1 ? `${maxQueueLimit} entries` : 'entry'} was added due to queue limits on this server.`);
+        return this.client.ui.say(message, 'ok', `${playlist.user} added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'}. However, only the first ${maxQueueLimit > 1 ? `${maxQueueLimit} entries` : 'entry'} was added due to queue limits on this server.`);
       }
     }
 
-    this.client.ui.say(message, 'ok', `Added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'} to the queue.`);
+    this.client.ui.say(message, 'ok', `${playlist.user} added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'} to the queue.`);
   }
 };

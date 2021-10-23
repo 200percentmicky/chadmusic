@@ -89,6 +89,6 @@ module.exports = class ListenerAddSong extends Listener {
       }
     }
 
-    this.client.ui.say(message, 'ok', `Added **${song.name}** to the queue.`);
+    this.client.ui.say(message, 'ok', `${song.user} added **${song.name}** to the queue.`);
   }
 };
