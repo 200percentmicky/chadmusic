@@ -22,7 +22,7 @@ module.exports = class ListenerCommandError extends Listener {
       message.reply({ embeds: [guru], allowedMentions: { repliedUser: true } });
     } else {
       const guru = stripIndents`
-      :woman_in_lotus_position: **Guru Meditation**
+      💢 **Bruh Moment**
       Something bad happened while executing \`${command.id}\`. An error report was sent to the bot owner.
       \`\`\`js
       ${error.name}: ${error.message}
