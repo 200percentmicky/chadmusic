@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 const { Message, MessageEmbed, MessageActionRow, ColorResolvable, EmojiResolvable, Client, Permissions } = require('discord.js');
-const { stripIndents } = require('common-tags');
 const slash = require('slash-create');
 
 let baseEmbed = {};
@@ -288,14 +287,7 @@ const recordError = async (msg, type, command, title, error) => { // TODO: Remov
   const errorChannel = msg.channel.client.channels.cache.get(process.env.BUG_CHANNEL);
   if (!errorChannel) return;
 
-  const report = stripIndents`
-  **${title}**${command ? ` \`${command}\`` : ''}
-  \`\`\`js
-  ${error}
-  \`\`\`
-  `;
-
-  return errorChannel.send({ content: report });
+  return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
 module.exports = { say, reply, ctx, usage, custom, recordError };
