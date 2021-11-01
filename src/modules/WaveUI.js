@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const { Message, MessageEmbed, MessageActionRow, ColorResolvable, EmojiResolvable, Client, Permissions } = require('discord.js');
+const { stripIndents } = require('common-tags');
 const slash = require('slash-create');
 
 let baseEmbed = {};
@@ -281,44 +282,20 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
  * @param {string} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
  * @returns {Message} The overall bug report.
  */
-const recordError = async (msg, type, command, title, error) => {
-  if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
-
+const recordError = async (msg, type, command, title, error) => { // TODO: Remove 'type'.
   // Consider replacing the channel ID for your own error reporting
   // channel until the feature is supported in the configs.
   const errorChannel = msg.channel.client.channels.cache.get(process.env.BUG_CHANNEL);
   if (!errorChannel) return;
-  const embed = new MessageEmbed()
-    .setTimestamp()
-    .addField('Server', `${msg.channel.type === 'dm'
-      ? 'Direct Message'
-      : msg.guild.name + '\nID: ' + msg.guild.id}`, true
-    )
-    .addField('Channel', `${msg.channel.type === 'dm'
-      ? 'Direct Message'
-      : msg.channel.name + '\nID: ' + msg.channel.id}`, true
-    );
 
-  if (command) {
-    // I was rather lazy with this one. I'm not sure if Akairo is able to
-    // provide what command is invoked. Hard coding seems to not be an issue atm...
-    embed.addField('Command', `${command}`, true);
-  }
+  const report = stripIndents`
+  **${title}**${command ? ` \`${command}\`` : ''}
+  \`\`\`js
+  ${error}
+  \`\`\`
+  `;
 
-  if (type === 'warning') {
-    msg.channel.client.logger.warn(error);
-    embed.setColor(parseInt(process.env.COLOR_WARN));
-    embed.setTitle(`${process.env.EMOJI_WARN} ${title}`);
-  }
-
-  if (type === 'error') {
-    msg.channel.client.logger.error(error);
-    embed.setColor(parseInt(process.env.COLOR_ERROR));
-    embed.setTitle(`${process.env.EMOJI_ERROR} ${title}`);
-  }
-
-  await errorChannel.send({ embeds: [embed] });
-  return errorChannel.send({ content: error, code: 'js', split: true });
+  return errorChannel.send({ content: report });
 };
 
 module.exports = { say, reply, ctx, usage, custom, recordError };
