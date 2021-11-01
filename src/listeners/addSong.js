@@ -23,7 +23,6 @@ module.exports = class ListenerAddSong extends Listener {
   }
 
   async exec (queue, song) {
-    if (queue.repeatMode > 0) return;
     const channel = queue.textChannel;
     const guild = channel.guild;
     const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
@@ -89,6 +88,7 @@ module.exports = class ListenerAddSong extends Listener {
       }
     }
 
+    if (!queue.songs[1]) return; // Don't send to channel if a player was created.
     this.client.ui.say(message, 'ok', `${song.user} added **${song.name}** to the queue.`);
   }
 };

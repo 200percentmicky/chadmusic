@@ -94,6 +94,7 @@ module.exports = class CommandPlay extends Command {
     try {
       /* eslint-disable-next-line no-useless-escape */
       await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url);
+      return message.react(process.env.EMOJI_MUSIC);
     } catch (err) {
       this.client.logger.error(err.stack); // Just in case.
       return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
