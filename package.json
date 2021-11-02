@@ -1,7 +1,7 @@
 {
-  "name": "chadmusic",
+  "name": "projectwave",
   "version": "0.0.0-1",
-  "description": "The Chad Music Bot",
+  "description": "Personal multi-purpose bot. Whatever I feel like really lol",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,8 +18,8 @@
     "common-tags": "^1.8.0",
     "discord-akairo": "github:discord-akairo/discord-akairo",
     "discord-anti-spam": "^2.5.1",
-    "discord.js": "^13.1.0",
-    "distube": "^3.0.0-beta.36",
+    "discord.js": "^13.3.1",
+    "distube": "^3.1.0",
     "dotenv": "^8.6.0",
     "enmap": "^5.8.7",
     "ffmpeg-static": "^4.4.0",
