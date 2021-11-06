@@ -136,7 +136,10 @@ class WaveBot extends AkairoClient {
       },
       commandUtil: true,
       handleEdits: true,
-      allowMention: true
+      allowMention: true,
+      ignorePermissions: [
+        process.env.OWNER_ID // Owner bypass
+      ]
     });
 
     // Create Listener Handler
