@@ -131,8 +131,9 @@ class WaveBot extends AkairoClient {
       prefix: message => {
         if (message.guild) {
           return this.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
+        } else {
+          return process.env.PREFIX;
         }
-        return process.env.PREFIX;
       },
       commandUtil: true,
       handleEdits: true,
