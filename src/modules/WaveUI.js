@@ -1,5 +1,14 @@
-// eslint-disable-next-line no-unused-vars
-const { Message, MessageEmbed, MessageActionRow, ColorResolvable, EmojiResolvable, Client, Permissions } = require('discord.js');
+/* eslint-disable no-multi-spaces */
+const {
+  Message,
+  MessageEmbed,
+  MessageActionRow, /* eslint-disable-line no-unused-vars */
+  ColorResolvable,  /* eslint-disable-line no-unused-vars */
+  EmojiResolvable,  /* eslint-disable-line no-unused-vars */
+  Client,
+  Permissions,
+  BaseGuildTextChannel
+} = require('discord.js');
 const slash = require('slash-create');
 
 let baseEmbed = {};
@@ -58,7 +67,7 @@ const embedColor = {
 /**
  * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
  *
- * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {BaseGuildTextChannel} channel A ChannelResolvable
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
@@ -66,12 +75,12 @@ const embedColor = {
  * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
  * @returns {Message} The message to send in the channel.
  */
-const say = (msg, type, description, title, footer, buttons) => {
-  if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
+const say = (channel, type, description, title, footer, buttons) => {
+  if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
 
   /* The emoji of the embed */
   // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-  const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
+  const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
   const embedEmoji = {
     ok: emojiPerms ? process.env.EMOJI_OK : '✅',
     warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
@@ -83,19 +92,19 @@ const say = (msg, type, description, title, footer, buttons) => {
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
   const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-  if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-    return msg.channel.send({
+  if (channel.type === 'dm') { /* DMs will always have embed links. */
+    return channel.send({
       embeds: [embed],
       components: buttons || []
     });
   } else {
-    if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-      return msg.channel.send({
+    if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
+      return channel.send({
         content: stringUI(embedEmoji[type], title || null, description || null),
         components: buttons || []
       });
     } else {
-      return msg.channel.send({
+      return channel.send({
         embeds: [embed],
         components: buttons || []
       });
@@ -106,7 +115,7 @@ const say = (msg, type, description, title, footer, buttons) => {
 /**
  * Similar to `Message.say()` but replies to the user instead.
  *
- * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {Message} msg A MessageResolvable
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
@@ -282,8 +291,6 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
  * @returns {Message} The overall bug report.
  */
 const recordError = async (msg, type, command, title, error) => { // TODO: Remove 'type'.
-  // Consider replacing the channel ID for your own error reporting
-  // channel until the feature is supported in the configs.
   const errorChannel = msg.channel.client.channels.cache.get(process.env.BUG_CHANNEL);
   if (!errorChannel) return;
 
