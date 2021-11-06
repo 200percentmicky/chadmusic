@@ -39,7 +39,7 @@ module.exports = class CommandFilterOff extends Command {
     if (currentVc) {
       if (!queue.filters) return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.');
       await this.client.player.setFilter(message.guild.id, false);
-      return this.client.ui.say(message, 'info', 'Removed all filters from the player.');
+      return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
     } else {
       if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
     }

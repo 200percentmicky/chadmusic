@@ -170,7 +170,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
 };
 
 /**
- * Functions the same as `this.client.ui.say(message, )`, but is used strictly for slash commands as an interaction. This function relies on the `slash-create` package as a peer dependency, and should be converted for use with `discord.js` instead.
+ * Functions the same as `say()`, but is used strictly for slash commands as an interaction. This function relies on the `slash-create` package as a peer dependency, and should be converted for use with `discord.js` instead.
  *
  * @param {slash.CommandContext} ctx The CommandContext interaction.
  * @param {Client} client The instance of `Discord.Client`.

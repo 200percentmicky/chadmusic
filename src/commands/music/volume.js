@@ -58,7 +58,7 @@ module.exports = class CommandVolume extends Command {
     this.client.player.setVolume(message.guild.id, newVolume);
 
     if (newVolume >= 201) {
-      return this.client.ui.say(
+      return this.client.ui.reply(
         message,
         'warn',
         `Volume has been set to **${newVolume}%**.`,

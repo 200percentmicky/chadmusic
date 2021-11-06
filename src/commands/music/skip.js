@@ -37,12 +37,12 @@ module.exports = class CommandSkip extends Command {
     const queue = this.client.player.getQueue(message.guild);
 
     const currentVc = this.client.vc.get(vc);
-    if (!queue || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+    if (!queue || !currentVc) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
     else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
     // For breaking use only.
     // this.client.player.skip(message)
-    // return this.client.ui.say(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+    // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
 
     /*
     if (args[1] === ('--force' || '-f')) {
@@ -59,7 +59,7 @@ module.exports = class CommandSkip extends Command {
       const vcSize = Math.floor(vc.members.size / 2);
       const neededVotes = votes.length >= vcSize;
       const votesLeft = Math.floor(vcSize - votes.length);
-      if (votes.includes(message.author.id)) return this.client.ui.say(message, 'warn', 'You already voted to skip.');
+      if (votes.includes(message.author.id)) return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
       this.client.votes.push(message.guild.id, message.author.id);
       if (neededVotes) {
         await this.client.votes.delete(message.guild.id);

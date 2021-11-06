@@ -37,7 +37,7 @@ module.exports = class CommandShuffle extends Command {
       if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
       const queue = this.client.player.getQueue(message);
-      if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+      if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
       this.client.player.shuffle(message);
       return this.client.ui.reply(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
     } else {

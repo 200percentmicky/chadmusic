@@ -38,7 +38,7 @@ module.exports = class CommandSummon extends Command {
     const currentVc = this.client.vc.get(vc);
     if (currentVc) {
       if (vc.id !== currentVc.id) return this.client.ui.reply(message, 'error', 'I\'m currently binded to a different voice channel.');
-      else return this.client.ui.say(message, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
+      else return this.client.ui.reply(message, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
     } else {
       if (vc.type === 'stage') {
         await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.

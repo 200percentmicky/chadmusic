@@ -58,7 +58,7 @@ module.exports = class CommandEarrape extends Command {
       return this.client.ui.reply(message, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`);
     } else {
       this.client.player.setVolume(message, earrape);
-      return this.client.ui.say(
+      return this.client.ui.reply(
         message,
         'ok',
         `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,

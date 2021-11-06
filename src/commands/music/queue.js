@@ -41,7 +41,7 @@ module.exports = class CommandQueue extends Command {
 
     const currentVc = this.client.vc.get(vc);
 
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
     else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
     /* Getting the entire queue. */

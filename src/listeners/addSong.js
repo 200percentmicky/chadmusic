@@ -28,7 +28,10 @@ module.exports = class ListenerAddSong extends Listener {
     const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
     const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
 
-    // This is annoying.
+    // * This is annoying.
+    // Basically, grab the message of the user that just added a song to the queue. If there is
+    // a match, this information will be used to reply to the user. However, the filter may grab the
+    // wrong message. Using it will not guarantee an accurate result.
     const message = channel.messages.cache.filter(x => x.author.id === member.user.id && x.content.startsWith(prefix)).last();
 
     const djRole = await this.client.settings.get(guild.id, 'djRole');
@@ -36,8 +39,8 @@ module.exports = class ListenerAddSong extends Listener {
     const maxTime = await this.client.settings.get(guild.id, 'maxTime');
     const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
     if (!allowAgeRestricted) {
-      queue.songs.pop();
-      return this.client.ui.reply(message, 'no', 'You cannot add **Age Restricted** videos to the queue.');
+      this.client.ui.reply(message, 'no', `**${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
+      return queue.songs.pop();
     }
     if (maxTime) {
       if (!dj) {
@@ -45,8 +48,8 @@ module.exports = class ListenerAddSong extends Listener {
         // Using Math.floor() to round down.
         // Still need to apend '000' to be accurate.
         if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
+          this.client.ui.reply(message, 'no', `**${song.name} cannot be added since the duration of this track exceeds the max limits for this server. (\`${prettyms(maxTime, { colonNotation: true })}\`)`);
           queue.songs.pop();
-          return this.client.ui.reply(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
         }
       }
     }
@@ -89,6 +92,6 @@ module.exports = class ListenerAddSong extends Listener {
     }
 
     if (!queue.songs[1]) return; // Don't send to channel if a player was created.
-    this.client.ui.say(message, 'ok', `${song.user} added **${song.name}** to the queue.`);
+    this.client.ui.say(channel, 'ok', `${song.user} added **${song.name}** to the queue.`);
   }
 };

@@ -107,10 +107,10 @@ module.exports = class CommandSearch extends Command {
           let selected = results[parseInt(collected.content - 1)].url;
           if (collected.content > 10) {
             selected = results[9].url;
-            this.client.ui.say(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`);
+            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`);
           } else if (collected.content <= 0) {
             selected = results[0].url;
-            this.client.ui.say(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
+            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
           }
           await this.client.player.play(message, selected);
           message.react(process.env.REACTION_OK);

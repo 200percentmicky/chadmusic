@@ -29,7 +29,7 @@ module.exports = class CommandResetData extends Command {
 
     const buttonRow = new MessageActionRow().addComponents(yesButton, noButton);
 
-    const msg = await this.client.ui.say(message, 'warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow]);
+    const msg = await this.client.ui.reply(message, 'warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow]);
 
     const filter = interaction => interaction.user.id === message.author.id;
 

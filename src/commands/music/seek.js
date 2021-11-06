@@ -36,7 +36,7 @@ module.exports = class CommandSeek extends Command {
 
     const currentVc = this.client.vc.get(vc);
 
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
 
     if (vc.members.size <= 2 || dj) {
       if (!args[1]) return this.client.ui.usage(message, 'seek <time>');

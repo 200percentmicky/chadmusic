@@ -34,11 +34,11 @@ module.exports = class CommandResume extends Command {
     const queue = this.client.player.getQueue(message);
 
     const currentVc = this.client.vc.get(vc);
-    if (!queue || !currentVc) return this.client.ui.say(message, 'warn', 'Nothing is currently playing in this server.');
+    if (!queue || !currentVc) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
     else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
     if (vc.members.size <= 2 || dj) {
-      if (!queue.paused) return this.client.ui.say(message, 'warn', 'The player is not paused.');
+      if (!queue.paused) return this.client.ui.reply(message, 'warn', 'The player is not paused.');
       await queue.resume();
       return this.client.ui.custom(message, '▶', process.env.COLOR_INFO, 'Resuming playback...');
     } else {
