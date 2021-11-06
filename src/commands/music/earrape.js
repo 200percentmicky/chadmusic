@@ -47,7 +47,7 @@ module.exports = class CommandEarrape extends Command {
 
     const queue = this.client.player.getQueue(message.guild.id);
     if (!queue) {
-      return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.');
+      return this.client.ui.reply(message, 'warn', 'Nothing is currently playing on this server.');
     }
 
     const earrape = 69420; // 😂👌👌💯

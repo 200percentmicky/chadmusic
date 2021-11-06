@@ -45,7 +45,7 @@ module.exports = class CommandReverse extends Command {
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
     const queue = this.client.player.getQueue(message.guild.id);
-    if (!queue) return this.client.ui.say(message, 'warn', 'Nothing is currently playing on this server.');
+    if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing on this server.');
 
     const currentVc = this.client.vc.get(vc);
     if (currentVc) {
