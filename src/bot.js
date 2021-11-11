@@ -1,5 +1,5 @@
 /**
- * ChadMusic - The Chad Music Bot
+ * Project Wave
  *
  * MIT License
  *
@@ -41,7 +41,7 @@ const path = require('path');
 // Say hello!
 const { version } = require('../package.json');
 logger.info('/////////////////////////////');
-logger.info('    * * * ChadMusic * * *');
+logger.info('    * * * Project Wave * * *');
 logger.info('/////////////////////////////');
 logger.info('Bot Version: %s', version);
 

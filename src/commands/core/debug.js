@@ -33,7 +33,7 @@ module.exports = class CommandDebug extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID);
 
     const data = stripIndents`
-    === ChadMusic - The Chad Music Bot ===
+    === Project Wave ===
               Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
                Owner :: ${owner.tag} (ID: ${owner.id})
              Node.js :: ${process.version}
