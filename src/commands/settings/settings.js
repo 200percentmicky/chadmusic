@@ -36,40 +36,35 @@ module.exports = class CommandSettings extends Command {
     // All pornographic websites are blocked.
     const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-    // const modlog = settings.get(message.guild.id, 'modlog', null) // Moderation Logs
-    // const taglog = settings.get(message.guild.id, 'taglog', null) // Tag Logs
-    // const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null) // User Join
-    // const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null) // User Leave
-    // const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null) // User Update
-    // const messageDelete = settings.get(message.guild.id, 'messageDelete', null) // Deleted Messages
-    // const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null) // Edited Messages
-    // const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null) // User Voice State Update
+    const modlog = settings.get(message.guild.id, 'modlog', null); // Moderation Logs
+    const taglog = settings.get(message.guild.id, 'taglog', null); // Tag Logs
+    const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null); // User Join
+    const guildMemberRemove = settings.get(message.guild.id, 'guildMemberRemove', null); // User Leave
+    const guildMemberUpdate = settings.get(message.guild.id, 'guildMemberUpdate', null); // User Update
+    const messageDelete = settings.get(message.guild.id, 'messageDelete', null); // Deleted Messages
+    const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null); // Edited Messages
+    const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null); // User Voice State Update
     // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
       .setTitle('🎶 Music Settings')
-      /*
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`
-      **Time Zone:** ${timezone}
       `)
-      */
-      .setDescription(stripIndents`
-      **⁉ Prefix:** \`${prefix}\`
-      **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **🕰 Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-      **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      **🔊 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-      **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-      **🗣 Default Volume:** ${defaultVolume}
-      **📺 Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+      .addField(':notes: Music', stripIndents`
+      **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+      **Default Volume:** ${defaultVolume}
+      **Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
       `)
       // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
-      /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
       **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
@@ -80,6 +75,7 @@ module.exports = class CommandSettings extends Command {
       **messageUpdate:** ${messageUpdate ? `<#${messageUpdate}>` : 'None'}
       **voiceStateUpdate:** ${voiceStateUpdate ? `<#${voiceStateUpdate}>` : 'None'}
       `)
+      /*
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
       `)
