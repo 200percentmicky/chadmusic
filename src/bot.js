@@ -61,7 +61,7 @@ class WaveBot extends AkairoClient {
     }, {
       disableMentions: 'true',
       restTimeOffset: 175,
-      intents: new Intents(4737)
+      intents: new Intents(14279)
     });
 
     // Calling packages that can be used throughout the client.
@@ -137,10 +137,7 @@ class WaveBot extends AkairoClient {
       },
       commandUtil: true,
       handleEdits: true,
-      allowMention: true,
-      ignorePermissions: [
-        process.env.OWNER_ID // Owner bypass
-      ]
+      allowMention: true
     });
 
     // Create Listener Handler
