@@ -35,7 +35,7 @@ module.exports = class CommandAss extends Command {
         .setFooter(`r/${boodyPic[0].subreddit}`);
       message.channel.send({ embeds: [embed] });
     } catch (err) {
-      this.client.ui.say(message, 'error', err.message, 'Reddit API Error');
+      this.client.ui.say(message.channel, 'error', err.message, 'Reddit API Error');
     }
   }
 };

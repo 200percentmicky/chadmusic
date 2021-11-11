@@ -67,6 +67,7 @@ class WaveBot extends AkairoClient {
     // Calling packages that can be used throughout the client.
     this.logger = logger;
     this.ui = ui;
+    this.utils = require('bot-utils');
 
     // Music Player.
     this.player = new DisTube(this, {
