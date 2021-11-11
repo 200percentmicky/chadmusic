@@ -49,7 +49,7 @@ module.exports = class CommandSettings extends Command {
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
-      .setTitle('🎶 Music Settings')
+      .setTitle(':gear: Server Settings')
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`
       `)
