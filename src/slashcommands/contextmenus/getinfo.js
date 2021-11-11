@@ -50,7 +50,7 @@ class ContextMenuGetInfo extends SlashCommand {
     const memberCreated = parseInt(Math.floor(member.user.createdAt.getTime() / 1000));
     const guildOwner = guild.ownerId === member.user.id ? '<:owner:725387683811033140> This member owns this server.\n' : '';
     const botAccount = member.user.bot ? '<:bot:848557763172892722> This member is a bot.\n' : '';
-    const premiumMember = member.premiumSince ? `${parseInt(Math.floor(member.premiumSince.getTime() / 1000))}\n` : '';
+    const premiumMember = member.premiumSince ? `<:booster:710871139227795487> This member boosted this server on <t:${parseInt(Math.floor(member.premiumSince.getTime() / 1000))}:F>.\n` : '';
 
     const embed = {
       color: parseInt(member.displayColor),
