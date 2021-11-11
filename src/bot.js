@@ -122,8 +122,9 @@ class WaveBot extends AkairoClient {
       syncPermissions: true
     });
 
-    // Bot Settings.
-    this.settings = new MongooseProvider(require('./modules/SettingsProvider.js'));
+    this.settings = new MongooseProvider(require('./modules/SettingsProvider.js')); // Settings Provider
+    this.modlog = require('./modules/WaveModlog'); // Handler to manage modlog cases in a guild.
+    this.modlogCases = new Enmap({ name: 'modlog' }); // The database that manages modlog cases.
 
     // Create Command Handler
     this.commands = new CommandHandler(this, {
