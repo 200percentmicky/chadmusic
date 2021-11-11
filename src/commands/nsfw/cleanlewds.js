@@ -35,7 +35,7 @@ module.exports = class CommandCleanLewds extends Command {
         .setFooter(`r/${wholesomePic[0].subreddit}`);
       message.channel.send({ embeds: [embed] });
     } catch (err) {
-      this.client.ui.say(message, 'error', err.message, 'Reddit API Error');
+      this.client.ui.reply(message, 'error', err.message, 'Reddit API Error');
     }
   }
 };

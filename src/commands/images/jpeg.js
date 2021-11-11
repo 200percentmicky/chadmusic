@@ -26,12 +26,12 @@ module.exports = class CommandJPEG extends Command {
         attachment = message.channel.messages.cache.filter(m => m.attachments.size > 0).first().attachments.first();
       } catch (err) {
         console.log(err);
-        return this.client.ui.say(message, 'error', 'No attachments were found.');
+        return this.client.ui.reply(message, 'error', 'No attachments were found.');
       }
     }
 
     const imageQuality = parseInt(args[1]);
-    if (imageQuality > 100 || imageQuality < 1) return this.client.ui.say(message, 'error', 'Image quality must be between **1-100**.');
+    if (imageQuality > 100 || imageQuality < 1) return this.client.ui.reply(message, 'error', 'Image quality must be between **1-100**.');
 
     const imageData = await axios({
       url: attachment.url,
@@ -43,7 +43,7 @@ module.exports = class CommandJPEG extends Command {
       .quality(imageQuality || 1)
       .toBuffer('JPG', (err, buffer) => {
         if (err) {
-          this.client.ui.say(message, 'error', err.message);
+          this.client.ui.reply(message, 'error', err.message);
         }
         const newJPEG = new MessageAttachment(buffer, `jpeg_${args[1]}.jpg`);
 
