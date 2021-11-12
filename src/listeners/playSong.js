@@ -65,14 +65,14 @@ module.exports = class ListenerPlaySong extends Listener {
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }));
 
-    if (song.age_restricted) songNow.addField('Explicit', '🔞 This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
+    if (song.age_restricted) songNow.addField(':underage: Explicit', 'This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
     if (song.isFile) songNow.setDescription('📎 **File Upload**');
-    if (author.name) songNow.addField('Uploader', `[${author.name}](${author.url})` || 'N/A');
-    if (song.station) songNow.addField('Station', `${song.station}`);
+    if (author.name) songNow.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})` || 'N/A');
+    if (song.station) songNow.addField(':tv: Station', `${song.station}`);
 
     songNow
-      .addField('Requested by', `${song.user}`, true)
-      .addField('Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
+      .addField(':raising_hand: Requested by', `${song.user}`, true)
+      .addField(':hourglass: Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
       .setTitle(`${song.name}`)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)

@@ -61,15 +61,26 @@ module.exports = class CommandNowPlaying extends Command {
     }
 
     if (song.age_restricted) {
-      embed.addField('Explicit', '🔞 This track is **Age Restricted**');
+      embed.addField(':underage: Explicit', 'This track is **Age Restricted**');
     }
 
-    if (author.name) embed.addField('Uploader', `[${author.name}](${author.url})`);
-    if (song.station) embed.addField('Station', `${song.station}`);
+    if (author.name) embed.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})`);
+    if (song.station) embed.addField(':tv: Station', `${song.station}`);
+
+    const volumeEmoji = () => {
+      const volume = queue.volume;
+      const volumeIcon = {
+        50: '🔈',
+        100: '🔉',
+        150: '🔊'
+      };
+      if (volume >= 175) return '🔊😭👌';
+      return volumeIcon[Math.round(volume / 50) * 50];
+    };
 
     embed
-      .addField('Requested by', `${song.user}`, true)
-      .addField('Volume', `${queue.volume}%`, true)
+      .addField(':raising_hand: Requested by', `${song.user}`, true)
+      .addField(`${volumeEmoji()} Volume`, `${queue.volume}%`, true)
       .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.filters.map(x => `**${x.name}:** ${x.value}`)}` : 'None'}`)
       .setTimestamp();
 
