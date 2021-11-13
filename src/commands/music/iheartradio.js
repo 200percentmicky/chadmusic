@@ -90,7 +90,8 @@ module.exports = class CommandIHeartRadio extends Command {
       // To prevent overwrites, lock the command until the value is cleared.
       if (await this.client.radio.get(message.guild.id)) return this.client.ui.reply(message, 'warn', 'Request is still being processed. Please try again later.');
       await this.client.radio.set(message.guild.id, text, 10000);
-      return await this.client.player.play(message, url);
+      await this.client.player.play(message, url);
+      return message.react(process.env.EMOJI_MUSIC);
     } catch (err) {
       this.client.logger.error(err.stack); // Just in case.
       return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
