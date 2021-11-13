@@ -15,7 +15,7 @@ module.exports = class ListenerPlaySong extends Listener {
       // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
       setTimeout(() => {
         nowPlayingMsg(queue, song);
-      }, 1000);
+      }, 500);
     } else {
       nowPlayingMsg(queue, song);
     }
