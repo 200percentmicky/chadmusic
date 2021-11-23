@@ -175,13 +175,14 @@ const reply = (msg, type, description, title, footer, buttons) => {
  * @param {slash.CommandContext} ctx The CommandContext interaction.
  * @param {Client} client The instance of `Discord.Client`.
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
+ * @param {boolean} ephemeral Whether the message should be sent as an ephemeral message to the user.
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
  * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
  * @returns {Promise<boolean | Message>} The message to send when an interaction is resolved.
  */
-const ctx = (ctx, client, type, description, title, footer, buttons) => {
+const ctx = (ctx, client, type, ephemeral, description, title, footer, buttons) => {
   if (!(ctx instanceof slash.CommandContext)) throw new TypeError('Parameter "ctx" must be an instance of "CommandContext".');
   if (!(client instanceof Client)) throw new TypeError('Parameter "client" must be an instance of "Client".');
 
@@ -204,7 +205,8 @@ const ctx = (ctx, client, type, description, title, footer, buttons) => {
   if (channel.type === 'dm') { /* DMs will always have embed links. */
     return ctx.send({
       embeds: [embed],
-      components: buttons || []
+      components: buttons || [],
+      ephemeral: false // DMs do not need ephemeral messages in my opinion.
     });
   } else {
     if (!channel.permissionsFor(client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
@@ -212,7 +214,50 @@ const ctx = (ctx, client, type, description, title, footer, buttons) => {
     } else {
       return ctx.send({
         embeds: [embed],
-        components: buttons || []
+        components: buttons || [],
+        ephemeral: ephemeral
+      });
+    }
+  }
+};
+
+/**
+ * A custom varient of `ui.ctx()` which allows you to create a custom embed or text message.
+ *
+ * @param {slash.CommandContext} ctx The CommandContext interaction.
+ * @param {Client} client The instance of `Discord.Client`.
+ * @param {boolean} ephemeral Whether the message should be sent as an ephemeral message to the user.
+ * @param {string} emoji The emoji of the message.
+ * @param {number} color The color of the embed.
+ * @param {string} description The overall message.
+ * @param {string} title [Optional] The title of the embed or message.
+ * @param {string} footer [Optional] The footer of the embed.
+ * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @returns {Promise<boolean | Message>} The message to send when an interaction is resolved.
+ */
+const ctxCustom = (ctx, client, ephemeral, emoji, color, description, title, footer, buttons) => {
+  if (!(ctx instanceof slash.CommandContext)) throw new TypeError('Parameter "ctx" must be an instance of "CommandContext".');
+  if (!(client instanceof Client)) throw new TypeError('Parameter "client" must be an instance of "Client".');
+
+  const channel = client.channels.cache.get(ctx.channelID);
+
+  const embed = embedUI(color, emoji, title || null, description || null, footer || null);
+  /* No embed */
+  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+  if (channel.type === 'dm') { /* DMs will always have embed links. */
+    return ctx.send({
+      embeds: [embed],
+      components: buttons || [],
+      ephemeral: false // DMs do not need ephemeral messages in my opinion.
+    });
+  } else {
+    if (!channel.permissionsFor(client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
+      return ctx.send(stringUI(emoji, title || null, description || null), { components: buttons || [] });
+    } else {
+      return ctx.send({
+        embeds: [embed],
+        components: buttons || [],
+        ephemeral: ephemeral
       });
     }
   }
@@ -297,4 +342,4 @@ const recordError = async (msg, type, command, title, error) => { // TODO: Remov
   return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
-module.exports = { say, reply, ctx, usage, custom, recordError };
+module.exports = { say, reply, ctx, ctxCustom, usage, custom, recordError };
