@@ -1,5 +1,5 @@
 const { Listener } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { Permissions, MessageEmbed } = require('discord.js');
 
 module.exports = class ListenerAddList extends Listener {
   constructor () {
@@ -11,6 +11,7 @@ module.exports = class ListenerAddList extends Listener {
 
   async exec (queue, playlist) {
     const channel = queue.textChannel;
+    const guild = channel.guild;
     const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
     // Cut some or many entries if maxQueueLimit is in place.
@@ -30,6 +31,14 @@ module.exports = class ListenerAddList extends Listener {
       }
     }
 
-    this.client.ui.say(channel, 'ok', `${playlist.user} added the playlist **${playlist.name}** with **${playlist.songs.length}** entr${playlist.songs.length === 1 ? 'y' : 'ies'} to the queue.`);
+    const embed = new MessageEmbed()
+      .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+      .setAuthor(`Playlist added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+      .setTitle(playlist.name)
+      .setURL(playlist.url)
+      .addField('🔢 Number of entries', `${playlist.songs.length}`)
+      .setThumbnail(playlist.thumbnail)
+      .setFooter(playlist.user.tag, playlist.user.avatarURL({ dynamic: true }));
+    channel.send({ embeds: [embed] });
   }
 };

@@ -1,5 +1,5 @@
 const { Listener } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { Permissions, MessageEmbed } = require('discord.js');
 const prettyms = require('pretty-ms');
 const iheart = require('iheart');
 const ffprobe = require('ffprobe');
@@ -92,6 +92,17 @@ module.exports = class ListenerAddSong extends Listener {
     }
 
     if (!queue.songs[1]) return; // Don't send to channel if a player was created.
-    this.client.ui.say(channel, 'ok', `${song.user} added **${song.name}** to the queue.`);
+    const embed = new MessageEmbed()
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+      .setAuthor(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+      .setTitle(song.name)
+      .setURL(song.url)
+      .setThumbnail(song.thumbnail)
+      .setFooter(song.user.tag, song.user.avatarURL({ dynamic: true }));
+    if (!message.channel) {
+      channel.send({ embeds: [embed] });
+    } else {
+      message.channel.send({ embeds: [embed] });
+    }
   }
 };
