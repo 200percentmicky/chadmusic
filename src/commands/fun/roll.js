@@ -6,7 +6,9 @@ module.exports = class RollCommand extends Command {
     super('roll', {
       aliases: ['roll'],
       description: {
-        text: 'Rolls a dice expression.'
+        text: 'Rolls a dice expression.',
+        usage: '<dice_syntax>',
+        details: '<dice_syntax> The expression to roll.'
       },
       category: '💻 Core'
     });
