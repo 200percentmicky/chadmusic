@@ -97,7 +97,7 @@ module.exports = class CommandSetLog extends Command {
       return this.client.ui.reply(message, 'ok', `Added ${logType[args[1]]} to ${channel.toString()}.`);
     } catch (err) {
       this.client.ui.reply(message, 'error', err.message);
-      return this.client.ui.recordError(message, 'error', 'setlog', 'Command Error', err.stack);
+      return this.client.ui.recordError(this.client, 'setlog', '❌ Command Error', err.stack);
     }
   }
 };

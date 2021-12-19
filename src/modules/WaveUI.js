@@ -328,15 +328,14 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
 /**
  * A function that sends an error report to the given bug reports channel, if one was provided in the `.env` file.
  *
- * @param {Message} msg A MessageResolvable | `Discord.Message`
- * @param {string} type The type of bug report. Supported are `error` for errors, and `warn` for warnings.
+ * @param {Client} client An instance of `Discord.Client`
  * @param {string} command [Optional] The command of the bug report.
  * @param {string} title The title of the bug report.
  * @param {string} error The error of the bug report. It's recommended to provide `<err>.stack` in this parameter.
  * @returns {Message} The overall bug report.
  */
-const recordError = async (msg, type, command, title, error) => { // TODO: Remove 'type'.
-  const errorChannel = msg.channel.client.channels.cache.get(process.env.BUG_CHANNEL);
+const recordError = async (client, command, title, error) => { // TODO: Remove 'type'.
+  const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
   if (!errorChannel) return;
 
   return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
