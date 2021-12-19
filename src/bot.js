@@ -82,10 +82,10 @@ class WaveBot extends AkairoClient {
       leaveOnFinish: process.env.LEAVE_ON_FINISH === 'true' || false,
       youtubeCookie: process.env.YOUTUBE_COOKIE,
       ytdlOptions: {
-        format: {
-          quality: '140'
-        },
-        highWaterMark: 1 >> 25
+        quality: 'highestaudio',
+        filter: 'audioonly',
+        dlChunkSize: 25000,
+        highWaterMark: 1024
       },
       youtubeDL: process.env.USE_YOUTUBE_DL === 'true' || false,
       updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
