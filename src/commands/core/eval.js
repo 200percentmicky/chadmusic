@@ -81,11 +81,12 @@ module.exports = class CommandEval extends Command {
       message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``);
       const errorChannel = this.client.channels.cache.get('603735567733227531');
       const embed = new Discord.MessageEmbed()
-        .setColor(process.env.COLOR_WARN)
+        .setColor(parseInt(process.env.COLOR_WARN))
         .setTitle(process.env.EMOJI_WARN + 'eval() Error')
         .setDescription(`Input: \`${code}\``)
         .addField('\u200b', `\`\`\`js\n${err.name}: ${err.message}\`\`\``)
         .setTimestamp();
+      this.client.ui.recordError(this.client, null, '⚠ Eval Error', `\`\`\`js\n${err.name}: ${err.message}\`\`\``);
       errorChannel.send({ embeds: [embed] });
     }
   }
