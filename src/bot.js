@@ -83,11 +83,9 @@ class WaveBot extends AkairoClient {
       youtubeCookie: process.env.YOUTUBE_COOKIE,
       ytdlOptions: {
         format: {
-          quality: '134'
+          quality: '140'
         },
-        highWaterMark: 1 >> 25,
-        liveBuffer: 3000,
-        dlChunkSize: 2048
+        highWaterMark: 1 >> 25
       },
       youtubeDL: process.env.USE_YOUTUBE_DL === 'true' || false,
       updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
