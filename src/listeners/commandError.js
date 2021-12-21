@@ -19,5 +19,6 @@ module.exports = class ListenerCommandError extends Listener {
     `;
     message.reply(guru, { allowedMentions: { repliedUser: true } });
     this.client.ui.recordError(this.client, command, '❌ Command Error', error.stack);
+    this.client.logger.error('Error in command "%s": %d', command, error.stack);
   }
 };
