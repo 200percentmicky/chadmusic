@@ -52,7 +52,7 @@ module.exports = class CommandEval extends Command {
       let evaled = eval(code);
 
       if (typeof evaled !== 'string') {
-        evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
+        evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 });
       }
 
       message.channel.sendTyping();
