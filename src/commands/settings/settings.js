@@ -46,6 +46,8 @@ module.exports = class CommandSettings extends Command {
     const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null); // User Voice State Update
     // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
+    const forumChannels = settings.get(message.guild.id, 'forumChannels', []); // List of Forum Channels
+
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
       .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
@@ -74,7 +76,11 @@ module.exports = class CommandSettings extends Command {
       **messageDelete:** ${messageDelete ? `<#${messageDelete}>` : 'None'}
       **messageUpdate:** ${messageUpdate ? `<#${messageUpdate}>` : 'None'}
       **voiceStateUpdate:** ${voiceStateUpdate ? `<#${voiceStateUpdate}>` : 'None'}
-      `)
+      `, true)
+      .addField('📰 Forum Channels', forumChannels.length > 0
+        ? forumChannels.map(x => `<#${x}>`).join(', ')
+        : 'There are no forum channels on this server.'
+      , true)
       /*
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
