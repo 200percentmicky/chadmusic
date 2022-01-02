@@ -28,11 +28,17 @@ module.exports = class CommandAss extends Command {
       });
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(`${boodyPic[0].title}`, message.author.avatarURL({ dynamic: true }), boodyPic[0].postLink)
+        .setAuthor({
+          name: `${boodyPic[0].title}`,
+          iconURL: message.author.avatarURL({ dynamic: true }),
+          url: boodyPic[0].postLink
+        })
         .setDescription(`**[Click here if the image isn't loading.](${boodyPic[0].image})**`)
         .setImage(boodyPic[0].image)
         .setTimestamp()
-        .setFooter(`r/${boodyPic[0].subreddit}`);
+        .setFooter({
+          text: `r/${boodyPic[0].subreddit}`
+        });
       message.channel.send({ embeds: [embed] });
     } catch (err) {
       this.client.ui.say(message.channel, 'error', err.message, 'Reddit API Error');

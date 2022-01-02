@@ -22,7 +22,10 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
     if (newMember.nickname !== oldMember.nickname) {
       const nickname = new MessageEmbed()
         .setColor(0xF29500)
-        .setAuthor(newMember.user.tag, newMember.user.avatarURL())
+        .setAuthor({
+          name: newMember.user.tag,
+          iconURL: newMember.user.avatarURL()
+        })
         .setTitle('📛 Nickname Change')
         .setDescription(`**Before:** ${oldMember.nickname !== null ? oldMember.nickname : 'None'}\n**After:** ${newMember.nickname !== null ? newMember.nickname : 'None'}`)
         .addField('ID', stripIndents`
@@ -38,7 +41,10 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
     if (newMember.user.tag !== oldMember.user.tag) {
       const tag = new MessageEmbed()
         .setColor(0xF29500)
-        .setAuthor(newMember.user.tag, newMember.user.avatarURL())
+        .setAuthor({
+          name: newMember.user.tag,
+          iconURL: newMember.user.avatarURL()
+        })
         .setTitle('📛 Username Change')
         .setDescription(`**Before:** ${oldMember.user.tag}\n**After:** ${newMember.user.tag}`)
         .addField('ID', stripIndents`

@@ -32,7 +32,10 @@ module.exports = class ListenerMessageUpdate extends Listener {
     const user = newMessage.member.nickname ? newMessage.member.nickname : newMessage.author.tag;
     const edited = new MessageEmbed()
       .setColor(0xDFED1A)
-      .setAuthor(`${user}`, newMessage.author.avatarURL())
+      .setAuthor({
+        name: `${user}`,
+        iconURL: newMessage.author.avatarURL()
+      })
       .setTitle('📝 Edited Message')
       .setDescription(`${desc}`)
       .addField('Channel', `${newMessage.channel.toString()}`, true)

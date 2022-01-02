@@ -39,7 +39,9 @@ module.exports = class CommandRule34 extends Command {
           .setDescription(`**[Click here if the image or video isn't loading.](${i.fileUrl})**`)
           .setImage(i.fileUrl)
           .setTimestamp()
-          .setFooter(i.booru.domain);
+          .setFooter({
+            text: i.booru.domain
+          });
         message.channel.send({
           embeds: [result],
           files: i.fileUrl.endsWith('.webm' || '.mp4') ? [i.fileUrl] : []

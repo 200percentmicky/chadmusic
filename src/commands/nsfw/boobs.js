@@ -28,11 +28,17 @@ module.exports = class CommandBoobs extends Command {
       });
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(`${tiddyPic[0].title}`, message.author.avatarURL({ dynamic: true }), tiddyPic[0].postLink)
+        .setAuthor({
+          name: `${tiddyPic[0].title}`,
+          iconURL: message.author.avatarURL({ dynamic: true }),
+          url: tiddyPic[0].postLink
+        })
         .setDescription(`**[Click here if the image isn't loading.](${tiddyPic[0].image})**`)
         .setImage(tiddyPic[0].image)
         .setTimestamp()
-        .setFooter(`r/${tiddyPic[0].subreddit}`);
+        .setFooter({
+          text: `r/${tiddyPic[0].subreddit}`
+        });
       message.channel.send({ embeds: [embed] });
     } catch (err) {
       this.client.ui.reply(message, 'error', err.message, 'Reddit API Error');

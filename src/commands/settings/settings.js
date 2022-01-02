@@ -50,7 +50,10 @@ module.exports = class CommandSettings extends Command {
 
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `${message.guild.name}`,
+        iconURL: message.guild.iconURL({ dynamic: true })
+      })
       .setTitle(':gear: Server Settings')
       .addField('🌐 General', stripIndents`
       **Server Prefix:** \`${prefix}\`

@@ -33,12 +33,18 @@ module.exports = class ListenerAddList extends Listener {
 
     const embed = new MessageEmbed()
       .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
-      .setAuthor(`Playlist added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `Playlist added to queue - ${member.voice.channel.name}`,
+        iconURL: guild.iconURL({ dynamic: true })
+      })
       .setTitle(playlist.name)
       .setURL(playlist.url)
       .addField('🔢 Number of entries', `${playlist.songs.length}`)
       .setThumbnail(playlist.thumbnail)
-      .setFooter(playlist.user.tag, playlist.user.avatarURL({ dynamic: true }));
+      .setFooter({
+        text: playlist.user.tag,
+        iconURL: playlist.user.avatarURL({ dynamic: true })
+      });
     channel.send({ embeds: [embed] });
   }
 };

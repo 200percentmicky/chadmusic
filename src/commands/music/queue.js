@@ -66,11 +66,17 @@ module.exports = class CommandQueue extends Command {
     /* Making the embed. */
     const queueEmbed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `Queue for ${message.guild.name} - ${currentVc.channel.name}`,
+        iconURL: message.guild.iconURL({ dynamic: true })
+      })
       .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
       .addField(`${process.env.EMOJI_MUSIC} Currently Playing`, `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``)
       .setTimestamp()
-      .setFooter(`${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+      .setFooter({
+        text: `${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+        iconURL: message.author.avatarURL({ dynamic: true })
+      });
 
     /* Creating the buttons to interact with the queue. */
 
@@ -160,7 +166,10 @@ module.exports = class CommandQueue extends Command {
 
         /* Making the embed. */
         queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+        queueEmbed.setFooter({
+          text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+          iconURL: message.author.avatarURL({ dynamic: true })
+        });
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
         collector.resetTimer({
           time: 30000,
@@ -196,7 +205,10 @@ module.exports = class CommandQueue extends Command {
 
         /* Making the embed. */
         queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+        queueEmbed.setFooter({
+          text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+          iconURL: message.author.avatarURL({ dynamic: true })
+        });
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
         collector.resetTimer({
           time: 30000,
@@ -233,7 +245,10 @@ module.exports = class CommandQueue extends Command {
 
         /* Making the embed. */
         queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+        queueEmbed.setFooter({
+          text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+          iconURL: message.author.avatarURL({ dynamic: true })
+        });
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
         collector.resetTimer({
           time: 30000,
@@ -272,7 +287,10 @@ module.exports = class CommandQueue extends Command {
 
         /* Making the embed. */
         queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-        queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+        queueEmbed.setFooter({
+          text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+          iconURL: message.author.avatarURL({ dynamic: true })
+        });
         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
         collector.resetTimer({
           time: 30000,
@@ -321,7 +339,10 @@ module.exports = class CommandQueue extends Command {
 
               /* Making the embed. */
               queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-              queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+              queueEmbed.setFooter({
+                text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+                iconURL: message.author.avatarURL({ dynamic: true })
+              });
               await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
               msg2.delete();
               pageMsg.delete();
@@ -353,7 +374,10 @@ module.exports = class CommandQueue extends Command {
 
               /* Making the embed. */
               queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-              queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+              queueEmbed.setFooter({
+                text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+                iconURL: message.author.avatarURL({ dynamic: true })
+              });
               await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
               msg2.delete();
               pageMsg.delete();
@@ -388,7 +412,10 @@ module.exports = class CommandQueue extends Command {
 
             /* Making the embed. */
             queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-            queueEmbed.setFooter(`${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`, message.author.avatarURL({ dynamic: true }));
+            queueEmbed.setFooter({
+              text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+              iconURL: message.author.avatarURL({ dynamic: true })
+            });
             await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
             msg2.delete();
             pageMsg.delete();
@@ -415,52 +442,5 @@ module.exports = class CommandQueue extends Command {
     collector.on('end', async () => {
       await msg.edit({ components: [] });
     });
-
-    /*
-    try {
-      const queueEmbed = new FieldsEmbed()
-        .setArray(songs)
-        .setAuthorizedUsers(message.author.id)
-        .setChannel(message.channel)
-        .setElementsPerPage(7)
-        .setPageIndicator('footer')
-        .formatField(`${songs.length} entr${songs.length === 1 ? 'y' : 'ies'} in the queue.`, song => `${song ? `\n**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name.length > 35 ? song.name.slice(0, 35) + '...' : song.name}](${song.url})` : `${process.env.EMOJI_WARN}Queue is empty.`}`)
-        .setPage(1)
-        .setNavigationEmojis({
-          back: '◀',
-          jump: '↗',
-          forward: '▶',
-          delete: '❌'
-        })
-
-      queueEmbed.embed
-        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-        .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`<:pMusic:815331262255595610>**Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
-        .setTimestamp()
-        .setFooter('\u200b') // Ironically required if .setPageIndicator() is using 'footer'.
-
-      queueEmbed.build()
-    } catch (err) {
-      // If no array exists to build the embed.
-      if (err.name.includes('TypeError')) {
-        if (err.message.includes('Cannot invoke PaginationEmbed class')) {
-          message.channel.send(new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-            .setAuthor(`Queue for ${message.guild.name} - ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
-            .setDescription(`<:pMusic:815331262255595610> **Currently Playing:**\n${song.user} \`${song.formattedDuration}\`\n**[${song.name}](${song.url})**`)
-            .addField('The queue is empty.', 'Start adding some songs! 😉')
-            .setTimestamp()
-          )
-        } else {
-          // Different error?
-          this.client.ui.reply(message, 'error', err.message, err.name)
-        }
-      } else {
-        // Different error?
-        this.client.ui.reply(message, 'error', err.message, err.name)
-      }
-    }
-    */
   }
 };

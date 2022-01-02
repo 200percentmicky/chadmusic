@@ -22,7 +22,10 @@ module.exports = class ListenerMessageDelete extends Listener {
 
     const deleted = new MessageEmbed()
       .setColor(0x9C0003)
-      .setAuthor(`${message.author.tag}`, message.author.avatarURL())
+      .setAuthor({
+        name: `${message.author.tag}`,
+        iconURL: message.author.avatarURL()
+      })
       .setTitle('🗑 Message Deleted')
       .setDescription(`${message.content}`)
       .addField('Channel', `${message.channel.toString()}`, true)

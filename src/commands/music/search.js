@@ -86,9 +86,16 @@ module.exports = class CommandSearch extends Command {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n');
       const embed = new MessageEmbed()
         .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-        .setAuthor('Which track do you wanna play?', message.author.avatarURL({ dynamic: true }))
+        .setAuthor({
+          name: 'Which track do you wanna play?',
+          iconURL: message.author.avatarURL({ dynamic: true })
+        })
         .setDescription(`${resultMap}`)
-        .setFooter('Type the number of your selection, or type "cancel" if you changed your mind.');
+        .setFooter({
+          text: 'Type the number of your selection, or type "cancel" if you changed your mind.'
+        });
+
+      // TODO: Replace collector for a select menu instead.
 
       message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
         const filter = m => m.author.id === message.author.id;
@@ -108,7 +115,7 @@ module.exports = class CommandSearch extends Command {
           if (collected.content > 10) {
             selected = results[9].url;
             this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`);
-          } else if (collected.content <= 0) {
+          } else if (collected.content <= 0) { // Why even bother? The bot can't comprehend a negative integer for some reason...
             selected = results[0].url;
             this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
           }

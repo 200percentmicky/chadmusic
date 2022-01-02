@@ -53,7 +53,10 @@ const nowPlayingMsg = async (queue, song) => {
 
   const songNow = new MessageEmbed()
     .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-    .setAuthor(`Now playing in ${vc.name}`, guild.iconURL({ dynamic: true }));
+    .setAuthor({
+      name: `Now playing in ${vc.name}`,
+      iconURL: guild.iconURL({ dynamic: true })
+    });
 
   if (song.age_restricted) songNow.addField(':underage: Explicit', 'This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
   if (song.isFile) songNow.setDescription('📎 **File Upload**');

@@ -19,7 +19,10 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
 
     const left = new MessageEmbed()
       .setColor(0xDE2A42)
-      .setAuthor(`${member.user.tag}`, member.user.avatarURL())
+      .setAuthor({
+        name: `${member.user.tag}`,
+        iconURL: member.user.avatarURL()
+      })
       .setTitle('📤 User Left')
       .setDescription(`${member.user.bot ? '🤖 Bot Account' : ''}`)
       .addField('Total Members', `${member.guild.memberCount}`)

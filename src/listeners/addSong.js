@@ -94,11 +94,17 @@ module.exports = class ListenerAddSong extends Listener {
     if (!queue.songs[1]) return; // Don't send to channel if a player was created.
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `Added to queue - ${member.voice.channel.name}`,
+        iconURL: guild.iconURL({ dynamic: true })
+      })
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .setFooter(song.user.tag, song.user.avatarURL({ dynamic: true }));
+      .setFooter({
+        text: song.user.tag,
+        iconURL: song.user.avatarURL({ dynamic: true })
+      });
     if (!message.channel) {
       channel.send({ embeds: [embed] });
     } else {

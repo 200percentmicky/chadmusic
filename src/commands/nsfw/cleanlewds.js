@@ -28,11 +28,17 @@ module.exports = class CommandCleanLewds extends Command {
       });
       const embed = new MessageEmbed()
         .setColor(this.client.utils.randColor())
-        .setAuthor(`${wholesomePic[0].title}`, message.author.avatarURL({ dynamic: true }), wholesomePic[0].postLink)
+        .setAuthor({
+          name: `${wholesomePic[0].title}`,
+          iconURL: message.author.avatarURL({ dynamic: true }),
+          url: wholesomePic[0].postLink
+        })
         .setDescription(`**[Click here if the image isn't loading.](${wholesomePic[0].image})**`)
         .setImage(wholesomePic[0].image)
         .setTimestamp()
-        .setFooter(`r/${wholesomePic[0].subreddit}`);
+        .setFooter({
+          text: `r/${wholesomePic[0].subreddit}`
+        });
       message.channel.send({ embeds: [embed] });
     } catch (err) {
       this.client.ui.reply(message, 'error', err.message, 'Reddit API Error');

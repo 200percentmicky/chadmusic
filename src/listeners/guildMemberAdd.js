@@ -19,11 +19,14 @@ module.exports = class ListenerGuildMemberAdd extends Listener {
 
     const join = new MessageEmbed()
       .setColor(0x77B255)
-      .setAuthor(member.user.tag, member.user.avatarURL())
+      .setAuthor({
+        name: member.user.tag,
+        iconURL: member.user.avatarURL()
+      })
       .setTitle('📥 User Joined')
       .setDescription(`${member.user.toString()}\n${member.user.bot ? '**🤖 Bot Account**' : ''}`)
-      .addField('Total Members', `${member.guild.memberCount}`)
       .setThumbnail(member.user.avatarURL() + '?size=2048')
+      .addField('Total Members', `${member.guild.memberCount}`)
       .addField('ID', stripIndents`
       \`\`\`js
       User: ${member.user.id}

@@ -76,11 +76,17 @@ module.exports = class CommandHelp extends Command {
 
         const commandEmbed = new MessageEmbed()
           .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-          .setAuthor(this.client.user.username + ' Help Documentation', this.client.user.avatarURL({ dynamic: true }))
+          .setAuthor({
+            name: this.client.user.username + ' Help Documentation',
+            iconURL: this.client.user.avatarURL({ dynamic: true })
+          })
           .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
           .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
           .setTimestamp()
-          .setFooter('<Required> • [Optional]', message.author.avatarURL({ dynamic: true }));
+          .setFooter({
+            text: '<Required> • [Optional]',
+            iconURL: message.author.avatarURL({ dynamic: true })
+          });
         if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.');
         if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.');
         if (command.category) commandEmbed.addField('Category', `${command.category}`, true);
@@ -107,9 +113,14 @@ module.exports = class CommandHelp extends Command {
 
     const helpEmbed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor(`${this.client.user.username} Help Documentation`, this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor({
+        name: `${this.client.user.username} Help Documentation`,
+        iconURL: this.client.user.avatarURL({ dynamic: true })
+      })
       .setTimestamp()
-      .setFooter(`To learn more about a command, use ${prefix}help [command]`);
+      .setFooter({
+        text: `To learn more about a command, use ${prefix}help [command]`
+      });
 
     this.handler.categories.forEach((value, key) => {
       const field = {

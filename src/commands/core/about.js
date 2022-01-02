@@ -23,7 +23,10 @@ module.exports = class CommandAbout extends Command {
     const owner = this.client.users.cache.get(this.client.ownerID);
     const aboutembed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor('Project Wave', this.client.user.avatarURL({ dynamic: true }))
+      .setAuthor({
+        name: 'Project Wave',
+        iconURL: this.client.user.avatarURL({ dynamic: true })
+      })
       .setDescription('Cool ~~open-source~~ Discord bot. :thumbsup:')
       /*
       .addField('✨ Features', stripIndents`
@@ -49,7 +52,10 @@ module.exports = class CommandAbout extends Command {
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
       .setThumbnail(this.client.user.avatarURL({ dynamic: true }))
-      .setFooter(`The owner of this instance is ${owner.tag} (${owner.id}).`, owner.avatarURL({ dynamic: true }));
+      .setFooter({
+        text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
+        iconURL: owner.avatarURL({ dynamic: true })
+      });
     return message.channel.send({ embeds: [aboutembed] });
   }
 };

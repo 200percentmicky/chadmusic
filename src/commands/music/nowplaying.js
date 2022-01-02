@@ -49,7 +49,10 @@ module.exports = class CommandNowPlaying extends Command {
     const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor(`Currently playing in ${currentVc.channel.name}`, message.guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `Currently playing in ${currentVc.channel.name}`,
+        iconURL: message.guild.iconURL({ dynamic: true })
+      })
       .setDescription(`${duration}`)
       .setTitle(song.name)
       .setURL(song.url)
