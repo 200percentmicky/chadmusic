@@ -56,7 +56,8 @@ module.exports = class CommandQueue extends Command {
 
     // This includes the currently playing song btw...
     const numOfEntries = songs.length > 0 ? `${songs.length} entr${queue.songs.length === 1 ? 'y' : 'ies'}` : '';
-    const totalTime = songs.length > 0 ? ` • Total Length: \`${toColonNotation(parseInt(songs.map(x => x.duration).reduce((a, b) => a + b) + '000'))}\`` : '';
+    const trueTime = songs.map(x => x.duration).reduce((a, b) => a + b);
+    const totalTime = songs.length > 0 ? ` • Total Length: \`${trueTime ? toColonNotation(parseInt(trueTime + '000')) : '00:00'}\`` : '';
 
     /* Map the array. */
     const queueMap = songs.length > 0
