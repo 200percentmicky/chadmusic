@@ -14,5 +14,6 @@ module.exports = class ListenerInitQueue extends Listener {
 
     queue.autoplay = false;
     queue.volume = parseInt(volume);
+    queue.votes = []; // Initialize an empty array for casting votes.
   }
 };
