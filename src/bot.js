@@ -24,7 +24,6 @@ const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const mongoose = require('mongoose');
-const Enmap = require('enmap');
 const Keyv = require('keyv');
 const ui = require('./modules/WaveUI');
 const logger = require('./modules/winstonLogger');
@@ -84,8 +83,7 @@ class WaveBot extends AkairoClient {
       nsfw: true // Being handled on a per guild basis, not client-wide.
     });
     this.vc = this.player.voices; // @discordjs/voice
-    this.votes = new Enmap();
-    this.radio = new Keyv(); // Parse radio info.
+    this.radio = new Keyv(); // Parse radio info. TODO: Replace this with Map() instead.
 
     this.creator = new SlashCreator({
       token: process.env.TOKEN,
@@ -115,7 +113,7 @@ class WaveBot extends AkairoClient {
 
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js')); // Settings Provider
     this.modlog = require('./modules/WaveModlog'); // Handler to manage modlog cases in a guild.
-    this.modlogCases = new Enmap({ name: 'modlog' }); // The database that manages modlog cases.
+    this.modlogCases = new Keyv(process.env.MONGO_URI_MODLOG, { namespace: 'modlog' }); // The database that manages modlog cases.
 
     // Create Command Handler
     this.commands = new CommandHandler(this, {

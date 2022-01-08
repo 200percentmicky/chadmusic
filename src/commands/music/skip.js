@@ -52,17 +52,14 @@ module.exports = class CommandSkip extends Command {
     }
     */
 
-    await this.client.votes.ensure(message.guild.id, []);
-    const votes = this.client.votes.get(message.guild.id);
-
     if (vc.members.size >= 4) {
       const vcSize = Math.floor(vc.members.size / 2);
-      const neededVotes = votes.length >= vcSize;
-      const votesLeft = Math.floor(vcSize - votes.length);
-      if (votes.includes(message.author.id)) return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
-      this.client.votes.push(message.guild.id, message.author.id);
+      const neededVotes = queue.votes.length >= vcSize;
+      const votesLeft = Math.floor(vcSize - queue.votes.length);
+      if (queue.votes.includes(message.member.user.id)) return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
+      queue.votes.push(message.member.user.id);
       if (neededVotes) {
-        await this.client.votes.delete(message.guild.id);
+        queue.votes = [];
         if (!queue.songs[1]) {
           this.client.player.stop(message.guild);
           return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
@@ -74,14 +71,14 @@ module.exports = class CommandSkip extends Command {
         const embed = new MessageEmbed()
           .setColor(process.env.COLOR_INFO)
           .setDescription('⏭ Skipping?')
-          .setFooter(
-            `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
-            message.author.avatarURL({ dynamic: true })
-          );
+          .setFooter({
+            text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
+            icon_url: message.author.avatarURL({ dynamic: true })
+          });
         return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
       }
     } else {
-      await this.client.votes.delete(message.guild.id);
+      queue.votes = [];
       if (!queue.songs[1]) {
         this.client.player.stop(message.guild);
         return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
