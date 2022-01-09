@@ -47,9 +47,8 @@ module.exports = class CommandForceSkip extends Command {
     }
     */
 
-    if (await this.client.votes.has(message.guild.id)) {
-      await this.client.votes.delete(message.guild.id);
-    }
+    const queue = this.client.player.getQueue(message);
+    if (queue.votes.length > 0) queue.votes = [];
 
     if (vc.members.size <= 2) {
       if (!this.client.player.getQueue(message).songs[1]) {
