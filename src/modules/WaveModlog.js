@@ -15,7 +15,8 @@ const { stripIndents } = require('common-tags');
  */
 const create = async (guild, type, modid, userid, reason, duration) => {
   if (!(guild instanceof Guild)) throw new TypeError('guild must be an instance of Guild.');
-  const modlog = await guild.client.modlogCases.get(guild.id);
+  await guild.client.modlog.ensure(guild.id);
+  const modlog = await guild.client.modlog.get(guild.id);
   // Gets the entire size of the guild's modlog, and parses a number for the case's creation.
   // What the fuck am I doing?
   let caseid;
@@ -57,13 +58,18 @@ const create = async (guild, type, modid, userid, reason, duration) => {
 
   const embed = new MessageEmbed()
     .setColor(colors[type])
-    .setAuthor(`${moderator.user.tag}`, moderator.user.avatarURL({ dynamic: true }))
+    .setAuthor({
+      name: `${moderator.user.tag}`,
+      iconURL: moderator.user.avatarURL({ dynamic: true })
+    })
     .setDescription(`${__reason}`)
     .setThumbnail(`${user.avatarURL({ dynamic: true })}?size=1024`)
     .addField('User', `${user.tag}`, true)
     .addField('Action', `${__type}`, true)
     .setTimestamp()
-    .setFooter(`Case ${caseid + 1}`); // Adds 1 from the caseid variable.
+    .setFooter({
+      text: `Case ${caseid + 1}`
+    }); // Adds 1 from the caseid variable.
 
   if (type === 'mute') {
     const _duration = prettyms(duration, { verbose: true });

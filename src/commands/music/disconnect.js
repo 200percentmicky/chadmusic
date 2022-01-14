@@ -39,7 +39,7 @@ module.exports = class CommandDisconnect extends Command {
 
     if (!vc) {
       return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
-    } else if (vc.id !== currentVc._channel.id) {
+    } else if (vc.id !== currentVc.channel.id) {
       return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
     }
 

@@ -77,7 +77,7 @@ class CommandPlay extends SlashCommand {
         client.vc.join(vc);
       }
     } else {
-      if (vc.id !== currentVc._channel.id) return client.ui.ctx(ctx, client, 'error', true, 'You must be in the same voice channel that I\'m in to use that command.');
+      if (vc.id !== currentVc.channel.id) return client.ui.ctx(ctx, client, 'error', true, 'You must be in the same voice channel that I\'m in to use that command.');
     }
 
     const queue = client.player.getQueue(guild.id);

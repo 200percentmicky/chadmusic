@@ -25,6 +25,7 @@ const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const mongoose = require('mongoose');
 const Keyv = require('keyv');
+const Enmap = require('Enmap');
 const ui = require('./modules/WaveUI');
 const logger = require('./modules/winstonLogger');
 const path = require('path');
@@ -112,8 +113,7 @@ class WaveBot extends AkairoClient {
     });
 
     this.settings = new MongooseProvider(require('./modules/SettingsProvider.js')); // Settings Provider
-    this.modlog = require('./modules/WaveModlog'); // Handler to manage modlog cases in a guild.
-    this.modlogCases = new Keyv(process.env.MONGO_URI_MODLOG, { namespace: 'modlog' }); // The database that manages modlog cases.
+    this.modlog = new Enmap({ name: 'modlog' }); // The database that manages modlog cases.
 
     // Create Command Handler
     this.commands = new CommandHandler(this, {

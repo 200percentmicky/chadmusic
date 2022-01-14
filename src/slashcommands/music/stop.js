@@ -36,7 +36,7 @@ class CommandStop extends SlashCommand {
 
     const currentVc = client.vc.get(vc);
     if (!client.player.getQueue(guild) || !currentVc) return client.ui.ctx(ctx, client, 'warn', true, 'Nothing is currently playing in this server.');
-    else if (vc.id !== currentVc._channel.id) return client.ui.ctx(ctx, client, 'error', true, 'You must be in the same voice channel that I\'m in to use that command.');
+    else if (vc.id !== currentVc.channel.id) return client.ui.ctx(ctx, client, 'error', true, 'You must be in the same voice channel that I\'m in to use that command.');
 
     if (vc.members.size <= 2 || dj) {
       client.player.stop(guild);
