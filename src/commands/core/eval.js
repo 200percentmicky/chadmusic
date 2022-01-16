@@ -99,7 +99,6 @@ module.exports = class CommandEval extends Command {
       }
     } catch (err) {
       message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``);
-      this.client.ui.recordError(this.client, null, '⚠ Eval Error', `${err.name}: ${err.message}`);
     }
   }
 };
