@@ -52,7 +52,7 @@ const nowPlayingMsg = async (queue, song) => {
   const author = song.uploader; // Video Uploader
 
   const songNow = new MessageEmbed()
-    .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+    .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
     .setAuthor({
       name: `Now playing in ${vc.name}`,
       iconURL: guild.iconURL({ dynamic: true })
