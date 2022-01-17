@@ -56,7 +56,7 @@ module.exports = class CommandQueue extends Command {
 
     // This includes the currently playing song btw...
     const numOfEntries = songs.length > 0 ? `${songs.length} entr${queue.songs.length === 1 ? 'y' : 'ies'}` : '';
-    const trueTime = songs.map(x => x.duration).reduce((a, b) => a + b);
+    const trueTime = songs.map(x => x.duration).reduce((a, b) => a + b, 0);
     const totalTime = songs.length > 0 ? ` • Total Length: \`${trueTime ? toColonNotation(parseInt(trueTime + '000')) : '00:00'}\`` : '';
 
     /* Map the array. */
@@ -139,6 +139,8 @@ module.exports = class CommandQueue extends Command {
       componentType: 'BUTTON',
       time: 30000
     });
+
+    // TODO: Look into combining the collector into a single function.
 
     collector.on('collect', async interaction => {
       // First Page Button
