@@ -16,7 +16,7 @@ module.exports = class ListenerMentionPrefix extends Listener {
       canChange = ` | You can run \`${prefix}musicprefix\` to change this.`
     }
     if (message.content === `<@!${this.client.user.id}>`) {
-      return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix for music commands in **${message.guild.name} is \`${prefix}\`.${canChange}`);
+      return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix for music commands in **${message.guild.name}** is \`${prefix}\`.${canChange}`);
     }
   }
 };
