@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { Permissions, BaseGuildVoiceChannel } = require('discord.js');
 
 function pornPattern (url) {
   // ! TODO: Come up with a better regex lol
@@ -93,7 +93,11 @@ module.exports = class CommandPlay extends Command {
 
     try {
       /* eslint-disable-next-line no-useless-escape */
-      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url);
+      await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
+        member: message.member,
+        textChannel: message.channel,
+        message: message
+      });
       return message.react(process.env.EMOJI_MUSIC);
     } catch (err) {
       this.client.logger.error(err.stack); // Just in case.

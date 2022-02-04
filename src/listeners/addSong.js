@@ -66,10 +66,6 @@ module.exports = class ListenerAddSong extends Listener {
       });
     }
 
-    // Stupid fix to make sure that the queue doesn't break.
-    // TODO: Fix toColonNotation in queue.js
-    if (song.isLive) song.duration = 1;
-
     if (isAttachment(song.url)) {
       const supportedFormats = [
         'mp3',
@@ -89,7 +85,11 @@ module.exports = class ListenerAddSong extends Listener {
           song.isFile = true;
         });
       }
-    }
+    }  
+
+    // Stupid fix to make sure that the queue doesn't break.
+    // TODO: Fix toColonNotation in queue.js
+    if (song.isLive) song.duration = 1;
 
     if (!queue.songs[1]) return; // Don't send to channel if a player was created.
     const embed = new MessageEmbed()
@@ -105,6 +105,8 @@ module.exports = class ListenerAddSong extends Listener {
         text: song.user.tag,
         iconURL: song.user.avatarURL({ dynamic: true })
       });
+
+    if (queue.songs.indexOf(song) === 1) return;
     if (!message.channel) {
       channel.send({ embeds: [embed] });
     } else {

@@ -1,6 +1,14 @@
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 
+function pornPattern (url) {
+  // ! TODO: Come up with a better regex lol
+  // eslint-disable-next-line no-useless-escape
+  const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+  const pornRegex = new RegExp(pornPattern);
+  return url.match(pornRegex);
+}
+
 module.exports = class CommandPlayNow extends Command {
   constructor () {
     super('playnow', {
@@ -34,6 +42,10 @@ module.exports = class CommandPlayNow extends Command {
 
     const vc = message.member.voice.channel;
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
+    
+    if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'playnow <url/search/attachment>');
+    
+    if (pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
 
     const queue = this.client.player.getQueue(message);
     if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.');
@@ -68,8 +80,17 @@ module.exports = class CommandPlayNow extends Command {
       if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
       message.channel.sendTyping();
+      // Adding song to position 1 of the queue. options.skip is shown to be unreliable.
+      // This is probably due to the addition of metadata being passed into the player.
+      // The bot does not use this for now, as its using events to parse info instead.
       // eslint-disable-next-line no-useless-escape
-      await this.client.player.play(message, text.replace(/(^\<+|\>+$)/g, ''), { skip: true });
+      await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
+        member: message.member,
+        textChannel: message.channel,
+        message: message,
+        position: 1
+      });
+      await this.client.player.skip(message)
       message.react(process.env.REACTION_OK);
     } else {
       return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');

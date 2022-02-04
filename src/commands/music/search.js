@@ -119,7 +119,11 @@ module.exports = class CommandSearch extends Command {
             selected = results[0].url;
             this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
           }
-          await this.client.player.play(message, selected);
+          await this.client.player.play(vc, selected, {
+            member: message.member,
+            textChannel: message.channel,
+            message: message
+          });
           message.react(process.env.REACTION_OK);
         });
 

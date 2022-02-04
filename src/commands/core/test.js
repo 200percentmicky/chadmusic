@@ -58,12 +58,6 @@ module.exports = class CommandTest extends Command {
         break;
       }
 
-      case 'music': {
-        await this.client.player.play(message, 'undertale megalovania');
-        this.client.ui.custom(message, '🎶', null, "Playing some jams. If megalovania isn't playing, then you're gonna have a bad time.");
-        break;
-      }
-
       default: {
         this.client.ui.reply(message, 'ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗');
       }

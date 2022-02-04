@@ -10,14 +10,10 @@ module.exports = class ListenerPlaySong extends Listener {
   }
 
   async exec (queue, song) {
-    if (queue.songs.length === 1) {
-      // The event is being called way too quickly for metadata to be parsed correctly
-      // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
-      setTimeout(() => {
-        nowPlayingMsg(queue, song);
-      }, 500);
-    } else {
+    // The event is being called way too quickly for metadata to be parsed correctly
+    // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
+    setTimeout(() => {
       nowPlayingMsg(queue, song);
-    }
+    }, 500);
   }
 };

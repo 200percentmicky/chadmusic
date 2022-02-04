@@ -12,7 +12,7 @@ const isAttachment = (url) => {
 const nowPlayingMsg = async (queue, song) => {
   const channel = queue.textChannel; // TextChannel
   const guild = channel.guild; // Guild
-  const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id); // GuildMember
+  const member = guild.members.cache.get(queue.songs[queue.songs.length - 1]?.user.id); // GuildMember
   const prefix = channel.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
 
   // This is annoying.
@@ -70,21 +70,6 @@ const nowPlayingMsg = async (queue, song) => {
     .setURL(song.url)
     .setThumbnail(song.thumbnail)
     .setTimestamp();
-
-  if (isAttachment(song.url)) {
-    const supportedFormats = [
-      'mp3',
-      'mp4',
-      'webm',
-      'ogg',
-      'wav'
-    ];
-      // This is to prevent the event from being called. This is already
-      // checked in the 'addSong' event.
-    if (!supportedFormats.some(element => song.url.endsWith(element))) {
-      return;
-    }
-  }
 
   if (!message.channel) {
     channel.send({ embeds: [songNow] });
