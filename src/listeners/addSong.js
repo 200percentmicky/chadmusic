@@ -106,7 +106,7 @@ module.exports = class ListenerAddSong extends Listener {
         iconURL: song.user.avatarURL({ dynamic: true })
       });
 
-    if (queue.songs.indexOf(song) === 1) return;
+    if (queue.songs.indexOf(song) === 0) return;
     if (!message.channel) {
       channel.send({ embeds: [embed] });
     } else {
