@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, MessageFlags } = require('discord.js');
 const { Permissions } = require('discord.js');
 
 module.exports = class CommandSearch extends Command {
@@ -82,6 +82,72 @@ module.exports = class CommandSearch extends Command {
     }
 
     message.channel.sendTyping();
+
+    const results = await this.client.player.search(search);
+
+    const embed = new MessageEmbed()
+      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+      .setAuthor({
+        name: 'Which track do you wanna play?',
+        iconURL: message.author.avatarURL({ dynamic: true })
+      })
+      .setFooter({
+        text: `Make your selection using the menu below.`
+      });
+
+    let menuOptions = [];
+    let i;
+    for (i = 0; i < results.length; i++) {
+      const track = {
+        label: results[i].name,
+        description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
+        value: `${i}`
+      };
+      menuOptions.push(track);
+    }
+
+    const menu = new MessageSelectMenu()
+      .setCustomId('track_menu')
+      .setPlaceholder('Pick a track!')
+      .addOptions(menuOptions)
+    
+    const cancel = new MessageButton()
+      .setCustomId('cancel_search')
+      .setStyle('DANGER')
+      .setEmoji(process.env.CLOSE)
+
+    const trackMenu = new MessageActionRow()
+      .addComponents(menu)
+
+    const cancelButton = new MessageActionRow()
+      .addComponents(cancel)
+
+    const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
+
+    const filter = (interaction) => interaction.user.id === message.member.user.id;
+    const collector = msg.createMessageComponentCollector({
+      filter,
+      time: 30 * 1000,
+      max: 1,
+    })
+    
+    collector.on('collect', async interaction => {
+      if (interaction.customId === 'cancel_search') return collector.stop();
+      message.channel.sendTyping();
+      await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
+        member: message.member,
+        textChannel: message.channel,
+        message: message
+      });
+      message.react(process.env.EMOJI_MUSIC)
+      collector.stop();
+    });
+
+    collector.on('end', () => {
+      msg.delete();
+    })
+
+    /*
     this.client.player.search(search).then(results => {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n');
       const embed = new MessageEmbed()
@@ -132,5 +198,6 @@ module.exports = class CommandSearch extends Command {
         });
       });
     });
+    */
   }
 };
