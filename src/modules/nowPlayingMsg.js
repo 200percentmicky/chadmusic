@@ -1,14 +1,6 @@
 const { Permissions, MessageEmbed } = require('discord.js');
 const prettyms = require('pretty-ms');
 
-const isAttachment = (url) => {
-  // ! TODO: Come up with a better regex lol
-  // eslint-disable-next-line no-useless-escape
-  const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-  const urlRegex = new RegExp(urlPattern);
-  return url.match(urlRegex);
-};
-
 const nowPlayingMsg = async (queue, song) => {
   const channel = queue.textChannel; // TextChannel
   const guild = channel.guild; // Guild
@@ -36,8 +28,6 @@ const nowPlayingMsg = async (queue, song) => {
         // Using Math.floor() to round down.
         // Still need to apend '000' to be accurate.
         if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-          // Stupid fix.
-          if (message.content.includes(channel.client.prefix.getPrefix(guild.id) + ('skip' || 's'))) return;
           channel.client.player.stop(message);
           return channel.client.ui.reply(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
         }
@@ -71,7 +61,7 @@ const nowPlayingMsg = async (queue, song) => {
     .setThumbnail(song.thumbnail)
     .setTimestamp();
 
-  if (!message.channel) {
+  if (!message) {
     channel.send({ embeds: [songNow] });
   } else {
     message.channel.send({ embeds: [songNow] });

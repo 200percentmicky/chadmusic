@@ -15,5 +15,6 @@ module.exports = class ListenerInitQueue extends Listener {
     queue.autoplay = false;
     queue.volume = parseInt(volume);
     queue.votes = []; // Initialize an empty array for casting votes.
+    queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
   }
 };

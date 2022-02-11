@@ -32,7 +32,7 @@ module.exports = class ListenerAddSong extends Listener {
     // Basically, grab the message of the user that just added a song to the queue. If there is
     // a match, this information will be used to reply to the user. However, the filter may grab the
     // wrong message. Using it will not guarantee an accurate result.
-    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && x.content.startsWith(prefix)).last();
+    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${channel.client.user.id}>`))).last(); // Message
 
     const djRole = await this.client.settings.get(guild.id, 'djRole');
     const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true);
@@ -85,7 +85,7 @@ module.exports = class ListenerAddSong extends Listener {
           song.isFile = true;
         });
       }
-    }  
+    }
 
     // Stupid fix to make sure that the queue doesn't break.
     // TODO: Fix toColonNotation in queue.js
