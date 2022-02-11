@@ -11,11 +11,17 @@ module.exports = class CommandVolume extends Command {
         details: '`<number>` The percentage of the new volume to set.'
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      args: [
+        {
+          id: 'volume',
+          type: 'number'
+        }
+      ]
     });
   }
 
-  async exec (message) {
+  async exec (message, args) {
     const djMode = this.client.settings.get(message.guild.id, 'djMode');
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
@@ -30,8 +36,6 @@ module.exports = class CommandVolume extends Command {
       }
     }
 
-    const args = message.content.split(/ +/g);
-
     const vc = message.member.voice.channel;
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
@@ -39,7 +43,7 @@ module.exports = class CommandVolume extends Command {
     if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing on this server.');
 
     const volume = queue.volume;
-    if (!args[1]) {
+    if (!args.volume) {
       const volumeEmoji = () => {
         const volumeIcon = {
           50: '🔈',
@@ -52,7 +56,7 @@ module.exports = class CommandVolume extends Command {
       return this.client.ui.custom(message, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
     }
 
-    let newVolume = parseInt(args[1]);
+    let newVolume = parseInt(args.volume);
     const allowFreeVolume = await this.client.settings.get(message.guild.id, 'allowFreeVolume');
     if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200;
     this.client.player.setVolume(message.guild.id, newVolume);

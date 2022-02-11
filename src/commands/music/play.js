@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { Permissions, BaseGuildVoiceChannel } = require('discord.js');
+const { Permissions } = require('discord.js');
 
 function pornPattern (url) {
   // ! TODO: Come up with a better regex lol
@@ -20,14 +20,17 @@ module.exports = class CommandPlay extends Command {
         details: '`<url/search>` The URL or search term to load.'
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      args: [
+        {
+          id: 'track',
+          match: 'rest'
+        }
+      ]
     });
   }
 
-  async exec (message) {
-    const args = message.content.split(/ +/g);
-    const text = args.slice(1).join(' ');
-
+  async exec (message, args) {
     const djMode = this.client.settings.get(message.guild.id, 'djMode');
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
@@ -45,9 +48,9 @@ module.exports = class CommandPlay extends Command {
     const vc = message.member.voice.channel;
     if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
 
-    if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
+    if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-    if (pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
+    if (pornPattern(args.track)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
 
     const currentVc = this.client.vc.get(vc);
     if (!currentVc) {
@@ -93,7 +96,7 @@ module.exports = class CommandPlay extends Command {
 
     try {
       /* eslint-disable-next-line no-useless-escape */
-      await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
+      await this.client.player.play(vc, args.track.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
         member: message.member,
         textChannel: message.channel,
         message: message

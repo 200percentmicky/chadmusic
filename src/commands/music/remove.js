@@ -11,12 +11,21 @@ module.exports = class CommandRemove extends Command {
         details: '`<int:queue_entry/starting>` The queue entry to remove from the queue, or the starting position.\n[int:end] The end position for removing multiple entries.\nEvery entry from the starting to end position will be removed from the queue.'
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      args: [
+        {
+          id: 'start',
+          type: 'number'
+        },
+        {
+          id: 'end',
+          type: 'number'
+        }
+      ]
     });
   }
 
-  async exec (message) {
-    const args = message.content.split(/ +/g);
+  async exec (message, args) {
     const djMode = this.client.settings.get(message.guild.id, 'djMode');
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
@@ -38,16 +47,16 @@ module.exports = class CommandRemove extends Command {
     if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server.');
     else if (vc.id !== currentVc.channel.id) return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
 
-    if (!args[1]) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]');
+    if (!args.start) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]');
 
     if (vc.members.size <= 2 || dj) {
       const queue = this.client.player.getQueue(message);
 
       /* Remove multiple entries from the queue. */
-      if (args[2]) {
+      if (args.end) {
         /* Parsing arguments as numbers */
-        const start = parseInt(args[1]);
-        const end = parseInt(args[2]);
+        const start = parseInt(args.start);
+        const end = parseInt(args.end);
 
         /* Checking if the arguments are numbers. */
         if (isNaN(start)) return this.client.ui.reply(message, 'error', 'Starting position must be a number.');
@@ -62,14 +71,14 @@ module.exports = class CommandRemove extends Command {
         return this.client.ui.reply(message, 'ok', `Removed **${n}** entries from the queue.`);
       } else {
         /* Removing only one entry from the queue. */
-        const song = queue.songs[args[1]];
+        const song = queue.songs[args.start];
 
         /* Checking if argument is a number. */
-        const n = parseInt(args[1]);
+        const n = parseInt(args.start);
         if (isNaN(n)) return this.client.ui.reply(message, 'error', 'Selection must be a number.');
 
         /* Modify queue to remove the specified entry. */
-        queue.songs.splice(args[1], 1);
+        queue.songs.splice(args.start, 1);
 
         return this.client.ui.reply(message, 'ok', `Removed **${song.name}** from the queue.`);
       }

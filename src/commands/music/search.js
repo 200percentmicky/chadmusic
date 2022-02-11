@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, MessageFlags } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 const { Permissions } = require('discord.js');
 
 module.exports = class CommandSearch extends Command {
@@ -12,13 +12,17 @@ module.exports = class CommandSearch extends Command {
         usage: '<query>'
       },
       channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
+      clientPermissions: ['EMBED_LINKS'],
+      args: [
+        {
+          id: 'query',
+          match: 'rest'
+        }
+      ]
     });
   }
 
-  async exec (message) {
-    const args = message.content.split(/ +/g);
-    const search = args.slice(1).join(' ');
+  async exec (message, args) {
     const djMode = this.client.settings.get(message.guild.id, 'djMode');
     const djRole = this.client.settings.get(message.guild.id, 'djRole');
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
@@ -66,7 +70,7 @@ module.exports = class CommandSearch extends Command {
     message.channel.sendTyping();
     const queue = this.client.player.getQueue(message.guild.id);
 
-    if (!args[1]) return this.client.ui.usage(message, 'search <query>');
+    if (!args.query) return this.client.ui.usage(message, 'search <query>');
 
     // These limitations should not affect a member with DJ permissions.
     if (!dj) {
@@ -83,7 +87,7 @@ module.exports = class CommandSearch extends Command {
 
     message.channel.sendTyping();
 
-    const results = await this.client.player.search(search);
+    const results = await this.client.player.search(args.query);
 
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
@@ -92,10 +96,10 @@ module.exports = class CommandSearch extends Command {
         iconURL: message.author.avatarURL({ dynamic: true })
       })
       .setFooter({
-        text: `Make your selection using the menu below.`
+        text: 'Make your selection using the menu below.'
       });
 
-    let menuOptions = [];
+    const menuOptions = [];
     let i;
     for (i = 0; i < results.length; i++) {
       const track = {
@@ -109,18 +113,18 @@ module.exports = class CommandSearch extends Command {
     const menu = new MessageSelectMenu()
       .setCustomId('track_menu')
       .setPlaceholder('Pick a track!')
-      .addOptions(menuOptions)
-    
+      .addOptions(menuOptions);
+
     const cancel = new MessageButton()
       .setCustomId('cancel_search')
       .setStyle('DANGER')
-      .setEmoji(process.env.CLOSE)
+      .setEmoji(process.env.CLOSE);
 
     const trackMenu = new MessageActionRow()
-      .addComponents(menu)
+      .addComponents(menu);
 
     const cancelButton = new MessageActionRow()
-      .addComponents(cancel)
+      .addComponents(cancel);
 
     const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
 
@@ -128,9 +132,9 @@ module.exports = class CommandSearch extends Command {
     const collector = msg.createMessageComponentCollector({
       filter,
       time: 30 * 1000,
-      max: 1,
-    })
-    
+      max: 1
+    });
+
     collector.on('collect', async interaction => {
       if (interaction.customId === 'cancel_search') return collector.stop();
       message.channel.sendTyping();
@@ -139,13 +143,13 @@ module.exports = class CommandSearch extends Command {
         textChannel: message.channel,
         message: message
       });
-      message.react(process.env.EMOJI_MUSIC)
+      message.react(process.env.EMOJI_MUSIC);
       collector.stop();
     });
 
     collector.on('end', () => {
       msg.delete();
-    })
+    });
 
     /*
     this.client.player.search(search).then(results => {
