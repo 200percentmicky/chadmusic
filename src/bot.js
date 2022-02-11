@@ -27,6 +27,7 @@ const mongoose = require('mongoose');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ui = require('./modules/WaveUI');
+const slashUI = require('./modules/WaveSlashUI');
 const logger = require('./modules/winstonLogger');
 const path = require('path');
 
@@ -93,6 +94,7 @@ class WaveBot extends AkairoClient {
     });
 
     this.creator.client = this; // Make the AkairoClient accessible in slash commands.
+    this.creator.ui = slashUI;
     this.creator.on('commandError', (command, err, ctx) => {
       this.logger.error('%s', err);
     });
