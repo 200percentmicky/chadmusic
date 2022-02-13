@@ -52,7 +52,6 @@ class WaveBot extends AkairoClient {
     super({
       ownerID: process.env.OWNER_ID
     }, {
-      disableMentions: 'true',
       allowedMentions: {
         repliedUser: false
       },
