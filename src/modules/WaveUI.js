@@ -236,8 +236,8 @@ const send = (msg, prompt, extra) => {
     NOT_PLAYING: 'Nothing is currently playing on this server.',
     NOT_IN_VC: 'You\'re not in a voice channel.',
     ALREADY_SUMMONED_ELSEWHERE: 'You must be in the same voice channel that I\'m in to do that.',
-    MISSING_CONNECT: `Missing **Connect** permission for <#${extra.id}>`,
-    MISSING_SPEAK: `Missing **Request to Speak** permission for <#${extra.id}>.`,
+    MISSING_CONNECT: `Missing **Connect** permission for <#${extra}>`,
+    MISSING_SPEAK: `Missing **Request to Speak** permission for <#${extra}>.`,
     WRONG_TEXT_CHANNEL_MUSIC: `Music commands must be used in <#${extra}>`,
     OWNER_ONLY: 'This command can only be used by the bot owner.',
     NSFW_ONLY: 'This command must be used in NSFW channels.'

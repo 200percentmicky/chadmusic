@@ -33,7 +33,7 @@ module.exports = class CommandSummon extends Command {
     if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
     const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-    if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc)
+    if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
 
     const currentVc = this.client.vc.get(vc);
     if (currentVc) {
@@ -48,7 +48,7 @@ module.exports = class CommandSummon extends Command {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
           if (!requestToSpeak) {
             vc.leave();
-            return this.client.ui.send(message, 'MISSING_SPEAK', vc);
+            return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true);
           }

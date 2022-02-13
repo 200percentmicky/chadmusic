@@ -53,7 +53,7 @@ module.exports = class CommandPlayNow extends Command {
     const currentVc = this.client.vc.get(vc);
     if (!currentVc) {
       const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-      if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc);
+      if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
 
       if (vc.type === 'stage') {
         await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
@@ -62,7 +62,7 @@ module.exports = class CommandPlayNow extends Command {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
           if (!requestToSpeak) {
             vc.leave();
-            return this.client.ui.send(message, 'MISSING_SPEAK', vc);
+            return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true);
           }
