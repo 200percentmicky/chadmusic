@@ -17,7 +17,7 @@ module.exports = class CommandBoobs extends Command {
   }
 
   async exec (message) {
-    if (!message.channel.nsfw) return this.client.ui.custom(message, '🔞', process.env.COLOR_NO, 'This command must be used in a NSFW channel.');
+    if (!message.channel.nsfw) return this.client.ui.send(message, 'NSFW_ONLY');
 
     message.channel.sendTyping();
     try {

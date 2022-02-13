@@ -20,14 +20,14 @@ module.exports = class CommandEarrape extends Command {
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
     if (djMode) {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.');
+        return this.client.ui.send(message, 'DJ_MODE');
       }
     }
 
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
       }
     }
 
@@ -40,14 +40,14 @@ module.exports = class CommandEarrape extends Command {
     const vc = message.member.voice.channel;
     const currentVc = this.client.vc.get(message.guild.id);
     if (!vc) {
-      return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
+      return this.client.ui.send(message, 'NOT_IN_VC');
     } else if (vc.id !== currentVc.channel.id) {
-      return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
+      return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
     }
 
     const queue = this.client.player.getQueue(message.guild.id);
     if (!queue) {
-      return this.client.ui.reply(message, 'warn', 'Nothing is currently playing on this server.');
+      return this.client.ui.send(message, 'NOT_PLAYING');
     }
 
     const earrape = 69420; // 😂👌👌💯

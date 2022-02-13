@@ -18,7 +18,7 @@ module.exports = class CommandE621 extends Command {
   }
 
   async exec (message) {
-    if (!message.channel.nsfw) return this.client.ui.custom(message, '🔞', process.env.COLOR_NO, 'This command must be used in a NSFW channel.');
+    if (!message.channel.nsfw) return this.client.ui.send(message, 'NSFW_ONLY');
     const args = message.content.split(/ +/g);
     let tags = args.slice(1).join('_');
 

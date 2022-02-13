@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo');
-const { oneLine } = require('common-tags');
 
 module.exports = class CommandBassBoost extends Command {
   constructor () {
@@ -25,10 +24,7 @@ module.exports = class CommandBassBoost extends Command {
 
     if (djMode) {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', oneLine`
-          DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** 
-          permission to use music commands at this time.
-        `);
+        return this.client.ui.send(message, 'DJ_MODE');
       }
     }
 
@@ -39,10 +35,10 @@ module.exports = class CommandBassBoost extends Command {
     }
 
     const vc = message.member.voice.channel;
-    if (!vc) return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
+    if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
     const queue = this.client.player.getQueue(message.guild.id);
-    if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing on this server.');
+    if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
 
     const currentVc = this.client.vc.get(vc);
     if (currentVc) {
@@ -67,9 +63,7 @@ module.exports = class CommandBassBoost extends Command {
       }
     } else {
       if (vc.id !== currentVc.channel.id) {
-        return this.client.ui.reply(message, 'error', oneLine`
-          You must be in the same voice channel that I\'m in to use that command.
-        `);
+        return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
       }
     }
   }

@@ -228,36 +228,48 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
   }
 };
 
-const send = (msg, prompt) => {
+const send = (msg, prompt, extra) => {
   const promptMessage = {
-    NO_DJ: `${process.env.EMOJI_NO} You must be a DJ or have the **Manage Channels** permission to use that.`,
-    NOT_ALONE: `${process.env.EMOJI_NO} You must be a DJ or have the **Manage Channels** permission to use that. However, being alone with me in the voice channel will work.`,
-    NOT_PLAYING: `${process.env.EMOJI_WARN} Nothing is currently playing on this server.`,
-    NOT_IN_VC: `${process.env.EMOJI_ERROR} You're not in a voice channel.`,
-    ALREADY_SUMMONED_ELSEWHERE: `${process.env.EMOJI_ERROR} You must be in the same voice channel that I'm in to do that.`,
-    MISSING_CONNECT: (vc) => `${process.env.EMOJI_NO} Missing **Connect** permission for <#${vc.id}>`,
-    MISSING_SPEAK: (vc) => `${process.env.EMOJI_NO} Missing **Request to Speak** permission for <#${vc.id}>.`
+    DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
+    NO_DJ: 'You must be a DJ or have the **Manage Channels** permission to use that.',
+    NOT_ALONE: 'You must be a DJ or have the **Manage Channels** permission to use that. However, being alone with me in the voice channel will work.',
+    NOT_PLAYING: 'Nothing is currently playing on this server.',
+    NOT_IN_VC: 'You\'re not in a voice channel.',
+    ALREADY_SUMMONED_ELSEWHERE: 'You must be in the same voice channel that I\'m in to do that.',
+    MISSING_CONNECT: `Missing **Connect** permission for <#${extra.id}>`,
+    MISSING_SPEAK: `Missing **Request to Speak** permission for <#${extra.id}>.`,
+    WRONG_TEXT_CHANNEL_MUSIC: `Music commands must be used in <#${extra}>`,
+    OWNER_ONLY: 'This command can only be used by the bot owner.',
+    NSFW_ONLY: 'This command must be used in NSFW channels.'
   };
 
   const promptColor = {
+    DJ_MODE: process.env.COLOR_NO,
     NO_DJ: process.env.COLOR_NO,
     NOT_ALONE: process.env.COLOR_NO,
     NOT_PLAYING: process.env.COLOR_WARN,
     NOT_IN_VC: process.env.COLOR_ERROR,
     ALREADY_SUMMONED_ELSEWHERE: process.env.COLOR_ERROR,
     MISSING_CONNECT: process.env.COLOR_NO,
-    MISSING_SPEAK: process.env.COLOR_NO
+    MISSING_SPEAK: process.env.COLOR_NO,
+    WRONG_TEXT_CHANNEL_MUSIC: process.env.COLOR_NO,
+    OWNER_ONLY: process.env.COLOR_NO,
+    NSFW_ONLY: process.env.COLOR_NO
   };
 
   const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
   const promptEmoji = {
+    DJ_MODE: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NO_DJ: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NOT_ALONE: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NOT_PLAYING: emojiPerms ? process.env.EMOJI_WARN : '⚠',
     NOT_IN_VC: emojiPerms ? process.env.EMOJI_ERROR : '❌',
     ALREADY_SUMMONED_ELSEWHERE: emojiPerms ? process.env.EMOJI_ERROR : '❌',
     MISSING_CONNECT: emojiPerms ? process.env.EMOJI_NO : '🚫',
-    MISSING_SPEAK: emojiPerms ? process.env.EMOJI_NO : '🚫'
+    MISSING_SPEAK: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    WRONG_TEXT_CHANNEL_MUSIC: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    OWNER_ONLY: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    NSFW_ONLY: '🔞'
   };
 
   /* No embed */

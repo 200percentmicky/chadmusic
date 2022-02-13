@@ -20,14 +20,14 @@ module.exports = class CommandDisconnect extends Command {
     const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
     if (djMode) {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.', 'DJ Mode');
+        return this.client.ui.send(message, 'DJ_MODE');
       }
     }
 
     const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
     if (textChannel) {
       if (textChannel !== message.channel.id) {
-        return this.client.ui.reply(message, 'no', `Music commands must be used in <#${textChannel}>.`);
+        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
       }
     }
 
@@ -38,9 +38,9 @@ module.exports = class CommandDisconnect extends Command {
     }
 
     if (!vc) {
-      return this.client.ui.reply(message, 'error', 'You are not in a voice channel.');
+      return this.client.ui.send(message, 'NOT_IN_VC');
     } else if (vc.id !== currentVc.channel.id) {
-      return this.client.ui.reply(message, 'error', 'You must be in the same voice channel that I\'m in to use that command.');
+      return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
     }
 
     if (vc.members.size <= 2 || dj) {
@@ -50,7 +50,7 @@ module.exports = class CommandDisconnect extends Command {
       this.client.vc.leave(message);
       return this.client.ui.custom(message, '📤', 0xDD2E44, `Left <#${vc.id}>`);
     } else {
-      return this.client.ui.reply(message, 'error', 'You must have the DJ role on this server, or the **Manage Channel** permission to use that command. Being alone with me works too!');
+      return this.client.ui.send(message, 'NOT_ALONE');
     }
   }
 };
