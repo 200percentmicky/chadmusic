@@ -53,6 +53,9 @@ class WaveBot extends AkairoClient {
       ownerID: process.env.OWNER_ID
     }, {
       disableMentions: 'true',
+      allowedMentions: {
+        repliedUser: false
+      },
       restTimeOffset: 175,
       intents: new Intents(14279)
     });
