@@ -5,11 +5,8 @@ const {
   MessageActionRow, /* eslint-disable-line no-unused-vars */
   ColorResolvable,  /* eslint-disable-line no-unused-vars */
   EmojiResolvable,  /* eslint-disable-line no-unused-vars */
-  Client,
-  Permissions,
   BaseGuildTextChannel
 } = require('discord.js');
-const slash = require('slash-create');
 
 let baseEmbed = {};
 /**
@@ -170,100 +167,6 @@ const reply = (msg, type, description, title, footer, buttons) => {
 };
 
 /**
- * Functions the same as `say()`, but is used strictly for slash commands as an interaction. This function relies on the `slash-create` package as a peer dependency, and should be converted for use with `discord.js` instead.
- *
- * @param {slash.CommandContext} ctx The CommandContext interaction.
- * @param {Client} client The instance of `Discord.Client`.
- * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
- * @param {boolean} ephemeral Whether the message should be sent as an ephemeral message to the user.
- * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the embed or message.
- * @param {string} footer [Optional] The footer of the embed.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
- * @returns {Promise<boolean | Message>} The message to send when an interaction is resolved.
- */
-const ctx = (ctx, client, type, ephemeral, description, title, footer, buttons) => {
-  if (!(ctx instanceof slash.CommandContext)) throw new TypeError('Parameter "ctx" must be an instance of "CommandContext".');
-  if (!(client instanceof Client)) throw new TypeError('Parameter "client" must be an instance of "Client".');
-
-  const channel = client.channels.cache.get(ctx.channelID);
-
-  /* The emoji of the embed */
-  // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-  const emojiPerms = channel.permissionsFor(client.user.id).has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS);
-  const embedEmoji = {
-    ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-    warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-    error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-    info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-    no: emojiPerms ? process.env.EMOJI_NO : '🚫'
-  };
-
-  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-  /* No embed */
-  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return ctx.send({
-      embeds: [embed],
-      components: buttons || [],
-      ephemeral: false // DMs do not need ephemeral messages in my opinion.
-    });
-  } else {
-    if (!channel.permissionsFor(client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
-      return ctx.send(stringUI(embedEmoji[type], title || null, description || null), { components: buttons || [] });
-    } else {
-      return ctx.send({
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: ephemeral
-      });
-    }
-  }
-};
-
-/**
- * A custom varient of `ui.ctx()` which allows you to create a custom embed or text message.
- *
- * @param {slash.CommandContext} ctx The CommandContext interaction.
- * @param {Client} client The instance of `Discord.Client`.
- * @param {boolean} ephemeral Whether the message should be sent as an ephemeral message to the user.
- * @param {string} emoji The emoji of the message.
- * @param {number} color The color of the embed.
- * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the embed or message.
- * @param {string} footer [Optional] The footer of the embed.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
- * @returns {Promise<boolean | Message>} The message to send when an interaction is resolved.
- */
-const ctxCustom = (ctx, client, ephemeral, emoji, color, description, title, footer, buttons) => {
-  if (!(ctx instanceof slash.CommandContext)) throw new TypeError('Parameter "ctx" must be an instance of "CommandContext".');
-  if (!(client instanceof Client)) throw new TypeError('Parameter "client" must be an instance of "Client".');
-
-  const channel = client.channels.cache.get(ctx.channelID);
-
-  const embed = embedUI(color, emoji, title || null, description || null, footer || null);
-  /* No embed */
-  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return ctx.send({
-      embeds: [embed],
-      components: buttons || [],
-      ephemeral: false // DMs do not need ephemeral messages in my opinion.
-    });
-  } else {
-    if (!channel.permissionsFor(client.user.id).has(Permissions.FLAGS.EMBED_LINKS)) {
-      return ctx.send(stringUI(emoji, title || null, description || null), { components: buttons || [] });
-    } else {
-      return ctx.send({
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: ephemeral
-      });
-    }
-  }
-};
-
-/**
  * A UI element that returns the overall usage of the command if no arguments were provided.
  *
  * @example this.client.ui.usage(message, message, 'play <url|search>');
@@ -325,6 +228,58 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
   }
 };
 
+const send = (msg, prompt) => {
+  const promptMessage = {
+    NO_DJ: `${process.env.EMOJI_NO} You must be a DJ or have the **Manage Channels** permission to use that.`,
+    NOT_ALONE: `${process.env.EMOJI_NO} You must be a DJ or have the **Manage Channels** permission to use that. However, being alone with me in the voice channel will work.`,
+    NOT_PLAYING: `${process.env.EMOJI_WARN} Nothing is currently playing on this server.`,
+    NOT_IN_VC: `${process.env.EMOJI_ERROR} You're not in a voice channel.`,
+    ALREADY_SUMMONED_ELSEWHERE: `${process.env.EMOJI_ERROR} You must be in the same voice channel that I'm in to do that.`,
+    MISSING_CONNECT: (vc) => `${process.env.EMOJI_NO} Missing **Connect** permission for <#${vc.id}>`,
+    MISSING_SPEAK: (vc) => `${process.env.EMOJI_NO} Missing **Request to Speak** permission for <#${vc.id}>.`
+  };
+
+  const promptColor = {
+    NO_DJ: process.env.COLOR_NO,
+    NOT_ALONE: process.env.COLOR_NO,
+    NOT_PLAYING: process.env.COLOR_WARN,
+    NOT_IN_VC: process.env.COLOR_ERROR,
+    ALREADY_SUMMONED_ELSEWHERE: process.env.COLOR_ERROR,
+    MISSING_CONNECT: process.env.COLOR_NO,
+    MISSING_SPEAK: process.env.COLOR_NO
+  };
+
+  const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
+  const promptEmoji = {
+    NO_DJ: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    NOT_ALONE: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    NOT_PLAYING: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+    NOT_IN_VC: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+    ALREADY_SUMMONED_ELSEWHERE: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+    MISSING_CONNECT: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    MISSING_SPEAK: emojiPerms ? process.env.EMOJI_NO : '🚫'
+  };
+
+  /* No embed */
+  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+  const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
+  if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+    return msg.reply({
+      embeds: [embed]
+    });
+  } else {
+    if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
+      return msg.reply({
+        content: stringUI(promptEmoji[prompt], null, promptMessage[prompt])
+      });
+    } else {
+      return msg.reply({
+        embeds: [embed]
+      });
+    }
+  }
+};
+
 /**
  * A function that sends an error report to the given bug reports channel, if one was provided in the `.env` file.
  *
@@ -341,4 +296,4 @@ const recordError = async (client, command, title, error) => { // TODO: Remove '
   return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
-module.exports = { say, reply, ctx, ctxCustom, usage, custom, recordError };
+module.exports = { say, reply, usage, custom, send, recordError };
