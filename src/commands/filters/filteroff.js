@@ -25,7 +25,7 @@ module.exports = class CommandFilterOff extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.send(message, 'FILTERS_NOT_ALLOWED');
       }
     }
 

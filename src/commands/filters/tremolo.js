@@ -1,4 +1,4 @@
-const { oneLine, stripIndents } = require('common-tags');
+const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 
 module.exports = class CommandTremolo extends Command {
@@ -35,7 +35,7 @@ module.exports = class CommandTremolo extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.send(message, 'FILTERS_NOT_ALLOWED');
       }
     }
 
@@ -52,7 +52,7 @@ module.exports = class CommandTremolo extends Command {
           await this.client.player.setFilter(message.guild.id, 'tremolo', false);
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tremolo** Off');
         } catch (err) {
-          return this.client.ui.reply(message, 'error', '**Tremolo** is not applied to the player.');
+          return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Tremolo');
         }
       } else {
         if (!args[1]) {

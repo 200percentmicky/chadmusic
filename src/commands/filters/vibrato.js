@@ -1,4 +1,4 @@
-const { oneLine, stripIndents } = require('common-tags');
+const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 
 module.exports = class CommandVibrato extends Command {
@@ -35,7 +35,7 @@ module.exports = class CommandVibrato extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.send(message, 'FILTERS_NOT_ALLOWED');
       }
     }
 
@@ -52,7 +52,7 @@ module.exports = class CommandVibrato extends Command {
           await this.client.player.setFilter(message.guild.id, 'vibrato', false);
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Vibrato** Off');
         } catch (err) {
-          return this.client.ui.reply(message, 'error', '**Vibrato** is not applied to the player.');
+          return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Vibrato');
         }
       } else {
         if (!args[1]) {

@@ -232,6 +232,8 @@ const send = (msg, prompt, extra) => {
   const promptMessage = {
     DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
     NO_DJ: 'You must be a DJ or have the **Manage Channels** permission to use that.',
+    FILTER_NOT_APPLIED: `**${extra}** is not applied to the player.`,
+    FILTERS_NOT_ALLOWED: 'Filters can only be applied by DJs on this server.',
     NOT_ALONE: 'You must be a DJ or have the **Manage Channels** permission to use that. However, being alone with me in the voice channel will work.',
     NOT_PLAYING: 'Nothing is currently playing on this server.',
     NOT_IN_VC: 'You\'re not in a voice channel.',
@@ -246,6 +248,8 @@ const send = (msg, prompt, extra) => {
   const promptColor = {
     DJ_MODE: process.env.COLOR_NO,
     NO_DJ: process.env.COLOR_NO,
+    FILTER_NOT_APPLIED: process.env.COLOR_ERROR,
+    FILTERS_NOT_ALLOWED: process.env.COLOR_NO,
     NOT_ALONE: process.env.COLOR_NO,
     NOT_PLAYING: process.env.COLOR_WARN,
     NOT_IN_VC: process.env.COLOR_ERROR,
@@ -261,6 +265,8 @@ const send = (msg, prompt, extra) => {
   const promptEmoji = {
     DJ_MODE: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NO_DJ: emojiPerms ? process.env.EMOJI_NO : '🚫',
+    FILTER_NOT_APPLIED: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+    FILTERS_NOT_ALLOWED: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NOT_ALONE: emojiPerms ? process.env.EMOJI_NO : '🚫',
     NOT_PLAYING: emojiPerms ? process.env.EMOJI_WARN : '⚠',
     NOT_IN_VC: emojiPerms ? process.env.EMOJI_ERROR : '❌',

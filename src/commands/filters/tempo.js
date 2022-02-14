@@ -28,7 +28,7 @@ module.exports = class CommandTempo extends Command {
 
     if (allowFilters === 'dj') {
       if (!dj) {
-        return this.client.ui.reply(message, 'no', 'You must have the DJ Role or the **Manage Channels** permission to use filters.');
+        return this.client.ui.send(message, 'FILTERS_NOT_ALLOWED');
       }
     }
 
@@ -49,7 +49,7 @@ module.exports = class CommandTempo extends Command {
           await this.client.player.setFilter(message.guild.id, 'asetrate', false);
           return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tempo** Reverted');
         } catch (err) {
-          return this.client.ui.reply(message, 'error', '**Tempo** is not applied to the player.');
+          return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Tempo');
         }
       }
 
