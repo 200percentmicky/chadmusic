@@ -8,7 +8,9 @@ module.exports = class CommandLyrics extends Command {
       aliases: ['lyrics'],
       category: '🎶 Music',
       description: {
-        text: 'Stops the player, and clears the queue.'
+        text: 'Retrieves lyrics from the playing track or from search query.',
+        usage: 'lyrics [query]',
+        details: '`[query]` The search query to find lyrics.'
       },
       channel: 'guild',
       clientPermissions: ['EMBED_LINKS'],
@@ -17,7 +19,8 @@ module.exports = class CommandLyrics extends Command {
           id: 'query',
           match: 'rest'
         }
-      ]
+      ],
+      cooldown: 10 * 1000
     });
   }
 
@@ -29,46 +32,17 @@ module.exports = class CommandLyrics extends Command {
       if (!dj) return this.client.ui.send(message, 'DJ_MODE');
     }
 
-    // Most likely will want the lyrics command to be available to all.
-    // I'll leave this commented out for now.
-
-    /*
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
-    if (textChannel) {
-      if (textChannel !== message.channel.id) {
-        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
-      }
-    }
-
-    const vc = message.member.voice.channel;
-    if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
-
-    const currentVc = this.client.vc.get(vc);
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
-
-    if (vc.members.size <= 2 || dj) {
-      this.client.player.stop(message);
-      this.client.vc.leave(message);
-      return this.client.ui.custom(message, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
-    } else {
-      return this.client.ui.send(message, 'NOT_ALONE');
-    }
-    */
-
     const geniusClient = new Genius.Client(process.env.GENIUS_TOKEN);
     const queue = this.client.player.getQueue(message.guild);
+    const query = queue?.songs[0]?.name ?? args.query;
+
+    if (!queue && !query) {
+      return this.client.ui.reply(message, 'warn', `Nothing is currently playing in this server. You can \`lyrics [query]\` to manually search for lyrics.`)
+    }
 
     message.channel.sendTyping();
 
     try {
-      const query = queue.songs[0].name || args.query;
-
-      if (!queue && !args.query) {
-        const prefix = this.client.settings.get(message, 'prefix', process.env.PREFIX);
-        return this.client.ui.say(message, 'warn', `Nothing is currently playing on this server. Consider a manual search by using \`${prefix}lyrics [query]\`.`);
-      }
-
       const songSearch = await geniusClient.songs.search(query);
       const songLyrics = await songSearch[0].lyrics();
 
@@ -87,10 +61,16 @@ module.exports = class CommandLyrics extends Command {
           text: `${message.member.user.tag} • Powered by Genius API. (https://genius.com)`,
           iconURL: message.member.user.avatarURL({ dynamic: true })
         });
-
       return message.reply({ embeds: [embed] });
     } catch (err) {
-      if (err) return this.client.ui.reply(message, 'error', err.message, 'Genius API Error');
+      if (err) {
+        return this.client.ui.reply(message,
+          'error',
+          err.message.includes('Invalid Form Body')
+            ? `Unable to retrieve lyrics from currently playing song. Try manually searching for the song using \`lyrics [query]\`.`
+            : err.message,
+          'Genius API Error');
+      }
     }
   }
 };
