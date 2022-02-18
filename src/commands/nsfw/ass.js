@@ -41,7 +41,7 @@ module.exports = class CommandAss extends Command {
         });
       message.channel.send({ embeds: [embed] });
     } catch (err) {
-      this.client.ui.say(message.channel, 'error', err.message, 'Reddit API Error');
+      this.client.ui.reply(message, 'error', err.message, 'Reddit API Error');
     }
   }
 };
