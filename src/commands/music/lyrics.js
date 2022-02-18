@@ -46,6 +46,12 @@ module.exports = class CommandLyrics extends Command {
       const songSearch = await geniusClient.songs.search(query);
       const songLyrics = await songSearch[0].lyrics();
 
+      if (songLyrics.length > 4096) {
+        // Since Genius likes to give you weird results, it most likely didn't
+        // retrieve lyrics causing the embed to exceed its limits.
+        return this.client.ui.reply(message, 'error', `Unable to retrieve lyrics from currently playing song. Try manually searching for the song using \`lyrics [query]\`.`)
+      }
+
       const embed = new MessageEmbed()
         .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor({
@@ -63,14 +69,7 @@ module.exports = class CommandLyrics extends Command {
         });
       return message.reply({ embeds: [embed] });
     } catch (err) {
-      if (err) {
-        return this.client.ui.reply(message,
-          'error',
-          err.message.includes('Invalid Form Body')
-            ? `Unable to retrieve lyrics from currently playing song. Try manually searching for the song using \`lyrics [query]\`.`
-            : err.message,
-          'Genius API Error');
-      }
+      return this.client.ui.reply(message, 'error', err.message, 'Genius API Error');
     }
   }
 };
