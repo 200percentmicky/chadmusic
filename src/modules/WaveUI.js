@@ -5,7 +5,7 @@ const {
   MessageActionRow, /* eslint-disable-line no-unused-vars */
   ColorResolvable,  /* eslint-disable-line no-unused-vars */
   EmojiResolvable,  /* eslint-disable-line no-unused-vars */
-  BaseGuildTextChannel
+  GuildMember       /* eslint-disable-line no-unused-vars */
 } = require('discord.js');
 
 let baseEmbed = {};
@@ -14,15 +14,17 @@ let baseEmbed = {};
  *
  * @param {ColorResolvable} color The color of the embed.
  * @param {EmojiResolvable} emoji The emoji to add to the message.
+ * @param {GuildMember} author The guild member.
  * @param {string} title The title of the embed.
  * @param {string} desc The description of the embed.
  * @param {string} footer The footer of the embed.
  * @returns The object used to construct an embed.
  */
-const embedUI = (color, emoji, title, desc, footer) => {
+const embedUI = (color, emoji, author, title, desc, footer) => {
   baseEmbed = {
     color: parseInt(color),
     title: null,
+    author: null,
     description: `${emoji} ${desc}`,
     footer: null
   };
@@ -30,6 +32,13 @@ const embedUI = (color, emoji, title, desc, footer) => {
   if (title) {
     baseEmbed.title = `${emoji} ${title}`;
     baseEmbed.description = `${desc}`;
+  }
+
+  if (author) {
+    baseEmbed.author = {
+      name: author.user.tag,
+      icon_url: author.user.avatarURL({ dynamic: true })
+    };
   }
 
   if (footer) baseEmbed.footer = { text: footer };
@@ -64,7 +73,7 @@ const embedColor = {
 /**
  * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
  *
- * @param {BaseGuildTextChannel} channel A ChannelResolvable
+ * @param {Message} msg A MessageResolvable
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
@@ -72,12 +81,12 @@ const embedColor = {
  * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
  * @returns {Message} The message to send in the channel.
  */
-const say = (channel, type, description, title, footer, buttons) => {
-  if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
+const say = (msg, type, description, title, footer, buttons) => {
+  if (!(msg instanceof Message)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
 
   /* The emoji of the embed */
   // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-  const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
+  const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
   const embedEmoji = {
     ok: emojiPerms ? process.env.EMOJI_OK : '✅',
     warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
@@ -88,20 +97,20 @@ const say = (channel, type, description, title, footer, buttons) => {
 
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-  if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return channel.send({
+  const embed = embedUI(embedColor[type], embedEmoji[type], msg.member, title || null, description || null, footer || null);
+  if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+    return msg.channel.send({
       embeds: [embed],
       components: buttons || []
     });
   } else {
-    if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
-      return channel.send({
+    if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
+      return msg.channel.send({
         content: stringUI(embedEmoji[type], title || null, description || null),
         components: buttons || []
       });
     } else {
-      return channel.send({
+      return msg.channel.send({
         embeds: [embed],
         components: buttons || []
       });
@@ -136,7 +145,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
 
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
+  const embed = embedUI(embedColor[type], embedEmoji[type], msg.member, title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
     return msg.reply({
       embeds: [embed],
@@ -204,7 +213,7 @@ const usage = (msg, syntax) => {
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
   if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-  const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
+  const embed = embedUI(color, emoji || null, msg.member, title || null, description || null, footer || null);
   if (msg.channel.type === 'dm') {
     return msg.reply({
       embeds: [embed],
@@ -280,7 +289,7 @@ const send = (msg, prompt, extra) => {
 
   /* No embed */
   // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
+  const embed = embedUI(promptColor[prompt], promptEmoji[prompt], msg.member, null, promptMessage[prompt], null);
   if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
     return msg.reply({
       embeds: [embed]
