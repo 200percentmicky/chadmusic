@@ -8,6 +8,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
 const commonTags = require('common-tags');
+const Genius = require('genius-lyrics');
 
 module.exports = class CommandEval extends Command {
   constructor () {
@@ -25,7 +26,8 @@ module.exports = class CommandEval extends Command {
         \`prettyBytes\` - pretty-bytes
         \`prettyMs\` - prettyMs
         \`colonNotation\` - colon-notation
-        \`commonTags\` - common-tags`
+        \`commonTags\` - common-tags
+        \`Genius\` - genius-lyrics`
       },
       category: '💻 Core',
       args: [
