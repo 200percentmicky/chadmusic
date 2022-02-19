@@ -98,7 +98,7 @@ module.exports = class CommandPlay extends Command {
 
     try {
       /* eslint-disable-next-line no-useless-escape */
-      await this.client.player.play(vc, args.track.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
+      await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
         member: message.member,
         textChannel: message.channel,
         message: message
