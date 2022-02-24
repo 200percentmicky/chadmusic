@@ -1,6 +1,6 @@
 {
   "name": "projectwave",
-  "version": "0.0.0-1",
+  "version": "2022.2.24",
   "description": "Personal multi-purpose bot. Whatever I feel like really lol",
   "main": "index.js",
   "scripts": {

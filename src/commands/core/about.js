@@ -4,6 +4,7 @@ const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
 // Mainly for version info...
+const botversion = require('../../../package.json');
 const akairoversion = require('../../../node_modules/discord-akairo/package.json');
 const discordversion = require('../../../node_modules/discord.js/package.json');
 const distubeversion = require('../../../chadtube/package.json'); // Temporary
@@ -27,7 +28,7 @@ module.exports = class CommandAbout extends Command {
         name: 'Project Wave',
         iconURL: this.client.user.avatarURL({ dynamic: true })
       })
-      .setDescription('Cool ~~open-source~~ Discord bot. :thumbsup:')
+      .setDescription('Swiss Army Discord Bot with ａｅｓｔｈｅｔｉｃｓ　新椅萎. Also [open-sourced!](https://github.com/200percentmicky/ProjectWave) :thumbsup:')
       /*
       .addField('✨ Features', stripIndents`
       :white_small_square: Supports up to 700+ websites.
@@ -43,6 +44,7 @@ module.exports = class CommandAbout extends Command {
       */
       .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the bot owner.')
       .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
+      **Version:** ${botversion.version}
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
       **Discord.js:** ${discordversion.version}
