@@ -37,6 +37,7 @@ const { Intents } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
+const { YtDlpPlugin } = require('@distube/yt-dlp');
 const mongoose = require('mongoose');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
@@ -75,7 +76,8 @@ class WaveBot extends AkairoClient {
       plugins: [
         new SpotifyPlugin({
           emitEventsAfterFetching: true
-        })
+        }),
+        new YtDlpPlugin()
       ],
       emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
       leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
@@ -88,7 +90,7 @@ class WaveBot extends AkairoClient {
         dlChunkSize: 25000,
         highWaterMark: 1024
       },
-      youtubeDL: process.env.USE_YOUTUBE_DL === 'true' || false,
+      youtubeDL: false,
       updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
       nsfw: true // Being handled on a per guild basis, not client-wide.
     });
