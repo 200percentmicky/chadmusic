@@ -18,6 +18,20 @@
 
 'use strict';
 
+const logger = require('./modules/winstonLogger');
+
+// Say hello!
+const { version } = require('../package.json');
+logger.info('    ____               _           __     _       __               ');
+logger.info('   / __ \\_________    (_)__  _____/ /_   | |     / /___ __   _____ ');
+logger.info('  / /_/ / ___/ __ \\  / / _ \\/ ___/ __/   | | /| / / __ `/ | / / _ \\');
+logger.info(' / ____/ /  / /_/ / / /  __/ /__/ /_     | |/ |/ / /_/ /| |/ /  __/');
+logger.info('/_/   /_/   \\____/_/ /\\___/\\___/\\__/     |__/|__/\\__,_/ |___/\\___/ ');
+logger.info('                /___/                                                 ');
+logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836')
+logger.info('Bot Version: %s', version);
+logger.info('Loading libraries...');
+
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo');
 const { Intents } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
@@ -28,15 +42,7 @@ const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ui = require('./modules/WaveUI');
 const slashUI = require('./modules/WaveSlashUI');
-const logger = require('./modules/winstonLogger');
 const path = require('path');
-
-// Say hello!
-const { version } = require('../package.json');
-logger.info('/////////////////////////////');
-logger.info('    * * * Project Wave * * *');
-logger.info('/////////////////////////////');
-logger.info('Bot Version: %s', version);
 
 /* Connecting to databases... */
 mongoose.connect(process.env.MONGO_URI_MAIN, {
