@@ -2,6 +2,7 @@ const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 const { toColonNotation } = require('colon-notation');
+const { version } = require('../../../package.json');
 
 module.exports = class CommandSettings extends Command {
   constructor () {
@@ -36,6 +37,10 @@ module.exports = class CommandSettings extends Command {
     // All pornographic websites are blocked.
     const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
+    // Below are some old comments to when this use to be a multipurpose bot.
+    // Preserving this just in case...
+
+    /*
     const modlog = settings.get(message.guild.id, 'modlog', null); // Moderation Logs
     const taglog = settings.get(message.guild.id, 'taglog', null); // Tag Logs
     const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null); // User Join
@@ -44,9 +49,10 @@ module.exports = class CommandSettings extends Command {
     const messageDelete = settings.get(message.guild.id, 'messageDelete', null); // Deleted Messages
     const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null); // Edited Messages
     const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null); // User Voice State Update
+    */
     // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
-    const forumChannels = settings.get(message.guild.id, 'forumChannels', []); // List of Forum Channels
+    // const forumChannels = settings.get(message.guild.id, 'forumChannels', []); // List of Forum Channels
 
     const embed = new MessageEmbed()
       .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
@@ -54,22 +60,24 @@ module.exports = class CommandSettings extends Command {
         name: `${message.guild.name}`,
         iconURL: message.guild.iconURL({ dynamic: true })
       })
-      .setTitle(':gear: Server Settings')
-      .addField('🌐 General', stripIndents`
-      **Server Prefix:** \`${prefix}\`
-      `)
-      .addField(':notes: Music', stripIndents`
-      **DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-      **DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-      **Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-      **Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-      **Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
-      **Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-      **Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-      **Default Volume:** ${defaultVolume}
-      **Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+      .setTitle(':gear: Settings')
+      //.addField('🌐 General', stripIndents`
+      //**Server Prefix:** \`${prefix}\`
+      //`)
+      .setDescription(stripIndents`
+      **⁉ Prefix:** \`${prefix}\`
+      **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+      **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+      **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+      **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+      **📢 Allow Filters:** ${allowFilters === 'dj' ? 'DJ Only' : 'All'}
+      **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+      **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+      **🔊 Default Volume:** ${defaultVolume}
+      **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
       `)
       // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
+      /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
       **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
@@ -84,6 +92,7 @@ module.exports = class CommandSettings extends Command {
         ? forumChannels.map(x => `<#${x}>`).join(', ')
         : 'There are no forum channels on this server.'
       , true)
+      */
       /*
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
@@ -125,7 +134,11 @@ module.exports = class CommandSettings extends Command {
         : 'Not configured'}
       `)
       */
-      .setTimestamp();
+      .setTimestamp()
+      .setFooter({
+        text: `ChadMusic v${version}`,
+        iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+      })
 
     return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
   }
