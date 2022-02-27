@@ -1,5 +1,5 @@
 /**
- *  Project Wave - Swiss Army Discord Bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2021  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -22,12 +22,12 @@ const logger = require('./modules/winstonLogger');
 
 // Say hello!
 const { version } = require('../package.json');
-logger.info('    ____               _           __     _       __               ');
-logger.info('   / __ \\_________    (_)__  _____/ /_   | |     / /___ __   _____ ');
-logger.info('  / /_/ / ___/ __ \\  / / _ \\/ ___/ __/   | | /| / / __ `/ | / / _ \\');
-logger.info(' / ____/ /  / /_/ / / /  __/ /__/ /_     | |/ |/ / /_/ /| |/ /  __/');
-logger.info('/_/   /_/   \\____/_/ /\\___/\\___/\\__/     |__/|__/\\__,_/ |___/\\___/ ');
-logger.info('                /___/                                                 ');
+logger.info('   ________              ____  ___           _');
+logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
+logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
+logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
+logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');  
+                                                 
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836')
 logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
@@ -50,7 +50,9 @@ mongoose.connect(process.env.MONGO_URI_MAIN, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-mongoose.connection.on('error', error => logger.error('[Mongoose] Connection Error: %s', error))
+mongoose.connection.on('error', error => {
+  logger.error('[Mongoose] An error occured when connecting to the database. Is MongoDB installed and running? Is MONGO_URI_MAIN valid?\n%s', error);
+})
   .on('ready', () => logger.info('[Mongoose] Connection established!'));
 
 // Let's boogie!
