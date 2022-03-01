@@ -48,7 +48,7 @@ module.exports = class CommandSummon extends Command {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
           if (!requestToSpeak) {
             vc.leave();
-            return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+            return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true);
           }

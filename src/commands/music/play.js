@@ -66,7 +66,7 @@ module.exports = class CommandPlay extends Command {
           const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
           if (!requestToSpeak) {
             this.client.vc.leave(message);
-            return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+            return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
           } else if (message.guild.me.voice.suppress) {
             await message.guild.me.voice.setRequestToSpeak(true);
           }
