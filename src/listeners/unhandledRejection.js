@@ -9,7 +9,6 @@ module.exports = class ListenerProcessUnhandledRejection extends Listener {
   }
 
   async exec (error) {
-    if (error.name === 'DiscordAPIError') return; // Discord API Errors should never be unhandled.
     this.client.logger.error(error.stack);
   }
 };
