@@ -1,11 +1,14 @@
 {
   "name": "chadmusic",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The Chad Music Bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo Building the bot. This will take some time. && npm ci && git clone https://github.com/200percentmicky/chadtube && cd chadtube && npm ci && npx tsc && echo Everything should be good to go. It's also safe to ignore any Typescript errors."
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "author": "mickykun-ar",
   "license": "MIT",
