@@ -32,6 +32,7 @@ Sure, why not? Read the instructions below.
 
 ## Directions
 The bot requires Node.JS 16.0.0 to run.
+MongoDB is also required to save data.
 1. Clone this repo.
 2. Create a bot application **[here](https://discord.com/developers)**, and copy the bot's token.
 3. Fill out the `.env.example` file and rename it to `.env`
