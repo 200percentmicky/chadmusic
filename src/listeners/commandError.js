@@ -12,7 +12,7 @@ module.exports = class ListenerCommandError extends Listener {
   async exec (error, message, command) {
     const guru = stripIndents`
     💢 **Bruh Moment**
-    Something bad happened. An error report was sent to the bot owner.
+    Something bad happened. Check the console or logs for details.
     \`\`\`js
     ${error.name}: ${error.message}
     \`\`\`
