@@ -17,7 +17,7 @@ module.exports = class ListenerCommandError extends Listener {
     ${error.name}: ${error.message}
     \`\`\`
     `;
-    message.reply(guru, { allowedMentions: { repliedUser: true } });
+    message.reply({ content: guru, allowedMentions: { repliedUser: true } });
     this.client.ui.recordError(this.client, command, '❌ Command Error', error.stack);
     this.client.logger.error('Error in command "%s": %s', command, error.stack);
   }
