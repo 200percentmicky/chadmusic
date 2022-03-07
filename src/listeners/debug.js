@@ -10,7 +10,7 @@ module.exports = class ListenerDebug extends Listener {
 
   async exec (debug) {
     if (process.env.DEBUG_LOGGING === 'true') {
-      this.client.logger.info(debug);
+      this.client.logger.info('[DEBUG] %s', debug);
     }
   }
 };
