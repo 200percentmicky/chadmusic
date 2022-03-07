@@ -10,7 +10,5 @@ module.exports = class ListenerThreadCreate extends Listener {
 
   async exec (thread) {
     await thread.join();
-    const msg = thread.lastMessage;
-    msg.react('😘');
   }
 };
