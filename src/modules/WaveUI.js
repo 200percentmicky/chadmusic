@@ -2,9 +2,11 @@
 const {
     Message,
     MessageEmbed,
+    CommandInteraction, /* eslint-disable-line no-unused-vars */
     MessageActionRow, /* eslint-disable-line no-unused-vars */
     ColorResolvable,  /* eslint-disable-line no-unused-vars */
-    EmojiResolvable  /* eslint-disable-line no-unused-vars */
+    EmojiResolvable,  /* eslint-disable-line no-unused-vars */
+    BaseGuildTextChannel /* eslint-disable-line no-unused-vars */
 } = require('discord.js');
 
 let baseEmbed = {};
@@ -41,9 +43,9 @@ const embedUI = (color, emoji, title, desc, footer) => {
  * The overall structured message to use for the UI.
  * Should be used if the bot doesn't have permission to embed links.
  *
- * @param {*} emoji The emoji to use in the message.
- * @param {*} title The title of the message.
- * @param {*} desc The description of the message.
+ * @param {EmojiResolvable} emoji The emoji to use in the message.
+ * @param {string} title The title of the message.
+ * @param {string} desc The description of the message.
  * @returns The constructed message.
  */
 const stringUI = (emoji, title, desc) => {
@@ -228,6 +230,61 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
     }
 };
 
+/**
+ * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
+ *
+ * @param {CommandInteraction} interaction The incoming interaction.
+ * @param {BaseGuildTextChannel} channel The text channel of the interaction.
+ * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
+ * @param {string} description The overall message.
+ * @param {string} title [Optional] The title of the embed or message.
+ * @param {string} footer [Optional] The footer of the embed.
+ * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
+ * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @returns {Message} The message to send in the channel.
+ */
+const ctx = (interaction, type, description, title, footer, ephemeral, buttons) => { // Temp name
+    /* The emoji of the embed */
+    const embedEmoji = {
+        ok: process.env.EMOJI_OK ?? '✅',
+        warn: process.env.EMOJI_WARN ?? '⚠',
+        error: process.env.EMOJI_ERROR ?? '❌',
+        info: process.env.EMOJI_INFO ?? 'ℹ',
+        no: process.env.EMOJI_NO ?? '🚫'
+    };
+
+    /* No embed */
+    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
+    return interaction.send({
+        embeds: [embed],
+        components: buttons || [],
+        ephemeral: ephemeral
+    });
+};
+
+/**
+ * A custom varient of `<Message>.say()` that allows you to input a custom emoji. If the bot has the **Embed Links** permission, a custom color can be provided to the embed.
+ *
+ * @param {CommandInteraction} interaction The incoming interaction.
+ * @param {string} emoji The emoji of the message.
+ * @param {number} color [Optional] The color of the embed, if the bot has the **Embed Links** permission.
+ * @param {string} description The overall message.
+ * @param {string} title [Optional] The title of the message.
+ * @param {string} footer [Optional] The footer of the message.
+ * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
+ * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @returns {Message} The message to reply to the user.
+ */
+const ctxCustom = (interaction, emoji, color, description, title, footer, ephemeral, buttons) => { // Temp name.
+    const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
+    return interaction.send({
+        embeds: [embed],
+        components: buttons || [],
+        ephemeral: ephemeral
+    });
+};
+
 const send = (msg, prompt, extra) => {
     const promptMessage = {
         DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
@@ -261,40 +318,46 @@ const send = (msg, prompt, extra) => {
         NSFW_ONLY: process.env.COLOR_NO
     };
 
-    const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
     const promptEmoji = {
-        DJ_MODE: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        NO_DJ: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        FILTER_NOT_APPLIED: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-        FILTERS_NOT_ALLOWED: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        NOT_ALONE: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        NOT_PLAYING: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-        NOT_IN_VC: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-        ALREADY_SUMMONED_ELSEWHERE: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-        MISSING_CONNECT: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        MISSING_SPEAK: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        WRONG_TEXT_CHANNEL_MUSIC: emojiPerms ? process.env.EMOJI_NO : '🚫',
-        OWNER_ONLY: emojiPerms ? process.env.EMOJI_NO : '🚫',
+        DJ_MODE: process.env.EMOJI_NO ?? '🚫',
+        NO_DJ: process.env.EMOJI_NO ?? '🚫',
+        FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? '❌',
+        FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? '🚫',
+        NOT_ALONE: process.env.EMOJI_NO ?? '🚫',
+        NOT_PLAYING: process.env.EMOJI_WARN ?? '⚠',
+        NOT_IN_VC: process.env.EMOJI_ERROR ?? '❌',
+        ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? '❌',
+        MISSING_CONNECT: process.env.EMOJI_NO ?? '🚫',
+        MISSING_SPEAK: process.env.EMOJI_NO ?? '🚫',
+        WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? '🚫',
+        OWNER_ONLY: process.env.EMOJI_NO ?? '🚫',
         NSFW_ONLY: '🔞'
     };
 
-    /* No embed */
-    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
-    if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
-        return msg.reply({
-            embeds: [embed]
-        });
-    } else {
-        if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-            return msg.reply({
-                content: stringUI(promptEmoji[prompt], null, promptMessage[prompt])
-            });
-        } else {
+    if ((msg instanceof Message)) {
+        /* No embed */
+        // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
+        if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
             return msg.reply({
                 embeds: [embed]
             });
+        } else {
+            if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
+                return msg.reply({
+                    content: stringUI(promptEmoji[prompt], null, promptMessage[prompt])
+                });
+            } else {
+                return msg.reply({
+                    embeds: [embed]
+                });
+            }
         }
+    } else { // Slash commands.
+        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
+        return msg.send({
+            embeds: [embed]
+        });
     }
 };
 
@@ -314,4 +377,4 @@ const recordError = async (client, command, title, error) => { // TODO: Remove '
     return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
-module.exports = { say, reply, usage, custom, send, recordError };
+module.exports = { say, reply, usage, custom, send, ctx, ctxCustom, recordError };
