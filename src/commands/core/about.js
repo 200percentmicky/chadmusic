@@ -10,26 +10,26 @@ const discordversion = require('../../../node_modules/discord.js/package.json');
 const distubeversion = require('../../../chadtube/package.json'); // Temporary
 
 module.exports = class CommandAbout extends Command {
-  constructor () {
-    super('about', {
-      aliases: ['about'],
-      category: '💻 Core',
-      description: {
-        text: 'Shows information about the bot.'
-      }
-    });
-  }
+    constructor () {
+        super('about', {
+            aliases: ['about'],
+            category: '💻 Core',
+            description: {
+                text: 'Shows information about the bot.'
+            }
+        });
+    }
 
-  async exec (message) {
-    const owner = this.client.users.cache.get(this.client.ownerID);
-    const aboutembed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor({
-        name: 'About ChadMusic',
-        iconURL: this.client.user.avatarURL({ dynamic: true })
-      })
-      .setDescription('The Chad Music Bot. Also [open-sourced!](https://github.com/200percentmicky/ChadMusic) :thumbsup:')
-      .addField('✨ Features', stripIndents`
+    async exec (message) {
+        const owner = this.client.users.cache.get(this.client.ownerID);
+        const aboutembed = new MessageEmbed()
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setAuthor({
+                name: 'About ChadMusic',
+                iconURL: this.client.user.avatarURL({ dynamic: true })
+            })
+            .setDescription('The Chad Music Bot. Also [open-sourced!](https://github.com/200percentmicky/ChadMusic) :thumbsup:')
+            .addField('✨ Features', stripIndents`
       :white_small_square: Supports up to 700+ websites.
       :white_small_square: Add multiple filters to the player.
       :white_small_square: Alter filter values during playback.
@@ -41,8 +41,8 @@ module.exports = class CommandAbout extends Command {
       :white_small_square: ???
       :white_small_square: Profit!
       `)
-      .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the bot owner or make an issue in the [Github repo](https://github.com/200percentmicky/ChadMusic).')
-      .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
+            .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the bot owner or make an issue in the [Github repo](https://github.com/200percentmicky/ChadMusic).')
+            .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
       **Version:** ${botversion.version}
       **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
       **Node.js:** ${process.version}
@@ -52,11 +52,11 @@ module.exports = class CommandAbout extends Command {
       **Voice Connections:** ${this.client.vc.voices.collection.size}
       **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
       `, true)
-      .setThumbnail('https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
-      .setFooter({
-        text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
-        iconURL: owner.avatarURL({ dynamic: true })
-      });
-    return message.reply({ embeds: [aboutembed] });
-  }
+            .setThumbnail('https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
+            .setFooter({
+                text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
+                iconURL: owner.avatarURL({ dynamic: true })
+            });
+        return message.reply({ embeds: [aboutembed] });
+    }
 };

@@ -3,153 +3,153 @@ const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = req
 const { Permissions } = require('discord.js');
 
 module.exports = class CommandSearch extends Command {
-  constructor () {
-    super('search', {
-      aliases: ['search'],
-      category: '🎶 Music',
-      description: {
-        text: 'Searches for a song on YouTube.',
-        usage: '<query>'
-      },
-      channel: 'guild',
-      clientPermissions: ['EMBED_LINKS'],
-      args: [
-        {
-          id: 'query',
-          match: 'rest'
+    constructor () {
+        super('search', {
+            aliases: ['search'],
+            category: '🎶 Music',
+            description: {
+                text: 'Searches for a song on YouTube.',
+                usage: '<query>'
+            },
+            channel: 'guild',
+            clientPermissions: ['EMBED_LINKS'],
+            args: [
+                {
+                    id: 'query',
+                    match: 'rest'
+                }
+            ]
+        });
+    }
+
+    async exec (message, args) {
+        const djMode = this.client.settings.get(message.guild.id, 'djMode');
+        const djRole = this.client.settings.get(message.guild.id, 'djRole');
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        if (djMode) {
+            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
-      ]
-    });
-  }
 
-  async exec (message, args) {
-    const djMode = this.client.settings.get(message.guild.id, 'djMode');
-    const djRole = this.client.settings.get(message.guild.id, 'djRole');
-    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
-    if (djMode) {
-      if (!dj) return this.client.ui.send(message, 'DJ_MODE');
-    }
+        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        if (textChannel) {
+            if (textChannel !== message.channel.id) {
+                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            }
+        }
 
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
-    if (textChannel) {
-      if (textChannel !== message.channel.id) {
-        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
-      }
-    }
+        const vc = message.member.voice.channel;
+        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
-    const vc = message.member.voice.channel;
-    if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        message.channel.sendTyping();
+        const currentVc = this.client.vc.get(vc);
+        if (!currentVc) {
+            const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
+            if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
 
-    message.channel.sendTyping();
-    const currentVc = this.client.vc.get(vc);
-    if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-      if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
-
-      if (vc.type === 'stage') {
-        await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-        const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
-        if (!stageMod) {
-          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
-          if (!requestToSpeak) {
-            vc.leave();
-            return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-          } else if (message.guild.me.voice.suppress) {
-            await message.guild.me.voice.setRequestToSpeak(true);
-          }
+            if (vc.type === 'stage') {
+                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
+                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                if (!stageMod) {
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
+                    if (!requestToSpeak) {
+                        vc.leave();
+                        return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
+                    } else if (message.guild.me.voice.suppress) {
+                        await message.guild.me.voice.setRequestToSpeak(true);
+                    }
+                } else {
+                    await message.guild.me.voice.setSuppressed(false);
+                }
+            } else {
+                this.client.vc.join(vc);
+            }
         } else {
-          await message.guild.me.voice.setSuppressed(false);
+            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
-      } else {
-        this.client.vc.join(vc);
-      }
-    } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
-    }
 
-    message.channel.sendTyping();
-    const queue = this.client.player.getQueue(message.guild.id);
+        message.channel.sendTyping();
+        const queue = this.client.player.getQueue(message.guild.id);
 
-    if (!args.query) return this.client.ui.usage(message, 'search <query>');
+        if (!args.query) return this.client.ui.usage(message, 'search <query>');
 
-    // These limitations should not affect a member with DJ permissions.
-    if (!dj) {
-      if (queue) {
-        const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id);
-        if (maxQueueLimit) {
-          const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
-          if (queueMemberSize >= maxQueueLimit) {
-            this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
-          }
+        // These limitations should not affect a member with DJ permissions.
+        if (!dj) {
+            if (queue) {
+                const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id);
+                if (maxQueueLimit) {
+                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+                    if (queueMemberSize >= maxQueueLimit) {
+                        this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                    }
+                }
+            }
         }
-      }
-    }
 
-    message.channel.sendTyping();
+        message.channel.sendTyping();
 
-    const results = await this.client.player.search(args.query);
+        const results = await this.client.player.search(args.query);
 
-    const embed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor({
-        name: 'Which track do you wanna play?',
-        iconURL: message.author.avatarURL({ dynamic: true })
-      })
-      .setFooter({
-        text: 'Make your selection using the menu below.'
-      });
+        const embed = new MessageEmbed()
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setAuthor({
+                name: 'Which track do you wanna play?',
+                iconURL: message.author.avatarURL({ dynamic: true })
+            })
+            .setFooter({
+                text: 'Make your selection using the menu below.'
+            });
 
-    const menuOptions = [];
-    let i;
-    for (i = 0; i < results.length; i++) {
-      const track = {
-        label: results[i].name,
-        description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
-        value: `${i}`
-      };
-      menuOptions.push(track);
-    }
+        const menuOptions = [];
+        let i;
+        for (i = 0; i < results.length; i++) {
+            const track = {
+                label: results[i].name,
+                description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
+                value: `${i}`
+            };
+            menuOptions.push(track);
+        }
 
-    const menu = new MessageSelectMenu()
-      .setCustomId('track_menu')
-      .setPlaceholder('Pick a track!')
-      .addOptions(menuOptions);
+        const menu = new MessageSelectMenu()
+            .setCustomId('track_menu')
+            .setPlaceholder('Pick a track!')
+            .addOptions(menuOptions);
 
-    const cancel = new MessageButton()
-      .setCustomId('cancel_search')
-      .setStyle('DANGER')
-      .setEmoji(process.env.CLOSE);
+        const cancel = new MessageButton()
+            .setCustomId('cancel_search')
+            .setStyle('DANGER')
+            .setEmoji(process.env.CLOSE);
 
-    const trackMenu = new MessageActionRow()
-      .addComponents(menu);
+        const trackMenu = new MessageActionRow()
+            .addComponents(menu);
 
-    const cancelButton = new MessageActionRow()
-      .addComponents(cancel);
+        const cancelButton = new MessageActionRow()
+            .addComponents(cancel);
 
-    const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
+        const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
 
-    const filter = (interaction) => interaction.user.id === message.member.user.id;
-    const collector = msg.createMessageComponentCollector({
-      filter,
-      time: 30 * 1000,
-      max: 1
-    });
+        const filter = (interaction) => interaction.user.id === message.member.user.id;
+        const collector = msg.createMessageComponentCollector({
+            filter,
+            time: 30 * 1000,
+            max: 1
+        });
 
-    collector.on('collect', async interaction => {
-      if (interaction.customId === 'cancel_search') return collector.stop();
-      message.channel.sendTyping();
-      await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
-        member: message.member,
-        textChannel: message.channel,
-        message: message
-      });
-      message.react(process.env.EMOJI_MUSIC);
-      collector.stop();
-    });
+        collector.on('collect', async interaction => {
+            if (interaction.customId === 'cancel_search') return collector.stop();
+            message.channel.sendTyping();
+            await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
+                member: message.member,
+                textChannel: message.channel,
+                message: message
+            });
+            message.react(process.env.EMOJI_MUSIC);
+            collector.stop();
+        });
 
-    collector.on('end', () => {
-      msg.delete();
-    });
+        collector.on('end', () => {
+            msg.delete();
+        });
 
     /*
     this.client.player.search(search).then(results => {
@@ -203,5 +203,5 @@ module.exports = class CommandSearch extends Command {
       });
     });
     */
-  }
+    }
 };

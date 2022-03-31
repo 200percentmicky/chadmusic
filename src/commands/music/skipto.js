@@ -1,48 +1,48 @@
 const { Command } = require('discord-akairo');
 
 module.exports = class CommandSkipTo extends Command {
-  constructor () {
-    super('skipto', {
-      aliases: ['skipto', 'jumpto'],
-      category: '🎶 Music',
-      description: {
-        text: 'Skips to the specified entry in the queue.',
-        usage: '<int:queue_entry>',
-        details: '`<int:queue_entry>` The number of the queue entry to skip to. Skips all other entries of the queue.'
-      },
-      channel: 'guild',
-      clientPermissions: ['EMBED_LINKS']
-    });
-  }
-
-  async exec (message) {
-    const args = message.content.split(/ +/g);
-    const djMode = this.client.settings.get(message.guild.id, 'djMode');
-    const djRole = this.client.settings.get(message.guild.id, 'djRole');
-    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
-    if (djMode) {
-      if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+    constructor () {
+        super('skipto', {
+            aliases: ['skipto', 'jumpto'],
+            category: '🎶 Music',
+            description: {
+                text: 'Skips to the specified entry in the queue.',
+                usage: '<int:queue_entry>',
+                details: '`<int:queue_entry>` The number of the queue entry to skip to. Skips all other entries of the queue.'
+            },
+            channel: 'guild',
+            clientPermissions: ['EMBED_LINKS']
+        });
     }
 
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
-    if (textChannel) {
-      if (textChannel !== message.channel.id) {
-        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
-      }
-    }
+    async exec (message) {
+        const args = message.content.split(/ +/g);
+        const djMode = this.client.settings.get(message.guild.id, 'djMode');
+        const djRole = this.client.settings.get(message.guild.id, 'djRole');
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        if (djMode) {
+            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+        }
 
-    const vc = message.member.voice.channel;
-    if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        if (textChannel) {
+            if (textChannel !== message.channel.id) {
+                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            }
+        }
 
-    const currentVc = this.client.vc.get(vc);
-    if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-    else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        const vc = message.member.voice.channel;
+        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
-    // For breaking use only.
-    // this.client.player.skip(message)
-    // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+        const currentVc = this.client.vc.get(vc);
+        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-    /*
+        // For breaking use only.
+        // this.client.player.skip(message)
+        // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+
+        /*
     if (args[1] === ('--force' || '-f')) {
       if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
@@ -50,27 +50,27 @@ module.exports = class CommandSkipTo extends Command {
     }
     */
 
-    const queue = this.client.player.getQueue(message);
-    const song = queue.songs[args[1]];
+        const queue = this.client.player.getQueue(message);
+        const song = queue.songs[args[1]];
 
-    if (vc.members.size <= 2) {
-      try {
-        this.client.player.jump(message, parseInt(args[1]));
-        return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
-      } catch {
-        return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
-      }
-    } else {
-      if (dj) {
-        try {
-          this.client.player.jump(message, parseInt(args[1]));
-          return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
-        } catch {
-          return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
+        if (vc.members.size <= 2) {
+            try {
+                this.client.player.jump(message, parseInt(args[1]));
+                return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+            } catch {
+                return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
+            }
+        } else {
+            if (dj) {
+                try {
+                    this.client.player.jump(message, parseInt(args[1]));
+                    return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+                } catch {
+                    return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
+                }
+            } else {
+                return this.client.ui.send(message, 'NOT_ALONE');
+            }
         }
-      } else {
-        return this.client.ui.send(message, 'NOT_ALONE');
-      }
     }
-  }
 };

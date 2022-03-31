@@ -1,20 +1,20 @@
 const { Listener } = require('discord-akairo');
 
 module.exports = class ListenerInitQueue extends Listener {
-  constructor () {
-    super('initQueue', {
-      emitter: 'player',
-      event: 'initQueue'
-    });
-  }
+    constructor () {
+        super('initQueue', {
+            emitter: 'player',
+            event: 'initQueue'
+        });
+    }
 
-  async exec (queue) {
-    const guild = queue.textChannel.guild;
-    const volume = this.client.settings.get(guild.id, 'defaultVolume', 100);
+    async exec (queue) {
+        const guild = queue.textChannel.guild;
+        const volume = this.client.settings.get(guild.id, 'defaultVolume', 100);
 
-    queue.autoplay = false;
-    queue.volume = parseInt(volume);
-    queue.votes = []; // Initialize an empty array for casting votes.
-    queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
-  }
+        queue.autoplay = false;
+        queue.volume = parseInt(volume);
+        queue.votes = []; // Initialize an empty array for casting votes.
+        queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
+    }
 };

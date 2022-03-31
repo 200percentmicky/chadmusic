@@ -5,42 +5,42 @@ const { toColonNotation } = require('colon-notation');
 const { version } = require('../../../package.json');
 
 module.exports = class CommandSettings extends Command {
-  constructor () {
-    super('settings', {
-      aliases: ['settings'],
-      category: '⚙ Settings',
-      description: {
-        text: 'Shows you the current settings of the bot for this server.'
-      },
-      clientPermissions: ['EMBED_LINKS'],
-      userPermissions: ['MANAGE_GUILD']
-    });
-  }
+    constructor () {
+        super('settings', {
+            aliases: ['settings'],
+            category: '⚙ Settings',
+            description: {
+                text: 'Shows you the current settings of the bot for this server.'
+            },
+            clientPermissions: ['EMBED_LINKS'],
+            userPermissions: ['MANAGE_GUILD']
+        });
+    }
 
-  async exec (message) {
-    const settings = this.client.settings;
+    async exec (message) {
+        const settings = this.client.settings;
 
-    // All Settings
-    const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX); // Server Prefix
-    // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
-    const djRole = settings.get(message.guild.id, 'djRole', null); // DJ Role
-    const djMode = settings.get(message.guild.id, 'djMode', false); // Toggle DJ Mode
-    const maxTime = settings.get(message.guild.id, 'maxTime', null); // Max Song Duration
-    const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null); // Max Entries in the Queue
-    const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all'); // Allow the use of Filters
-    const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true); // Unlimited Volume
-    const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100); // Default Volume
-    const textChannel = settings.get(message.guild.id, 'textChannel', null); // Text Channel
-    // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
+        // All Settings
+        const prefix = settings.get(message.guild.id, 'prefix', process.env.PREFIX); // Server Prefix
+        // const timezone = settings.get(message.guild.id, 'timezone', 'UTC') // Time Zone
+        const djRole = settings.get(message.guild.id, 'djRole', null); // DJ Role
+        const djMode = settings.get(message.guild.id, 'djMode', false); // Toggle DJ Mode
+        const maxTime = settings.get(message.guild.id, 'maxTime', null); // Max Song Duration
+        const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit', null); // Max Entries in the Queue
+        const allowFilters = settings.get(message.guild.id, 'allowFilters', 'all'); // Allow the use of Filters
+        const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume', true); // Unlimited Volume
+        const defaultVolume = settings.get(message.guild.id, 'defaultVolume', 100); // Default Volume
+        const textChannel = settings.get(message.guild.id, 'textChannel', null); // Text Channel
+        // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
-    // ! This setting only affects videos from YouTube.
-    // All pornographic websites are blocked.
-    const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
+        // ! This setting only affects videos from YouTube.
+        // All pornographic websites are blocked.
+        const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-    // Below are some old comments to when this use to be a multipurpose bot.
-    // Preserving this just in case...
+        // Below are some old comments to when this use to be a multipurpose bot.
+        // Preserving this just in case...
 
-    /*
+        /*
     const modlog = settings.get(message.guild.id, 'modlog', null); // Moderation Logs
     const taglog = settings.get(message.guild.id, 'taglog', null); // Tag Logs
     const guildMemberAdd = settings.get(message.guild.id, 'guildMemberAdd', null); // User Join
@@ -50,21 +50,21 @@ module.exports = class CommandSettings extends Command {
     const messageUpdate = settings.get(message.guild.id, 'messageUpdate', null); // Edited Messages
     const voiceStateUpdate = settings.get(message.guild.id, 'voiceStateUpdate', null); // User Voice State Update
     */
-    // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
+        // const noInvites = settings.get(message.guild.id, 'noInvites', null) // No Invite Links
 
-    // const forumChannels = settings.get(message.guild.id, 'forumChannels', []); // List of Forum Channels
+        // const forumChannels = settings.get(message.guild.id, 'forumChannels', []); // List of Forum Channels
 
-    const embed = new MessageEmbed()
-      .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-      .setAuthor({
-        name: `${message.guild.name}`,
-        iconURL: message.guild.iconURL({ dynamic: true })
-      })
-      .setTitle(':gear: Settings')
-      //.addField('🌐 General', stripIndents`
-      //**Server Prefix:** \`${prefix}\`
-      //`)
-      .setDescription(stripIndents`
+        const embed = new MessageEmbed()
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setAuthor({
+                name: `${message.guild.name}`,
+                iconURL: message.guild.iconURL({ dynamic: true })
+            })
+            .setTitle(':gear: Settings')
+        // .addField('🌐 General', stripIndents`
+        //* *Server Prefix:** \`${prefix}\`
+        // `)
+            .setDescription(stripIndents`
       **⁉ Prefix:** \`${prefix}\`
       **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
       **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
@@ -76,8 +76,8 @@ module.exports = class CommandSettings extends Command {
       **🔊 Default Volume:** ${defaultVolume}
       **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
       `)
-      // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
-      /*
+        // **👁‍🗨 Voice Channel:** ${voiceChannel ? `<#!${voiceChannel}>` : 'Any'}
+        /*
       .addField('📃 Logging', stripIndents`
       **Moderation Logs:** ${modlog ? `<#${modlog}>` : 'None'}
       **Tag Logs:** ${taglog ? `<#${taglog}>` : 'None'}
@@ -93,7 +93,7 @@ module.exports = class CommandSettings extends Command {
         : 'There are no forum channels on this server.'
       , true)
       */
-      /*
+        /*
       .addField('🔨 Auto Moderation', stripIndents`
       **No Invites:** ${noInvites ? 'On' : 'Off'}
       `)
@@ -134,12 +134,12 @@ module.exports = class CommandSettings extends Command {
         : 'Not configured'}
       `)
       */
-      .setTimestamp()
-      .setFooter({
-        text: `ChadMusic v${version}`,
-        iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-      })
+            .setTimestamp()
+            .setFooter({
+                text: `ChadMusic v${version}`,
+                iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+            });
 
-    return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
-  }
+        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+    }
 };

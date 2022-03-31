@@ -1,9 +1,9 @@
 /* eslint-disable no-multi-spaces */
 const {
-  MessageActionRow, /* eslint-disable-line no-unused-vars */
-  ColorResolvable,  /* eslint-disable-line no-unused-vars */
-  EmojiResolvable,  /* eslint-disable-line no-unused-vars */
-  BaseGuildTextChannel
+    MessageActionRow, /* eslint-disable-line no-unused-vars */
+    ColorResolvable,  /* eslint-disable-line no-unused-vars */
+    EmojiResolvable,  /* eslint-disable-line no-unused-vars */
+    BaseGuildTextChannel
 } = require('discord.js');
 
 let baseEmbed = {};
@@ -18,21 +18,21 @@ let baseEmbed = {};
  * @returns The object used to construct an embed.
  */
 const embedUI = (color, emoji, title, desc, footer) => {
-  baseEmbed = {
-    color: parseInt(color),
-    title: null,
-    description: `${emoji} ${desc}`,
-    footer: null
-  };
+    baseEmbed = {
+        color: parseInt(color),
+        title: null,
+        description: `${emoji} ${desc}`,
+        footer: null
+    };
 
-  if (title) {
-    baseEmbed.title = `${emoji} ${title}`;
-    baseEmbed.description = `${desc}`;
-  }
+    if (title) {
+        baseEmbed.title = `${emoji} ${title}`;
+        baseEmbed.description = `${desc}`;
+    }
 
-  if (footer) baseEmbed.footer = { text: footer };
+    if (footer) baseEmbed.footer = { text: footer };
 
-  return baseEmbed;
+    return baseEmbed;
 };
 
 /**
@@ -45,18 +45,18 @@ const embedUI = (color, emoji, title, desc, footer) => {
  * @returns The constructed message.
  */
 const stringUI = (emoji, title, desc) => {
-  let msgString = `${emoji} ${desc}`;
-  if (title) msgString = `${emoji} **${title}**\n${desc}`;
-  return msgString;
+    let msgString = `${emoji} ${desc}`;
+    if (title) msgString = `${emoji} **${title}**\n${desc}`;
+    return msgString;
 };
 
 // Embed colors
 const embedColor = {
-  ok: process.env.COLOR_OK,
-  warn: process.env.COLOR_WARN,
-  error: process.env.COLOR_ERROR,
-  info: process.env.COLOR_INFO,
-  no: process.env.COLOR_NO
+    ok: process.env.COLOR_OK,
+    warn: process.env.COLOR_WARN,
+    error: process.env.COLOR_ERROR,
+    info: process.env.COLOR_INFO,
+    no: process.env.COLOR_NO
 };
 
 /**
@@ -71,40 +71,40 @@ const embedColor = {
  * @returns {Message} The message to send in the channel.
  */
 const say = (channel, type, description, title, footer, buttons) => {
-  if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
+    if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
 
-  /* The emoji of the embed */
-  // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-  const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
-  const embedEmoji = {
-    ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-    warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-    error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-    info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-    no: emojiPerms ? process.env.EMOJI_NO : '🚫'
-  };
-
-  /* No embed */
-  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-  if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return {
-      embeds: [embed],
-      components: buttons || []
+    /* The emoji of the embed */
+    // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
+    const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
+    const embedEmoji = {
+        ok: emojiPerms ? process.env.EMOJI_OK : '✅',
+        warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+        error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+        info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
+        no: emojiPerms ? process.env.EMOJI_NO : '🚫'
     };
-  } else {
-    if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
-      return {
-        content: stringUI(embedEmoji[type], title || null, description || null),
-        components: buttons || []
-      };
+
+    /* No embed */
+    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
+    if (channel.type === 'dm') { /* DMs will always have embed links. */
+        return {
+            embeds: [embed],
+            components: buttons || []
+        };
     } else {
-      return {
-        embeds: [embed],
-        components: buttons || []
-      };
+        if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
+            return {
+                content: stringUI(embedEmoji[type], title || null, description || null),
+                components: buttons || []
+            };
+        } else {
+            return {
+                embeds: [embed],
+                components: buttons || []
+            };
+        }
     }
-  }
 };
 
 /**
@@ -119,42 +119,42 @@ const say = (channel, type, description, title, footer, buttons) => {
  * @returns {Message} The message to send in the channel.
  */
 const secret = (channel, type, description, title, footer, buttons) => {
-  if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
+    if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
 
-  /* The emoji of the embed */
-  // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-  const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
-  const embedEmoji = {
-    ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-    warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-    error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-    info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-    no: emojiPerms ? process.env.EMOJI_NO : '🚫'
-  };
-
-  /* No embed */
-  // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-  const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-  if (channel.type === 'dm') { /* DMs will always have embed links. */
-    return {
-      embeds: [embed],
-      components: buttons || [],
-      ephemeral: true
+    /* The emoji of the embed */
+    // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
+    const emojiPerms = channel.permissionsFor(channel.client.user.id).has(['USE_EXTERNAL_EMOJIS']);
+    const embedEmoji = {
+        ok: emojiPerms ? process.env.EMOJI_OK : '✅',
+        warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+        error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+        info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
+        no: emojiPerms ? process.env.EMOJI_NO : '🚫'
     };
-  } else {
-    if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
-      return {
-        content: stringUI(embedEmoji[type], title || null, description || null),
-        components: buttons || []
-      };
+
+    /* No embed */
+    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
+    if (channel.type === 'dm') { /* DMs will always have embed links. */
+        return {
+            embeds: [embed],
+            components: buttons || [],
+            ephemeral: true
+        };
     } else {
-      return {
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: true
-      };
+        if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
+            return {
+                content: stringUI(embedEmoji[type], title || null, description || null),
+                components: buttons || []
+            };
+        } else {
+            return {
+                embeds: [embed],
+                components: buttons || [],
+                ephemeral: true
+            };
+        }
     }
-  }
 };
 
 /**
@@ -171,30 +171,30 @@ const secret = (channel, type, description, title, footer, buttons) => {
  * @returns {Message} The message to reply to the user.
  */
 const custom = (channel, emoji, color, description, title, footer, buttons, ephemeral) => {
-  if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
+    if (!(channel instanceof BaseGuildTextChannel)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-  const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
-  if (channel.type === 'dm') {
-    return {
-      embeds: [embed],
-      components: buttons || [],
-      ephemeral: ephemeral
-    };
-  } else {
-    if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
-      return {
-        content: stringUI(emoji || null, title || null, description || null),
-        components: buttons || [],
-        ephemeral: ephemeral
-      };
+    const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
+    if (channel.type === 'dm') {
+        return {
+            embeds: [embed],
+            components: buttons || [],
+            ephemeral: ephemeral
+        };
     } else {
-      return {
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: ephemeral
-      };
+        if (!channel.permissionsFor(channel.client.user.id).has(['EMBED_LINKS'])) {
+            return {
+                content: stringUI(emoji || null, title || null, description || null),
+                components: buttons || [],
+                ephemeral: ephemeral
+            };
+        } else {
+            return {
+                embeds: [embed],
+                components: buttons || [],
+                ephemeral: ephemeral
+            };
+        }
     }
-  }
 };
 
 /**
@@ -207,10 +207,10 @@ const custom = (channel, emoji, color, description, title, footer, buttons, ephe
  * @returns {Message} The overall bug report.
  */
 const recordError = async (client, command, title, error) => { // TODO: Remove 'type'.
-  const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
-  if (!errorChannel) return;
+    const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
+    if (!errorChannel) return;
 
-  return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
+    return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
 module.exports = { say, secret, custom, recordError };

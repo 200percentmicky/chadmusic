@@ -2,111 +2,111 @@ const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 
 function pornPattern (url) {
-  // ! TODO: Come up with a better regex lol
-  // eslint-disable-next-line no-useless-escape
-  const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-  const pornRegex = new RegExp(pornPattern);
-  return url.match(pornRegex);
+    // ! TODO: Come up with a better regex lol
+    // eslint-disable-next-line no-useless-escape
+    const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+    const pornRegex = new RegExp(pornPattern);
+    return url.match(pornRegex);
 }
 
 module.exports = class CommandPlay extends Command {
-  constructor () {
-    super('play', {
-      aliases: ['play', 'p'],
-      category: '🎶 Music',
-      description: {
-        text: 'Play\'s a song from a URL or search term.',
-        usage: '<url/search>',
-        details: '`<url/search>` The URL or search term to load.'
-      },
-      channel: 'guild',
-      clientPermissions: ['EMBED_LINKS'],
-      args: [
-        {
-          id: 'track',
-          match: 'rest'
+    constructor () {
+        super('play', {
+            aliases: ['play', 'p'],
+            category: '🎶 Music',
+            description: {
+                text: 'Play\'s a song from a URL or search term.',
+                usage: '<url/search>',
+                details: '`<url/search>` The URL or search term to load.'
+            },
+            channel: 'guild',
+            clientPermissions: ['EMBED_LINKS'],
+            args: [
+                {
+                    id: 'track',
+                    match: 'rest'
+                }
+            ]
+        });
+    }
+
+    async exec (message, args) {
+        const djMode = this.client.settings.get(message.guild.id, 'djMode');
+        const djRole = this.client.settings.get(message.guild.id, 'djRole');
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        if (djMode) {
+            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
-      ]
-    });
-  }
 
-  async exec (message, args) {
-    const djMode = this.client.settings.get(message.guild.id, 'djMode');
-    const djRole = this.client.settings.get(message.guild.id, 'djRole');
-    const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
-    if (djMode) {
-      if (!dj) return this.client.ui.send(message, 'DJ_MODE');
-    }
+        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        if (textChannel) {
+            if (textChannel !== message.channel.id) {
+                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            }
+        }
 
-    const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
-    if (textChannel) {
-      if (textChannel !== message.channel.id) {
-        return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
-      }
-    }
+        const vc = message.member.voice.channel;
+        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
-    const vc = message.member.voice.channel;
-    if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-    if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
+        if (pornPattern(args.track || message.attachments.first().url)) {
+            return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
+        }
 
-    if (pornPattern(args.track || message.attachments.first().url)) {
-      return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
-    }
+        const currentVc = this.client.vc.get(vc);
+        if (!currentVc) {
+            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
+            if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
 
-    const currentVc = this.client.vc.get(vc);
-    if (!currentVc) {
-      const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
-      if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
-
-      if (vc.type === 'stage') {
-        await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-        const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
-        if (!stageMod) {
-          const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
-          if (!requestToSpeak) {
-            this.client.vc.leave(message);
-            return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-          } else if (message.guild.me.voice.suppress) {
-            await message.guild.me.voice.setRequestToSpeak(true);
-          }
+            if (vc.type === 'stage') {
+                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
+                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                if (!stageMod) {
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    if (!requestToSpeak) {
+                        this.client.vc.leave(message);
+                        return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
+                    } else if (message.guild.me.voice.suppress) {
+                        await message.guild.me.voice.setRequestToSpeak(true);
+                    }
+                } else {
+                    await message.guild.me.voice.setSuppressed(false);
+                }
+            } else {
+                this.client.vc.join(vc);
+            }
         } else {
-          await message.guild.me.voice.setSuppressed(false);
+            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
-      } else {
-        this.client.vc.join(vc);
-      }
-    } else {
-      if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
-    }
 
-    message.channel.sendTyping();
-    const queue = this.client.player.getQueue(message.guild.id);
+        message.channel.sendTyping();
+        const queue = this.client.player.getQueue(message.guild.id);
 
-    // These limitations should not affect a member with DJ permissions.
-    if (!dj) {
-      if (queue) {
-        const maxQueueLimit = await this.client.settings.get(message.guild.id, 'maxQueueLimit');
-        if (maxQueueLimit) {
-          const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
-          if (queueMemberSize >= maxQueueLimit) {
-            return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
-          }
+        // These limitations should not affect a member with DJ permissions.
+        if (!dj) {
+            if (queue) {
+                const maxQueueLimit = await this.client.settings.get(message.guild.id, 'maxQueueLimit');
+                if (maxQueueLimit) {
+                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+                    if (queueMemberSize >= maxQueueLimit) {
+                        return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                    }
+                }
+            }
         }
-      }
-    }
 
-    try {
-      /* eslint-disable-next-line no-useless-escape */
-      await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
-        member: message.member,
-        textChannel: message.channel,
-        message: message
-      });
-      return message.react(process.env.EMOJI_MUSIC);
-    } catch (err) {
-      this.client.logger.error(`Cannot play requested track: ${err.stack}`); // Just in case.
-      return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+        try {
+            /* eslint-disable-next-line no-useless-escape */
+            await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
+                member: message.member,
+                textChannel: message.channel,
+                message: message
+            });
+            return message.react(process.env.EMOJI_MUSIC);
+        } catch (err) {
+            this.client.logger.error(`Cannot play requested track: ${err.stack}`); // Just in case.
+            return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+        }
     }
-  }
 };
