@@ -1,14 +1,10 @@
 const { Permissions, MessageEmbed } = require('discord.js');
 const prettyms = require('pretty-ms');
 
-const nowPlayingMsg = async (queue, song) => {
+async function nowPlayingMsg (queue, song) {
     const channel = queue.textChannel; // TextChannel
     const guild = channel.guild; // Guild
-    const member = guild.members.cache.get(queue.songs[queue.songs.length - 1]?.user.id); // GuildMember
-    const prefix = channel.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
-
-    // This is annoying.
-    const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${channel.client.user.id}>`))).last(); // Message
+    const member = guild.members.cache?.get(queue.songs[queue.songs.length - 1]?.user.id); // GuildMember
     const vc = member.voice.channel; // VoiceChannel
 
     if (queue.songs.length === 1) { // If someone started a new queue.
@@ -16,11 +12,23 @@ const nowPlayingMsg = async (queue, song) => {
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted', true);
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
 
+        const userEmbed = new MessageEmbed()
+            .setColor(parseInt(process.env.COLOR_NO))
+            .setAuthor({
+                name: `${song.user.tag}`,
+                iconURL: song.user.avatarURL({ dynamic: true })
+            });
+
         // Check if this member is a DJ
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
         if (!allowAgeRestricted) {
-            channel.client.player.stop(message);
-            return channel.client.ui.reply(message, 'no', 'You cannot add **Age Restricted** videos to the queue.');
+            if (!dj) {
+                if (song.age_restricted) {
+                    channel.client.player.stop(guild);
+                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
+                    return channel.send({ embeds: [userEmbed] });
+                }
+            }
         }
         if (maxTime) {
             if (!dj) {
@@ -28,8 +36,9 @@ const nowPlayingMsg = async (queue, song) => {
                 // Using Math.floor() to round down.
                 // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    channel.client.player.stop(message);
-                    return channel.client.ui.reply(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
+                    channel.client.player.stop(guild);
+                    userEmbed.setDescription(`${process.env.EMOJI_NO} You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
+                    return channel.send({ embeds: [userEmbed] });
                 }
             }
         }
@@ -61,11 +70,7 @@ const nowPlayingMsg = async (queue, song) => {
         .setThumbnail(song.thumbnail)
         .setTimestamp();
 
-    if (!message) {
-        channel.send({ embeds: [songNow] });
-    } else {
-        message.channel.send({ embeds: [songNow] });
-    }
-};
+    channel.send({ embeds: [songNow] });
+}
 
 module.exports = { nowPlayingMsg };

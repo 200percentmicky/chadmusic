@@ -26,38 +26,46 @@ module.exports = class ListenerAddSong extends Listener {
         const channel = queue.textChannel;
         const guild = channel.guild;
         const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
-        const prefix = this.client.settings.get(channel.guild.id, 'prefix', process.env.PREFIX);
 
-        // * This is annoying.
-        // Basically, grab the message of the user that just added a song to the queue. If there is
-        // a match, this information will be used to reply to the user. However, the filter may grab the
-        // wrong message. Using it will not guarantee an accurate result.
-        const message = channel.messages.cache.filter(x => x.author.id === member.user.id && (x.content.startsWith(prefix) || x.content.startsWith(`<@!${channel.client.user.id}>`))).last(); // Message
-
-        const djRole = await this.client.settings.get(guild.id, 'djRole');
-        const allowAgeRestricted = await this.client.settings.get(guild.id, 'allowAgeRestricted', true);
-        const maxTime = await this.client.settings.get(guild.id, 'maxTime');
+        const djRole = await channel.client.settings.get(guild.id, 'djRole');
+        const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
+        const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+
+        const userEmbed = new MessageEmbed()
+            .setColor(parseInt(process.env.COLOR_NO))
+            .setAuthor({
+                name: `${song.user.tag}`,
+                iconURL: song.user.avatarURL({ dynamic: true })
+            });
+
         if (!allowAgeRestricted) {
-            this.client.ui.reply(message, 'no', `**${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
-            return queue.songs.pop();
-        }
-        if (maxTime) {
             if (!dj) {
-                // DisTube provide the duration as a decimal.
-                // Using Math.floor() to round down.
-                // Still need to apend '000' to be accurate.
-                if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    this.client.ui.reply(message, 'no', `**${song.name} cannot be added since the duration of this track exceeds the max limits for this server. (\`${prettyms(maxTime, { colonNotation: true })}\`)`);
-                    queue.songs.pop();
+                if (song.age_restricted) {
+                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
+                    channel.send({ embeds: [userEmbed] });
+                    return queue.songs.pop();
                 }
             }
         }
 
-        if (await this.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
+        if (maxTime) {
+            if (!dj) {
+            // DisTube provide the duration as a decimal.
+            // Using Math.floor() to round down.
+            // Still need to apend '000' to be accurate.
+                if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
+                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
+                    channel.send({ embeds: [userEmbed] });
+                    return queue.songs.pop();
+                }
+            }
+        }
+
+        if (await channel.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
             // Changes the description of the track, in case its a
             // radio station.
-            await iheart.search(`${await this.client.radio.get(guild.id)}`).then(match => {
+            await iheart.search(`${await channel.client.radio.get(guild.id)}`).then(match => {
                 const station = match.stations[0];
                 song.name = `${station.name} - ${station.description}`;
                 song.isLive = true;
@@ -76,7 +84,9 @@ module.exports = class ListenerAddSong extends Listener {
             ];
             if (!supportedFormats.some(element => song.url.endsWith(element))) {
                 queue.songs.pop();
-                return this.client.ui.reply(message, 'error', `The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`);
+                userEmbed.setColor(parseInt(process.env.COLOR_ERROR));
+                userEmbed.setDescription(`${process.env.EMOJI_ERROR} The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`);
+                return channel.send({ embeds: [userEmbed] });
             } else {
                 await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
                     const time = Math.floor(info.streams[0].duration);
@@ -92,8 +102,9 @@ module.exports = class ListenerAddSong extends Listener {
         if (song.isLive) song.duration = 1;
 
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
+        if (queue.songs.indexOf(song) === 0) return;
         const embed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: `Added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
@@ -106,11 +117,6 @@ module.exports = class ListenerAddSong extends Listener {
                 iconURL: song.user.avatarURL({ dynamic: true })
             });
 
-        if (queue.songs.indexOf(song) === 0) return;
-        if (!message.channel) {
-            channel.send({ embeds: [embed] });
-        } else {
-            message.channel.send({ embeds: [embed] });
-        }
+        channel.send({ embeds: [embed] });
     }
 };

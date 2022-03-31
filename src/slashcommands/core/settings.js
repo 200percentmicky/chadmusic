@@ -46,6 +46,10 @@ module.exports = class CommandSettings extends SlashCommand {
                                 value: 'allowFilters'
                             },
                             {
+                                name: 'allowexplicit',
+                                value: 'allowAgeRestricted'
+                            },
+                            {
                                 name: 'unlimitedvolume',
                                 value: 'allowFreeVolume'
                             },
@@ -117,6 +121,17 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'allowexplicit',
+                    description: 'Allows or denies the ability to add explicit tracks to the queue.',
+                    options: [{
+                        type: CommandOptionType.BOOLEAN,
+                        name: 'toggle',
+                        description: 'Whether explicit tracks should be added to the queue.',
+                        required: true
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'unlimitedvolume',
                     description: 'Allows or denies the ability to freely set the player\'s volume to any value.',
                     options: [{
@@ -150,8 +165,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         required: true
                     }]
                 }
-            ],
-            guildIDs: [process.env.DEV_GUILD]
+            ]
         });
     }
 
@@ -200,7 +214,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const channel = guild.channels.cache.get(ctx.channelID);
 
         if (!channel.permissionsFor(ctx.user.id).has(Permissions.FLAGS.MANAGE_GUILD)) {
-            return this.creator.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
+            return this.client.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
         // Default Settings
@@ -210,6 +224,7 @@ module.exports = class CommandSettings extends SlashCommand {
             maxTime: null,
             maxQueueLimit: null,
             allowFilters: true,
+            allowAgeRestricted: true,
             allowFreeVolume: true,
             defaultVolume: 100,
             textChannel: null
@@ -262,44 +277,49 @@ module.exports = class CommandSettings extends SlashCommand {
 
         case 'remove': {
             await settings.set(ctx.guildID, defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
-            return this.creator.ui.say(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
+            return this.client.ui.ctx(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
         }
 
         case 'djrole': {
             await settings.set(ctx.guildID, ctx.options.djrole.role, 'djRole');
-            return this.creator.ui.say(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
+            return this.client.ui.ctx(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
         }
 
         case 'djmode': {
             await settings.set(ctx.guildID, ctx.options.djmode.toggle, 'djMode');
-            return this.creator.ui.say(ctx, 'ok', 'DJ Mode has been enabled.');
+            return this.client.ui.ctx(ctx, 'ok', 'DJ Mode has been enabled.');
         }
 
         case 'maxtime': {
             const time = toMilliseconds(ctx.options.maxtime.time);
-            if (isNaN(time)) return this.creator.ui.say(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
+            if (isNaN(time)) return this.client.ui.ctx(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
             await settings.set(ctx.guildID, time, 'maxTime');
-            return this.creator.ui.say(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
+            return this.client.ui.ctx(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
         }
 
         case 'maxqueuelimit': {
             await settings.set(ctx.guildID, ctx.options.maxqueuelimit.limit, 'maxQueueLimit');
-            return this.creator.ui.say(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
+            return this.client.ui.ctx(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
         }
 
         case 'allowfilters': {
             await settings.set(ctx.guildID, ctx.options.allowfilters.toggle, 'allowFilters');
-            return this.creator.ui.say(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
+            return this.client.ui.ctx(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
+        }
+
+        case 'allowexplicit': {
+            await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
+            return this.client.ui.ctx(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
         }
 
         case 'unlimitedvolume': {
             await settings.set(ctx.guildID, ctx.options.unlimitedvolume.toggle, 'allowFreeVolume');
-            return this.creator.ui.say(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
+            return this.client.ui.ctx(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
         }
 
         case 'defaultvolume': {
             await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
-            return this.creator.ui.say(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
+            return this.client.ui.ctx(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
         }
 
         // ! Deprecated.
@@ -308,7 +328,7 @@ module.exports = class CommandSettings extends SlashCommand {
         // Server Settings -> Integrations -> <Any Application> -> Command Permissions
         case 'textchannel': {
             await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
-            return this.creator.ui.say(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
+            return this.client.ui.ctx(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
         }
         }
     }

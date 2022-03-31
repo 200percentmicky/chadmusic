@@ -5,7 +5,6 @@ class CommandFilter extends SlashCommand {
         super(creator, {
             name: 'filter',
             description: 'Add a filter to the player.',
-            guildIDs: [process.env.DEV_GUILD],
             options: [{
                 type: CommandOptionType.SUB_COMMAND,
                 name: 'remove',
@@ -165,26 +164,26 @@ class CommandFilter extends SlashCommand {
 
         if (djMode) {
             if (!dj) {
-                return this.creator.ui.send(ctx, 'DJ_MODE');
+                return this.client.ui.send(ctx, 'DJ_MODE');
             }
         }
 
         if (!allowFilters) {
             if (!dj) {
-                return this.creator.ui.send(ctx, 'FILTERS_NOT_ALLOWED');
+                return this.client.ui.send(ctx, 'FILTERS_NOT_ALLOWED');
             }
         }
 
         const vc = member.voice.channel;
-        if (!vc) return this.creator.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(guild.id);
-        if (!queue) return this.creator.ui.send(ctx, 'NOT_PLAYING');
+        if (!queue) return this.client.ui.send(ctx, 'NOT_PLAYING');
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
             const noFilter = (filter) => {
-                return this.creator.ui.send(
+                return this.client.ui.send(
                     ctx,
                     'FILTER_NOT_APPLIED',
                     filter
@@ -201,7 +200,7 @@ class CommandFilter extends SlashCommand {
                         , ctx.options.remove.filter === 'all'
                             ? null
                             : false);
-                    return this.creator.ui.say(ctx, 'info', ctx.options.remove.filter === 'all'
+                    return this.client.ui.ctx(ctx, 'info', ctx.options.remove.filter === 'all'
                         ? 'Removed all filters from the player.'
                         : `**${ctx.options.remove.filter.charAt(0).toUpperCase() + ctx.options.remove.filter.slice(1)}** Off`);
                 } catch {
@@ -210,16 +209,36 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'bass': {
-                try {
-                    await this.client.player.setFilter(guild.id, 'bassboost', `bass=g=${ctx.options.bass.db}`);
-                    return this.creator.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain: \`${ctx.options.bass.db}dB\``);
-                } catch {
-                    return noFilter('Bass Boost');
-                }
+                await this.client.player.setFilter(guild.id, 'bassboost', `bass=g=${ctx.options.bass.db}`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
+                    ? 'Off'
+                    : `Gain: \`${ctx.options.bass.db}dB\``
+                }`);
+            }
+
+            case 'tremolo': {
+                const f = ctx.options.tremolo.frequency;
+                const d = ctx.options.tremolo.depth;
+                console.log(f + d);
+                await this.client.player.setFilter(guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0 && !f
+                    ? 'Off'
+                    : `Depth \`${d}\` at \`${f}Hz\``
+                }`);
+            }
+
+            case 'vibrato': {
+                const f = ctx.options.vibrato.frequency;
+                const d = ctx.options.vibrato.depth;
+                await this.client.player.setFilter(guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0 && !f
+                    ? 'Off'
+                    : `Depth \`${d}\` at \`${f}Hz\``
+                }`);
             }
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.creator.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
     }
 }

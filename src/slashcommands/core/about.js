@@ -6,6 +6,7 @@ const prettyms = require('pretty-ms');
 // Mainly for version info...
 const bot = require('../../../package.json');
 const scversion = require('../../../node_modules/slash-create/package.json');
+const akairoversion = require('../../../node_modules/discord-akairo/package.json');
 const discordversion = require('../../../node_modules/discord.js/package.json');
 const distubeversion = require('../../../chadtube/package.json'); // Temporary
 
@@ -29,7 +30,7 @@ class CommandAbout extends SlashCommand {
                 name: 'About ChadMusic',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
-            .setDescription('The Chad Music Bot. Also [open source](https://github.com/200percentmicky/ChadMusic)!')
+            .setDescription('The Chad Music Bot. Also [open-sourced!](https://github.com/200percentmicky/ChadMusic) :thumbsup:')
             .addField('✨ Features', stripIndents`
             :white_small_square: Supports up to 700+ websites.
             :white_small_square: Add multiple filters to the player.
@@ -48,6 +49,7 @@ class CommandAbout extends SlashCommand {
             **Node.js:** ${process.version}
             **Discord.js:** ${discordversion.version}
             **slash-create:** ${scversion.version}
+            **Akairo Framework:** ${akairoversion.version}
             **DisTube.js:** ${distubeversion.version}
             **Voice Connections:** ${this.client.vc.voices.collection.size}
             **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
