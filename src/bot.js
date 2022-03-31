@@ -32,28 +32,16 @@ logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
 logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
 
-const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler, MongooseProvider } = require('discord-akairo');
+const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { Intents } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
-const mongoose = require('mongoose');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ui = require('./modules/WaveUI');
-const slashUI = require('./modules/WaveSlashUI');
 const path = require('path');
-
-/* Connecting to databases... */
-mongoose.connect(process.env.MONGO_URI_MAIN, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-mongoose.connection.on('error', error => {
-    logger.error('[Mongoose] An error occured when connecting to the database. Is MongoDB installed and running? Is MONGO_URI_MAIN valid?\n%s', error);
-})
-    .on('ready', () => logger.info('[Mongoose] Connection established!'));
 
 // Let's boogie!
 class WaveBot extends AkairoClient {
@@ -99,42 +87,29 @@ class WaveBot extends AkairoClient {
         this.vc = this.player.voices; // @discordjs/voice
         this.radio = new Keyv(); // Parse radio info. TODO: Replace this with Map() instead.
 
-        this.creator = new SlashCreator({
-            token: process.env.TOKEN,
-            applicationID: process.env.APP_ID,
-            publicKey: process.env.PUBLIC_KEY
-        });
+        this.settings = new Enmap({ name: 'settings' });
 
-        this.creator.client = this; // Make the AkairoClient accessible in slash commands.
-        this.creator.ui = slashUI;
-        this.creator.on('commandError', (command, err, ctx) => {
-            this.logger.error('%s', err);
-        });
-        // Gateway Server
-        this.creator.withServer(
-            new GatewayServer(
-                (handler) => this.ws.on('INTERACTION_CREATE', handler)
-            )
-        );
-
-        // Register commands in the "commands" directory.
-        this.creator.registerCommandsIn(path.join(__dirname, 'slashcommands'));
-        this.creator.syncCommands({ // Sync all commands with Discord.
-            deleteCommands: true,
-            skipGuildErrors: true,
-            syncGuilds: true,
-            syncPermissions: true
-        });
-
-        this.settings = new MongooseProvider(require('./modules/SettingsProvider.js')); // Settings Provider
-        this.modlog = new Enmap({ name: 'modlog' }); // The database that manages modlog cases.
+        this.defaultSettings = {
+            prefix: process.env.PREFIX,
+            djRole: null,
+            djMode: false,
+            maxTime: null,
+            maxQueueLimit: null,
+            allowFilters: true,
+            allowAgeRestricted: true,
+            allowFreeVolume: true,
+            defaultVolume: 100,
+            textChannel: null
+        };
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {
             directory: './src/commands',
             prefix: message => {
+                // Make sure that default settings are loaded into memory.
+                this.settings.ensure(message.guild.id, this.defaultSettings);
                 if (message.guild) {
-                    return this.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
+                    return this.settings.get(message.guild.id, 'prefix');
                 } else {
                     return process.env.PREFIX;
                 }
@@ -154,11 +129,35 @@ class WaveBot extends AkairoClient {
             directory: './src/inhibitors'
         });
 
+        this.creator = new SlashCreator({
+            token: process.env.TOKEN,
+            applicationID: process.env.APP_ID,
+            publicKey: process.env.PUBLIC_KEY,
+            client: this
+        });
+
+        // Gateway Server
+        this.creator.withServer(
+            new GatewayServer(
+                (handler) => this.ws.on('INTERACTION_CREATE', handler)
+            )
+        );
+
+        // Register commands in the "commands" directory.
+        this.creator.registerCommandsIn(path.join(__dirname, 'slashcommands'));
+        this.creator.syncCommands({ // Sync all commands with Discord.
+            deleteCommands: true,
+            skipGuildErrors: true,
+            syncGuilds: true,
+            syncPermissions: true
+        });
+
         // Set custom emitters
         this.listeners.setEmitters({
             process: process,
             commandHandler: this.commands,
-            player: this.player
+            player: this.player,
+            creator: this.creator
         });
 
         this.commands.useInhibitorHandler(this.inhibitors); // Use all Inhibitors.
@@ -175,7 +174,6 @@ class WaveBot extends AkairoClient {
 
     // This is required to load the mongoose provider.
     async login (token) {
-        await this.settings.init();
         return super.login(token);
     }
 }
