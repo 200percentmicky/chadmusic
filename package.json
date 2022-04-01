@@ -41,7 +41,9 @@
     "reddit-image-fetcher": "^2.0.9",
     "slash-create": "^5.4.1",
     "string-progressbar": "^1.0.4",
+    "temmie": "^1.0.0",
     "underscore": "^1.13.1",
+    "uwufy": "^1.0.7",
     "winston": "^3.3.3",
     "youtube-sr": "^2.0.5"
   },

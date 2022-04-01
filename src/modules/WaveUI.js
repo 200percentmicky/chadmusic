@@ -8,6 +8,7 @@ const {
     EmojiResolvable,  /* eslint-disable-line no-unused-vars */
     BaseGuildTextChannel /* eslint-disable-line no-unused-vars */
 } = require('discord.js');
+const temmie = require('temmie');
 
 let baseEmbed = {};
 /**
@@ -25,13 +26,13 @@ const embedUI = (color, emoji, title, desc, footer) => {
         color: parseInt(color),
         title: null,
         author: null,
-        description: `${emoji} ${desc}`,
+        description: `${emoji} ${temmie.temfie(desc)}`,
         footer: null
     };
 
     if (title) {
-        baseEmbed.title = `${emoji} ${title}`;
-        baseEmbed.description = `${desc}`;
+        baseEmbed.title = `${emoji} ${temmie.temfie(title)}`;
+        baseEmbed.description = `${temmie.temfie(desc)}`;
     }
 
     if (footer) baseEmbed.footer = { text: footer };
@@ -49,8 +50,8 @@ const embedUI = (color, emoji, title, desc, footer) => {
  * @returns The constructed message.
  */
 const stringUI = (emoji, title, desc) => {
-    let msgString = `${emoji} ${desc}`;
-    if (title) msgString = `${emoji} **${title}**\n${desc}`;
+    let msgString = `${emoji} ${temmie.temfie(desc)}`;
+    if (title) msgString = `${emoji} **${temmie.temfie(title)}**\n${temmie.temfie(desc)}`;
     return msgString;
 };
 
