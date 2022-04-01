@@ -10,8 +10,9 @@ module.exports = class ListenerPlaySong extends Listener {
     }
 
     async exec (queue, song) {
-    // The event is being called way too quickly for metadata to be parsed correctly
-    // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
+        if (song.url === 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav') return;
+        // The event is being called way too quickly for metadata to be parsed correctly
+        // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
         setTimeout(() => {
             nowPlayingMsg(queue, song);
         }, 500);

@@ -40,7 +40,6 @@ module.exports = class CommandSearch extends Command {
         const vc = message.member.voice.channel;
         if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
-        message.channel.sendTyping();
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
             const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
@@ -67,10 +66,25 @@ module.exports = class CommandSearch extends Command {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        message.channel.sendTyping();
         const queue = this.client.player.getQueue(message.guild.id);
 
         if (!args.query) return this.client.ui.usage(message, 'search <query>');
+
+        if (!queue) {
+            message.channel.send({
+                embeds: [
+                    new MessageEmbed()
+                        .setDescription('<:pWin95:538423887323594768> Starting Windows 98...')
+                ]
+            });
+            this.client.player.play(vc, 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav', {
+                member: message.member,
+                textChannel: message.channel,
+                message: message
+            });
+        }
+
+        message.channel.sendTyping();
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
@@ -84,8 +98,6 @@ module.exports = class CommandSearch extends Command {
                 }
             }
         }
-
-        message.channel.sendTyping();
 
         const results = await this.client.player.search(args.query);
 

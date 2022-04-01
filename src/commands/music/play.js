@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { Permissions, MessageEmbed } = require('discord.js');
 
 function pornPattern (url) {
     // ! TODO: Come up with a better regex lol
@@ -80,8 +80,23 @@ module.exports = class CommandPlay extends Command {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        message.channel.sendTyping();
         const queue = this.client.player.getQueue(message.guild.id);
+
+        if (!queue) {
+            message.channel.send({
+                embeds: [
+                    new MessageEmbed()
+                        .setDescription('<:pWin95:538423887323594768> Starting Windows 98...')
+                ]
+            });
+            this.client.player.play(vc, 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav', {
+                member: message.member,
+                textChannel: message.channel,
+                message: message
+            });
+        }
+
+        message.channel.sendTyping();
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
