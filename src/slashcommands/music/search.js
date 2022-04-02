@@ -72,21 +72,6 @@ class CommandSearch extends SlashCommand {
 
         const queue = this.client.player.getQueue(guild.id);
 
-        await ctx.defer();
-
-        if (!queue) {
-            channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setDescription('<:pWin95:538423887323594768> Starting Windows 98...')
-                ]
-            });
-            await this.client.player.play(vc, 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav', {
-                member: member,
-                textChannel: channel
-            });
-        }
-
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
             if (queue) {
@@ -99,6 +84,8 @@ class CommandSearch extends SlashCommand {
                 }
             }
         }
+
+        await ctx.defer();
 
         const results = await this.client.player.search(ctx.options.query);
 

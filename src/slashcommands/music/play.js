@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { Permissions } = require('discord.js');
 
 const pornPattern = (url) => {
     // ! TODO: Come up with a better regex lol
@@ -83,18 +83,6 @@ class CommandPlay extends SlashCommand {
         }
 
         const queue = client.player.getQueue(guild.id);
-        if (!queue) {
-            channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setDescription('<:pWin95:538423887323594768> Starting Windows 98...')
-                ]
-            });
-            await this.client.player.play(vc, 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav', {
-                member: _member,
-                textChannel: channel
-            });
-        }
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {

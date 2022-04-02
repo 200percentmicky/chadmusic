@@ -70,20 +70,6 @@ module.exports = class CommandSearch extends Command {
 
         if (!args.query) return this.client.ui.usage(message, 'search <query>');
 
-        if (!queue) {
-            message.channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setDescription('<:pWin95:538423887323594768> Starting Windows 98...')
-                ]
-            });
-            await this.client.player.play(vc, 'https://cdn.discordapp.com/attachments/375453081631981568/944838120304693268/temmie98.wav', {
-                member: message.member,
-                textChannel: message.channel,
-                message: message
-            });
-        }
-
         message.channel.sendTyping();
 
         // These limitations should not affect a member with DJ permissions.
