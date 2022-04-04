@@ -4,10 +4,11 @@ const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
 // Mainly for version info...
-const botversion = require('../../../package.json');
-const akairoversion = require('../../../node_modules/discord-akairo/package.json');
-const discordversion = require('../../../node_modules/discord.js/package.json');
-const distubeversion = require('../../../chadtube/package.json'); // Temporary
+const bot = require('../../../package.json');
+const sc = require('../../../node_modules/slash-create/package.json');
+const akairo = require('../../../node_modules/discord-akairo/package.json');
+const discord = require('../../../node_modules/discord.js/package.json');
+const distube = require('../../../chadtube/package.json'); // Temporary
 
 module.exports = class CommandAbout extends Command {
     constructor () {
@@ -37,18 +38,19 @@ module.exports = class CommandAbout extends Command {
             :white_small_square: DJ commands to control the player.
             :white_small_square: Queue and track length limits.
             :white_small_square: Advanced queue management.
-            :white_small_square: ~~Slash commands when?~~
+            :white_small_square: Slash commands ~~when?~~ in development!
             :white_small_square: ???
             :white_small_square: Profit!
             `)
-            .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the bot owner or make an issue in the [Github repo](https://github.com/200percentmicky/ChadMusic).')
+            .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the developer or make an issue in the [Github repo](https://github.com/200percentmicky/ChadMusic).')
             .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
-            **Version:** ${botversion.version}
             **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
+            **Bot Version:** ${bot.version}
             **Node.js:** ${process.version}
-            **Discord.js:** ${discordversion.version}
-            **Akairo Framework:** ${akairoversion.version}
-            **DisTube.js:** ${distubeversion.version}
+            **Discord.js:** ${discord.version}
+            **slash-create:** ${sc.version}
+            **Akairo Framework:** ${akairo.version}
+            **DisTube.js:** ${distube.version}
             **Voice Connections:** ${this.client.vc.voices.collection.size}
             **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
             `, true)

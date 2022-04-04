@@ -19,11 +19,11 @@ ChadMusic is a feature-rich badass Discord music bot for your badass Discord ser
 * Supports up to 700+ websites.
 * Add multiple filters to the player.
 * Alter filter values during playback.
-* Unlimited volume! 😂👌
+* Unlimited volume! :joy::ok_hand:
 * DJ commands to control the player.
 * Queue and track length limits.
 * Advanced queue management.
-* ~~Slash commands when?~~
+* Slash commands ~~when?~~ in development!
 * ???
 * Profit!
 
