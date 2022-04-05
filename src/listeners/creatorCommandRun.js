@@ -1,10 +1,10 @@
 const { Listener } = require('discord-akairo');
 
-module.exports = class CommandBlockedListener extends Listener {
+module.exports = class ListenerCreatorCommandRun extends Listener {
     constructor () {
-        super('commandBlocked', {
-            emitter: 'commandHandler',
-            event: 'commandBlocked'
+        super('creatorCommandRun', {
+            emitter: 'creator',
+            event: 'commandRun'
         });
     }
 
