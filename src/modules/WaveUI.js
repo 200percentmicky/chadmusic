@@ -2,7 +2,6 @@
 const {
     Message,
     MessageEmbed,
-    User, /* eslint-disable-line no-unused-vars */
     CommandInteraction, /* eslint-disable-line no-unused-vars */
     MessageActionRow, /* eslint-disable-line no-unused-vars */
     ColorResolvable,  /* eslint-disable-line no-unused-vars */
@@ -18,21 +17,15 @@ let baseEmbed = {};
  * @param {ColorResolvable} color The color of the embed.
  * @param {EmojiResolvable} emoji The emoji to add to the message.
  * @param {string} title The title of the embed.
- * @param {User} author The user for the embed.
  * @param {string} desc The description of the embed.
  * @param {string} footer The footer of the embed.
  * @returns The object used to construct an embed.
  */
-const embedUI = (color, emoji, title, author, desc, footer) => {
+const embedUI = (color, emoji, title, desc, footer) => {
     baseEmbed = {
         color: parseInt(color),
         title: null,
-        author: {
-            name: `${author.username}#${author.discriminator}`,
-            icon_url: (author instanceof User)
-                ? author.avatarURL({ dynamic: true })
-                : author.avatarURL
-        },
+        author: null,
         description: `${emoji} ${desc}`,
         footer: null
     };
@@ -53,13 +46,12 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
  *
  * @param {EmojiResolvable} emoji The emoji to use in the message.
  * @param {string} title The title of the message.
- * @param {User} author The user of the message.
  * @param {string} desc The description of the message.
  * @returns The constructed message.
  */
-const stringUI = (emoji, title, author, desc) => {
-    let msgString = `\`${author.username}#${author.discriminator}\` ${emoji} ${desc}`;
-    if (title) msgString = `\`${author.username}#${author.discriminator}\` ${emoji} **${title}**\n${desc}`;
+const stringUI = (emoji, title, desc) => {
+    let msgString = `${emoji} ${desc}`;
+    if (title) msgString = `${emoji} **${title}**\n${desc}`;
     return msgString;
 };
 
@@ -99,7 +91,7 @@ const say = (msg, type, description, title, footer, buttons) => {
 
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, msg.member.user, description || null, footer || null);
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
     if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
         return msg.channel.send({
             embeds: [embed],
@@ -108,7 +100,7 @@ const say = (msg, type, description, title, footer, buttons) => {
     } else {
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
             return msg.channel.send({
-                content: stringUI(embedEmoji[type], title || null, msg.member.user, description || null),
+                content: stringUI(embedEmoji[type], title || null, description || null),
                 components: buttons || []
             });
         } else {
@@ -147,7 +139,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
 
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, msg.member.user, description || null, footer || null);
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
     if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
         return msg.reply({
             embeds: [embed],
@@ -159,7 +151,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
     } else {
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
             return msg.reply({
-                content: stringUI(embedEmoji[type], title || null, msg.member.user, description || null),
+                content: stringUI(embedEmoji[type], title || null, description || null),
                 components: buttons || [],
                 allowedMentions: {
                     repliedUser: false
@@ -188,17 +180,13 @@ const reply = (msg, type, description, title, footer, buttons) => {
 const usage = (msg, syntax) => {
     if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-    const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix', process.env.PREFIX);
+    const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix') ?? process.env.PREFIX;
     const embed = new MessageEmbed()
         .setColor(process.env.COLOR_INFO)
-        .setAuthor({
-            name: msg.member.user.tag,
-            iconURL: msg.member.user.avatarURL({ dynamic: true })
-        })
         .setTitle(`${process.env.EMOJI_INFO} Usage`)
         .setDescription(`\`${guildPrefix}${syntax}\``);
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-        return msg.reply(`\`${msg.member.user.tag}\` ${process.env.EMOJI_INFO} **Usage** | \`${guildPrefix}${syntax}\``);
+        return msg.reply(`${process.env.EMOJI_INFO} **Usage** | \`${guildPrefix}${syntax}\``);
     } else {
         return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
     }
@@ -219,7 +207,7 @@ const usage = (msg, syntax) => {
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
     if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-    const embed = embedUI(color, emoji || null, title || null, msg.member.user, description || null, footer || null);
+    const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
     if (msg.channel.type === 'dm') {
         return msg.reply({
             embeds: [embed],
@@ -229,7 +217,7 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
         });
     } else {
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(['EMBED_LINKS'])) {
-            return msg.reply(stringUI(emoji || null, title || null, msg.member.user, description || null)
+            return msg.reply(stringUI(emoji || null, title || null, description || null)
                 , { allowedMentions: { repliedUser: false } });
         } else {
             return msg.reply({
@@ -268,7 +256,7 @@ const ctx = (interaction, type, description, title, footer, ephemeral, buttons) 
 
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, interaction.user, description || null, footer || null);
+    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
     return interaction.send({
         embeds: [embed],
         components: buttons || [],
@@ -290,7 +278,7 @@ const ctx = (interaction, type, description, title, footer, ephemeral, buttons) 
  * @returns {Message} The message to reply to the user.
  */
 const ctxCustom = (interaction, emoji, color, description, title, footer, ephemeral, buttons) => { // Temp name.
-    const embed = embedUI(color, emoji || null, title || null, interaction.user, description || null, footer || null);
+    const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
     return interaction.send({
         embeds: [embed],
         components: buttons || [],
@@ -359,7 +347,7 @@ const send = (msg, prompt, extra) => {
     if ((msg instanceof Message)) {
         /* No embed */
         // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, msg.member.user, promptMessage[prompt], null);
+        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
         if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
             return msg.reply({
                 embeds: [embed]
@@ -376,7 +364,7 @@ const send = (msg, prompt, extra) => {
             }
         }
     } else { // Slash commands.
-        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, msg.user, promptMessage[prompt], null);
+        const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
         return msg.send({
             embeds: [embed]
         });
