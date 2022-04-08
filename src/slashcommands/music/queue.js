@@ -7,8 +7,7 @@ class CommandQueue extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'queue',
-            description: 'Shows the player\'s current queue on this server.',
-            guildIDs: [process.env.DEV_GUILD]
+            description: 'Shows the player\'s current queue on this server.'
         });
 
         this.filePath = __filename;
