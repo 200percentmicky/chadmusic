@@ -356,7 +356,9 @@ class CommandQueue extends SlashCommand {
                     }
                 ]
             }, async (modalCtx) => {
-                if (isNaN(modalCtx.values.new_page)) {
+                let pageNumber = parseInt(modalCtx.values.new_page);
+
+                if (isNaN(pageNumber)) {
                     return modalCtx.send({
                         embeds: [
                             new MessageEmbed()
@@ -367,8 +369,8 @@ class CommandQueue extends SlashCommand {
                     });
                 }
 
-                let pageNumber = parseInt(modalCtx.values.new_page);
                 if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
+
                 if (pageNumber >= queuePaginate.total) {
                     const paginateArray = queuePaginate.last();
 
