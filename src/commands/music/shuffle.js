@@ -32,12 +32,13 @@ module.exports = class CommandShuffle extends Command {
         const vc = message.member.voice.channel;
         if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
+        const queue = this.client.player.getQueue(message);
+        if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
+
         const currentVc = this.client.vc.get(vc);
         if (vc.members.size <= 2 || dj) {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-            const queue = this.client.player.getQueue(message);
-            if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
             this.client.player.shuffle(message);
             return this.client.ui.reply(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
         } else {
