@@ -314,7 +314,8 @@ module.exports = class CommandQueue extends Command {
 
                     collector.on('collect', async collected => {
                         const msg2 = collected;
-                        const pageNumber = parseInt(msg2.content);
+                        let pageNumber = parseInt(msg2.content);
+                        if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
                         if (pageNumber >= queuePaginate.total) {
                             const paginateArray = queuePaginate.last();
 
