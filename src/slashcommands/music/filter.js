@@ -29,7 +29,7 @@ class CommandFilter extends SlashCommand {
                         },
                         {
                             name: 'tempo',
-                            value: 'tempo'
+                            value: 'asetrate'
                         },
                         {
                             name: 'reverse',
@@ -72,7 +72,7 @@ class CommandFilter extends SlashCommand {
                         type: CommandOptionType.NUMBER,
                         name: 'depth',
                         description: 'The depth of the tremolo effect.',
-                        min_value: 0.1,
+                        min_value: 0,
                         max_value: 1,
                         required: true
                     },
@@ -93,7 +93,7 @@ class CommandFilter extends SlashCommand {
                         type: CommandOptionType.NUMBER,
                         name: 'depth',
                         description: 'The depth of the vibrato effect.',
-                        min_value: 0.1,
+                        min_value: 0,
                         max_value: 1,
                         required: true
                     },
@@ -108,7 +108,15 @@ class CommandFilter extends SlashCommand {
             {
                 type: CommandOptionType.SUB_COMMAND,
                 name: 'reverse',
-                description: 'Play\'s the track in reverse.'
+                description: 'Plays the track in reverse.',
+                options: [
+                    {
+                        type: CommandOptionType.BOOLEAN,
+                        name: 'toggle',
+                        description: 'The toggle to enable or disable reverse.',
+                        required: true
+                    }
+                ]
             },
             {
                 type: CommandOptionType.SUB_COMMAND,
@@ -162,17 +170,9 @@ class CommandFilter extends SlashCommand {
         const allowFilters = this.client.settings.get(ctx.guildID, 'allowFilters');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
 
-        if (djMode) {
-            if (!dj) {
-                return this.client.ui.send(ctx, 'DJ_MODE');
-            }
-        }
+        if (djMode && !dj) return this.client.ui.send(ctx, 'DJ_MODE');
 
-        if (!allowFilters) {
-            if (!dj) {
-                return this.client.ui.send(ctx, 'FILTERS_NOT_ALLOWED');
-            }
-        }
+        if (!allowFilters && !dj) return this.client.ui.send(ctx, 'FILTERS_NOT_ALLOWED');
 
         const vc = member.voice.channel;
         if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
@@ -217,7 +217,7 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'tremolo': {
-                const f = ctx.options.tremolo.frequency;
+                const f = ctx.options.tremolo.frequency ?? 5;
                 const d = ctx.options.tremolo.depth;
                 console.log(f + d);
                 await this.client.player.setFilter(guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`);
@@ -228,13 +228,43 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'vibrato': {
-                const f = ctx.options.vibrato.frequency;
+                const f = ctx.options.vibrato.frequency ?? 5;
                 const d = ctx.options.vibrato.depth;
                 await this.client.player.setFilter(guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0 && !f
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
+            }
+
+            case 'reverse': {
+                const reverse = ctx.options.reverse.toggle;
+                await this.client.player.setFilter(guild.id, 'reverse', reverse
+                    ? 'areverse'
+                    : false
+                );
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
+                    ? 'On'
+                    : 'Off'
+                }`);
+            }
+
+            case 'tempo': {
+                const rate = ctx.options.tempo.rate;
+                await this.client.player.setFilter(guild.id, 'asetrate', `asetrate=${rate}*10000`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
+            }
+
+            case 'crystalize': {
+                const intensity = ctx.options.crystalize.intensity;
+                await this.client.player.setFilter(guild.id, 'crystalize', `crystalizer=i=${intensity}`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
+            }
+
+            case 'customfilter': {
+                const custom = ctx.options.customfilter.filter;
+                await this.client.player.setFilter(guild.id, 'custom', custom);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }
             }
         } else {
