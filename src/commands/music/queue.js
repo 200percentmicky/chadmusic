@@ -133,9 +133,7 @@ module.exports = class CommandQueue extends Command {
         const msg = await message.reply({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
 
         /* Button Collector */
-        const filter = interaction => interaction.user.id === message.author.id;
         const collector = await msg.createMessageComponentCollector({
-            filter,
             componentType: 'BUTTON',
             time: 30000
         });
@@ -143,6 +141,17 @@ module.exports = class CommandQueue extends Command {
         // TODO: Look into combining the collector into a single function.
 
         collector.on('collect', async interaction => {
+            if (interaction.user.id !== message.member.user.id) {
+                return interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                            .setColor(parseInt(process.env.COLOR_NO))
+                            .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
+                    ],
+                    ephemeral: true
+                });
+            }
+
             // First Page Button
             if (interaction.customId === 'first_page') {
                 const paginateArray = queuePaginate.first();
@@ -350,6 +359,7 @@ module.exports = class CommandQueue extends Command {
                             await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
                             msg2.delete();
                             pageMsg.delete();
+                            return;
                         } else if (pageNumber <= queuePaginate.total) {
                             const paginateArray = queuePaginate.first();
 
@@ -385,6 +395,7 @@ module.exports = class CommandQueue extends Command {
                             await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
                             msg2.delete();
                             pageMsg.delete();
+                            return;
                         }
 
                         const paginateArray = queuePaginate.page(pageNumber);
@@ -423,7 +434,7 @@ module.exports = class CommandQueue extends Command {
                         await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
                         msg2.delete();
                         pageMsg.delete();
-                        collector.resetTimer({
+                        return collector.resetTimer({
                             time: 30000,
                             idle: 30000
                         });
