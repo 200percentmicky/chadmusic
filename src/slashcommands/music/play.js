@@ -16,31 +16,47 @@ class CommandPlay extends SlashCommand {
             description: 'Plays a song by URL, an attachment, or from a search result.',
             options: [
                 {
-                    type: CommandOptionType.STRING,
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'track',
-                    required: true,
-                    description: 'The track to play. You can use a URL of the track, or you can search or it.'
+                    description: 'Plays a song by a search term or URL.',
+                    options: [{
+                        type: CommandOptionType.STRING,
+                        name: 'query',
+                        description: 'The track to play.',
+                        required: true
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'attachment',
+                    description: 'Plays a song from an attachment.',
+                    options: [{
+                        type: CommandOptionType.ATTACHMENT,
+                        name: 'file',
+                        description: 'The file to play. Supports both audio and video files.',
+                        required: true
+                    }]
                 }
-            ]
+            ],
+            guildIDs: [process.env.DEV_GUILD]
         });
 
         this.filePath = __filename;
     }
 
     async run (ctx) {
-        const client = this.client;
-        const guild = client.guilds.cache.get(ctx.guildID);
+        const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
         const _member = await guild.members.fetch(ctx.member.id);
 
-        const djMode = client.settings.get(ctx.guildID, 'djMode');
-        const djRole = client.settings.get(ctx.guildID, 'djRole');
+        const djMode = this.client.settings.get(ctx.guildID, 'djMode');
+        const djRole = this.client.settings.get(ctx.guildID, 'djRole');
         const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(['MANAGE_CHANNELS']);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
-        const textChannel = client.settings.get(ctx.guildID, 'textChannel');
+        const textChannel = this.client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
             if (textChannel !== channel.id) {
                 return this.creator.ui.ctx(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
@@ -52,22 +68,24 @@ class CommandPlay extends SlashCommand {
 
         // if (!text && !message.attachments.first()) return client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (pornPattern(ctx.options.track)) return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+        if (ctx.subcommands[0] === 'query') {
+            if (pornPattern(ctx.options.track)) return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+        }
 
         await ctx.defer();
 
-        const currentVc = client.vc.get(vc);
+        const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(client.user.id).has(Permissions.FLAGS.CONNECT);
+            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
-                await client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(client.user.id).has(Permissions.STAGE_MODERATOR);
+                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
+                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
                     if (!requestToSpeak) {
-                        client.vc.leave(guild);
+                        this.client.vc.leave(guild);
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
                     } else if (guild.me.voice.suppress) {
                         await guild.me.voice.setRequestToSpeak(true);
@@ -76,18 +94,18 @@ class CommandPlay extends SlashCommand {
                     await guild.me.voice.setSuppressed(false);
                 }
             } else {
-                client.vc.join(vc);
+                this.client.vc.join(vc);
             }
         } else {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        const queue = client.player.getQueue(guild.id);
+        const queue = this.client.player.getQueue(guild.id);
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
             if (queue) {
-                const maxQueueLimit = await client.settings.get(guild.id, 'maxQueueLimit');
+                const maxQueueLimit = await this.client.settings.get(guild.id, 'maxQueueLimit');
                 if (maxQueueLimit) {
                     const queueMemberSize = queue.songs.filter(entries => entries.user.id === _member.user.id).length;
                     if (queueMemberSize >= maxQueueLimit) {
@@ -98,14 +116,18 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
+            const requested = ctx.subcommands[0] === 'attachment'
+                ? ctx.attachments.first().url
+                : ctx.options.track?.query;
+
             /* eslint-disable-next-line no-useless-escape */
-            await client.player.play(vc, ctx.options.track.replace(/(^\<+|\>+$)/g, ''), {
+            await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                 textChannel: channel,
                 member: _member
             });
-            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Requested \`${ctx.options.track}\``);
+            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Requested \`${requested}\``);
         } catch (err) {
-            this.creator.logger.error(err.stack); // Just in case.
+            this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
         }
     }
