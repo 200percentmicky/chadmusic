@@ -37,8 +37,7 @@ class CommandPlay extends SlashCommand {
                         required: true
                     }]
                 }
-            ],
-            guildIDs: [process.env.DEV_GUILD]
+            ]
         });
 
         this.filePath = __filename;

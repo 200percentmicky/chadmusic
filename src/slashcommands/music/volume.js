@@ -10,8 +10,7 @@ class CommandVolume extends SlashCommand {
                 type: CommandOptionType.INTEGER,
                 name: 'number',
                 description: 'The number to set the volume to.'
-            }],
-            guildIDs: [process.env.DEV_GUILD]
+            }]
         });
 
         this.filePath = __filename;
