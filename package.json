@@ -1,6 +1,6 @@
 {
   "name": "chadmusic",
-  "version": "2.0.0-dev5.1",
+  "version": "2.0.0-dev6",
   "description": "The Chad Music Bot",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "pretty-ms": "^7.0.1",
     "quickmongo": "^4.0.0",
     "reddit-image-fetcher": "^2.0.9",
-    "slash-create": "^5.4.1",
+    "slash-create": "github:Snazzah/slash-create#master",
     "string-progressbar": "^1.0.4",
     "underscore": "^1.13.1",
     "uwufy": "^1.0.7",
