@@ -44,7 +44,7 @@ module.exports = class CommandSeek extends Command {
                 const time = toMilliseconds(args[1]);
                 this.client.player.seek(message.guild, parseInt(Math.floor(time / 1000)));
             } catch {
-                this.client.ui.reply(message, 'error', 'Track time must be in colon notation. Example: `4:30`');
+                this.client.ui.reply(message, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
             }
             return message.react(process.env.REACTION_OK);
         } else {
