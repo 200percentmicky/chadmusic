@@ -146,7 +146,7 @@ class WaveBot extends AkairoClient {
         // Register commands in the "commands" directory.
         this.creator.registerCommandsIn(path.join(__dirname, 'slashcommands'));
         this.creator.syncCommands({ // Sync all commands with Discord.
-            deleteCommands: false, // Just in case people use mutliple bots in one application.
+            deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
             skipGuildErrors: true,
             syncGuilds: true,
             syncPermissions: true
