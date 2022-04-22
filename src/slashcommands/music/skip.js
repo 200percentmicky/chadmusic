@@ -11,6 +11,25 @@ class CommandSkip extends SlashCommand {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'track',
                     description: 'Skips the playing track, or vote to skip if the voice channel has more than 3 people.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'force',
+                    description: 'Force skips the currently playing track.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'jump',
+                    description: 'Skips the track to a specified entry in the queue.',
+                    options: [
+                        {
+                            type: CommandOptionType.INTEGER,
+                            name: 'index',
+                            description: 'The entry in the queue to skip to.',
+                            min_value: 1,
+                            required: true
+                        }
+                    ]
                 }
             ]
         });
@@ -46,13 +65,63 @@ class CommandSkip extends SlashCommand {
         if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
         else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        if (vc.members.size >= 4) {
-            const vcSize = Math.floor(vc.members.size / 2);
-            const neededVotes = queue.votes.length >= vcSize;
-            const votesLeft = Math.floor(vcSize - queue.votes.length);
-            if (queue.votes.includes(member.user.id)) return this.client.ui.ctx(ctx, 'warn', 'You already voted to skip.');
-            queue.votes.push(member.user.id);
-            if (neededVotes) {
+        switch (ctx.subcommands[0]) {
+        case 'force': {
+            if (dj || vc.members.size <= 2) {
+                if (!queue.songs[1]) {
+                    this.client.player.stop(guild);
+                    this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                }
+                this.client.player.skip(guild);
+                this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+            } else {
+                this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+
+            break;
+        }
+
+        case 'jump': {
+            const song = queue.songs[ctx.options.jump.index];
+
+            if (dj || vc.members.size <= 2) {
+                try {
+                    this.client.player.jump(guild, parseInt(ctx.options.jump.index));
+                    return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+                } catch {
+                    return this.client.ui.ctx(ctx, 'error', 'Not a valid entry in the queue.');
+                }
+            } else {
+                return this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+        }
+
+        default: { // track
+            if (vc.members.size >= 4) {
+                const vcSize = Math.floor(vc.members.size / 2);
+                const neededVotes = queue.votes.length >= vcSize;
+                const votesLeft = Math.floor(vcSize - queue.votes.length);
+                if (queue.votes.includes(member.user.id)) return this.client.ui.ctx(ctx, 'warn', 'You already voted to skip.');
+                queue.votes.push(member.user.id);
+                if (neededVotes) {
+                    queue.votes = [];
+                    if (!queue.songs[1]) {
+                        this.client.player.stop(guild);
+                        return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    }
+                    this.client.player.skip(guild);
+                    return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+                } else {
+                    const embed = new MessageEmbed()
+                        .setColor(parseInt(process.env.COLOR_INFO))
+                        .setDescription('⏭ Skipping?')
+                        .setFooter({
+                            text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? " Yo DJ, you can force skip the track by using '/skip force'." : ''}`,
+                            icon_url: member.user.avatarURL({ dynamic: true })
+                        });
+                    return ctx.send({ embeds: [embed] });
+                }
+            } else {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
@@ -60,25 +129,8 @@ class CommandSkip extends SlashCommand {
                 }
                 this.client.player.skip(guild);
                 return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
-            } else {
-                const prefix = this.client.settings.get(guild.id, 'prefix', process.env.PREFIX);
-                const embed = new MessageEmbed()
-                    .setColor(parseInt(process.env.COLOR_INFO))
-                    .setDescription('⏭ Skipping?')
-                    .setFooter({
-                        text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
-                        icon_url: member.user.avatarURL({ dynamic: true })
-                    });
-                return ctx.send({ embeds: [embed] });
             }
-        } else {
-            queue.votes = [];
-            if (!queue.songs[1]) {
-                this.client.player.stop(guild);
-                return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
-            }
-            this.client.player.skip(guild);
-            return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+        }
         }
     }
 }
