@@ -180,7 +180,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
 const usage = (msg, syntax) => {
     if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
-    const guildPrefix = msg.channel.client.settings.get(msg.id, 'prefix') ?? process.env.PREFIX;
+    const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
     const embed = new MessageEmbed()
         .setColor(process.env.COLOR_INFO)
         .setTitle(`${process.env.EMOJI_INFO} Usage`)
