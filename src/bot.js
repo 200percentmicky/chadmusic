@@ -106,8 +106,6 @@ class WaveBot extends AkairoClient {
         this.commands = new CommandHandler(this, {
             directory: './src/commands',
             prefix: message => {
-                // Make sure that default settings are loaded into memory.
-                this.settings.ensure(message.guild.id, this.defaultSettings);
                 if (message.guild) {
                     return this.settings.get(message.guild.id, 'prefix');
                 } else {
