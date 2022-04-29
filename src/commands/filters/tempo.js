@@ -6,9 +6,9 @@ module.exports = class CommandTempo extends Command {
             aliases: ['tempo'],
             category: '📢 Filter',
             description: {
-                text: 'Changes the tempo of the player.',
-                usage: '<rate:int[1-20]>',
-                details: '`<rate:int[1-20]>` The rate to change. Anything lower than 5 will slow down playback.'
+                text: 'Changes the tempo of the playing track.',
+                usage: '<rate:int[1-10]>',
+                details: '`<rate:int[1-10]>` The rate to change. Between 1-10'
             },
             channel: 'guild',
             clientPermissions: ['EMBED_LINKS']
@@ -46,7 +46,7 @@ module.exports = class CommandTempo extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'asetrate', false);
+                    await this.client.player.setFilter(message.guild.id, 'tempo', false);
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tempo** Reverted');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Tempo');
@@ -60,7 +60,7 @@ module.exports = class CommandTempo extends Command {
             if (rate <= 0 || rate >= 21) {
                 return this.client.ui.reply(message, 'error', 'Tempo must be between **1-20** or **off**.');
             }
-            await this.client.player.setFilter(message, 'asetrate', `asetrate=${rate}*10000`);
+            await this.client.player.setFilter(message, 'tempo', `rubberband=tempo=${rate}`);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
         } else {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
