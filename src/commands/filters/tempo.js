@@ -7,8 +7,8 @@ module.exports = class CommandTempo extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Changes the tempo of the playing track.',
-                usage: '<rate:int[1-10]>',
-                details: '`<rate:int[1-10]>` The rate to change. Between 1-10'
+                usage: '<rate:int[0.1-10]>',
+                details: '`<rate:int[0.1-10]>` The rate to change. Between 0.1-10'
             },
             channel: 'guild',
             clientPermissions: ['EMBED_LINKS']
@@ -41,7 +41,7 @@ module.exports = class CommandTempo extends Command {
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
             if (!args[1]) {
-                return this.client.ui.usage(message, 'tempo <rate:int[1-20]/off>');
+                return this.client.ui.usage(message, 'tempo <rate:int[0.1-10]/off>');
             }
 
             if (args[1] === 'OFF'.toLowerCase()) {
@@ -57,8 +57,8 @@ module.exports = class CommandTempo extends Command {
             if (isNaN(rate)) {
                 return this.client.ui.reply(message, 'error', 'Tempo requires a number or **off**.');
             }
-            if (rate <= 0 || rate >= 21) {
-                return this.client.ui.reply(message, 'error', 'Tempo must be between **1-20** or **off**.');
+            if (rate <= 0 || rate >= 11) {
+                return this.client.ui.reply(message, 'error', 'Tempo must be between **0.1-10** or **off**.');
             }
             await this.client.player.setFilter(message, 'tempo', `rubberband=tempo=${rate}`);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
