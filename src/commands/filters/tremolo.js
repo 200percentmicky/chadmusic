@@ -58,8 +58,8 @@ module.exports = class CommandTremolo extends Command {
                 if (!args[1]) {
                     return this.client.ui.usage(message, 'tremolo <depth:int(0.1-1)/off> [frequency:int]');
                 }
-                const d = parseInt(args[1]);
-                let f = parseInt(args[2]);
+                const d = parseFloat(args[1]);
+                let f = parseFloat(args[2]);
                 if (d < 0.1 || d > 1 || isNaN(d)) {
                     return this.client.ui.reply(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.');
                 }

@@ -53,7 +53,7 @@ module.exports = class CommandTempo extends Command {
                 }
             }
 
-            const rate = parseInt(args[1]);
+            const rate = parseFloat(args[1]);
             if (isNaN(rate)) {
                 return this.client.ui.reply(message, 'error', 'Tempo requires a number or **off**.');
             }

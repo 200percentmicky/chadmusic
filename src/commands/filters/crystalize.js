@@ -52,7 +52,7 @@ module.exports = class CommandCrystalize extends Command {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
             } else {
-                const intensity = parseInt(args[1]);
+                const intensity = parseFloat(args[1]);
 
                 if (intensity < -10 || intensity > 10 || isNaN(intensity)) {
                     return this.client.ui.reply(message, 'error', 'Intensity must be between **-10** to **10**, or **"off"**.');

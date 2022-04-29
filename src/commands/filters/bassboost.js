@@ -52,7 +52,7 @@ module.exports = class CommandBassBoost extends Command {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
             } else {
-                const gain = parseInt(args[1]);
+                const gain = parseFloat(args[1]);
 
                 if (gain < 1 || gain > 100 || isNaN(gain)) {
                     return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.');

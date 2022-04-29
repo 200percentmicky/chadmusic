@@ -59,7 +59,7 @@ module.exports = class CommandVibrato extends Command {
                     return this.client.ui.usage(message, 'vibrato <depth:int(0.1-1)/off> [frequency:int]');
                 }
                 const d = args[1];
-                let f = parseInt(args[2]);
+                let f = parseFloat(args[2]);
                 if (d < 0.1 || d > 1 || isNaN(d)) {
                     return this.client.ui.reply(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.');
                 }
