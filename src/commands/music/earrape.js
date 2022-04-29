@@ -60,7 +60,7 @@ module.exports = class CommandEarrape extends Command {
             this.client.player.setVolume(message, earrape);
             return this.client.ui.reply(
                 message,
-                'ok',
+                'warn',
                 `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,
                 null,
                 'Volumes exceeding 200% may cause damage to self and equipment.'
