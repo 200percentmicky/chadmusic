@@ -125,9 +125,22 @@ class CommandFilter extends SlashCommand {
                 options: [{
                     type: CommandOptionType.INTEGER,
                     name: 'rate',
-                    description: 'The rate of speed. Anything lower than 5 will slow down playback.',
-                    min_value: 1,
-                    max_value: 20,
+                    description: 'The rate of speed.',
+                    min_value: 0.1,
+                    max_value: 10,
+                    required: true
+                }]
+            },
+            {
+                type: CommandOptionType.SUB_COMMAND,
+                name: 'pitch',
+                description: 'Changes the pitch of the playing track.',
+                options: [{
+                    type: CommandOptionType.INTEGER,
+                    name: 'rate',
+                    description: 'The rate of high or low vibrations.',
+                    min_value: 0.1,
+                    max_value: 10,
                     required: true
                 }]
             },
@@ -251,8 +264,14 @@ class CommandFilter extends SlashCommand {
 
             case 'tempo': {
                 const rate = ctx.options.tempo.rate;
-                await this.client.player.setFilter(guild.id, 'asetrate', `asetrate=${rate}*10000`);
+                await this.client.player.setFilter(guild.id, 'tempo', `rubberband=tempo=${rate}`);
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
+            }
+
+            case 'pitch': {
+                const rate = ctx.options.pitch.rate;
+                await this.client.player.setFilter(guild.id, 'pitch', `rubberband=pitch=${rate}`);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
             }
 
             case 'crystalize': {
