@@ -57,7 +57,7 @@ module.exports = class CommandTempo extends Command {
             if (isNaN(rate)) {
                 return this.client.ui.reply(message, 'error', 'Pitch requires a number or **off**.');
             }
-            if (rate <= 0 || rate >= 11) {
+            if (rate < 0.1 || rate > 11) {
                 return this.client.ui.reply(message, 'error', 'Pitch must be between **0.1-10** or **off**.');
             }
             await this.client.player.setFilter(message, 'pitch', `rubberband=pitch=${rate}`);
