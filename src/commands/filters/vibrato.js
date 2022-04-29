@@ -58,7 +58,7 @@ module.exports = class CommandVibrato extends Command {
                 if (!args[1]) {
                     return this.client.ui.usage(message, 'vibrato <depth:int(0.1-1)/off> [frequency:int]');
                 }
-                const d = args[1];
+                const d = parseFloat(args[1]);
                 let f = parseFloat(args[2]);
                 if (d < 0.1 || d > 1 || isNaN(d)) {
                     return this.client.ui.reply(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.');
@@ -67,7 +67,7 @@ module.exports = class CommandVibrato extends Command {
                 if (isNaN(f)) {
                     return this.client.ui.reply(message, 'error', 'Frequency requires a number.');
                 }
-                if (f < 1) {
+                if (f < 0) {
                     return this.client.ui.reply(message, 'error', 'Frequency must be greater than 0.');
                 }
                 await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
