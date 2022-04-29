@@ -123,7 +123,7 @@ class CommandFilter extends SlashCommand {
                 name: 'tempo',
                 description: 'Changes the tempo of the playing track.',
                 options: [{
-                    type: CommandOptionType.INTEGER,
+                    type: CommandOptionType.NUMBER,
                     name: 'rate',
                     description: 'The rate of speed.',
                     min_value: 0.1,
@@ -136,7 +136,7 @@ class CommandFilter extends SlashCommand {
                 name: 'pitch',
                 description: 'Changes the pitch of the playing track.',
                 options: [{
-                    type: CommandOptionType.INTEGER,
+                    type: CommandOptionType.NUMBER,
                     name: 'rate',
                     description: 'The rate of high or low vibrations.',
                     min_value: 0.1,
