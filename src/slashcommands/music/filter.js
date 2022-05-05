@@ -29,7 +29,11 @@ class CommandFilter extends SlashCommand {
                         },
                         {
                             name: 'tempo',
-                            value: 'asetrate'
+                            value: 'tempo'
+                        },
+                        {
+                            name: 'pitch',
+                            value: 'pitch'
                         },
                         {
                             name: 'reverse',
@@ -41,7 +45,7 @@ class CommandFilter extends SlashCommand {
                         },
                         {
                             name: 'customfilter',
-                            value: 'customfilter'
+                            value: 'custom'
                         },
                         {
                             name: 'all',
