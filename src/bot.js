@@ -106,17 +106,7 @@ class WaveBot extends AkairoClient {
         // Create Command Handler
         this.commands = new CommandHandler(this, {
             directory: './src/commands',
-            prefix: message => {
-                if (message.guild) {
-                    try {
-                        return this.settings.get(message.guild.id, 'prefix');
-                    } catch {
-                        return process.env.PREFIX;
-                    }
-                } else {
-                    return process.env.PREFIX;
-                }
-            },
+            prefix: process.env.PREFIX,
             commandUtil: true,
             handleEdits: true,
             allowMention: true
