@@ -68,7 +68,7 @@ class CommandEval extends SlashCommand {
             } else {
                 const result = clean(evaled);
                 if (result.length > 2000) {
-                    this.creator.logger.info('[eval] Took %s ms. to complete.\n%s', end, `Input: ${code}\n${clean(evaled)}`);
+                    this.client.logger.info('[eval] Took %s ms. to complete.\n%s', end, `Input: ${code}\n${clean(evaled)}`);
                     return await ctx.send(':warning: Out too large. Check the console, or logs for the output.', { ephemeral: true });
                 } else {
                     return await ctx.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``, { ephemeral: true });
@@ -76,7 +76,7 @@ class CommandEval extends SlashCommand {
             }
         } catch (err) {
             await ctx.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``, { ephemeral: true });
-            this.creator.logger.error('[eval] Error during eval: %s', err);
+            this.client.logger.error('[eval] Error during eval: %s', err);
         }
     }
 }
