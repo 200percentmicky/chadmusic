@@ -99,7 +99,8 @@ class WaveBot extends AkairoClient {
             allowAgeRestricted: true,
             allowFreeVolume: true,
             defaultVolume: 100,
-            textChannel: null
+            textChannel: null,
+            blockedPhrases: []
         };
 
         // Create Command Handler
@@ -107,7 +108,11 @@ class WaveBot extends AkairoClient {
             directory: './src/commands',
             prefix: message => {
                 if (message.guild) {
-                    return this.settings.get(message.guild.id, 'prefix');
+                    try {
+                        return this.settings.get(message.guild.id, 'prefix');
+                    } catch {
+                        return process.env.PREFIX;
+                    }
                 } else {
                     return process.env.PREFIX;
                 }
