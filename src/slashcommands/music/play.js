@@ -67,8 +67,23 @@ class CommandPlay extends SlashCommand {
 
         // if (!text && !message.attachments.first()) return client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (ctx.subcommands[0] === 'query') {
-            if (pornPattern(ctx.options.track)) return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+        if (ctx.subcommands[0] === 'track') {
+            if (pornPattern(ctx.options.track?.query)) {
+                await ctx.defer(true);
+                return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+            }
+
+            if (!dj) {
+                const list = await this.client.settings.get(guild.id, 'blockedPhrases');
+                const splitSearch = ctx.options.track?.query.split(/ +/g);
+                for (let i = 0; i < splitSearch.length; i++) {
+                    /* eslint-disable-next-line no-useless-escape */
+                    if (list.includes(splitSearch[i].replace(/(^\\<+|\\>+$)/g, ''))) {
+                        await ctx.defer(true);
+                        return this.client.ui.ctx(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                    }
+                }
+            }
         }
 
         await ctx.defer();

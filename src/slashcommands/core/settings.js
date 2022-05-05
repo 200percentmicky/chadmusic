@@ -58,6 +58,10 @@ module.exports = class CommandSettings extends SlashCommand {
                                 value: 'defaultVolume'
                             },
                             {
+                                name: 'blockedphrases',
+                                value: 'blockedPhrases'
+                            },
+                            {
                                 name: 'textchannel',
                                 value: 'textChannel'
                             }
@@ -164,49 +168,39 @@ module.exports = class CommandSettings extends SlashCommand {
                         description: 'The text channel to use.',
                         required: true
                     }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND_GROUP,
+                    name: 'blocklist',
+                    description: "Manages the server's blocklist.",
+                    options: [
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'add',
+                            description: "Adds a phrase to the server's blocklist.",
+                            options: [{
+                                type: CommandOptionType.STRING,
+                                name: 'phrase',
+                                description: 'The phrase to add to the blocklist',
+                                required: true
+                            }]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'remove',
+                            description: 'Removes a phrase from the blocklist.',
+                            options: [{
+                                type: CommandOptionType.STRING,
+                                name: 'phrase',
+                                description: 'The phrase to remove from the blocklist.',
+                                required: true
+                            }]
+                        }
+                    ]
                 }
             ]
         });
     }
-
-    /*
-  async autocomplete (ctx) {
-    return [
-      {
-        name: 'djrole',
-        value: 'djRole',
-      },
-      {
-        name: 'djmode',
-        value: 'djMode',
-      },
-      {
-        name: 'maxtime',
-        value: 'maxTime',
-      },
-      {
-        name: 'maxqueuelimit',
-        value: 'maxQueueLimit'
-      },
-      {
-        name: 'allowfilters',
-        value: 'allowFilters'
-      },
-      {
-        name: 'unlimitedvolume',
-        value: 'allowFreeVolume'
-      },
-      {
-        name: 'defaultvolume',
-        value: 'defaultVolume'
-      },
-      {
-        name: 'textchannel',
-        value: 'textChannel'
-      }
-    ]
-  }
-  */
 
     async run (ctx) {
         const settings = this.creator.client.settings;
@@ -217,19 +211,7 @@ module.exports = class CommandSettings extends SlashCommand {
             return this.client.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
-        // Default Settings
-        const defaultSettings = {
-            djRole: null,
-            djMode: false,
-            maxTime: null,
-            maxQueueLimit: null,
-            allowFilters: true,
-            allowAgeRestricted: true,
-            allowFreeVolume: true,
-            defaultVolume: 100,
-            textChannel: null
-        };
-        await settings.ensure(ctx.guildID, defaultSettings);
+        await settings.ensure(ctx.guildID, this.client.defaultSettings);
 
         // All Settings
         const djRole = settings.get(guild.id, 'djRole'); // DJ Role
@@ -240,6 +222,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const allowFreeVolume = settings.get(guild.id, 'allowFreeVolume'); // Unlimited Volume
         const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
+        const blockedPhrases = settings.get(guild.id, 'blockedPhrases');
         // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -272,11 +255,30 @@ module.exports = class CommandSettings extends SlashCommand {
                     iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                 });
 
-            return ctx.send({ embeds: [embed] });
+            const blockedEmbed = new MessageEmbed()
+                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+                .setAuthor({
+                    name: `${guild.name}`,
+                    iconURL: guild.iconURL({ dynamic: true })
+                })
+                .setTitle('🤐 Blocked Phrases')
+                .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
+                .setTimestamp()
+                .setFooter({
+                    text: `ChadMusic v${version}`,
+                    iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                });
+
+            if (blockedPhrases.length === 0) {
+                blockedEmbed.setDescription('');
+                blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, 'To add phrases to the blocklist, run `/settings blocklist add <phrase>`.');
+            }
+
+            return ctx.send({ embeds: [embed, blockedEmbed] });
         }
 
         case 'remove': {
-            await settings.set(ctx.guildID, defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
+            await settings.set(ctx.guildID, this.client.defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
             return this.client.ui.ctx(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
         }
 
@@ -320,6 +322,27 @@ module.exports = class CommandSettings extends SlashCommand {
         case 'defaultvolume': {
             await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
             return this.client.ui.ctx(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
+        }
+
+        case 'blocklist': {
+            switch (ctx.subcommands[1]) {
+            case 'add': {
+                if (this.client.settings.includes(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.add.phrase}\` already exists in the blocklist.`);
+                }
+                await this.client.settings.push(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.add.phrase}\` has been added to the blocklist for this server.`, null, 'Any phrases in the blocklist will no longer be added to the queue.');
+            }
+
+            case 'remove': {
+                if (!this.client.settings.includes(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.remove.phrase}\` doesn't exists in the blocklist.`);
+                }
+                await this.client.settings.remove(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.remove.phrase}\` has been removed from the blocklist for this server.`);
+            }
+            }
+            break;
         }
 
         // ! Deprecated.

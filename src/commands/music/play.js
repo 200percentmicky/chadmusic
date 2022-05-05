@@ -54,6 +54,18 @@ module.exports = class CommandPlay extends Command {
             return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
         }
 
+        const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
+        const splitSearch = args.track.split(/ +/g);
+        if (list.length > 0) {
+            if (!dj) {
+                for (let i = 0; i < splitSearch.length; i++) {
+                    if (list.includes(splitSearch[i])) {
+                        return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                    }
+                }
+            }
+        }
+
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
             const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);

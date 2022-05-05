@@ -37,6 +37,18 @@ module.exports = class CommandSearch extends Command {
             }
         }
 
+        const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
+        const splitSearch = args.query.split(/ +/g);
+        if (list.length > 0) {
+            if (!dj) {
+                for (let i = 0; i < splitSearch.length; i++) {
+                    if (list.includes(splitSearch[i])) {
+                        return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                    }
+                }
+            }
+        }
+
         const vc = message.member.voice.channel;
         if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 

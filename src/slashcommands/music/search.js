@@ -41,6 +41,19 @@ class CommandSearch extends SlashCommand {
             }
         }
 
+        const list = await this.client.settings.get(guild.id, 'blockedPhrases');
+        const splitSearch = ctx.options.query.split(/ +/g);
+        if (list.length > 0) {
+            if (!dj) {
+                for (let i = 0; i < splitSearch.length; i++) {
+                    if (list.includes(splitSearch[i])) {
+                        await ctx.defer(true);
+                        return this.client.ui.ctx(ctx, 'no', 'Unable to search for your selection because your search contains a blocked phrase on this server.');
+                    }
+                }
+            }
+        }
+
         const vc = member.voice.channel;
         if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 

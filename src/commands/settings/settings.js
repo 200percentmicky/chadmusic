@@ -20,6 +20,8 @@ module.exports = class CommandSettings extends Command {
     async exec (message) {
         const settings = this.client.settings;
 
+        settings.ensure(message.guild.id, this.client.defaultSettings);
+
         // All Settings
         const prefix = settings.get(message.guild.id, 'prefix'); // Server Prefix
         const djRole = settings.get(message.guild.id, 'djRole'); // DJ Role
@@ -30,6 +32,7 @@ module.exports = class CommandSettings extends Command {
         const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume'); // Unlimited Volume
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
+        const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases');
         // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -44,7 +47,7 @@ module.exports = class CommandSettings extends Command {
             })
             .setTitle(':gear: Settings')
             .setDescription(stripIndents`
-            **⁉ Prefix:** \`${prefix}\`
+            **⁉ Prefix:** \`${prefix}\` :warning: **Deprecated**
             **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
             **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
             **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
@@ -53,7 +56,7 @@ module.exports = class CommandSettings extends Command {
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
             **🔊 Default Volume:** ${defaultVolume}
-            **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+            **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
             `)
             .setTimestamp()
             .setFooter({
@@ -61,6 +64,25 @@ module.exports = class CommandSettings extends Command {
                 iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             });
 
-        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+        const blockedEmbed = new MessageEmbed()
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setAuthor({
+                name: `${message.guild.name}`,
+                iconURL: message.guild.iconURL({ dynamic: true })
+            })
+            .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
+            .setTitle('🤐 Blocked Phrases')
+            .setTimestamp()
+            .setFooter({
+                text: `ChadMusic v${version}`,
+                iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+            });
+
+        if (blockedPhrases.length === 0) {
+            blockedEmbed.setDescription('');
+            blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, `To add phrases to the blocklist, run \`${process.env.PREFIX}blocklist add <phrase>\`.`);
+        }
+
+        return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });
     }
 };
