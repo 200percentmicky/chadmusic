@@ -1,6 +1,6 @@
 {
   "name": "chadmusic",
-  "version": "2.0.0-dev8.2",
+  "version": "2.0.0-dev9",
   "description": "The Chad Music Bot",
   "main": "index.js",
   "scripts": {
