@@ -59,7 +59,8 @@ module.exports = class CommandPlay extends Command {
         if (list.length > 0) {
             if (!dj) {
                 for (let i = 0; i < splitSearch.length; i++) {
-                    if (list.includes(splitSearch[i])) {
+                    /* eslint-disable-next-line no-useless-escape */
+                    if (list.includes(splitSearch[i].replace(/(^\<+|\>+$)/g, ''))) {
                         return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
                     }
                 }
