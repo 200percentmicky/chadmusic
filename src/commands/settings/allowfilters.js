@@ -19,10 +19,10 @@ module.exports = class CommandAllowFilters extends Command {
         const args = message.content.split(/ +/g);
         if (!args[1]) return this.client.ui.usage(message, 'allowfilters <toggle>');
         if (args[1] === 'OFF'.toLowerCase()) {
-            await this.client.settings.set(message.guild.id, 'allowFilters', false);
+            await this.client.settings.set(message.guild.id, false, 'allowFilters');
             return this.client.ui.reply(message, 'ok', 'Filters have been disabled. Only DJs will be able to apply filters.');
         } else if (args[1] === 'ON'.toLowerCase()) {
-            await this.client.settings.set(message.guild.id, 'allowFilters', true);
+            await this.client.settings.set(message.guild.id, true, 'allowFilters');
             return this.client.ui.reply(message, 'ok', 'Filters have been enabled.');
         } else {
             return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**');

@@ -21,7 +21,7 @@ module.exports = class CommandTextChannel extends Command {
             if (!channel) {
                 return this.client.ui.reply(message, 'error', `\`${args[1]}\` is not a valid text channel.`);
             } else {
-                await this.client.settings.set(message.guild.id, 'textChannel', channel.id);
+                await this.client.settings.set(message.guild.id, channel.id, 'textChannel');
                 return this.client.ui.reply(message, 'ok', `<#${channel.id}> will be used for music commands.`);
             }
         } else {

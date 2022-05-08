@@ -18,13 +18,13 @@ module.exports = class CommandResetData extends Command {
         const yesButton = new MessageButton()
             .setStyle('SUCCESS')
             .setLabel('Yes')
-            .setEmoji(process.env.EMOJI_OK)
+            .setEmoji('✔')
             .setCustomId('yes_data');
 
         const noButton = new MessageButton()
             .setStyle('DANGER')
             .setLabel('No')
-            .setEmoji(process.env.EMOJI_ERROR)
+            .setEmoji('✖')
             .setCustomId('no_data');
 
         const buttonRow = new MessageActionRow().addComponents(yesButton, noButton);
@@ -42,18 +42,19 @@ module.exports = class CommandResetData extends Command {
         collector.on('collect', async interaction => {
             if (interaction.customID === 'yes_data') {
                 interaction.defer();
-                await this.client.settings.clear(interaction.guild.id);
+                await this.client.settings.delete(interaction.guild.id);
                 collector.stop();
                 this.client.ui.reply(message, 'ok', 'The settings for this server have been cleared.');
             }
 
             if (interaction.customID === 'no_data') {
+                interaction.defer();
+                msg.delete();
                 collector.stop();
             }
         });
 
         collector.on('end', () => {
-            msg.delete();
             return message.react(process.env.REACTION_OK);
         });
     }

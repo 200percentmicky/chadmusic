@@ -29,7 +29,7 @@ module.exports = class CommandSetDJ extends Command {
         }
         if (!role) return this.client.ui.reply(message, 'error', `\`${text}\` is not a valid role.`);
 
-        await this.client.settings.set(message.guild.id, 'djRole', role.id);
+        await this.client.settings.set(message.guild.id, role.id, 'djRole');
         return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
     }
 };

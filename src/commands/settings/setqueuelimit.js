@@ -22,14 +22,14 @@ module.exports = class CommandSetQueueLimit extends Command {
         if (!args[1]) return this.client.ui.usage(message, 'setqueuelimit <number|0/none>');
 
         if (args[1] === (0 || 'NONE'.toLowerCase())) {
-            await this.client.settings.remove(message.guild.id, 'maxQueueLimit');
+            await this.client.settings.delete(message.guild.id, 'maxQueueLimit');
             return this.client.ui.reply(message, 'ok', 'Queue Limits have been removed.');
         }
 
         if (isNaN(args[1])) return this.client.ui.reply(message, 'error', 'You must provide a number.');
         else if (args[1] < 0) return this.client.ui.reply(message, 'error', 'You cannot use a negative value.');
 
-        await this.client.settings.set(message.guild.id, 'maxQueueLimit', parseInt(args[1]));
+        await this.client.settings.set(message.guild.id, parseInt(args[1]), 'maxQueueLimit');
         return this.client.ui.reply(message, 'ok', `Queue Limits have been set to \`${args[1]}\``);
     }
 };

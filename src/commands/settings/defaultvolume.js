@@ -36,7 +36,7 @@ module.exports = class CommandDefaultVolume extends Command {
             return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.');
         }
 
-        await this.client.settings.set(message.guild.id, 'defaultVolume', volume);
+        await this.client.settings.set(message.guild.id, volume, 'defaultVolume');
         return this.client.ui.reply(message, 'ok', `The default volume is now **${volume}%**.`);
     }
 };
