@@ -136,6 +136,17 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'allowlinks',
+                    description: 'Allows or denies the ability to add songs to the queue from a URL link.',
+                    options: [{
+                        type: CommandOptionType.BOOLEAN,
+                        name: 'toggle',
+                        description: 'Whether URLs can be added to the queue.',
+                        required: true
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'unlimitedvolume',
                     description: 'Allows or denies the ability to freely set the player\'s volume to any value.',
                     options: [{
@@ -220,6 +231,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const maxQueueLimit = settings.get(guild.id, 'maxQueueLimit'); // Max Entries in the Queue
         const allowFilters = settings.get(guild.id, 'allowFilters'); // Allow the use of Filters
         const allowFreeVolume = settings.get(guild.id, 'allowFreeVolume'); // Unlimited Volume
+        const allowLinks = settings.get(guild.id, 'allowLinks'); // Allow Links
         const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases');
@@ -245,6 +257,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
                 **📢 Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
                 **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+                **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
@@ -312,6 +325,11 @@ module.exports = class CommandSettings extends SlashCommand {
         case 'allowexplicit': {
             await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
             return this.client.ui.ctx(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
+        }
+
+        case 'allowlinks': {
+            await settings.set(ctx.guildID, ctx.options.allowlinks.toggle, 'allowLinks');
+            return this.client.ui.ctx(ctx, 'ok', `URLs can ${ctx.options.allowlinks.toggle ? 'now' : 'no longer'} be added to the queue.`);
         }
 
         case 'unlimitedvolume': {

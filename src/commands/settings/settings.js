@@ -30,9 +30,10 @@ module.exports = class CommandSettings extends Command {
         const maxQueueLimit = settings.get(message.guild.id, 'maxQueueLimit'); // Max Entries in the Queue
         const allowFilters = settings.get(message.guild.id, 'allowFilters'); // Allow the use of Filters
         const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume'); // Unlimited Volume
+        const allowLinks = settings.get(message.guild.id, 'allowLinks'); // Allow Links
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
-        const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases');
+        const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -54,6 +55,7 @@ module.exports = class CommandSettings extends Command {
             **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
             **📢 Allow Filters:** ${allowFilters === true ? 'Yes' : 'No'}
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+            **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
             **🔊 Default Volume:** ${defaultVolume}
             **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 

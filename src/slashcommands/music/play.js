@@ -1,5 +1,6 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { Permissions } = require('discord.js');
+const { isURL } = require('../../modules/isURL');
 
 const pornPattern = (url) => {
     // ! TODO: Come up with a better regex lol
@@ -71,6 +72,11 @@ class CommandPlay extends SlashCommand {
             if (pornPattern(ctx.options.track?.query)) {
                 await ctx.defer(true);
                 return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+            }
+
+            if (isURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
+                const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
+                if (!allowLinks) return this.client.ui.ctx(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
             }
 
             if (!dj) {

@@ -1,5 +1,8 @@
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
+const { isURL } = require('../../modules/isURL');
+
+/* eslint-disable no-useless-escape */
 
 function pornPattern (url) {
     // ! TODO: Come up with a better regex lol
@@ -50,8 +53,13 @@ module.exports = class CommandPlay extends Command {
 
         if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (pornPattern(args.track || message.attachments.first().url)) {
+        if (pornPattern(args.track?.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
             return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
+        }
+
+        if (isURL(args.track?.replace(/(^\<+|\>+$)/g, ''))) {
+            const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
+            if (!allowLinks) return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
         }
 
         const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
@@ -111,7 +119,6 @@ module.exports = class CommandPlay extends Command {
         }
 
         try {
-            /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
