@@ -74,12 +74,14 @@ class CommandPlay extends SlashCommand {
                 return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
             }
 
-            if (isURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
-                const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
-                if (!allowLinks) return this.client.ui.ctx(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
-            }
-
             if (!dj) {
+                if (isURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
+                    const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
+                    if (!allowLinks) {
+                        return this.client.ui.ctx(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+                    }
+                }
+
                 const list = await this.client.settings.get(guild.id, 'blockedPhrases');
                 const splitSearch = ctx.options.track?.query.split(/ +/g);
                 for (let i = 0; i < splitSearch.length; i++) {

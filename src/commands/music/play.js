@@ -59,7 +59,9 @@ module.exports = class CommandPlay extends Command {
 
         if (isURL(args.track?.replace(/(^\<+|\>+$)/g, ''))) {
             const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
-            if (!allowLinks) return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+            if (!dj && !allowLinks) {
+                return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+            }
         }
 
         const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
