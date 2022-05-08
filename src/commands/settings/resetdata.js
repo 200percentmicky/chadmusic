@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo');
-const { MessageButton, MessageActionRow } = require('discord.js');
+const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js');
 
 module.exports = class CommandResetData extends Command {
     constructor () {
@@ -40,15 +40,26 @@ module.exports = class CommandResetData extends Command {
         });
 
         collector.on('collect', async interaction => {
-            if (interaction.customID === 'yes_data') {
-                interaction.defer();
-                await this.client.settings.delete(interaction.guild.id);
-                collector.stop();
-                this.client.ui.reply(message, 'ok', 'The settings for this server have been cleared.');
+            if (interaction.user.id !== message.member.user.id) {
+                return interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                            .setColor(parseInt(process.env.COLOR_NO))
+                            .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
+                    ],
+                    ephemeral: true
+                });
             }
 
-            if (interaction.customID === 'no_data') {
-                interaction.defer();
+            if (interaction.customId === 'yes_data') {
+                await this.client.settings.delete(interaction.guild.id);
+                await this.client.settings.ensure(interaction.guild.id, this.client.defaultSettings);
+                collector.stop();
+                msg.delete();
+                return this.client.ui.reply(message, 'ok', 'The settings for this server have been cleared.');
+            }
+
+            if (interaction.customId === 'no_data') {
                 msg.delete();
                 collector.stop();
             }
