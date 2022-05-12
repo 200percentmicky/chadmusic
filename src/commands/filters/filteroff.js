@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandFilterOff extends Command {
     constructor () {
@@ -57,6 +58,7 @@ module.exports = class CommandFilterOff extends Command {
         if (currentVc) {
             if (!queue.filters) return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.');
             await this.client.player.setFilter(message.guild.id, false);
+            pushFormatFilter(queue, 'All', 'Off');
             return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
         } else {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');

@@ -18,6 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandReverse extends Command {
     constructor () {
@@ -67,12 +68,14 @@ module.exports = class CommandReverse extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'reverse', false);
+                    pushFormatFilter(queue, 'Reverse', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** Off');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
             } else {
                 await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse');
+                pushFormatFilter(queue, 'Reverse', 'Enabled');
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** On');
             }
         } else {

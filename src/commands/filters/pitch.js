@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandTempo extends Command {
     constructor () {
@@ -65,6 +66,7 @@ module.exports = class CommandTempo extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'pitch', false);
+                    pushFormatFilter(queue, 'Pitch', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Pitch** Removed');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Pitch');
@@ -79,6 +81,7 @@ module.exports = class CommandTempo extends Command {
                 return this.client.ui.reply(message, 'error', 'Pitch must be between **0.1-10** or **off**.');
             }
             await this.client.player.setFilter(message, 'pitch', `rubberband=pitch=${rate}`);
+            pushFormatFilter(queue, 'Pitch', `Rate: \`${rate}\``);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
         } else {
             if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');

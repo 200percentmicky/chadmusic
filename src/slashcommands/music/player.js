@@ -192,7 +192,7 @@ class CommandPlayer extends SlashCommand {
             embed
                 .addField(':raising_hand: Requested by', `${song.user}`, true)
                 .addField(`${volumeEmoji()} Volume`, `${queue.volume}%`, true)
-                .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.filters.map(x => `**${x.name}:** ${x.value}`)}` : 'None'}`)
+                .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`)
                 .setTimestamp();
 
             return ctx.send({ embeds: [embed] });

@@ -17,6 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 class CommandFilter extends SlashCommand {
     constructor (creator) {
@@ -91,18 +92,18 @@ class CommandFilter extends SlashCommand {
                 description: 'Adds a tremolo effect to the player.',
                 options: [
                     {
+                        type: CommandOptionType.INTEGER,
+                        name: 'frequency',
+                        description: 'The frequency of the tremolo effect.',
+                        min_value: 1,
+                        required: true
+                    },
+                    {
                         type: CommandOptionType.NUMBER,
                         name: 'depth',
                         description: 'The depth of the tremolo effect.',
                         min_value: 0,
-                        max_value: 1,
-                        required: true
-                    },
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'frequency',
-                        description: 'The frequency of the tremolo effect.',
-                        min_value: 1
+                        max_value: 1
                     }
                 ]
             },
@@ -112,18 +113,18 @@ class CommandFilter extends SlashCommand {
                 description: 'Adds a vibrato effect to the player.',
                 options: [
                     {
+                        type: CommandOptionType.INTEGER,
+                        name: 'frequency',
+                        description: 'The frequency of the vibrato effect.',
+                        min_value: 1,
+                        required: true
+                    },
+                    {
                         type: CommandOptionType.NUMBER,
                         name: 'depth',
                         description: 'The depth of the vibrato effect.',
                         min_value: 0,
-                        max_value: 1,
-                        required: true
-                    },
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'frequency',
-                        description: 'The frequency of the vibrato effect.',
-                        min_value: 1
+                        max_value: 1
                     }
                 ]
             },
@@ -227,6 +228,18 @@ class CommandFilter extends SlashCommand {
 
             switch (ctx.subcommands[0]) {
             case 'remove': {
+                const filterNames = {
+                    bassboost: 'Bass Boost',
+                    vibrato: 'Vibrato',
+                    tremolo: 'Tremolo',
+                    pitch: 'Pitch',
+                    tempo: 'Tempo',
+                    reverse: 'Reverse',
+                    crystalize: 'Crystalize',
+                    custom: 'Custom Filter',
+                    all: 'All'
+                };
+
                 try {
                     await this.client.player.setFilter(guild.id,
                         ctx.options.remove.filter === 'all'
@@ -235,16 +248,18 @@ class CommandFilter extends SlashCommand {
                         , ctx.options.remove.filter === 'all'
                             ? null
                             : false);
+                    pushFormatFilter(queue, filterNames[ctx.options.remove.filter], 'Off');
                     return this.client.ui.ctx(ctx, 'info', ctx.options.remove.filter === 'all'
                         ? 'Removed all filters from the player.'
-                        : `**${ctx.options.remove.filter.charAt(0).toUpperCase() + ctx.options.remove.filter.slice(1)}** Off`);
+                        : `**${filterNames[ctx.options.remove.filter]}** Off`);
                 } catch {
-                    return noFilter(ctx.options.remove.filter.charAt(0).toUpperCase() + ctx.options.remove.filter.slice(1));
+                    return noFilter(filterNames[ctx.options.remove.filter]);
                 }
             }
 
             case 'bass': {
-                await this.client.player.setFilter(guild.id, 'bassboost', `bass=g=${ctx.options.bass.db}`);
+                await this.client.player.setFilter(guild.id, 'bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
+                pushFormatFilter(queue, 'Bass Boost', ctx.options.bass.db !== 0 ? `Gain: \`${ctx.options.bass.db}dB\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
                     ? 'Off'
                     : `Gain: \`${ctx.options.bass.db}dB\``
@@ -253,10 +268,10 @@ class CommandFilter extends SlashCommand {
 
             case 'tremolo': {
                 const f = ctx.options.tremolo.frequency ?? 5;
-                const d = ctx.options.tremolo.depth;
-                console.log(f + d);
-                await this.client.player.setFilter(guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0 && !f
+                const d = ctx.options.tremolo.depth ?? 1;
+                await this.client.player.setFilter(guild.id, 'tremolo', d !== 0 ? `tremolo=f=${f}:d=${d}` : false);
+                pushFormatFilter(queue, 'Tremolo', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
@@ -264,9 +279,10 @@ class CommandFilter extends SlashCommand {
 
             case 'vibrato': {
                 const f = ctx.options.vibrato.frequency ?? 5;
-                const d = ctx.options.vibrato.depth;
-                await this.client.player.setFilter(guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0 && !f
+                const d = ctx.options.vibrato.depth ?? 1;
+                await this.client.player.setFilter(guild.id, 'vibrato', d !== 0 ? `vibrato=f=${f}:d=${d}` : false);
+                pushFormatFilter(queue, 'Vibrato', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
@@ -278,6 +294,7 @@ class CommandFilter extends SlashCommand {
                     ? 'areverse'
                     : false
                 );
+                pushFormatFilter(queue, 'Reverse', reverse ? 'Enabled' : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
                     ? 'On'
                     : 'Off'
@@ -286,26 +303,30 @@ class CommandFilter extends SlashCommand {
 
             case 'tempo': {
                 const rate = ctx.options.tempo.rate;
-                await this.client.player.setFilter(guild.id, 'tempo', `rubberband=tempo=${rate}`);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
+                await this.client.player.setFilter(guild.id, 'tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
+                pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
             }
 
             case 'pitch': {
                 const rate = ctx.options.pitch.rate;
-                await this.client.player.setFilter(guild.id, 'pitch', `rubberband=pitch=${rate}`);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
+                await this.client.player.setFilter(guild.id, 'pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
+                pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
             }
 
             case 'crystalize': {
                 const intensity = ctx.options.crystalize.intensity;
-                await this.client.player.setFilter(guild.id, 'crystalize', `crystalizer=i=${intensity}`);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
+                await this.client.player.setFilter(guild.id, 'crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
+                pushFormatFilter(queue, 'Crystalize', intensity !== 0 ? `Intensity \`${intensity}\`` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
             }
 
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
-                await this.client.player.setFilter(guild.id, 'custom', custom);
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
+                await this.client.player.setFilter(guild.id, 'custom', custom === 'OFF'.toLowerCase() ? false : custom);
+                pushFormatFilter(queue, 'Custom Filter', custom === 'OFF'.toLowerCase() ? 'Off' : custom);
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
             }
             }
         } else {

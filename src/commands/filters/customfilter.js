@@ -16,8 +16,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { oneLine, stripIndents } = require('common-tags');
+const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandCustomFilter extends Command {
     constructor () {
@@ -64,6 +65,7 @@ module.exports = class CommandCustomFilter extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'custom', false);
+                    pushFormatFilter(queue, 'Custom Filter', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed');
                 } catch (err) {
                     return this.client.ui.reply(message, 'error', 'No custom filters are applied to the player.');
@@ -71,6 +73,7 @@ module.exports = class CommandCustomFilter extends Command {
             } else {
                 const custom = args[1];
                 await this.client.player.setFilter(message.guild.id, 'custom', custom);
+                pushFormatFilter(queue, 'Custom Filter', custom);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }
         } else {

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandCrystalize extends Command {
     constructor () {
@@ -65,6 +66,7 @@ module.exports = class CommandCrystalize extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'crystalize', false);
+                    pushFormatFilter(queue, 'Crystalize', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Crystalize** Off');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Crystalize');
@@ -77,6 +79,7 @@ module.exports = class CommandCrystalize extends Command {
                 }
 
                 await this.client.player.setFilter(message.guild.id, 'crystalize', `crystalizer=i=${intensity}`);
+                pushFormatFilter(queue, 'Crystalize', `Intensity \`${intensity}\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
             }
         } else {

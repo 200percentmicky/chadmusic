@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandBassBoost extends Command {
     constructor () {
@@ -65,6 +66,7 @@ module.exports = class CommandBassBoost extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'bassboost', false);
+                    pushFormatFilter(queue, 'Bass Boost', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Bass Boost');
@@ -77,6 +79,7 @@ module.exports = class CommandBassBoost extends Command {
                 }
 
                 await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`);
+                pushFormatFilter(queue, 'Bass Boost', `Gain: \`${gain}dB\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
             }
         } else {

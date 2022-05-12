@@ -18,6 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandVibrato extends Command {
     constructor () {
@@ -68,6 +69,7 @@ module.exports = class CommandVibrato extends Command {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
                     await this.client.player.setFilter(message.guild.id, 'vibrato', false);
+                    pushFormatFilter(queue, 'Vibrato', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Vibrato** Off');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Vibrato');
@@ -89,6 +91,7 @@ module.exports = class CommandVibrato extends Command {
                     return this.client.ui.reply(message, 'error', 'Frequency must be greater than 0.');
                 }
                 await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
+                pushFormatFilter(queue, 'Vibrato', `Depth \`${d}\` at \`${f}Hz\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``);
             }
         } else {
