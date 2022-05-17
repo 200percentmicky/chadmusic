@@ -18,6 +18,7 @@
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { Permissions } = require('discord.js');
+const iheart = require('iheart');
 const { isURL } = require('../../modules/isURL');
 
 const pornPattern = (url) => {
@@ -55,6 +56,24 @@ class CommandPlay extends SlashCommand {
                         description: 'The file to play. Supports both audio and video files.',
                         required: true
                     }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND_GROUP,
+                    name: 'radio',
+                    description: 'Plays a live radio station.',
+                    options: [
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'iheartradio',
+                            description: 'Plays a radio station from iHeartRadio.',
+                            options: [{
+                                type: CommandOptionType.STRING,
+                                name: 'station',
+                                description: 'The station to play. The name of the station should match what you wanna play.',
+                                required: true
+                            }]
+                        }
+                    ]
                 }
             ]
         });
@@ -156,9 +175,26 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
-            const requested = ctx.subcommands[0] === 'attachment'
-                ? ctx.attachments.first().url
-                : ctx.options.track?.query;
+            let requested = ctx.options.track?.query;
+            if (ctx.subcommands[0] === 'attachment') requested = ctx.attachments.first().url;
+            if (ctx.subcommands[0] === 'radio') {
+                switch (ctx.subcommands[1]) {
+                case 'iheartradio': {
+                    const search = await iheart.search(ctx.options.radio.iheartradio.station);
+                    const station = search.stations[0];
+
+                    // To prevent overwrites, lock the command until the value is cleared.
+                    if (await this.client.radio.get(guild.id)) {
+                        await ctx.defer(true);
+                        return this.client.ui.ctx(ctx, 'warn', 'Request is still being processed. Please try again later.');
+                    }
+
+                    requested = await iheart.streamURL(station.id);
+
+                    await this.client.radio.set(guild.id, ctx.options.radio.iheartradio.station, 10000);
+                }
+                }
+            }
 
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
