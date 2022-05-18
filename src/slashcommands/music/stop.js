@@ -61,7 +61,7 @@ class CommandStop extends SlashCommand {
             client.vc.leave(guild);
             return this.client.ui.ctxCustom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {
-            return this.client.ui.send(ctx, 'NO_DJ');
+            return this.client.ui.send(ctx, 'NOT_ALONE');
         }
     }
 }
