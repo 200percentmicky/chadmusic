@@ -33,7 +33,14 @@ module.exports = class CommandGrab extends Command {
     }
 
     async exec (message) {
-    // Grab will not be affected by DJ Mode.
+        // Grab will not be affected by DJ Mode.
+        const vc = message.member.voice.channel;
+        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+
+        const currentVc = this.client.vc.get(vc);
+
+        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+
         const queue = this.client.player.getQueue(message);
         const song = queue.songs[0];
 
@@ -44,22 +51,23 @@ module.exports = class CommandGrab extends Command {
             }
         }
 
+        const embed = new MessageEmbed()
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setAuthor({
+                name: 'Song saved!',
+                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
+            })
+            .setTitle(song.name)
+            .setURL(song.url)
+            .setThumbnail(song.thumbnail)
+            .addField('Duration', `${song.formattedDuration}`)
+            .setTimestamp();
+
         try {
-            const embed = new MessageEmbed()
-                .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-                .setAuthor({
-                    name: 'Song saved!',
-                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
-                })
-                .setTitle(song.name)
-                .setURL(song.url)
-                .setThumbnail(song.thumbnail)
-                .addField('Duration', `${song.formattedDuration}`)
-                .setTimestamp();
-            message.author.send({ embeds: [embed] });
+            await message.author.send({ embeds: [embed] });
             return message.react(process.env.REACTION_OK);
-        } catch (err) {
-            if (err.name === 'DiscordAPIError') this.client.ui.reply(message, 'error', 'Unable to save this song. You are currently not accepting Direct Messages.');
+        } catch {
+            return this.client.ui.reply(message, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
         }
     }
 };
