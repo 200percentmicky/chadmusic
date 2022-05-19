@@ -66,7 +66,7 @@ module.exports = class CommandSettings extends Command {
             })
             .setTitle(':gear: Settings')
             .setDescription(stripIndents`
-            **⁉ Prefix:** \`${prefix}\` :warning: **Deprecated**
+            **⁉ Prefix:** \`${prefix}\`
             **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
             **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
             **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}

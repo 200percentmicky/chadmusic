@@ -226,6 +226,19 @@ module.exports = class CommandSettings extends SlashCommand {
                             }]
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'prefix',
+                    description: "Changes the bot's prefix for this server.",
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'newprefix',
+                            description: "The prefix to use for the server. Only applies to the bot's message based commands.",
+                            required: true
+                        }
+                    ]
                 }
             ]
         });
@@ -243,6 +256,7 @@ module.exports = class CommandSettings extends SlashCommand {
         await settings.ensure(ctx.guildID, this.client.defaultSettings);
 
         // All Settings
+        const prefix = settings.get(guild.id, 'prefix'); // Prefix
         const djRole = settings.get(guild.id, 'djRole'); // DJ Role
         const djMode = settings.get(guild.id, 'djMode'); // Toggle DJ Mode
         const maxTime = settings.get(guild.id, 'maxTime'); // Max Song Duration
@@ -269,6 +283,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 })
                 .setTitle(':gear: Settings')
                 .setDescription(stripIndents`
+                **⁉ Prefix:** \`${prefix}\`
                 **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
                 **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
                 **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
@@ -388,6 +403,12 @@ module.exports = class CommandSettings extends SlashCommand {
         case 'textchannel': {
             await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
             return this.client.ui.ctx(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
+        }
+
+        // Message based commands only.
+        case 'prefix': {
+            await this.client.settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
+            return this.client.ui.ctx(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
         }
         }
     }

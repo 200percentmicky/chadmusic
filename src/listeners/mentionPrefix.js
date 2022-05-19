@@ -17,6 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
+const { Permissions } = require('discord.js');
 
 module.exports = class ListenerMentionPrefix extends Listener {
     constructor () {
@@ -27,8 +28,13 @@ module.exports = class ListenerMentionPrefix extends Listener {
     }
 
     async exec (message) {
+        const prefix = this.client.settings.get(message.guild.id, 'prefix') ?? process.env.PREFIX;
+        const canChange = message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_GUILD)
+            ? ' You can change this using `musicprefix`.'
+            : '';
+
         if (message.content === `<@${this.client.user.id}>`) {
-            return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix for music commands is \`${process.env.PREFIX}\`. You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
+            return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix for ChadMusic in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
         }
     }
 };
