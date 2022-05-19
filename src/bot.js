@@ -108,12 +108,18 @@ class WaveBot extends AkairoClient {
         this.commands = new CommandHandler(this, {
             directory: './src/commands',
             prefix: message => {
+                // This is an attempt to have custom prefixes, despite how Enmap likes to complain.
+                // If no key is found, this should return the configured prefix in the .env file.
+
+                this.settings.ensure(message.guild.id, this.defaultSettings); // Hoping that the bot doesn't have a panic attack.
                 if (message.channel.type === 'dm') {
                     return process.env.PREFIX;
                 } else {
-                    // This is an attempt to have custom prefixes, despite how Enmap likes to complain.
-                    // If no key is found, this should return the configured prefix in the .env file.
-                    return [this.settings.get(message.guild.id, 'prefix'), process.env.PREFIX] ?? process.env.PREFIX;
+                    try {
+                        return [this.settings.get(message.guild.id, 'prefix'), process.env.PREFIX] ?? process.env.PREFIX;
+                    } catch {
+                        return process.env.PREFIX;
+                    }
                 }
             },
             commandUtil: true,

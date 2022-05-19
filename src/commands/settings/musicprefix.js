@@ -25,7 +25,7 @@ module.exports = class CommandMusicPrefix extends Command {
         const prefix = args.prefix;
 
         if (!prefix) {
-            await this.client.settings.delete(message.guild.id, 'prefix');
+            await this.client.settings.set(message.guild.id, process.env.PREFIX, 'prefix');
             return this.client.ui.reply(message, 'ok', `The prefix has been reset to \`${process.env.PREFIX}\``);
         }
         await this.client.settings.set(message.guild.id, prefix, 'prefix');
