@@ -23,8 +23,7 @@ class CommandGrab extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'grab',
-            description: 'Sends the currently playing song as a direct message.',
-            guildIDs: [process.env.DEV_GUILD]
+            description: 'Sends the currently playing song as a direct message.'
         });
 
         this.filePath = __filename;
