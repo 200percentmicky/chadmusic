@@ -153,12 +153,13 @@ module.exports = class CommandQueue extends Command {
         /* Button Collector */
         const collector = await msg.createMessageComponentCollector({
             componentType: 'BUTTON',
-            time: 30000
+            time: 1000 * 60 * 15
         });
 
         // TODO: Look into combining the collector into a single function.
 
         collector.on('collect', async interaction => {
+            console.log(interaction.customId);
             if (interaction.user.id !== message.member.user.id) {
                 return interaction.reply({
                     embeds: [
@@ -201,10 +202,6 @@ module.exports = class CommandQueue extends Command {
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
                 await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                collector.resetTimer({
-                    time: 30000,
-                    idle: 30000
-                });
             }
 
             // Previous Page Button
@@ -240,10 +237,6 @@ module.exports = class CommandQueue extends Command {
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
                 await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                collector.resetTimer({
-                    time: 30000,
-                    idle: 30000
-                });
             }
 
             // Next Page Button
@@ -280,10 +273,6 @@ module.exports = class CommandQueue extends Command {
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
                 await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                collector.resetTimer({
-                    time: 30000,
-                    idle: 30000
-                });
             }
 
             // Last Page Button
@@ -299,10 +288,6 @@ module.exports = class CommandQueue extends Command {
                 if (!queuePaginate.hasNext()) {
                     nextPage.setDisabled(true);
                     lastPage.setDisabled(true);
-                    collector.resetTimer({
-                        time: 30000,
-                        idle: 30000
-                    });
                 }
 
                 /* Row of buttons! */
@@ -322,101 +307,52 @@ module.exports = class CommandQueue extends Command {
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
                 await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                collector.resetTimer({
-                    time: 30000,
-                    idle: 30000
-                });
             }
 
             // Jump to Page Button
             if (interaction.customId === 'page_jump') {
-                message.reply('What page do you wanna go to?').then(async pageMsg => {
-                    const filter = m => m.author.id === message.author.id && !isNaN(m.content);
-                    const collector = message.channel.createMessageCollector({
-                        filter,
-                        max: 1,
-                        time: 15000,
-                        errors: ['time']
-                    });
+                const filter = i => i.customId === 'modal_jump_page_msg';
+                interaction.awaitModalSubmit({
+                    filter,
+                    time: 30000
+                }).then(async intmodal => {
+                    let pageNumber = parseInt(intmodal.fields.getTextInputValue('modal_jump_page_msg_short'));
+                    if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
+                    if (pageNumber >= queuePaginate.total) {
+                        const paginateArray = queuePaginate.last();
 
-                    collector.on('collect', async collected => {
-                        const msg2 = collected;
-                        let pageNumber = parseInt(msg2.content);
-                        if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
-                        if (pageNumber >= queuePaginate.total) {
-                            const paginateArray = queuePaginate.last();
+                        /* Map the array. */
+                        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
-                            /* Map the array. */
-                            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
+                        nextPage.setDisabled(false);
+                        lastPage.setDisabled(false);
+                        firstPage.setDisabled(false);
+                        previousPage.setDisabled(false);
 
-                            nextPage.setDisabled(false);
-                            lastPage.setDisabled(false);
-                            firstPage.setDisabled(false);
-                            previousPage.setDisabled(false);
-
-                            if (!queuePaginate.hasNext()) {
-                                nextPage.setDisabled(true);
-                                lastPage.setDisabled(true);
-                            }
-                            /* Row of buttons! */
-                            const buttonRow = new MessageActionRow()
-                                .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                            /* Rand out of room for the cancel button, so... */
-                            const cancelRow = new MessageActionRow()
-                                .addComponents(cancelButton);
-
-                            const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                            /* Making the embed. */
-                            queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                            queueEmbed.setFooter({
-                                text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                                iconURL: message.author.avatarURL({ dynamic: true })
-                            });
-                            await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                            msg2.delete();
-                            pageMsg.delete();
-                            return;
-                        } else if (pageNumber <= queuePaginate.total) {
-                            const paginateArray = queuePaginate.first();
-
-                            /* Map the array. */
-                            const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                            nextPage.setDisabled(false);
-                            lastPage.setDisabled(false);
-                            firstPage.setDisabled(false);
-                            previousPage.setDisabled(false);
-
-                            if (!queuePaginate.hasPrevious()) {
-                                firstPage.setDisabled(true);
-                                previousPage.setDisabled(true);
-                            }
-
-                            /* Row of buttons! */
-                            const buttonRow = new MessageActionRow()
-                                .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                            /* Rand out of room for the cancel button, so... */
-                            const cancelRow = new MessageActionRow()
-                                .addComponents(cancelButton);
-
-                            const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                            /* Making the embed. */
-                            queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                            queueEmbed.setFooter({
-                                text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                                iconURL: message.author.avatarURL({ dynamic: true })
-                            });
-                            await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                            msg2.delete();
-                            pageMsg.delete();
-                            return;
+                        if (!queuePaginate.hasNext()) {
+                            nextPage.setDisabled(true);
+                            lastPage.setDisabled(true);
                         }
+                        /* Row of buttons! */
+                        const buttonRow = new MessageActionRow()
+                            .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
-                        const paginateArray = queuePaginate.page(pageNumber);
+                        /* Rand out of room for the cancel button, so... */
+                        const cancelRow = new MessageActionRow()
+                            .addComponents(cancelButton);
+
+                        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
+
+                        /* Making the embed. */
+                        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
+                        queueEmbed.setFooter({
+                            text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+                            iconURL: message.author.avatarURL({ dynamic: true })
+                        });
+                        await intmodal.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                    } else if (pageNumber <= queuePaginate.total) {
+                        const paginateArray = queuePaginate.first();
+
                         /* Map the array. */
                         const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
@@ -428,9 +364,6 @@ module.exports = class CommandQueue extends Command {
                         if (!queuePaginate.hasPrevious()) {
                             firstPage.setDisabled(true);
                             previousPage.setDisabled(true);
-                        } else if (!queuePaginate.hasNext()) {
-                            nextPage.setDisabled(true);
-                            lastPage.setDisabled(true);
                         }
 
                         /* Row of buttons! */
@@ -449,19 +382,44 @@ module.exports = class CommandQueue extends Command {
                             text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                             iconURL: message.author.avatarURL({ dynamic: true })
                         });
-                        await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                        msg2.delete();
-                        pageMsg.delete();
-                        return collector.resetTimer({
-                            time: 30000,
-                            idle: 30000
-                        });
-                    });
+                        await intmodal.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                    }
 
-                    collector.on('end', async () => {
-                        await pageMsg.delete();
+                    const paginateArray = queuePaginate.page(pageNumber);
+                    /* Map the array. */
+                    const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
+
+                    nextPage.setDisabled(false);
+                    lastPage.setDisabled(false);
+                    firstPage.setDisabled(false);
+                    previousPage.setDisabled(false);
+
+                    if (!queuePaginate.hasPrevious()) {
+                        firstPage.setDisabled(true);
+                        previousPage.setDisabled(true);
+                    } else if (!queuePaginate.hasNext()) {
+                        nextPage.setDisabled(true);
+                        lastPage.setDisabled(true);
+                    }
+
+                    /* Row of buttons! */
+                    const buttonRow = new MessageActionRow()
+                        .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
+
+                    /* Rand out of room for the cancel button, so... */
+                    const cancelRow = new MessageActionRow()
+                        .addComponents(cancelButton);
+
+                    const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
+
+                    /* Making the embed. */
+                    queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
+                    queueEmbed.setFooter({
+                        text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
+                        iconURL: message.author.avatarURL({ dynamic: true })
                     });
-                });
+                    await intmodal.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                }).catch(x => {});
             }
 
             // Cancel Button
