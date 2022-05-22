@@ -224,39 +224,39 @@ class CommandQueue extends SlashCommand {
             const firstPage = new MessageButton()
                 .setStyle('PRIMARY')
                 .setEmoji(process.env.FIRST_PAGE)
-                .setCustomId('first_page')
+                .setCustomId('qc_first_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Previous Page
             const previousPage = new MessageButton()
                 .setStyle('PRIMARY')
                 .setEmoji(process.env.PREVIOUS_PAGE)
-                .setCustomId('previous_page')
+                .setCustomId('qc_previous_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Next Page
             const nextPage = new MessageButton()
                 .setStyle('PRIMARY')
                 .setEmoji(process.env.NEXT_PAGE)
-                .setCustomId('next_page');
+                .setCustomId('qc_next_page');
 
             // Last Page
             const lastPage = new MessageButton()
                 .setStyle('PRIMARY')
                 .setEmoji(process.env.LAST_PAGE)
-                .setCustomId('last_page');
+                .setCustomId('qc_last_page');
 
             // Jump to Page
             const pageJump = new MessageButton()
                 .setStyle('PRIMARY')
                 .setEmoji(process.env.JUMP_PAGE)
-                .setCustomId('page_jump');
+                .setCustomId('qc_page_jump');
 
             // Cancel
             const cancelButton = new MessageButton()
                 .setStyle('DANGER')
                 .setEmoji(process.env.CLOSE)
-                .setCustomId('cancel_button');
+                .setCustomId('qc_cancel_button');
 
             /* Row of buttons! */
             const buttonRow = new MessageActionRow()
@@ -274,7 +274,7 @@ class CommandQueue extends SlashCommand {
             // TODO: Look into combining the collector into a single function.
 
             // First Page Button
-            ctx.registerComponent('first_page', async (btnCtx) => {
+            ctx.registerComponent('qc_first_page', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
@@ -318,7 +318,7 @@ class CommandQueue extends SlashCommand {
             }, 300 * 1000);
 
             // Previous Page Button
-            ctx.registerComponent('previous_page', async (btnCtx) => {
+            ctx.registerComponent('qc_previous_page', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
@@ -364,7 +364,7 @@ class CommandQueue extends SlashCommand {
             }, 300 * 1000);
 
             // Next Page Button
-            ctx.registerComponent('next_page', async (btnCtx) => {
+            ctx.registerComponent('qc_next_page', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
@@ -411,7 +411,7 @@ class CommandQueue extends SlashCommand {
             }, 300 * 1000);
 
             // Last Page Button
-            ctx.registerComponent('last_page', async (btnCtx) => {
+            ctx.registerComponent('qc_last_page', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
@@ -456,7 +456,7 @@ class CommandQueue extends SlashCommand {
             }, 300 * 1000);
 
             // Jump to Page Button
-            ctx.registerComponent('page_jump', async (btnCtx) => {
+            ctx.registerComponent('qc_page_jump', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
@@ -475,7 +475,7 @@ class CommandQueue extends SlashCommand {
                             type: ComponentType.ACTION_ROW,
                             components: [{
                                 type: ComponentType.TEXT_INPUT,
-                                custom_id: 'new_page',
+                                custom_id: 'qc_new_page',
                                 style: TextInputStyle.SHORT,
                                 required: true,
                                 max_length: 3,
@@ -484,7 +484,7 @@ class CommandQueue extends SlashCommand {
                         }
                     ]
                 }, async (modalCtx) => {
-                    let pageNumber = parseInt(modalCtx.values.new_page);
+                    let pageNumber = parseInt(modalCtx.values.qc_new_page);
 
                     if (isNaN(pageNumber)) {
                         return modalCtx.send({
@@ -604,7 +604,7 @@ class CommandQueue extends SlashCommand {
             });
 
             // Cancel Button
-            ctx.registerComponent('cancel_button', async (btnCtx) => {
+            ctx.registerComponent('qc_cancel_button', async (btnCtx) => {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
