@@ -159,7 +159,6 @@ module.exports = class CommandQueue extends Command {
         // TODO: Look into combining the collector into a single function.
 
         collector.on('collect', async interaction => {
-            console.log(interaction.customId);
             if (interaction.user.id !== message.member.user.id) {
                 return interaction.reply({
                     embeds: [
@@ -316,6 +315,7 @@ module.exports = class CommandQueue extends Command {
                     filter,
                     time: 30000
                 }).then(async intmodal => {
+                    await intmodal.deferUpdate();
                     let pageNumber = parseInt(intmodal.fields.getTextInputValue('modal_jump_page_msg_short'));
                     if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
                     if (pageNumber >= queuePaginate.total) {
