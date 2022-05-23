@@ -206,6 +206,7 @@ module.exports = class CommandQueue extends Command {
             // Previous Page Button
             if (interaction.customId === 'previous_page') {
                 const paginateArray = queuePaginate.previous();
+                console.log(queuePaginate.current);
 
                 /* Map the array. */
                 const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
@@ -319,7 +320,9 @@ module.exports = class CommandQueue extends Command {
                     let pageNumber = parseInt(intmodal.fields.getTextInputValue('modal_jump_page_msg_short'));
                     if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
                     if (pageNumber >= queuePaginate.total) {
-                        const paginateArray = queuePaginate.last();
+                        // Stupid fix lol
+                        pageNumber = queuePaginate.totalPages;
+                        const paginateArray = queuePaginate.page(pageNumber);
 
                         /* Map the array. */
                         const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
