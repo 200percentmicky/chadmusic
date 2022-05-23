@@ -29,7 +29,7 @@ module.exports = class ListenerModalJumpPage extends Listener {
 
     async exec (interaction) {
         if (!this.client.player.getQueue(interaction.guild)) return interaction.deferUpdate();
-        if (interaction.isButton && interaction.customId === 'page_jump') {
+        if (interaction.customId === 'page_jump') {
             const modal = new Modal()
                 .setCustomId('modal_jump_page_msg')
                 .setTitle('Select Page')
