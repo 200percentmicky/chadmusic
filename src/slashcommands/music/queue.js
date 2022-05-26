@@ -500,7 +500,9 @@ class CommandQueue extends SlashCommand {
                     if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
 
                     if (pageNumber >= queuePaginate.total) {
-                        const paginateArray = queuePaginate.last();
+                        // Stupid fix lol
+                        pageNumber = queuePaginate.totalPages;
+                        const paginateArray = queuePaginate.page(pageNumber);
 
                         /* Map the array. */
                         const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
