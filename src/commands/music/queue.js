@@ -172,6 +172,7 @@ module.exports = class CommandQueue extends Command {
 
             // First Page Button
             if (interaction.customId === 'first_page') {
+                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.first();
 
                 /* Map the array. */
@@ -205,6 +206,7 @@ module.exports = class CommandQueue extends Command {
 
             // Previous Page Button
             if (interaction.customId === 'previous_page') {
+                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.previous();
 
                 /* Map the array. */
@@ -240,6 +242,7 @@ module.exports = class CommandQueue extends Command {
 
             // Next Page Button
             if (interaction.customId === 'next_page') {
+                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.next();
 
                 /* Map the array. */
@@ -276,6 +279,7 @@ module.exports = class CommandQueue extends Command {
 
             // Last Page Button
             if (interaction.customId === 'last_page') {
+                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.last();
 
                 /* Map the array. */
@@ -333,6 +337,18 @@ module.exports = class CommandQueue extends Command {
                 }).then(async intmodal => {
                     await intmodal.deferUpdate();
                     let pageNumber = parseInt(intmodal.fields.getTextInputValue('modal_jump_page_msg_short'));
+
+                    if (isNaN(pageNumber)) {
+                        return interaction.followUp({
+                            embeds: [
+                                new MessageEmbed()
+                                    .setColor(parseInt(process.env.COLOR_ERROR))
+                                    .setDescription(`${process.env.EMOJI_ERROR} A number must be provided in your response. Please try again.`)
+                            ],
+                            ephemeral: true
+                        });
+                    }
+
                     if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
                     if (pageNumber >= queuePaginate.total) {
                         // Stupid fix lol
@@ -442,6 +458,7 @@ module.exports = class CommandQueue extends Command {
 
             // Cancel Button
             if (interaction.customId === 'cancel_button') {
+                await interaction.deferUpdate();
                 collector.stop();
                 await msg.delete();
                 return message.react(process.env.REACTION_OK);
