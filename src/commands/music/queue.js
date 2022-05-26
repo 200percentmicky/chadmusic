@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { MessageEmbed, MessageButton, MessageActionRow, Modal, TextInputComponent } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 // const { FieldsEmbed } = require('discord-paginationembed')
@@ -311,6 +311,22 @@ module.exports = class CommandQueue extends Command {
 
             // Jump to Page Button
             if (interaction.customId === 'page_jump') {
+                const modal = new Modal()
+                    .setCustomId('modal_jump_page_msg')
+                    .setTitle('Select Page')
+                    .addComponents(
+                        new MessageActionRow()
+                            .addComponents(
+                                new TextInputComponent()
+                                    .setCustomId('modal_jump_page_msg_short')
+                                    .setLabel('Which page do you want to jump to?')
+                                    .setMaxLength(3)
+                                    .setStyle('SHORT')
+                                    .setRequired(true)
+                            )
+                    );
+                await interaction.showModal(modal);
+
                 const filter = i => i.customId === 'modal_jump_page_msg';
                 interaction.awaitModalSubmit({
                     filter,
