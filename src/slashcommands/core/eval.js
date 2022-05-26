@@ -89,7 +89,7 @@ class CommandEval extends SlashCommand {
                     this.client.logger.info('[eval] Took %s ms. to complete.\n%s', end, `Input: ${code}\n${clean(evaled)}`);
                     return await ctx.send(':warning: Out too large. Check the console, or logs for the output.', { ephemeral: true });
                 } else {
-                    return await ctx.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``, { ephemeral: true });
+                    return await ctx.send(`\`\`\`js\n${result}\`\`\``, { ephemeral: true });
                 }
             }
         } catch (err) {

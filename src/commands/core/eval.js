@@ -91,34 +91,28 @@ module.exports = class CommandEval extends Command {
             } else {
                 const result = clean(evaled);
                 if (result.length > 2000) {
-                    let tooLarge;
-                    message.channel.send(':warning: `eval()` output is too large. Creating file...\n');
                     try {
                         const buffer = Buffer.from(`// ✅ Evaluated in ${end} ms.\n${result}`);
                         const file = new Discord.MessageAttachment(buffer, 'eval_output.json');
                         if (!message.channel.permissionsFor(this.client.user.id).has(Discord.Permissions.FLAGS.ATTACH_FILES)) {
-                            tooLarge = ':no_entry_sign: No permission to upload files in this channel.\n';
                             try {
-                                message.author.send({ files: [file] });
-                                tooLarge += ':mailbox_with_mail: Check your DMs, the logs, or the console for the output.\n';
+                                await message.author.send({ files: [file] });
                             } catch {
-                                tooLarge += ':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.\nickname';
+                                return message.channel.send(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
                             }
-                            return message.channel.send(tooLarge);
                         }
-                        message.channel.send({ content: tooLarge, files: [file] });
+                        return message.channel.send({ files: [file] });
                     } catch {
-                        tooLarge = '\n:x: Failed to make a file for the eval output. Check the logs or the console for the output.\n';
-                        message.channel.send(tooLarge);
+                        return message.channel.send(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
                     } finally {
                         this.client.logger.info('Took %s ms. to complete.\n%s', end, clean(evaled));
                     }
                 } else {
-                    return message.channel.send(`\`\`\`js\n// ✅ Evaluated in ${end} ms.\n${result}\`\`\``);
+                    return message.channel.send(`\`\`\`js\n${result}\`\`\``);
                 }
             }
         } catch (err) {
-            message.channel.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``);
+            message.channel.send(`\`\`\`js\n${err.name}: ${err.message}\`\`\``);
         }
     }
 };
