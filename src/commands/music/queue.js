@@ -135,7 +135,7 @@ module.exports = class CommandQueue extends Command {
         const cancelButton = new MessageButton()
             .setStyle('DANGER')
             .setEmoji(process.env.CLOSE)
-            .setCustomId('cancel_button');
+            .setCustomId('close_queue');
 
         /* Row of buttons! */
         const buttonRow = new MessageActionRow()
@@ -457,10 +457,8 @@ module.exports = class CommandQueue extends Command {
             }
 
             // Cancel Button
-            if (interaction.customId === 'cancel_button') {
-                await interaction.deferUpdate();
+            if (interaction.customId === 'close_queue') {
                 collector.stop();
-                await msg.delete();
                 return message.react(process.env.REACTION_OK);
             }
         });
