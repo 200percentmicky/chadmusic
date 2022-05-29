@@ -59,6 +59,10 @@ class CommandFilter extends SlashCommand {
                             value: 'reverse'
                         },
                         {
+                            name: 'crusher',
+                            value: 'crusher'
+                        },
+                        {
                             name: 'crystalize',
                             value: 'crystalize'
                         },
@@ -95,7 +99,7 @@ class CommandFilter extends SlashCommand {
                         type: CommandOptionType.INTEGER,
                         name: 'frequency',
                         description: 'The frequency of the tremolo effect.',
-                        min_value: 1,
+                        min_value: 0,
                         required: true
                     },
                     {
@@ -149,7 +153,7 @@ class CommandFilter extends SlashCommand {
                     type: CommandOptionType.NUMBER,
                     name: 'rate',
                     description: 'The rate of speed.',
-                    min_value: 0.1,
+                    min_value: 0,
                     max_value: 10,
                     required: true
                 }]
@@ -162,10 +166,47 @@ class CommandFilter extends SlashCommand {
                     type: CommandOptionType.NUMBER,
                     name: 'rate',
                     description: 'The rate of high or low vibrations.',
-                    min_value: 0.1,
+                    min_value: 0,
                     max_value: 10,
                     required: true
                 }]
+            },
+            {
+                type: CommandOptionType.SUB_COMMAND,
+                name: 'crusher',
+                description: 'Crushes the audio without changing the bit depth. Makes it sound more harsh and "digital".',
+                options: [
+                    {
+                        type: CommandOptionType.NUMBER,
+                        name: 'samples',
+                        description: 'The sample reduction.',
+                        min_value: 0,
+                        max_value: 250,
+                        required: true
+                    },
+                    {
+                        type: CommandOptionType.NUMBER,
+                        name: 'bits',
+                        description: 'The bit reduction. Default is 8.',
+                        min_value: 1,
+                        max_value: 64
+                    },
+                    {
+                        type: CommandOptionType.STRING,
+                        name: 'mode',
+                        description: 'Changes logarithmic mode to either linear or logarithmic. Default is linear.',
+                        choices: [
+                            {
+                                name: 'linear',
+                                value: 'lin'
+                            },
+                            {
+                                name: 'logarithmic',
+                                value: 'log'
+                            }
+                        ]
+                    }
+                ]
             },
             {
                 type: CommandOptionType.SUB_COMMAND,
@@ -235,6 +276,7 @@ class CommandFilter extends SlashCommand {
                     pitch: 'Pitch',
                     tempo: 'Tempo',
                     reverse: 'Reverse',
+                    crusher: 'Crusher',
                     crystalize: 'Crystalize',
                     custom: 'Custom Filter',
                     all: 'All'
@@ -313,6 +355,15 @@ class CommandFilter extends SlashCommand {
                 await this.client.player.setFilter(guild.id, 'pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
                 pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
+            }
+
+            case 'crusher': {
+                const samples = ctx.options.crusher.samples;
+                const bits = ctx.options.crusher.bits || 8;
+                const mode = ctx.options.crusher.mode || 'lin';
+                await this.client.player.setFilter(guild.id, 'crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
+                pushFormatFilter(queue, 'Crusher', samples !== 0 ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : 'Off');
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
             }
 
             case 'crystalize': {
