@@ -75,21 +75,23 @@ module.exports = class CommandPlay extends Command {
             return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
         }
 
-        if (isURL(args.track?.replace(/(^\<+|\>+$)/g, ''))) {
-            const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
-            if (!dj && !allowLinks) {
-                return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+        if (args.track) {
+            if (isURL(args.track?.replace(/(^\<+|\>+$)/g, '')) && args.track) {
+                const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
+                if (!dj && !allowLinks) {
+                    return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+                }
             }
-        }
 
-        const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
-        const splitSearch = args.track.split(/ +/g);
-        if (list.length > 0) {
-            if (!dj) {
-                for (let i = 0; i < splitSearch.length; i++) {
-                    /* eslint-disable-next-line no-useless-escape */
-                    if (list.includes(splitSearch[i].replace(/(^\<+|\>+$)/g, ''))) {
-                        return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+            const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
+            const splitSearch = args.track.split(/ +/g);
+            if (list.length > 0) {
+                if (!dj) {
+                    for (let i = 0; i < splitSearch.length; i++) {
+                        /* eslint-disable-next-line no-useless-escape */
+                        if (list.includes(splitSearch[i].replace(/(^\<+|\>+$)/g, ''))) {
+                            return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                        }
                     }
                 }
             }
