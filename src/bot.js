@@ -52,7 +52,6 @@ class WaveBot extends AkairoClient {
             allowedMentions: {
                 repliedUser: false
             },
-            restTimeOffset: 175,
             intents: new Intents(14279)
         });
 
