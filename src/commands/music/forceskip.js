@@ -74,11 +74,13 @@ module.exports = class CommandForceSkip extends Command {
                 return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
             }
             this.client.player.skip(message);
-            return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!');
+            await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+            return message.channel.sendTyping();
         } else {
             if (dj) {
                 this.client.player.skip(message);
-                return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!');
+                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                return message.channel.sendTyping();
             } else {
                 return this.client.ui.send(message, 'NOT_ALONE');
             }

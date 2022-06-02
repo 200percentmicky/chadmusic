@@ -91,11 +91,12 @@ class CommandSkip extends SlashCommand {
                     this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                 }
                 this.client.player.skip(guild);
-                this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
             }
 
+            channel.sendTyping();
             break;
         }
 
@@ -105,7 +106,8 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 try {
                     this.client.player.jump(guild, parseInt(ctx.options.jump.index));
-                    return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                    return channel.sendTyping();
                 } catch {
                     return this.client.ui.ctx(ctx, 'error', 'Not a valid entry in the queue.');
                 }
@@ -128,7 +130,8 @@ class CommandSkip extends SlashCommand {
                         return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                     }
                     this.client.player.skip(guild);
-                    return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                    return channel.sendTyping();
                 } else {
                     const embed = new MessageEmbed()
                         .setColor(parseInt(process.env.COLOR_INFO))
@@ -146,7 +149,8 @@ class CommandSkip extends SlashCommand {
                     return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                 }
                 this.client.player.skip(guild);
-                return this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipped!');
+                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                return channel.sendTyping();
             }
         }
         }

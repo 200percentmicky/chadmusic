@@ -74,7 +74,8 @@ module.exports = class CommandSkipTo extends Command {
         if (vc.members.size <= 2) {
             try {
                 this.client.player.jump(message, parseInt(args[1]));
-                return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                return message.channel.sendTyping();
             } catch {
                 return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
             }
@@ -82,7 +83,8 @@ module.exports = class CommandSkipTo extends Command {
             if (dj) {
                 try {
                     this.client.player.jump(message, parseInt(args[1]));
-                    return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipped to **${song.name}**`);
+                    await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                    return message.channel.sendTyping();
                 } catch {
                     return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
                 }
