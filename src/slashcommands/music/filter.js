@@ -335,7 +335,7 @@ class CommandFilter extends SlashCommand {
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
-                pushFormatFilter(queue, 'Vibrato', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
+                pushFormatFilter(queue, 'Vibrato', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
