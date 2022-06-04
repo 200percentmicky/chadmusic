@@ -120,7 +120,7 @@ class CommandFilter extends SlashCommand {
                         type: CommandOptionType.INTEGER,
                         name: 'frequency',
                         description: 'The frequency of the vibrato effect. 0 to disable Vibrato.',
-                        min_value: 1,
+                        min_value: 0,
                         required: true
                     },
                     {
