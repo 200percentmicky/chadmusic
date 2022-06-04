@@ -321,7 +321,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
                 pushFormatFilter(queue, 'Tremolo', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${f === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
@@ -336,7 +336,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
                 pushFormatFilter(queue, 'Vibrato', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0
+                return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${f === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
