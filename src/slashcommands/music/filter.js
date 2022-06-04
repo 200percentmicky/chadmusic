@@ -84,7 +84,7 @@ class CommandFilter extends SlashCommand {
                 options: [{
                     type: CommandOptionType.INTEGER,
                     name: 'db',
-                    description: 'Adjust the bass in decibels.',
+                    description: 'Adjust the bass in decibels. 0 to disable.',
                     min_value: 0,
                     max_value: 100,
                     required: true
@@ -98,7 +98,7 @@ class CommandFilter extends SlashCommand {
                     {
                         type: CommandOptionType.INTEGER,
                         name: 'frequency',
-                        description: 'The frequency of the tremolo effect.',
+                        description: 'The frequency of the tremolo effect. 0 to disable Tremolo.',
                         min_value: 0,
                         required: true
                     },
@@ -119,7 +119,7 @@ class CommandFilter extends SlashCommand {
                     {
                         type: CommandOptionType.INTEGER,
                         name: 'frequency',
-                        description: 'The frequency of the vibrato effect.',
+                        description: 'The frequency of the vibrato effect. 0 to disable Vibrato.',
                         min_value: 1,
                         required: true
                     },
@@ -152,7 +152,7 @@ class CommandFilter extends SlashCommand {
                 options: [{
                     type: CommandOptionType.NUMBER,
                     name: 'rate',
-                    description: 'The rate of speed.',
+                    description: 'The rate of speed. 0 to disable.',
                     min_value: 0,
                     max_value: 10,
                     required: true
@@ -165,7 +165,7 @@ class CommandFilter extends SlashCommand {
                 options: [{
                     type: CommandOptionType.NUMBER,
                     name: 'rate',
-                    description: 'The rate of high or low vibrations.',
+                    description: 'The rate of high or low vibrations. 0 to disable.',
                     min_value: 0,
                     max_value: 10,
                     required: true
@@ -179,7 +179,7 @@ class CommandFilter extends SlashCommand {
                     {
                         type: CommandOptionType.NUMBER,
                         name: 'samples',
-                        description: 'The sample reduction.',
+                        description: 'The sample reduction. 0 to disable.',
                         min_value: 0,
                         max_value: 250,
                         required: true
@@ -215,7 +215,7 @@ class CommandFilter extends SlashCommand {
                 options: [{
                     type: CommandOptionType.INTEGER,
                     name: 'intensity',
-                    description: 'The intensity of the audio quality.',
+                    description: 'The intensity of the audio quality. 0 to disable.',
                     min_value: -10,
                     max_value: 10,
                     required: true
@@ -320,7 +320,7 @@ class CommandFilter extends SlashCommand {
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
-                pushFormatFilter(queue, 'Tremolo', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
+                pushFormatFilter(queue, 'Tremolo', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
@@ -331,7 +331,7 @@ class CommandFilter extends SlashCommand {
                 const f = ctx.options.vibrato.frequency ?? 5;
                 const d = ctx.options.vibrato.depth ?? 1;
                 try {
-                    await this.client.player.setFilter(guild.id, 'vibrato', d !== 0 ? `vibrato=f=${f}:d=${d}` : false);
+                    await this.client.player.setFilter(guild.id, 'vibrato', f !== 0 ? `vibrato=f=${f}:d=${d}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
