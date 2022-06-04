@@ -316,7 +316,7 @@ class CommandFilter extends SlashCommand {
                 const f = ctx.options.tremolo.frequency ?? 5;
                 const d = ctx.options.tremolo.depth ?? 1;
                 try {
-                    await this.client.player.setFilter(guild.id, 'tremolo', d !== 0 ? `tremolo=f=${f}:d=${d}` : false);
+                    await this.client.player.setFilter(guild.id, 'tremolo', f !== 0 ? `tremolo=f=${f}:d=${d}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
