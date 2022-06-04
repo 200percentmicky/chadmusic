@@ -300,7 +300,11 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'bass': {
-                await this.client.player.setFilter(guild.id, 'bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
+                }
                 pushFormatFilter(queue, 'Bass Boost', ctx.options.bass.db !== 0 ? `Gain: \`${ctx.options.bass.db}dB\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
                     ? 'Off'
@@ -311,7 +315,11 @@ class CommandFilter extends SlashCommand {
             case 'tremolo': {
                 const f = ctx.options.tremolo.frequency ?? 5;
                 const d = ctx.options.tremolo.depth ?? 1;
-                await this.client.player.setFilter(guild.id, 'tremolo', d !== 0 ? `tremolo=f=${f}:d=${d}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'tremolo', d !== 0 ? `tremolo=f=${f}:d=${d}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
+                }
                 pushFormatFilter(queue, 'Tremolo', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${d === 0
                     ? 'Off'
@@ -322,7 +330,11 @@ class CommandFilter extends SlashCommand {
             case 'vibrato': {
                 const f = ctx.options.vibrato.frequency ?? 5;
                 const d = ctx.options.vibrato.depth ?? 1;
-                await this.client.player.setFilter(guild.id, 'vibrato', d !== 0 ? `vibrato=f=${f}:d=${d}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'vibrato', d !== 0 ? `vibrato=f=${f}:d=${d}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
+                }
                 pushFormatFilter(queue, 'Vibrato', d !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${d === 0
                     ? 'Off'
@@ -332,10 +344,14 @@ class CommandFilter extends SlashCommand {
 
             case 'reverse': {
                 const reverse = ctx.options.reverse.toggle;
-                await this.client.player.setFilter(guild.id, 'reverse', reverse
-                    ? 'areverse'
-                    : false
-                );
+                try {
+                    await this.client.player.setFilter(guild.id, 'reverse', reverse
+                        ? 'areverse'
+                        : false
+                    );
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
+                }
                 pushFormatFilter(queue, 'Reverse', reverse ? 'Enabled' : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
                     ? 'On'
@@ -345,14 +361,22 @@ class CommandFilter extends SlashCommand {
 
             case 'tempo': {
                 const rate = ctx.options.tempo.rate;
-                await this.client.player.setFilter(guild.id, 'tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
+                }
                 pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
             }
 
             case 'pitch': {
                 const rate = ctx.options.pitch.rate;
-                await this.client.player.setFilter(guild.id, 'pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
+                }
                 pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
             }
@@ -361,21 +385,33 @@ class CommandFilter extends SlashCommand {
                 const samples = ctx.options.crusher.samples;
                 const bits = ctx.options.crusher.bits || 8;
                 const mode = ctx.options.crusher.mode || 'lin';
-                await this.client.player.setFilter(guild.id, 'crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
+                }
                 pushFormatFilter(queue, 'Crusher', samples !== 0 ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
             }
 
             case 'crystalize': {
                 const intensity = ctx.options.crystalize.intensity;
-                await this.client.player.setFilter(guild.id, 'crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
+                try {
+                    await this.client.player.setFilter(guild.id, 'crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
+                }
                 pushFormatFilter(queue, 'Crystalize', intensity !== 0 ? `Intensity \`${intensity}\`` : 'Off');
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
             }
 
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
-                await this.client.player.setFilter(guild.id, 'custom', custom === 'OFF'.toLowerCase() ? false : custom);
+                try {
+                    await this.client.player.setFilter(guild.id, 'custom', custom === 'OFF'.toLowerCase() ? false : custom);
+                } catch {
+                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
+                }
                 pushFormatFilter(queue, 'Custom Filter', custom === 'OFF'.toLowerCase() ? 'Off' : custom);
                 return this.client.ui.ctxCustom(ctx, '📢', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
             }
