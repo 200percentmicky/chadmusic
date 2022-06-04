@@ -140,7 +140,9 @@ class WaveBot extends AkairoClient {
             token: process.env.TOKEN,
             applicationID: process.env.APP_ID,
             publicKey: process.env.PUBLIC_KEY,
-            client: this
+            client: this,
+            disableTimeouts: this,
+            unknownCommandResponse: false
         });
 
         // Gateway Server
