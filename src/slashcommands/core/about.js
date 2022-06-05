@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -78,7 +78,21 @@ class CommandAbout extends SlashCommand {
                 text: `The owner of this instance is ${owner}.`,
                 iconURL: app.owner?.avatarURL({ dynamic: true })
             });
-        return ctx.send({ embeds: [aboutembed], ephemeral: true });
+
+        const urlGithub = new MessageButton()
+            .setStyle('LINK')
+            .setURL('https://github.com/200percentmicky/ChadMusic')
+            .setLabel('GitHub');
+
+        const support = new MessageButton()
+            .setStyle('LINK')
+            .setURL('https://discord.com/invite/qQuJ9YQ')
+            .setLabel('Support Server');
+
+        const actionRow = new MessageActionRow()
+            .addComponents([urlGithub, support]);
+
+        return ctx.send({ embeds: [aboutembed], components: [actionRow], ephemeral: true });
     }
 }
 

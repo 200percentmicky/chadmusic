@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -77,6 +77,20 @@ module.exports = class CommandAbout extends Command {
                 text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
                 iconURL: owner.avatarURL({ dynamic: true })
             });
-        return message.reply({ embeds: [aboutembed] });
+
+        const urlGithub = new MessageButton()
+            .setStyle('LINK')
+            .setURL('https://github.com/200percentmicky/ChadMusic')
+            .setLabel('GitHub');
+
+        const support = new MessageButton()
+            .setStyle('LINK')
+            .setURL('https://discord.com/invite/qQuJ9YQ')
+            .setLabel('Support Server');
+
+        const actionRow = new MessageActionRow()
+            .addComponents([urlGithub, support]);
+
+        return message.reply({ embeds: [aboutembed], components: [actionRow] });
     }
 };
