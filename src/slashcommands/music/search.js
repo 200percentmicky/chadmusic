@@ -120,12 +120,28 @@ class CommandSearch extends SlashCommand {
 
         const results = await this.client.player.search(ctx.options.query);
 
+        const emojiNumber = {
+            1: '1️⃣',
+            2: '2️⃣',
+            3: '3️⃣',
+            4: '4️⃣',
+            5: '5️⃣',
+            6: '6️⃣',
+            7: '7️⃣',
+            8: '8️⃣',
+            9: '9️⃣',
+            10: '🔟'
+        };
+
+        const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
+
         const embed = new MessageEmbed()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
                 iconURL: member.user.avatarURL({ dynamic: true })
             })
+            .setDescription(`${resultsFormattedList}`)
             .setFooter({
                 text: 'Make your selection using the menu below.'
             });
@@ -136,7 +152,11 @@ class CommandSearch extends SlashCommand {
             const track = {
                 label: results[i].name,
                 description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
-                value: `${i}`
+                value: `${i}`,
+                emoji: {
+                    // eslint-disable-next-line no-useless-escape
+                    name: emojiNumber[i + 1]
+                }
             };
             menuOptions.push(track);
         }
@@ -179,11 +199,11 @@ class CommandSearch extends SlashCommand {
                     });
                 }
 
-                selCtx.delete();
-                return await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
+                await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                     member: member,
                     textChannel: channel
                 });
+                return ctx.delete();
             },
             30 * 1000
         );
@@ -202,7 +222,7 @@ class CommandSearch extends SlashCommand {
                     });
                 }
 
-                return btnCtx.delete();
+                return ctx.delete();
             },
             30 * 1000
         );
