@@ -172,7 +172,6 @@ module.exports = class CommandQueue extends Command {
 
             // First Page Button
             if (interaction.customId === 'first_page') {
-                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.first();
 
                 /* Map the array. */
@@ -201,12 +200,11 @@ module.exports = class CommandQueue extends Command {
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
-                await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
             }
 
             // Previous Page Button
             if (interaction.customId === 'previous_page') {
-                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.previous();
 
                 /* Map the array. */
@@ -237,12 +235,11 @@ module.exports = class CommandQueue extends Command {
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
-                await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
             }
 
             // Next Page Button
             if (interaction.customId === 'next_page') {
-                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.next();
 
                 /* Map the array. */
@@ -274,12 +271,11 @@ module.exports = class CommandQueue extends Command {
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
-                await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
             }
 
             // Last Page Button
             if (interaction.customId === 'last_page') {
-                await interaction.deferUpdate();
                 const paginateArray = queuePaginate.last();
 
                 /* Map the array. */
@@ -309,7 +305,7 @@ module.exports = class CommandQueue extends Command {
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: message.author.avatarURL({ dynamic: true })
                 });
-                await interaction.message.edit({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
             }
 
             // Jump to Page Button
@@ -458,6 +454,8 @@ module.exports = class CommandQueue extends Command {
 
             // Cancel Button
             if (interaction.customId === 'close_queue') {
+                await interaction.deferUpdate();
+                await interaction.message.delete();
                 collector.stop();
                 return message.react(process.env.REACTION_OK);
             }

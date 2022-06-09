@@ -44,12 +44,6 @@ module.exports = class ListenerCloseMessage extends Listener {
             interaction.message.delete();
             break;
         }
-
-        case 'close_queue': {
-            await interaction.deferUpdate();
-            interaction.message.delete();
-            break;
-        }
         }
     }
 };
