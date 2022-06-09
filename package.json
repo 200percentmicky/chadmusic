@@ -24,7 +24,7 @@
     "colon-notation": "^1.2.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "github:discord-akairo/discord-akairo",
-    "discord.js": "github:200percentmicky/discord.js#voice-text",
+    "discord.js": "^13.8.0",
     "dotenv": "^8.6.0",
     "enmap": "^5.8.13",
     "ffprobe": "^1.1.2",
