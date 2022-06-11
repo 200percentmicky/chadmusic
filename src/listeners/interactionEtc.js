@@ -19,9 +19,11 @@
 const { Listener } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class ListenerCloseMessage extends Listener {
+// Handles various interaction requests not needed within the commands.
+
+module.exports = class ListenerInteractionEtc extends Listener {
     constructor () {
-        super('closeMessage', {
+        super('interactionEtc', {
             emitter: 'client',
             event: 'interactionCreate'
         });
