@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandSkip extends Command {
     constructor () {
@@ -56,7 +57,7 @@ module.exports = class CommandSkip extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (!queue || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         // For breaking use only.
         // this.client.player.skip(message)

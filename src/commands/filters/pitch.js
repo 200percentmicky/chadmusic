@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandTempo extends Command {
@@ -84,7 +85,7 @@ module.exports = class CommandTempo extends Command {
             pushFormatFilter(queue, 'Pitch', `Rate: \`${rate}\``);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
     }
 };

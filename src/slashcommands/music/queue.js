@@ -20,6 +20,7 @@ const { SlashCommand, ComponentType, TextInputStyle, CommandOptionType } = requi
 const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandQueue extends SlashCommand {
     constructor (creator) {
@@ -98,7 +99,7 @@ class CommandQueue extends SlashCommand {
         const currentVc = this.client.vc.get(vc);
 
         if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         switch (ctx.subcommands[0]) {
         case 'reverse': {

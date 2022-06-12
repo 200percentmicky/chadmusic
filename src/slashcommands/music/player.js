@@ -20,6 +20,7 @@ const { SlashCommand, CommandOptionType } = require('slash-create');
 const { MessageEmbed, Permissions } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -145,7 +146,7 @@ class CommandPlayer extends SlashCommand {
         case 'nowplaying': {
             const currentVc = client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const song = queue.songs[0];
             const total = song.duration;
@@ -249,7 +250,7 @@ class CommandPlayer extends SlashCommand {
         case 'pause': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.');
@@ -263,7 +264,7 @@ class CommandPlayer extends SlashCommand {
         case 'resume': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 if (!queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is not paused.');
@@ -277,7 +278,7 @@ class CommandPlayer extends SlashCommand {
         case 'volume': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const volume = queue.volume;
             if (!ctx.options.volume.set) {
@@ -314,7 +315,7 @@ class CommandPlayer extends SlashCommand {
         case 'earrape': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const earrape = 69420; // 😂👌👌💯
             const volume = queue.volume;
@@ -337,7 +338,7 @@ class CommandPlayer extends SlashCommand {
         case 'seek': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 try {
@@ -355,7 +356,7 @@ class CommandPlayer extends SlashCommand {
         case 'repeat': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 const mode = parseInt(ctx.options.repeat.mode);

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandResume extends Command {
     constructor () {
@@ -53,7 +54,7 @@ module.exports = class CommandResume extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (!queue || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
             if (!queue.paused) return this.client.ui.reply(message, 'warn', 'The player is not paused.');

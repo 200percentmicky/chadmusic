@@ -20,6 +20,7 @@ const { Command } = require('discord-akairo');
 const { MessageEmbed, MessageButton, MessageActionRow, Modal, TextInputComponent } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 // const { FieldsEmbed } = require('discord-paginationembed')
 
 // TODO: Use Discord Embed Buttons to go to the next page.
@@ -60,7 +61,7 @@ module.exports = class CommandQueue extends Command {
         const currentVc = this.client.vc.get(vc);
 
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         /* Getting the entire queue. */
         const songs = queue.songs.slice(1);

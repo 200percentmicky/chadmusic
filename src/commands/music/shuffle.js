@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { shuffle } = require('../../aliases.json');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandShuffle extends Command {
     constructor () {
@@ -53,9 +54,8 @@ module.exports = class CommandShuffle extends Command {
         const queue = this.client.player.getQueue(message);
         if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
 
-        const currentVc = this.client.vc.get(vc);
         if (vc.members.size <= 2 || dj) {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
             this.client.player.shuffle(message);
             return this.client.ui.reply(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);

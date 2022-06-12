@@ -19,6 +19,7 @@
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 const { stop } = require('../../aliases.json');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandStop extends Command {
     constructor () {
@@ -53,7 +54,7 @@ module.exports = class CommandStop extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
             this.client.player.stop(message);

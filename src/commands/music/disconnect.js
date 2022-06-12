@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandDisconnect extends Command {
     constructor () {
@@ -57,7 +58,7 @@ module.exports = class CommandDisconnect extends Command {
 
         if (!vc) {
             return this.client.ui.send(message, 'NOT_IN_VC');
-        } else if (vc.id !== currentVc.channel.id) {
+        } else if (!isSameVoiceChannel(this.client, message.member, vc)) {
             return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 

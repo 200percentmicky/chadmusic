@@ -18,6 +18,7 @@
 
 const { SlashCommand, ApplicationCommandType } = require('slash-create');
 const { Permissions } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
@@ -91,7 +92,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(guild.id);

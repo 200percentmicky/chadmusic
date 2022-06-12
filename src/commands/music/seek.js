@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { toMilliseconds } = require('colon-notation');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandSeek extends Command {
     constructor () {
@@ -55,6 +56,7 @@ module.exports = class CommandSeek extends Command {
         const currentVc = this.client.vc.get(vc);
 
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
             if (!args[1]) return this.client.ui.usage(message, 'seek <time>');

@@ -21,6 +21,7 @@ const {
     MessageEmbed,
     Permissions
 } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandSearch extends SlashCommand {
     constructor (creator) {
@@ -98,7 +99,7 @@ class CommandSearch extends SlashCommand {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(guild.id);

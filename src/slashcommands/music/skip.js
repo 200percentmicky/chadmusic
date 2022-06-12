@@ -18,6 +18,7 @@
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { MessageEmbed } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandSkip extends SlashCommand {
     constructor (creator) {
@@ -81,7 +82,7 @@ class CommandSkip extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         switch (ctx.subcommands[0]) {
         case 'force': {

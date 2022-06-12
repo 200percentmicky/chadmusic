@@ -18,6 +18,7 @@
 
 const { SlashCommand } = require('slash-create');
 const { Permissions } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandStop extends SlashCommand {
     constructor (creator) {
@@ -54,7 +55,7 @@ class CommandStop extends SlashCommand {
 
         const currentVc = client.vc.get(vc);
         if (!client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-        else if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
             client.player.stop(guild);

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandBassBoost extends Command {
@@ -83,7 +84,7 @@ module.exports = class CommandBassBoost extends Command {
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) {
+            if (!isSameVoiceChannel(this.client, message.member, vc)) {
                 return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
             }
         }

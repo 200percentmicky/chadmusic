@@ -20,6 +20,7 @@ const { SlashCommand, CommandOptionType } = require('slash-create');
 const { Permissions } = require('discord.js');
 const iheart = require('iheart');
 const { isURL } = require('../../modules/isURL');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 const pornPattern = (url) => {
     // ! TODO: Come up with a better regex lol
@@ -156,7 +157,7 @@ class CommandPlay extends SlashCommand {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(guild.id);

@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 function pornPattern (url) {
     // ! TODO: Come up with a better regex lol
@@ -91,11 +92,11 @@ module.exports = class CommandPlayNow extends Command {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         if (vc.members.size <= 3 || dj) {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
             message.channel.sendTyping();
             // Adding song to position 1 of the queue. options.skip is shown to be unreliable.

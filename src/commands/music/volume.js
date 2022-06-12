@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandVolume extends Command {
     constructor () {
@@ -59,6 +60,7 @@ module.exports = class CommandVolume extends Command {
 
         const queue = this.client.player.getQueue(message.guild.id);
         if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         const volume = queue.volume;
         if (!args.volume) {

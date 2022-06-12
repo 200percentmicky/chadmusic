@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandEarrape extends Command {
     constructor () {
@@ -56,10 +57,9 @@ module.exports = class CommandEarrape extends Command {
 
         // This command should not be limited by the DJ Role. Must be a toggable setting.
         const vc = message.member.voice.channel;
-        const currentVc = this.client.vc.get(message.guild.id);
         if (!vc) {
             return this.client.ui.send(message, 'NOT_IN_VC');
-        } else if (vc.id !== currentVc.channel.id) {
+        } else if (!isSameVoiceChannel(this.client, message.member, vc)) {
             return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 

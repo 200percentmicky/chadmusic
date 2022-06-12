@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandCrystalize extends Command {
     constructor () {
@@ -83,7 +84,7 @@ module.exports = class CommandCrystalize extends Command {
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) {
+            if (!isSameVoiceChannel(this.client, message.member, vc)) {
                 return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
             }
         }

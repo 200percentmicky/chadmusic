@@ -19,6 +19,7 @@
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 const iheart = require('iheart');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandIHeartRadio extends Command {
     constructor () {
@@ -81,7 +82,7 @@ module.exports = class CommandIHeartRadio extends Command {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         message.channel.sendTyping();

@@ -17,6 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 class CommandFilter extends SlashCommand {
@@ -417,7 +418,7 @@ class CommandFilter extends SlashCommand {
             }
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
     }
 }

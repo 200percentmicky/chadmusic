@@ -18,6 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandReverse extends Command {
@@ -79,7 +80,7 @@ module.exports = class CommandReverse extends Command {
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** On');
             }
         } else {
-            if (vc.id !== currentVc.channel.id) {
+            if (!isSameVoiceChannel(this.client, message.member, vc)) {
                 return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
             }
         }

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
 module.exports = class CommandFilterOff extends Command {
@@ -61,7 +62,7 @@ module.exports = class CommandFilterOff extends Command {
             pushFormatFilter(queue, 'All', 'Off');
             return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
     }
 };

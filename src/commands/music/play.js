@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { isURL } = require('../../modules/isURL');
 
 /* eslint-disable no-useless-escape */
@@ -120,7 +121,7 @@ module.exports = class CommandPlay extends Command {
                 this.client.vc.join(vc);
             }
         } else {
-            if (vc.id !== currentVc.channel.id) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(message.guild.id);
