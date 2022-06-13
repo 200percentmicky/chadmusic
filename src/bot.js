@@ -141,7 +141,7 @@ class WaveBot extends AkairoClient {
             applicationID: process.env.APP_ID,
             publicKey: process.env.PUBLIC_KEY,
             client: this,
-            disableTimeouts: this,
+            disableTimeouts: true,
             unknownCommandResponse: false
         });
 
