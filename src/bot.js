@@ -32,8 +32,7 @@ logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
 logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
 
-const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { Intents } = require('discord.js');
+const { Intents, Client } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
@@ -44,11 +43,9 @@ const ui = require('./modules/WaveUI');
 const path = require('path');
 
 // Let's boogie!
-class WaveBot extends AkairoClient {
+class WaveBot extends Client {
     constructor () {
         super({
-            ownerID: process.env.OWNER_ID
-        }, {
             allowedMentions: {
                 repliedUser: false
             },
@@ -103,45 +100,12 @@ class WaveBot extends AkairoClient {
             blockedPhrases: []
         };
 
-        // Create Command Handler
-        this.commands = new CommandHandler(this, {
-            directory: './src/commands',
-            prefix: message => {
-                // This is an attempt to have custom prefixes, despite how Enmap likes to complain.
-                // If no key is found, this should return the configured prefix in the .env file.
-
-                this.settings.ensure(message.guild.id, this.defaultSettings); // Hoping that the bot doesn't have a panic attack.
-                if (message.channel.type === 'dm') {
-                    return process.env.PREFIX;
-                } else {
-                    try {
-                        return [this.settings.get(message.guild.id, 'prefix'), process.env.PREFIX] ?? process.env.PREFIX;
-                    } catch {
-                        return process.env.PREFIX;
-                    }
-                }
-            },
-            commandUtil: true,
-            handleEdits: true,
-            allowMention: true
-        });
-
-        // Create Listener Handler
-        this.listeners = new ListenerHandler(this, {
-            directory: './src/listeners'
-        });
-
-        // Create Inhibitor Handler
-        this.inhibitors = new InhibitorHandler(this, {
-            directory: './src/inhibitors'
-        });
-
         this.creator = new SlashCreator({
             token: process.env.TOKEN,
             applicationID: process.env.APP_ID,
             publicKey: process.env.PUBLIC_KEY,
             client: this,
-            disableTimeouts: this,
+            disableTimeouts: true,
             unknownCommandResponse: false
         });
 
@@ -153,35 +117,15 @@ class WaveBot extends AkairoClient {
         );
 
         // Register commands in the "commands" directory.
-        this.creator.registerCommandsIn(path.join(__dirname, 'slashcommands'));
+        this.creator.registerCommandsIn(path.join(__dirname, 'commands'));
         this.creator.syncCommands({ // Sync all commands with Discord.
             deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
             skipGuildErrors: true,
             syncGuilds: true,
             syncPermissions: true
         });
-
-        // Set custom emitters
-        this.listeners.setEmitters({
-            process: process,
-            commandHandler: this.commands,
-            player: this.player,
-            creator: this.creator
-        });
-
-        this.commands.useInhibitorHandler(this.inhibitors); // Use all Inhibitors.
-        this.commands.useListenerHandler(this.listeners); // Use all Listeners.
-
-        this.commands.loadAll(); // Load all Inhibitors
-        this.listeners.loadAll(); // Load all Listeners.
-
-        // In the case of production, load all Inhibitors.
-        if (process.env.DEV === 'true') {
-            this.inhibitors.loadAll();
-        }
     }
 
-    // This is required to load the mongoose provider.
     async login (token) {
         return super.login(token);
     }
