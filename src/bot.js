@@ -87,6 +87,7 @@ class WaveBot extends AkairoClient {
         this.radio = new Keyv(); // Parse radio info. TODO: Replace this with Map() instead.
 
         this.settings = new Enmap({ name: 'settings' });
+        this.tags = new Enmap({ name: 'tags' });
 
         this.defaultSettings = {
             prefix: process.env.PREFIX,
@@ -153,7 +154,7 @@ class WaveBot extends AkairoClient {
         );
 
         // Register commands in the "commands" directory.
-        this.creator.registerCommandsIn(path.join(__dirname, 'slashcommands'));
+        this.creator.registerCommandsIn(path.join(__dirname, 'appcommands'));
         this.creator.syncCommands({ // Sync all commands with Discord.
             deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
             skipGuildErrors: true,
