@@ -18,16 +18,15 @@
 
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
-const { stop } = require('../../aliases.json');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandStop extends Command {
+module.exports = class CommandDisconnect extends Command {
     constructor () {
-        super(stop !== undefined ? stop[0] : 'stop', {
-            aliases: stop || ['stop'],
+        super('disconnect', {
+            aliases: ['disconnect', 'leave', 'pissoff', 'fuckoff'],
             category: '🎶 Music',
             description: {
-                text: 'Stops the player, and clears the queue.'
+                text: 'Disconnects from the current voice channel.'
             },
             channel: 'guild',
             clientPermissions: ['EMBED_LINKS']
@@ -39,7 +38,9 @@ module.exports = class CommandStop extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) {
+                return this.client.ui.send(message, 'DJ_MODE');
+            }
         }
 
         const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
@@ -50,16 +51,23 @@ module.exports = class CommandStop extends Command {
         }
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        const currentVc = this.client.vc.get(message.member.voice.channel);
+        if (!currentVc) {
+            return this.client.ui.reply(message, 'error', 'I\'m not in any voice channel.');
+        }
 
-        const currentVc = this.client.vc.get(vc);
-        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        if (!vc) {
+            return this.client.ui.send(message, 'NOT_IN_VC');
+        } else if (!isSameVoiceChannel(this.client, message.member, vc)) {
+            return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        }
 
         if (vc.members.size <= 2 || dj) {
-            this.client.player.stop(message);
+            if (this.client.player.getQueue(message)) {
+                this.client.player.stop(message);
+            }
             this.client.vc.leave(message);
-            return this.client.ui.custom(message, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
+            return this.client.ui.custom(message, '📤', 0xDD2E44, `Left <#${vc.id}>`);
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');
         }

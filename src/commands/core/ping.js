@@ -16,21 +16,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand } = require('slash-create');
+const { Command } = require('discord-akairo');
 
-class CommandPing extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'ping',
-            description: "Pong! Measures the bot's latency to Discord."
+module.exports = class PingCommand extends Command {
+    constructor () {
+        super('ping', {
+            aliases: ['ping'],
+            description: {
+                text: 'Shows the bot\'s latency to Discord.'
+            },
+            category: '💻 Core'
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        return ctx.send(`✅ **Pong!** \`${Math.round(this.client.ws.ping)}ms.\``);
-    }
-}
+    async exec (message) {
+        const ping = await message.channel.send(process.env.EMOJI_LOADING + 'Ping?');
 
-module.exports = CommandPing;
+        const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt);
+
+        await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩 \`${timeDiff}ms.\`\n💟 \`${Math.round(this.client.ws.ping)}ms.\``);
+    }
+};

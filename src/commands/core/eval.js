@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand, CommandOptionType } = require('slash-create');
-const { oneLine } = require('common-tags');
+const { Command } = require('discord-akairo');
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
@@ -27,76 +26,98 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
 const commonTags = require('common-tags');
+const Genius = require('genius-lyrics');
 
-class CommandEval extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'eval',
-            description: '[Owner Only] Evaluates and executes Javascript code.',
-            options: [
+module.exports = class CommandEval extends Command {
+    constructor () {
+        super('eval', {
+            aliases: ['eval'],
+            ownerOnly: true,
+            description: {
+                text: 'Executes Javascript code.',
+                usage: '<code>',
+                details: commonTags.stripIndents`
+        **Loaded Packages:**
+        \`Discord\` - discord.js
+        \`_\` - lodash
+        \`__\` - underscore
+        \`prettyBytes\` - pretty-bytes
+        \`prettyMs\` - prettyMs
+        \`colonNotation\` - colon-notation
+        \`commonTags\` - common-tags
+        \`Genius\` - genius-lyrics`
+            },
+            category: '💻 Core',
+            args: [
                 {
-                    type: CommandOptionType.STRING,
-                    name: 'code',
-                    required: true,
-                    description: 'The code to execute. With great power comes great responsibility.'
+                    type: 'string',
+                    id: 'code',
+                    match: 'text'
                 }
             ]
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        const app = await this.client.application.fetch();
-        if (app.owner?.id !== ctx.user.id) return ctx.send('🚫 That command can only be used by the bot owner.', { ephemeral: true });
-        if (!process.env.USE_EVAL) {
-            return ctx.send(oneLine`
-            ${process.env.EMOJI_INFO} The \`eval\` command is currently disabled. If you need to use this command, you can
-            enable it through the bot's environment variables by setting **USE_EVAL** to \`true\`.` + '\n' + oneLine`
-            ${process.env.EMOJI_WARN} Do not enable this command if you don't know what it does. Unless you know what you're
-            doing, if someone is telling you to enable it to have you run something, you're most likely being scammed.
-            `, { ephemeral: true });
-        }
-
-        const guild = this.client.guilds.cache.get(ctx.guildID);
-        const channel = guild.channels.cache.get(ctx.channelID);
-        const member = guild.members.cache.get(ctx.user.id);
-
+    async exec (message, args) {
         const t1 = process.hrtime();
         const clean = text => {
             if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); } else { return text; }
         };
 
         // const args = message.content.split(/ +/g)
-        const code = ctx.options.code;
+        const code = args.code;
+
+        const closeButton = new Discord.MessageButton()
+            .setCustomId('close_eval')
+            .setStyle('DANGER')
+            .setEmoji('✖');
 
         try {
             // eslint-disable-next-line no-eval
             let evaled = await eval(code);
 
             if (typeof evaled !== 'string') {
-                evaled = require('util').inspect(evaled, { depth: 0, sorted: true, maxArrayLength: 5 });
+                evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
             }
+
+            message.channel.sendTyping();
 
             const t2 = process.hrtime(t1);
             const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
-            if (code.match(/\.token/gmi)) {
-                return ctx.send('⛔ `REACTED`', { ephemeral: true }); // I'm not supporting that...
+            if (code.includes('.token')) {
+                await message.react(process.env.REACTION_WARN);
+                try {
+                    message.author.send(clean(evaled));
+                } catch (err) {
+                    if (err.name === 'DiscordAPIError') return;
+                }
+                return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled));
             } else {
                 const result = clean(evaled);
                 if (result.length > 2000) {
-                    this.client.logger.info('[eval] Took %s ms. to complete.\n%s', end, `Input: ${code}\n${clean(evaled)}`);
-                    return await ctx.send(':warning: Out too large. Check the console, or logs for the output.', { ephemeral: true });
+                    try {
+                        const buffer = Buffer.from(`// ✅ Evaluated in ${end} ms.\n${result}`);
+                        const file = new Discord.MessageAttachment(buffer, 'eval_output.json');
+                        if (!message.channel.permissionsFor(this.client.user.id).has(Discord.Permissions.FLAGS.ATTACH_FILES)) {
+                            try {
+                                await message.author.send({ files: [file] });
+                            } catch {
+                                return message.channel.send(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
+                            }
+                        }
+                        return message.channel.send({ files: [file], components: [new Discord.MessageActionRow().addComponents(closeButton)] });
+                    } catch {
+                        return message.channel.send(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
+                    } finally {
+                        this.client.logger.info('Took %s ms. to complete.\n%s', end, clean(evaled));
+                    }
                 } else {
-                    return await ctx.send(`\`\`\`js\n${result}\`\`\``, { ephemeral: true });
+                    return message.channel.send({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.MessageActionRow().addComponents(closeButton)] });
                 }
             }
         } catch (err) {
-            await ctx.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``, { ephemeral: true });
-            this.client.logger.error('[eval] Error during eval: %s', err);
+            message.channel.send({ content: `\`\`\`js\n${err.name}: ${err.message}\`\`\``, components: [new Discord.MessageActionRow().addComponents(closeButton)] });
         }
     }
-}
-
-module.exports = CommandEval;
+};

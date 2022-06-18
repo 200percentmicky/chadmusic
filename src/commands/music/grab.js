@@ -16,46 +16,43 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand } = require('slash-create');
+const { Command } = require('discord-akairo');
 const { MessageEmbed } = require('discord.js');
 
-class CommandGrab extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'grab',
-            description: 'Sends the currently playing song as a direct message.'
+module.exports = class CommandGrab extends Command {
+    constructor () {
+        super('grab', {
+            aliases: ['grab', 'save'],
+            category: '🎶 Music',
+            description: {
+                text: 'Saves this song to your DMs.'
+            },
+            channel: 'guild',
+            clientPermissions: ['EMBED_LINKS']
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        const client = this.creator.client;
-        const guild = client.guilds.cache.get(ctx.guildID);
-        const channel = await guild.channels.fetch(ctx.channelID);
-        const _member = await guild.members.fetch(ctx.member.id);
-
-        const vc = _member.voice.channel;
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+    async exec (message) {
+        // Grab will not be affected by DJ Mode.
+        const vc = message.member.voice.channel;
+        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
 
-        if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
 
-        const queue = this.client.player.getQueue(guild);
+        const queue = this.client.player.getQueue(message);
         const song = queue.songs[0];
 
-        const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
+        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
         if (textChannel) {
-            if (textChannel !== channel.id) {
-                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            if (textChannel !== message.channel.id) {
+                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
-        await ctx.defer(true);
-
         const embed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
@@ -67,12 +64,10 @@ class CommandGrab extends SlashCommand {
             .setTimestamp();
 
         try {
-            await _member.user.send({ embeds: [embed] });
-            return this.client.ui.ctx(ctx, 'ok', 'Saved! Check your DMs. 📩');
+            await message.author.send({ embeds: [embed] });
+            return message.react(process.env.REACTION_OK);
         } catch {
-            return this.client.ui.ctx(ctx, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
+            return this.client.ui.reply(message, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
         }
     }
-}
-
-module.exports = CommandGrab;
+};

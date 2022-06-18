@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand } = require('slash-create');
+const { Command } = require('discord-akairo');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
@@ -28,22 +28,21 @@ const akairo = require('../../../node_modules/discord-akairo/package.json');
 const discord = require('../../../node_modules/discord.js/package.json');
 const distube = require('../../../chadtube/package.json'); // Temporary
 
-class CommandAbout extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'about',
-            description: 'This application is running an instance of ChadMusic, The Chad Music Bot!'
+module.exports = class CommandAbout extends Command {
+    constructor () {
+        super('about', {
+            aliases: ['about'],
+            category: '💻 Core',
+            description: {
+                text: 'This application is running an instance of ChadMusic, The Chad Music Bot!'
+            }
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        const guild = this.client.guilds.cache.get(ctx.guildID);
-        const app = await this.client.application.fetch();
-        const owner = `${app.owner?.tag ?? app.owner?.name} (${app.owner?.id})`;
+    async exec (message) {
+        const owner = this.client.users.cache.get(this.client.ownerID);
         const aboutembed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'About ChadMusic',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
@@ -75,8 +74,8 @@ class CommandAbout extends SlashCommand {
             `, true)
             .setThumbnail('https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
             .setFooter({
-                text: `The owner of this instance is ${owner}.`,
-                iconURL: app.owner?.avatarURL({ dynamic: true })
+                text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
+                iconURL: owner.avatarURL({ dynamic: true })
             });
 
         const urlGithub = new MessageButton()
@@ -92,8 +91,6 @@ class CommandAbout extends SlashCommand {
         const actionRow = new MessageActionRow()
             .addComponents([urlGithub, support]);
 
-        return ctx.send({ embeds: [aboutembed], components: [actionRow], ephemeral: true });
+        return message.reply({ embeds: [aboutembed], components: [actionRow] });
     }
-}
-
-module.exports = CommandAbout;
+};
