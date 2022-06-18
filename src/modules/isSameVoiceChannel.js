@@ -27,8 +27,13 @@ const { Client, GuildMember, BaseGuildVoiceChannel } = require('discord.js');
  * @returns boolean
  */
 function isSameVoiceChannel (client, member, vc) {
-    const queue = client.player.getQueue(member.guild);
-    const channelId = queue.voice?.connection?.joinConfig?.channelId;
+    const queue = client.player?.getQueue(member.guild);
+    let channelId;
+    try {
+        channelId = queue.voice?.connection.joinConfig.channelId;
+    } catch {
+        channelId = client.vc.get(vc).channel.id;
+    }
 
     return channelId === vc.id;
 }
