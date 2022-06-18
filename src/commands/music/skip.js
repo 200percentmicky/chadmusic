@@ -16,96 +16,146 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Command } = require('discord-akairo');
+const { SlashCommand, CommandOptionType } = require('slash-create');
 const { MessageEmbed } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandSkip extends Command {
-    constructor () {
-        super('skip', {
-            aliases: ['skip', 's'],
-            category: '🎶 Music',
-            description: {
-                text: 'Skips the currently playing song.',
-                usage: '|--force/-f|',
-                details: '`|--force/-f|` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
-            },
-            channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+class CommandSkip extends SlashCommand {
+    constructor (creator) {
+        super(creator, {
+            name: 'skip',
+            description: 'Skips the playing track.',
+            options: [
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'track',
+                    description: 'Skips the playing track, or vote to skip if the voice channel has more than 3 people.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'force',
+                    description: 'Force skips the currently playing track.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'jump',
+                    description: 'Skips the track to a specified entry in the queue.',
+                    options: [
+                        {
+                            type: CommandOptionType.INTEGER,
+                            name: 'index',
+                            description: 'The entry in the queue to skip to.',
+                            min_value: 1,
+                            required: true
+                        }
+                    ]
+                }
+            ]
         });
+
+        this.filePath = __filename;
     }
 
-    async exec (message) {
-        const djMode = this.client.settings.get(message.guild.id, 'djMode');
-        const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+    async run (ctx) {
+        const guild = this.client.guilds.cache.get(ctx.guildID);
+        const channel = guild.channels.cache.get(ctx.channelID);
+        const member = guild.members.cache.get(ctx.user.id);
+
+        const djMode = this.client.settings.get(guild.id, 'djMode');
+        const djRole = this.client.settings.get(guild.id, 'djRole');
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
-        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
         if (textChannel) {
-            if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            if (textChannel !== channel.id) {
+                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
-        const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        const vc = member.voice.channel;
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 
-        const queue = this.client.player.getQueue(message.guild);
+        const queue = this.client.player.getQueue(guild);
 
         const currentVc = this.client.vc.get(vc);
-        if (!queue || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        // For breaking use only.
-        // this.client.player.skip(message)
-        // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+        switch (ctx.subcommands[0]) {
+        case 'force': {
+            if (dj || vc.members.size <= 2) {
+                if (!queue.songs[1]) {
+                    this.client.player.stop(guild);
+                    this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                }
+                this.client.player.skip(guild);
+                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+            } else {
+                this.client.ui.send(ctx, 'NOT_ALONE');
+            }
 
-        /*
-    if (args[1] === ('--force' || '-f')) {
-      if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
-      this.client.player.skip(message)
-      return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
-    }
-    */
+            channel.sendTyping();
+            break;
+        }
 
-        if (vc.members.size >= 4) {
-            const vcSize = Math.floor(vc.members.size / 2);
-            const neededVotes = queue.votes.length >= vcSize;
-            const votesLeft = Math.floor(vcSize - queue.votes.length);
-            if (queue.votes.includes(message.member.user.id)) return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
-            queue.votes.push(message.member.user.id);
-            if (neededVotes) {
+        case 'jump': {
+            const song = queue.songs[ctx.options.jump.index];
+
+            if (dj || vc.members.size <= 2) {
+                try {
+                    this.client.player.jump(guild, parseInt(ctx.options.jump.index));
+                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                    return channel.sendTyping();
+                } catch {
+                    return this.client.ui.ctx(ctx, 'error', 'Not a valid entry in the queue.');
+                }
+            } else {
+                return this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+        }
+
+        default: { // track
+            if (vc.members.size >= 4) {
+                const vcSize = Math.floor(vc.members.size / 2);
+                const neededVotes = queue.votes.length >= vcSize;
+                const votesLeft = Math.floor(vcSize - queue.votes.length);
+                if (queue.votes.includes(member.user.id)) return this.client.ui.ctx(ctx, 'warn', 'You already voted to skip.');
+                queue.votes.push(member.user.id);
+                if (neededVotes) {
+                    queue.votes = [];
+                    if (!queue.songs[1]) {
+                        this.client.player.stop(guild);
+                        return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    }
+                    this.client.player.skip(guild);
+                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                    return channel.sendTyping();
+                } else {
+                    const embed = new MessageEmbed()
+                        .setColor(parseInt(process.env.COLOR_INFO))
+                        .setDescription('⏭ Skipping?')
+                        .setFooter({
+                            text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? " Yo DJ, you can force skip the track by using '/skip force'." : ''}`,
+                            icon_url: member.user.avatarURL({ dynamic: true })
+                        });
+                    return ctx.send({ embeds: [embed] });
+                }
+            } else {
                 queue.votes = [];
                 if (!queue.songs[1]) {
-                    this.client.player.stop(message.guild);
-                    return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    this.client.player.stop(guild);
+                    return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                 }
-                this.client.player.skip(message);
-                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
-                return message.channel.sendTyping();
-            } else {
-                const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-                const embed = new MessageEmbed()
-                    .setColor(process.env.COLOR_INFO)
-                    .setDescription('⏭ Skipping?')
-                    .setFooter({
-                        text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
-                        icon_url: message.author.avatarURL({ dynamic: true })
-                    });
-                return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+                this.client.player.skip(guild);
+                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                return channel.sendTyping();
             }
-        } else {
-            queue.votes = [];
-            if (!queue.songs[1]) {
-                this.client.player.stop(message.guild);
-                return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
-            }
-            this.client.player.skip(message);
-            await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
-            return message.channel.sendTyping();
+        }
         }
     }
-};
+}
+
+module.exports = CommandSkip;

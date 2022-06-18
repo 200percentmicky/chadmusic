@@ -16,65 +16,70 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Command } = require('discord-akairo');
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
-const { Permissions } = require('discord.js');
+const { SlashCommand, CommandOptionType, ComponentType, ButtonStyle } = require('slash-create');
+const {
+    MessageEmbed,
+    Permissions
+} = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandSearch extends Command {
-    constructor () {
-        super('search', {
-            aliases: ['search'],
-            category: '🎶 Music',
-            description: {
-                text: 'Searches for a song on YouTube.',
-                usage: '<query>'
-            },
-            channel: 'guild',
-            clientPermissions: ['EMBED_LINKS'],
-            args: [
+class CommandSearch extends SlashCommand {
+    constructor (creator) {
+        super(creator, {
+            name: 'search',
+            description: 'Searches for a track.',
+            options: [
                 {
-                    id: 'query',
-                    match: 'rest'
+                    type: CommandOptionType.STRING,
+                    name: 'query',
+                    description: 'The track to search for. Provides the first 10 results.',
+                    required: true
                 }
             ]
         });
+
+        this.filePath = __filename;
     }
 
-    async exec (message, args) {
-        const djMode = this.client.settings.get(message.guild.id, 'djMode');
-        const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+    async run (ctx) {
+        const guild = this.client.guilds.cache.get(ctx.guildID);
+        const member = guild.members.cache.get(ctx.user.id);
+        const channel = guild.channels.cache.get(ctx.channelID);
+
+        const djMode = this.client.settings.get(guild.id, 'djMode');
+        const djRole = this.client.settings.get(guild.id, 'djRole');
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
-        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
         if (textChannel) {
-            if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            if (textChannel !== channel.id) {
+                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
-        const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
-        const splitSearch = args.query.split(/ +/g);
+        const list = await this.client.settings.get(guild.id, 'blockedPhrases');
+        const splitSearch = ctx.options.query.split(/ +/g);
         if (list.length > 0) {
             if (!dj) {
                 for (let i = 0; i < splitSearch.length; i++) {
                     if (list.includes(splitSearch[i])) {
-                        return this.client.ui.reply(message, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                        await ctx.defer(true);
+                        return this.client.ui.ctx(ctx, 'no', 'Unable to search for your selection because your search contains a blocked phrase on this server.');
                     }
                 }
             }
         }
 
-        const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        const vc = member.voice.channel;
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
             const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-            if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
                 await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
@@ -83,40 +88,38 @@ module.exports = class CommandSearch extends Command {
                     const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
                     if (!requestToSpeak) {
                         vc.leave();
-                        return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-                    } else if (message.guild.me.voice.suppress) {
-                        await message.guild.me.voice.setRequestToSpeak(true);
+                        return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
+                    } else if (guild.me.voice.suppress) {
+                        await guild.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await message.guild.me.voice.setSuppressed(false);
+                    await guild.me.voice.setSuppressed(false);
                 }
             } else {
                 this.client.vc.join(vc);
             }
         } else {
-            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        const queue = this.client.player.getQueue(message.guild.id);
-
-        if (!args.query) return this.client.ui.usage(message, 'search <query>');
-
-        message.channel.sendTyping();
+        const queue = this.client.player.getQueue(guild.id);
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
             if (queue) {
-                const maxQueueLimit = await this.client.maxQueueLimit.get(message.guild.id);
+                const maxQueueLimit = await this.client.maxQueueLimit.get(guild.id);
                 if (maxQueueLimit) {
-                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === member.user.id).length;
                     if (queueMemberSize >= maxQueueLimit) {
-                        this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                        this.client.ui.reply(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
                     }
                 }
             }
         }
 
-        const results = await this.client.player.search(args.query);
+        await ctx.defer();
+
+        const results = await this.client.player.search(ctx.options.query);
 
         const emojiNumber = {
             1: '1️⃣',
@@ -134,10 +137,10 @@ module.exports = class CommandSearch extends Command {
         const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
 
         const embed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
-                iconURL: message.author.avatarURL({ dynamic: true })
+                iconURL: member.user.avatarURL({ dynamic: true })
             })
             .setDescription(`${resultsFormattedList}`)
             .setFooter({
@@ -159,98 +162,72 @@ module.exports = class CommandSearch extends Command {
             menuOptions.push(track);
         }
 
-        const menu = new MessageSelectMenu()
-            .setCustomId('track_menu')
-            .setPlaceholder('Pick a track!')
-            .addOptions(menuOptions);
-
-        const cancel = new MessageButton()
-            .setCustomId('cancel_search')
-            .setStyle('DANGER')
-            .setEmoji(process.env.CLOSE);
-
-        const trackMenu = new MessageActionRow()
-            .addComponents(menu);
-
-        const cancelButton = new MessageActionRow()
-            .addComponents(cancel);
-
-        const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
-
-        const filter = (interaction) => interaction.user.id === message.member.user.id;
-        const collector = msg.createMessageComponentCollector({
-            filter,
-            time: 30 * 1000,
-            max: 1
+        await ctx.send({
+            embeds: [embed],
+            components: [
+                {
+                    type: ComponentType.ACTION_ROW,
+                    components: [{
+                        type: ComponentType.SELECT,
+                        custom_id: 'track_menu',
+                        placeholder: 'Pick a track!',
+                        options: menuOptions
+                    }]
+                },
+                {
+                    type: ComponentType.ACTION_ROW,
+                    components: [{
+                        type: ComponentType.BUTTON,
+                        style: ButtonStyle.DESTRUCTIVE,
+                        custom_id: 'cancel_search',
+                        emoji: { name: process.env.CLOSE }
+                    }]
+                }
+            ]
         });
 
-        collector.on('collect', async interaction => {
-            if (interaction.customId === 'cancel_search') return collector.stop();
-            message.channel.sendTyping();
-            await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
-                member: message.member,
-                textChannel: message.channel,
-                message: message
-            });
-            message.react(process.env.EMOJI_MUSIC);
-            collector.stop();
-        });
+        ctx.registerComponent(
+            'track_menu',
+            async (selCtx) => {
+                if (ctx.user.id !== selCtx.user.id) {
+                    return selCtx.send({
+                        embeds: [
+                            new MessageEmbed()
+                                .setColor(parseInt(process.env.COLOR_NO))
+                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
+                        ],
+                        ephemeral: true
+                    });
+                }
 
-        collector.on('end', () => {
-            msg.delete();
-        });
+                await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
+                    member: member,
+                    textChannel: channel
+                });
+                return ctx.delete();
+            },
+            30 * 1000
+        );
 
-    /*
-    this.client.player.search(search).then(results => {
-      const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n');
-      const embed = new MessageEmbed()
-        .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
-        .setAuthor({
-          name: 'Which track do you wanna play?',
-          iconURL: message.author.avatarURL({ dynamic: true })
-        })
-        .setDescription(`${resultMap}`)
-        .setFooter({
-          text: 'Type the number of your selection, or type "cancel" if you changed your mind.'
-        });
+        ctx.registerComponent(
+            'cancel_search',
+            async (btnCtx) => {
+                if (ctx.user.id !== btnCtx.user.id) {
+                    return btnCtx.send({
+                        embeds: [
+                            new MessageEmbed()
+                                .setColor(parseInt(process.env.COLOR_NO))
+                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
+                        ],
+                        ephemeral: true
+                    });
+                }
 
-      // TODO: Replace collector for a select menu instead.
-
-      message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
-        const filter = m => m.author.id === message.author.id;
-        const collector = message.channel.createMessageCollector({
-          filter,
-          max: 1,
-          time: 30000,
-          errors: ['time']
-        });
-
-        collector.on('collect', async collected => {
-          collector.stop();
-          collected.delete();
-          if (collected.content === 'CANCEL'.toLowerCase()) return;
-          message.channel.sendTyping();
-          let selected = results[parseInt(collected.content - 1)].url;
-          if (collected.content > 10) {
-            selected = results[9].url;
-            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`);
-          } else if (collected.content <= 0) { // Why even bother? The bot can't comprehend a negative integer for some reason...
-            selected = results[0].url;
-            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
-          }
-          await this.client.player.play(vc, selected, {
-            member: message.member,
-            textChannel: message.channel,
-            message: message
-          });
-          message.react(process.env.REACTION_OK);
-        });
-
-        collector.on('end', () => {
-          msg.delete();
-        });
-      });
-    });
-    */
+                return ctx.delete();
+            },
+            30 * 1000
+        );
     }
-};
+}
+
+module.exports = CommandSearch;

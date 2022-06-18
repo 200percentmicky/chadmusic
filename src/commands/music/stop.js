@@ -16,52 +16,55 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Command } = require('discord-akairo');
+const { SlashCommand } = require('slash-create');
 const { Permissions } = require('discord.js');
-const { stop } = require('../../aliases.json');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandStop extends Command {
-    constructor () {
-        super(stop !== undefined ? stop[0] : 'stop', {
-            aliases: stop || ['stop'],
-            category: '🎶 Music',
-            description: {
-                text: 'Stops the player, and clears the queue.'
-            },
-            channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+class CommandStop extends SlashCommand {
+    constructor (creator) {
+        super(creator, {
+            name: 'stop',
+            description: 'Destroys the player.'
         });
+
+        this.filePath = __filename;
     }
 
-    async exec (message) {
-        const djMode = this.client.settings.get(message.guild.id, 'djMode');
-        const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+    async run (ctx) {
+        const client = this.creator.client;
+        const guild = client.guilds.cache.get(ctx.guildID);
+        const channel = await guild.channels.fetch(ctx.channelID);
+        const _member = await guild.members.fetch(ctx.member.id);
+
+        const djMode = client.settings.get(ctx.guildID, 'djMode');
+        const djRole = client.settings.get(ctx.guildID, 'djRole');
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
-        const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
+        const vc = _member.voice.channel;
+        const textChannel = client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
-            if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            if (textChannel !== channel.id) {
+                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', vc.id);
             }
         }
 
-        const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 
-        const currentVc = this.client.vc.get(vc);
-        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        const currentVc = client.vc.get(vc);
+        if (!client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
-            this.client.player.stop(message);
-            this.client.vc.leave(message);
-            return this.client.ui.custom(message, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
+            client.player.stop(guild);
+            client.vc.leave(guild);
+            return this.client.ui.ctxCustom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {
-            return this.client.ui.send(message, 'NOT_ALONE');
+            return this.client.ui.send(ctx, 'NOT_ALONE');
         }
     }
-};
+}
+
+module.exports = CommandStop;
