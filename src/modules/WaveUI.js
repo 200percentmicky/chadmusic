@@ -63,7 +63,7 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
 
     if (footer) {
         baseEmbed.footer = {
-            text: `${author.user.tag} • ${footer}`,
+            text: `${author.user.username}#${author.user.discriminator} • ${footer}`,
             // <CommandContext>.user.avatarURL is not a function
             icon_url: `${(author instanceof Member) ? author.user.avatarURL : author.user.avatarURL({ dynamic: true })}`
 
