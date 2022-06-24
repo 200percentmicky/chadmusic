@@ -297,8 +297,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 `)
                 .setTimestamp()
                 .setFooter({
-                    text: `ChadMusic v${version}`,
-                    iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                    text: `Micky-bot v${version}`,
+                    iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
                 });
 
             const blockedEmbed = new MessageEmbed()
@@ -311,8 +311,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
                 .setTimestamp()
                 .setFooter({
-                    text: `ChadMusic v${version}`,
-                    iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                    text: `Micky-bot v${version}`,
+                    iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
                 });
 
             if (blockedPhrases.length === 0) {

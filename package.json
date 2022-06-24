@@ -1,7 +1,7 @@
 {
-  "name": "chadmusic",
+  "name": "mickybot",
   "version": "2022.1.12-1",
-  "description": "The Chad Music Bot",
+  "description": "Micky's personal Discord Bot.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

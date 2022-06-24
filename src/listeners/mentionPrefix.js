@@ -30,11 +30,11 @@ module.exports = class ListenerMentionPrefix extends Listener {
     async exec (message) {
         const prefix = this.client.settings.get(message.guild.id, 'prefix') ?? process.env.PREFIX;
         const canChange = message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_GUILD)
-            ? ' You can change this using `musicprefix`.'
+            ? ' You can change this using `prefix` or `/settings prefix`'
             : '';
 
         if (message.content === `<@${this.client.user.id}>`) {
-            return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix for ChadMusic in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
+            return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
         }
     }
 };

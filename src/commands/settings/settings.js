@@ -80,8 +80,8 @@ module.exports = class CommandSettings extends Command {
             `)
             .setTimestamp()
             .setFooter({
-                text: `ChadMusic v${version}`,
-                iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                text: `Micky-bot v${version}`,
+                iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
             });
 
         const blockedEmbed = new MessageEmbed()
@@ -94,8 +94,8 @@ module.exports = class CommandSettings extends Command {
             .setTitle('🤐 Blocked Phrases')
             .setTimestamp()
             .setFooter({
-                text: `ChadMusic v${version}`,
-                iconURL: 'https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                text: `Micky-bot v${version}`,
+                iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
             });
 
         if (blockedPhrases.length === 0) {

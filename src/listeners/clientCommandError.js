@@ -38,7 +38,7 @@ module.exports = class ListenerClientCommandError extends Listener {
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/ChadMusic')
+            .setURL('https://github.com/200percentmicky/mickybot')
             .setLabel('GitHub');
 
         const support = new MessageButton()

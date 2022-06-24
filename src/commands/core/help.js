@@ -95,7 +95,7 @@ module.exports = class CommandHelp extends Command {
                 const commandEmbed = new MessageEmbed()
                     .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
                     .setAuthor({
-                        name: 'ChadMusic Documentation',
+                        name: 'Micky-bot Documentation',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
                     .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
@@ -132,7 +132,7 @@ module.exports = class CommandHelp extends Command {
         const helpEmbed = new MessageEmbed()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
-                name: 'ChadMusic Documentation',
+                name: 'Micky-bot Documentation',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setTimestamp()

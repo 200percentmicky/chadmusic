@@ -32,7 +32,7 @@ class CommandAbout extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'about',
-            description: 'This application is running an instance of ChadMusic, The Chad Music Bot!'
+            description: 'Hi, I\'m Micky-bot. Mom made pizza rolls!'
         });
 
         this.filePath = __filename;
@@ -45,11 +45,11 @@ class CommandAbout extends SlashCommand {
         const aboutembed = new MessageEmbed()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
-                name: 'About ChadMusic',
+                name: 'About Micky-bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
-            .setDescription('The Chad Music Bot. Also [open-sourced!](https://github.com/200percentmicky/ChadMusic) :thumbsup:')
-            .addField('✨ Features', stripIndents`
+            .setDescription('Micky\'s personal Discord Bot. Whatever I find interesting, I\'ll most likely add it.')
+            .addField('🎶 Powerful Music Player', stripIndents`
             :white_small_square: Supports up to 700+ websites.
             :white_small_square: Add multiple filters to the player.
             :white_small_square: Alter filter values during playback.
@@ -57,11 +57,12 @@ class CommandAbout extends SlashCommand {
             :white_small_square: DJ commands to control the player.
             :white_small_square: Queue and track length limits.
             :white_small_square: Advanced queue management.
-            :white_small_square: Slash commands ~~when?~~ in development!
+            `)
+            .addField('✨ Other Features', stripIndents`
+            :white_small_square: Slash commands lol
             :white_small_square: ???
             :white_small_square: Profit!
             `)
-            .addField('⚠ This bot is still a work in progress.', 'This bot is still in an early state. If you come across any issues when using this bot, please notify the developer or make an issue in the [Github repo](https://github.com/200percentmicky/ChadMusic).')
             .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
             **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
             **Bot Version:** ${bot.version}
@@ -73,7 +74,7 @@ class CommandAbout extends SlashCommand {
             **Voice Connections:** ${this.client.vc.voices.collection.size}
             **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
             `, true)
-            .setThumbnail('https://cdn.discordapp.com/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
+            .setThumbnail(`${this.client.user.avatarURL({ dynamic: true })}`)
             .setFooter({
                 text: `The owner of this instance is ${owner}.`,
                 iconURL: app.owner?.avatarURL({ dynamic: true })
@@ -81,7 +82,7 @@ class CommandAbout extends SlashCommand {
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/ChadMusic')
+            .setURL('https://github.com/200percentmicky/mickybot')
             .setLabel('GitHub');
 
         const support = new MessageButton()
