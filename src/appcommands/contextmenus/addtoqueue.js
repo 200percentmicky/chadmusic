@@ -24,8 +24,7 @@ class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'Add To Queue',
-            type: ApplicationCommandType.MESSAGE,
-            description: 'Uses the message content to search for a track, and adds it to the queue.'
+            type: ApplicationCommandType.MESSAGE
         });
 
         this.filePath = __filename;

@@ -23,7 +23,6 @@ class ContextMenuGetInfo extends SlashCommand {
         super(creator, {
             name: 'Get Info',
             type: ApplicationCommandType.USER,
-            description: 'Shows information about the user.',
             deferEphemeral: true
         });
 
