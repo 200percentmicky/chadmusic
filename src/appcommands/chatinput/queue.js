@@ -604,7 +604,7 @@ class CommandQueue extends SlashCommand {
                     });
                     await modalCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
                 });
-            });
+            }, 300 * 1000);
 
             // Cancel Button
             ctx.registerComponent('qc_cancel_button', async (btnCtx) => {
