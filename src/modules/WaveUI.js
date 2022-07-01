@@ -47,13 +47,13 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
     baseEmbed = {
         color: parseInt(color),
         title: null,
-        description: `${emoji} ${desc}`,
-        timestamp: new Date(),
-        footer: {
-            text: `${author.user.username}#${author.user.discriminator}`,
+        description: `${emoji} ${desc}`//,
+        //timestamp: new Date(),
+        //footer: {
+        //    text: `${author.user.username}#${author.user.discriminator}`,
             // <CommandContext>.user.avatarURL is not a function
-            icon_url: `${(author instanceof Member) ? author.user.dynamicAvatarURL() : author.user.avatarURL({ dynamic: true })}`
-        }
+        //    icon_url: `${(author instanceof Member) ? author.user.dynamicAvatarURL() : author.user.avatarURL({ dynamic: true })}`
+        //}
     };
 
     if (title) {
@@ -63,10 +63,9 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
 
     if (footer) {
         baseEmbed.footer = {
-            text: `${author.user.username}#${author.user.discriminator} • ${footer}`,
+            text: `${footer}`//,
             // <CommandContext>.user.avatarURL is not a function
-            icon_url: `${(author instanceof Member) ? author.user.avatarURL : author.user.avatarURL({ dynamic: true })}`
-
+            //icon_url: `${(author instanceof Member) ? author.user.avatarURL : author.user.avatarURL({ dynamic: true })}`
         };
     }
 
