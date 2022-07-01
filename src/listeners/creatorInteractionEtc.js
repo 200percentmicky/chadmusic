@@ -24,24 +24,14 @@ module.exports = class ListenerCreatorInteractionEtc extends Listener {
     constructor () {
         super('creatorInteractionEtc', {
             emitter: 'creator',
-            event: 'commandRun'
+            event: 'componentInteraction'
         });
     }
 
     async exec (ctx) {
-        switch (ctx.interactionID) {
+        switch (ctx.customID) {
         case 'dice_help_button': {
-            await ctx.defer();
-            if (ctx.user.id !== ctx.message.author.id) {
-                return ctx.sendFollowUp({
-                    embeds: [
-                        new MessageEmbed()
-                            .setColor(parseInt(process.env.COLOR_ERROR))
-                            .setDescription(`${process.env.EMOJI_ERROR} This component can only be used by the bot owner.`)
-                    ],
-                    ephemeral: true
-                });
-            }
+            await ctx.defer(true);
 
             const diceDocumentation = new MessageActionRow()
                 .addComponents(new MessageButton()
@@ -60,9 +50,24 @@ module.exports = class ListenerCreatorInteractionEtc extends Listener {
                 .setColor(parseInt(process.env.COLOR_INFO))
                 .setTitle('🎲 Dice Cheat Sheet')
                 .addField('Dice', stripIndents`
-                    **Standard: \`d{n}\`
+                    Standard: \`d{n}\`
                     Percetange: \`d% [% = 1-100]\`
-                    Fudge / Fate: \`dF\` \`dF.2\` \`dF.1\`**
+                    Fudge / Fate: \`dF\` \`dF.2\` \`dF.1\`
+                    `)
+                .addField('Modifiers', stripIndents`
+                    Minimum: \`min{n}\`
+                    Maximum: \`max{n}\`
+                    Exploding: \`!\` / \`!{cp}\`
+                     - Compounding: \`!!\` \`!!{cp}\`
+                     - Penetrating: \`!p\` \`!!p\` \`!p{cp}\` \`!!p{cp} \`
+                    Re-roll: \`r\` \`ro\` \`r{cp}\` \`ro{cp}\`
+                    Keep: \`k{n}\` \`kh{n}\` \`kl{n}\`
+                    Drop: \`d{n}\` \`dh{n}\` \`dl{n}\`
+                    Target Success: \`[<,>,=]{cp}\` e.g. \`6d10<=4\` Less or equal to 4 is Success!
+                    Target Failure: \`{cp}f\` e.g. \`4d6>4f<3\` Greater than 4 = Success! Less than 3 = Failure!
+                    Critical Success: \`cs{cp}\` e.g. \`4d10cs>7\` Greater than 7 = Critical Success!
+                    Critical Failure: \`cf{cp}\` e.g. \`4d10cf<3\` Less than 3 = Critical Failure!
+                    Sorting: \`s\` \`sa\` \`sd\` | s, sa = Sort Ascending | sd = Sort Descending
                     `)
                 .addField('Math', stripIndents`
                     This is mostly basic math. You can use this with notations and Compare Points (\`{cp}\`).
@@ -85,21 +90,6 @@ module.exports = class ListenerCreatorInteractionEtc extends Listener {
     
                     You can also use the following **[Javascript \`Math\` functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#Static_methods)**:
                     \`abs\` \`ceil\` \`cos\` \`exp\` \`floor\` \`log\` \`max\` \`min\` \`pow\` \`round\` \`sign\` \`sin\` \`sqrt\` \`tan\`
-                    `)
-                .addField('Modifiers', stripIndents`
-                    **Minimum: \`min{n}\`
-                    Maximum: \`max{n}\`
-                    Exploding: \`!\` / \`!{cp}\`
-                     - Compounding: \`!!\` \`!!{cp}\`
-                     - Penetrating: \`!p\` \`!!p\` \`!p{cp}\` \`!!p{cp} \`
-                    Re-roll: \`r\` \`ro\` \`r{cp}\` \`ro{cp}\`
-                    Keep: \`k{n}\` \`kh{n}\` \`kl{n}\`
-                    Drop: \`d{n}\` \`dh{n}\` \`dl{n}\`
-                    Target Success: \`[<,>,=]{cp}\` e.g. \`6d10<=4\` Less or equal to 4 is Success!
-                    Target Failure: \`{cp}f\` e.g. \`4d6>4f<3\` Greater than 4 = Success! Less than 3 = Failure!
-                    Critical Success: \`cs{cp}\` e.g. \`4d10cs>7\` Greater than 7 = Critical Success!
-                    Critical Failure: \`cf{cp}\` e.g. \`4d10cf<3\` Less than 3 = Critical Failure!
-                    Sorting: \`s\` \`sa\` \`sd\` | s, sa = Sort Ascending | sd = Sort Descending**
                     `);
 
             await ctx.sendFollowUp({ embeds: [embed], components: [diceDocumentation], ephemeral: true });
