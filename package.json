@@ -13,6 +13,7 @@
   "author": "mickykun-ar",
   "license": "MIT",
   "dependencies": {
+    "@dice-roller/rpg-dice-roller": "^5.1.0",
     "@discordjs/voice": "^0.5.1",
     "@distube/spotify": "^1.2.1",
     "@distube/yt-dlp": "^1.0.2",
