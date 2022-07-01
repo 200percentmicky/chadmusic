@@ -91,6 +91,7 @@ class CommandOwner extends SlashCommand {
 
         switch (ctx.subcommands[0]) {
         case 'eval': {
+            await ctx.defer(true);
             // Safety measure.
             if (!process.env.USE_EVAL) {
                 return ctx.send(oneLine`
@@ -111,7 +112,7 @@ class CommandOwner extends SlashCommand {
             };
 
             // const args = message.content.split(/ +/g)
-            const code = ctx.options.code;
+            const code = ctx.options.eval.code;
 
             try {
                 // eslint-disable-next-line no-eval
