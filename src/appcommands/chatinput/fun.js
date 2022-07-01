@@ -110,8 +110,13 @@ class CommandFun extends SlashCommand {
             let roll;
             try {
                 roll = new DiceRoll(notation);
-            } catch {
-                return this.client.ui.ctx(ctx, 'error', `\`${notation}\` is not a valid dice notation.`, null, null, null, [helpButton]);
+            } catch (err) {
+                console.log(err);
+                switch (err.name) {
+                case 'RangeError': return this.client.ui.ctx(ctx, 'warn', 'Too many dice provided. You can only roll between 1-999 dice.', null, null, null, [helpButton]);
+                case 'DieActionValueError': return this.client.ui.ctx(ctx, 'error', `Cannot calculate die notation: \`${notation}\``);
+                default: return this.client.ui.ctx(ctx, 'error', `\`${notation}\` is not a valid die notation.`, null, null, null, [helpButton]);
+                }
             }
 
             let nice;
