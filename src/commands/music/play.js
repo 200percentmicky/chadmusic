@@ -19,7 +19,7 @@
 const { Command } = require('discord-akairo');
 const { Permissions } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const { isURL } = require('../../modules/isURL');
+const { hasURL } = require('../../modules/hasURL');
 
 /* eslint-disable no-useless-escape */
 
@@ -77,7 +77,7 @@ module.exports = class CommandPlay extends Command {
         }
 
         if (args.track) {
-            if (isURL(args.track?.replace(/(^\<+|\>+$)/g, '')) && args.track) {
+            if (hasURL(args.track?.replace(/(^\<+|\>+$)/g, '')) && args.track) {
                 const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
                 if (!dj && !allowLinks) {
                     return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');

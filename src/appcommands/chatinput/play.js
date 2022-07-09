@@ -19,7 +19,7 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { Permissions } = require('discord.js');
 const iheart = require('iheart');
-const { isURL } = require('../../modules/isURL');
+const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 const pornPattern = (url) => {
@@ -113,7 +113,7 @@ class CommandPlay extends SlashCommand {
             }
 
             if (!dj) {
-                if (isURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
+                if (hasURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
                     const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
                     if (!allowLinks) {
                         return this.client.ui.ctx(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
