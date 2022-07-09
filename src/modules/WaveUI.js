@@ -47,13 +47,7 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
     baseEmbed = {
         color: parseInt(color),
         title: null,
-        description: `${emoji} ${desc}`//,
-        //timestamp: new Date(),
-        //footer: {
-        //    text: `${author.user.username}#${author.user.discriminator}`,
-            // <CommandContext>.user.avatarURL is not a function
-        //    icon_url: `${(author instanceof Member) ? author.user.dynamicAvatarURL() : author.user.avatarURL({ dynamic: true })}`
-        //}
+        description: `${emoji} ${desc}`
     };
 
     if (title) {
@@ -63,9 +57,7 @@ const embedUI = (color, emoji, title, author, desc, footer) => {
 
     if (footer) {
         baseEmbed.footer = {
-            text: `${footer}`//,
-            // <CommandContext>.user.avatarURL is not a function
-            //icon_url: `${(author instanceof Member) ? author.user.avatarURL : author.user.avatarURL({ dynamic: true })}`
+            text: `${footer}`
         };
     }
 
@@ -340,6 +332,7 @@ const send = (msg, prompt, extra) => {
         ALREADY_SUMMONED_ELSEWHERE: 'You must be in the same voice channel that I\'m in to do that.',
         MISSING_CONNECT: `Missing **Connect** permission for <#${extra}>`,
         MISSING_SPEAK: `Missing **Request to Speak** permission for <#${extra}>.`,
+        MISSING_CLIENT_PERMISSIONS: `Missing **${extra}** permission(s) to run that command.`,
         MISSING_PERMISSIONS: `You need the **${extra}** permission(s) to use that command.`,
         WRONG_TEXT_CHANNEL_MUSIC: `Music commands must be used in <#${extra}>`,
         OWNER_ONLY: 'This command can only be used by the bot owner.',
@@ -357,6 +350,7 @@ const send = (msg, prompt, extra) => {
         ALREADY_SUMMONED_ELSEWHERE: process.env.COLOR_ERROR,
         MISSING_CONNECT: process.env.COLOR_NO,
         MISSING_SPEAK: process.env.COLOR_NO,
+        MISSING_CLIENT_PERMISSIONS: process.env.COLOR_WARN,
         MISSING_PERMISSIONS: process.env.COLOR_NO,
         WRONG_TEXT_CHANNEL_MUSIC: process.env.COLOR_NO,
         OWNER_ONLY: process.env.COLOR_NO,
@@ -374,6 +368,7 @@ const send = (msg, prompt, extra) => {
         ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? '❌',
         MISSING_CONNECT: process.env.EMOJI_NO ?? '🚫',
         MISSING_SPEAK: process.env.EMOJI_NO ?? '🚫',
+        MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? '⚠',
         MISSING_PERMISSIONS: process.envEMOJI_NO ?? '🚫',
         WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? '🚫',
         OWNER_ONLY: process.env.EMOJI_NO ?? '🚫',
