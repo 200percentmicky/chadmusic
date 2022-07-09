@@ -17,13 +17,13 @@
  */
 
 /**
- * Checks whether the song provided is a URL.
- * @param {string} song
+ * Checks whether the string contains a URL.
+ * @param {string} string
  */
-function isURL (song) {
+function hasURL (string) {
     const urlPattern = /(mailto|news|tel(net)?|urn|ldap|ftp|https?):\+?(\/\/)?\[?([a-zA-Z0-9]\]?.{0,})/gmi;
     const urlRegex = new RegExp(urlPattern);
-    return song.match(urlRegex);
+    return string.match(urlRegex);
 }
 
-module.exports = { isURL };
+module.exports = { hasURL };
