@@ -47,7 +47,7 @@ module.exports = class CommandHelp extends Command {
         const command = this.handler.modules.get(cmdName);
 
         let prefix;
-        if (message.channel.type === 'dm') {
+        if (message.channel.type === 'DM') {
             prefix = this.client.prefix.getPrefix(message.guild.id)
                 ? this.client.prefix.getPrefix(message.guild.id)
                 : process.env.PREFIX;

@@ -114,7 +114,7 @@ class WaveBot extends AkairoClient {
                 // If no key is found, this should return the configured prefix in the .env file.
 
                 this.settings.ensure(message.guild.id, this.defaultSettings); // Hoping that the bot doesn't have a panic attack.
-                if (message.channel.type === 'dm') {
+                if (message.channel.type === 'DM') {
                     return process.env.PREFIX;
                 } else {
                     try {
