@@ -54,7 +54,7 @@ class WaveBot extends AkairoClient {
             allowedMentions: {
                 repliedUser: false
             },
-            intents: new Intents(14279)
+            intents: new Intents(3192575)
         });
 
         // Calling packages that can be used throughout the client.
