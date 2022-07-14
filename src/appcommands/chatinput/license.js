@@ -31,7 +31,7 @@ class CommandLicense extends SlashCommand {
     }
 
     async run (ctx) {
-        await ctx.send(true);
+        await ctx.defer(true);
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
