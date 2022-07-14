@@ -28,7 +28,7 @@ module.exports = class ListenerMentionPrefix extends Listener {
     }
 
     async exec (message) {
-        const prefix = this.client.settings.get(message.guild.id, 'prefix') ?? process.env.PREFIX;
+        const prefix = this.client.settings.get(message.guild?.id, 'prefix') ?? process.env.PREFIX;
         const canChange = message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_GUILD)
             ? ' You can change this using `prefix` or `/settings prefix`'
             : '';
