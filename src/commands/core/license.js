@@ -45,7 +45,7 @@ module.exports = class LicenseCommand extends Command {
         const actionRow = new MessageActionRow()
             .addComponents([urlGithub, support]);
 
-        return message.author.send({
+        return message.channel.send({
             content: stripIndents`
             Micky-bot is licensed under the GNU General Public License version 3.
 
