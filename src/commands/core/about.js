@@ -1,5 +1,5 @@
 /**
- *  Micky-bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2022  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ module.exports = class CommandAbout extends Command {
             aliases: ['about'],
             category: '💻 Core',
             description: {
-                text: 'Hi, I\'m Micky-bot. Mom made pizza rolls!'
+                text: 'Hi, I\'m ChadMusic - The Chad Music Bot. Mom made pizza rolls!'
             }
         });
     }
@@ -44,11 +44,11 @@ module.exports = class CommandAbout extends Command {
         const aboutembed = new MessageEmbed()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
-                name: 'About Micky-bot',
+                name: 'ChadMusic - The Chad Music Bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
-            .setDescription('Micky\'s personal Discord Bot. Whatever I find interesting, I\'ll most likely add it.')
-            .addField('🎶 Powerful Music Player', stripIndents`
+            .setDescription('Cool open-source music bot.')
+            .addField('🎶 Features', stripIndents`
             :white_small_square: Supports up to 700+ websites.
             :white_small_square: Add multiple filters to the player.
             :white_small_square: Alter filter values during playback.
@@ -56,13 +56,11 @@ module.exports = class CommandAbout extends Command {
             :white_small_square: DJ commands to control the player.
             :white_small_square: Queue and track length limits.
             :white_small_square: Advanced queue management.
-            `)
-            .addField('✨ Other Features', stripIndents`
             :white_small_square: Slash commands lol
             :white_small_square: ???
             :white_small_square: Profit!
             `)
-            .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
+            .addField(`${process.env.EMOJI_INFO} Stats`, stripIndents`
             **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
             **Bot Version:** ${bot.version}
             **Node.js:** ${process.version}
@@ -81,7 +79,7 @@ module.exports = class CommandAbout extends Command {
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/mickybot')
+            .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
         const support = new MessageButton()

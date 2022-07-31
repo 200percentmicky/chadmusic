@@ -1,5 +1,5 @@
 /**
- *  Micky-bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2022  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -95,7 +95,7 @@ module.exports = class CommandHelp extends Command {
                 const commandEmbed = new MessageEmbed()
                     .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
                     .setAuthor({
-                        name: 'Micky-bot Documentation',
+                        name: 'ChadMusic - The Chad Music Bot Documentation',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
                     .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
@@ -132,7 +132,7 @@ module.exports = class CommandHelp extends Command {
         const helpEmbed = new MessageEmbed()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
-                name: 'Micky-bot Documentation',
+                name: 'ChadMusic - The Chad Music Bot Documentation',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setTimestamp()

@@ -1,5 +1,5 @@
 <h1 align="center" style="font-weight: bold; font-style: italic;">
-    Micky-bot
+    ChadMusic - The Chad Music Bot
 </h1>
 
 ![GitHub](https://img.shields.io/github/license/200percentmicky/mickybot)

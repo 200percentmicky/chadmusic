@@ -34,7 +34,7 @@ module.exports = class LicenseCommand extends Command {
     async exec (message) {
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/mickybot')
+            .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
         const support = new MessageButton()

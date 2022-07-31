@@ -1,5 +1,5 @@
 /**
- *  Micky-bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2022  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -297,7 +297,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 `)
                 .setTimestamp()
                 .setFooter({
-                    text: `Micky-bot v${version}`,
+                    text: `ChadMusic v${version}`,
                     iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
                 });
 
@@ -307,11 +307,11 @@ module.exports = class CommandSettings extends SlashCommand {
                     name: `${guild.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
                 })
-                .setTitle('🤐 Blocked Phrases')
+                .setTitle('🎶❌ Blocked Songs')
                 .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
                 .setTimestamp()
                 .setFooter({
-                    text: `Micky-bot v${version}`,
+                    text: `ChadMusic v${version}`,
                     iconURL: `${this.client.user.avatarURL({ dynamic: true })}`
                 });
 

@@ -1,5 +1,5 @@
 /**
- *  Micky-bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2022  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ class CommandAbout extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'about',
-            description: 'Hi, I\'m Micky-bot. Mom made pizza rolls!'
+            description: 'Hi, I\'m ChadMusic - The Chad Music Bot. Mom made pizza rolls!'
         });
 
         this.filePath = __filename;
@@ -45,11 +45,11 @@ class CommandAbout extends SlashCommand {
         const aboutembed = new MessageEmbed()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
-                name: 'About Micky-bot',
+                name: 'ChadMusic - The Chad Music Bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
-            .setDescription('Micky\'s personal Discord Bot. Whatever I find interesting, I\'ll most likely add it.')
-            .addField('🎶 Powerful Music Player', stripIndents`
+            .setDescription('Cool open-source music bot.')
+            .addField('🎶 Features', stripIndents`
             :white_small_square: Supports up to 700+ websites.
             :white_small_square: Add multiple filters to the player.
             :white_small_square: Alter filter values during playback.
@@ -57,13 +57,11 @@ class CommandAbout extends SlashCommand {
             :white_small_square: DJ commands to control the player.
             :white_small_square: Queue and track length limits.
             :white_small_square: Advanced queue management.
-            `)
-            .addField('✨ Other Features', stripIndents`
             :white_small_square: Slash commands lol
             :white_small_square: ???
             :white_small_square: Profit!
             `)
-            .addField(`${process.env.EMOJI_INFO} Info`, stripIndents`
+            .addField(`${process.env.EMOJI_INFO} Stats`, stripIndents`
             **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
             **Bot Version:** ${bot.version}
             **Node.js:** ${process.version}
@@ -82,7 +80,7 @@ class CommandAbout extends SlashCommand {
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/mickybot')
+            .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
         const support = new MessageButton()

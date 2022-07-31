@@ -1,5 +1,5 @@
 /**
- *  Micky-bot
+ *  ChadMusic - The Chad Music Bot
  *  Copyright (C) 2022  Micky D. | @200percentmicky | Micky-kun#3836
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ class CommandLicense extends SlashCommand {
 
         const urlGithub = new MessageButton()
             .setStyle('LINK')
-            .setURL('https://github.com/200percentmicky/mickybot')
+            .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
         const support = new MessageButton()
@@ -48,7 +48,7 @@ class CommandLicense extends SlashCommand {
 
         return ctx.send({
             content: stripIndents`
-            Micky-bot is licensed under the GNU General Public License version 3.
+            ChadMusic is licensed under the GNU General Public License version 3.
 
             This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU General Public License as published by
