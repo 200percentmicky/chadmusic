@@ -1,4 +1,6 @@
 <h1 align="center" style="font-weight: bold; font-style: italic;">
+    <img src="https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png" width=250>
+
     ChadMusic - The Chad Music Bot
 </h1>
 
@@ -9,19 +11,18 @@
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
 
-Micky's personal Discord Bot. Whatever I find interesting, I'll most likely add it.
+Cool open-source music bot that's based on a [forked](https://github.com/200percentmicky/chadtube) build of **[DisTube.js](https://distube.js.org)**.
 
 ### **[Add my bot to your server!](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
 
 ## ✨ Features
-* Powerful Music Player. (Based on a forked build of **[DisTube.js](https://distube.js.org)**.)
-    * Supports up to 700+ websites.
-    * Add multiple filters to the player.
-    * Alter filter values during playback.
-    * Unlimited volume! 😂👌
-    * DJ commands to control the player.
-    * Queue and track length limits.
-    * Advanced queue management.
+* Supports up to 700+ websites.
+* Add multiple filters to the player.
+* Alter filter values during playback.
+* Unlimited volume! 😂👌
+* DJ commands to control the player.
+* Queue and track length limits.
+* Advanced queue management.
 * Slash commands lol
 * ???
 * Profit!
