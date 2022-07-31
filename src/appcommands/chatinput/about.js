@@ -72,7 +72,7 @@ class CommandAbout extends SlashCommand {
             **Voice Connections:** ${this.client.vc.voices.collection.size}
             **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
             `, true)
-            .setThumbnail(`${this.client.user.avatarURL({ dynamic: true })}`)
+            .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
             .setFooter({
                 text: `The owner of this instance is ${owner}.`,
                 iconURL: app.owner?.avatarURL({ dynamic: true })
