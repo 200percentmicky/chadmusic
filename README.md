@@ -4,7 +4,7 @@
     ChadMusic - The Chad Music Bot
 </h1>
 
-![GitHub](https://img.shields.io/github/license/200percentmicky/mickybot)
+![GitHub](https://img.shields.io/github/license/200percentmicky/chadmusic)
 [![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)  
 [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)

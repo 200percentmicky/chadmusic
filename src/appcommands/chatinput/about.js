@@ -32,7 +32,7 @@ class CommandAbout extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'about',
-            description: 'Hi, I\'m ChadMusic - The Chad Music Bot. Mom made pizza rolls!'
+            description: 'This application is running an instance of ChadMusic - The Chad Music Bot!'
         });
 
         this.filePath = __filename;

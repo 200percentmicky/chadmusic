@@ -34,7 +34,7 @@ module.exports = class CommandAbout extends Command {
             aliases: ['about'],
             category: '💻 Core',
             description: {
-                text: 'Hi, I\'m ChadMusic - The Chad Music Bot. Mom made pizza rolls!'
+                text: 'This application is running an instance of ChadMusic - The Chad Music Bot!'
             }
         });
     }
