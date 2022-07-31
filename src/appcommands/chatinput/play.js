@@ -59,6 +59,17 @@ class CommandPlay extends SlashCommand {
                     }]
                 },
                 {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'now',
+                    description: 'Force play a song regardless if anything is playing or not.',
+                    options: [{
+                        type: CommandOptionType.STRING,
+                        name: 'query',
+                        description: 'The track to play.',
+                        required: true
+                    }]
+                },
+                {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'radio',
                     description: 'Plays a live radio station.',
@@ -106,7 +117,7 @@ class CommandPlay extends SlashCommand {
 
         // if (!text && !message.attachments.first()) return client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (ctx.subcommands[0] === 'track') {
+        if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
             if (pornPattern(ctx.options.track?.query)) {
                 await ctx.defer(true);
                 return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
@@ -197,12 +208,36 @@ class CommandPlay extends SlashCommand {
                 }
             }
 
-            /* eslint-disable-next-line no-useless-escape */
-            await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
-                textChannel: channel,
-                member: _member
-            });
-            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Requested \`${requested}\``);
+            if (ctx.subcommands[0] === 'now') {
+                if (vc.members.size <= 3 || dj) {
+                    requested = ctx.options.now.query;
+
+                    await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
+                    channel.sendTyping();
+
+                    /* eslint-disable-next-line no-useless-escape */
+                    await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
+                        textChannel: channel,
+                        member: _member,
+                        position: 1
+                    });
+                    try {
+                        await this.client.player.skip(guild);
+                    } catch {}
+                } else {
+                    return this.client.ui.send(ctx, 'NOT_ALONE');
+                }
+            } else {
+                await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
+                channel.sendTyping();
+
+                /* eslint-disable-next-line no-useless-escape */
+                await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
+                    textChannel: channel,
+                    member: _member
+                });
+            }
+            return;
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
