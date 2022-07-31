@@ -110,6 +110,19 @@ class CommandPlayer extends SlashCommand {
                             required: true
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'bindchannel',
+                    description: 'Changes the player\'s currently binded text or voice channel to a different one.',
+                    options: [
+                        {
+                            type: CommandOptionType.CHANNEL,
+                            name: 'channel',
+                            description: 'The new text or voice channel to bind to.',
+                            required: true
+                        }
+                    ]
                 }
             ]
         });
@@ -372,6 +385,20 @@ class CommandPlayer extends SlashCommand {
                 );
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+        }
+
+        case 'bindchannel': {
+            const currentVc = this.client.vc.get(vc);
+            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            if (dj) {
+                const newBindChannel = await guild.channels.fetch(ctx.options.bindchannel.channel);
+                queue.textChannel = newBindChannel;
+                return this.client.ui.ctx(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
+            } else {
+                return this.client.ui.send(ctx, 'NO_DJ');
             }
         }
         }
