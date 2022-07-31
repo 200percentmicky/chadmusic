@@ -1,6 +1,6 @@
 {
   "name": "mickybot",
-  "version": "2022.3.2",
+  "version": "2022.4.0",
   "description": "Micky's personal Discord Bot.",
   "main": "index.js",
   "scripts": {
