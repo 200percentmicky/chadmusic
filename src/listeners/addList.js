@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { Permissions, EmbedBuilder } = require('discord.js');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
@@ -32,7 +32,7 @@ module.exports = class ListenerAddList extends Listener {
         const guild = channel.guild;
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: `Playlist added to queue - ${member.voice.channel.name}`,

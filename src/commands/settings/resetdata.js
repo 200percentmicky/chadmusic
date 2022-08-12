@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = class CommandResetData extends Command {
     constructor () {
@@ -33,19 +33,19 @@ module.exports = class CommandResetData extends Command {
     }
 
     async exec (message) {
-        const yesButton = new MessageButton()
+        const yesButton = new ButtonBuilder()
             .setStyle('SUCCESS')
             .setLabel('Yes')
             .setEmoji('✔')
             .setCustomId('yes_data');
 
-        const noButton = new MessageButton()
+        const noButton = new ButtonBuilder()
             .setStyle('DANGER')
             .setLabel('No')
             .setEmoji('✖')
             .setCustomId('no_data');
 
-        const buttonRow = new MessageActionRow().addComponents(yesButton, noButton);
+        const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
 
         const msg = await this.client.ui.reply(message, 'warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow]);
 
@@ -61,7 +61,7 @@ module.exports = class CommandResetData extends Command {
             if (interaction.user.id !== message.member.user.id) {
                 return interaction.reply({
                     embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor(parseInt(process.env.COLOR_NO))
                             .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                     ],

@@ -18,7 +18,7 @@
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { DiceRoll } = require('@dice-roller/rpg-dice-roller');
-const { MessageButton, MessageActionRow } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder } = require('discord.js');
 
 class CommandFun extends SlashCommand {
     constructor (creator) {
@@ -99,8 +99,8 @@ class CommandFun extends SlashCommand {
         case 'roll': {
             const notation = ctx.options.roll.notation;
 
-            const helpButton = new MessageActionRow()
-                .addComponents(new MessageButton()
+            const helpButton = new ActionRowBuilder()
+                .addComponents(new ButtonBuilder()
                     .setCustomId('dice_help_button')
                     .setEmoji('❓')
                     .setLabel('Help')

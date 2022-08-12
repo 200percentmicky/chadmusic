@@ -18,7 +18,7 @@
 
 /* eslint-disable no-var */
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, ChannelType } = require('discord.js');
 
 module.exports = class CommandHelp extends Command {
     constructor () {
@@ -47,7 +47,7 @@ module.exports = class CommandHelp extends Command {
         const command = this.handler.modules.get(cmdName);
 
         let prefix;
-        if (message.channel.type === 'DM') {
+        if (message.channel.type === ChannelType.DM) {
             prefix = this.client.prefix.getPrefix(message.guild.id)
                 ? this.client.prefix.getPrefix(message.guild.id)
                 : process.env.PREFIX;
@@ -92,7 +92,7 @@ module.exports = class CommandHelp extends Command {
                     MANAGE_EMOJIS: 'Manage Emojis'
                 };
 
-                const commandEmbed = new MessageEmbed()
+                const commandEmbed = new EmbedBuilder()
                     .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
                     .setAuthor({
                         name: 'ChadMusic - The Chad Music Bot Documentation',
@@ -129,7 +129,7 @@ module.exports = class CommandHelp extends Command {
             } else return;
         }
 
-        const helpEmbed = new MessageEmbed()
+        const helpEmbed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'ChadMusic - The Chad Music Bot Documentation',

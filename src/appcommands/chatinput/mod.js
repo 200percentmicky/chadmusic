@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, Permissions } = require('discord.js');
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const humanTime = require('human-interval');
 
@@ -249,7 +249,7 @@ class CommandMod extends SlashCommand {
 
             if (!member.bannable) return this.client.ui.ctx(ctx, 'error', `Cannot ban **${member.user.tag}**.`, null, null, true);
 
-            const banDM = new MessageEmbed()
+            const banDM = new EmbedBuilder()
                 .setColor('RED')
                 .setAuthor({
                     name: guild.name,
@@ -258,7 +258,7 @@ class CommandMod extends SlashCommand {
                 .setTitle('🔨 You have been banned.')
                 .setDescription(`**Reason:** ${ctx.options.ban.reason}`);
 
-            const banMessage = new MessageEmbed()
+            const banMessage = new EmbedBuilder()
                 .setColor('RED')
                 .setAuthor({
                     name: member.user.tag,
@@ -292,7 +292,7 @@ class CommandMod extends SlashCommand {
 
             if (!member.kickable) return this.client.ui.ctx(ctx, 'error', `Cannot kick **${member.user.tag}**.`, null, null, true);
 
-            const kickDM = new MessageEmbed()
+            const kickDM = new EmbedBuilder()
                 .setColor('ORANGE')
                 .setAuthor({
                     name: guild.name,
@@ -301,7 +301,7 @@ class CommandMod extends SlashCommand {
                 .setTitle('👢 You have been kicked.')
                 .setDescription(`**Reason:** ${ctx.options.kick.reason}`);
 
-            const kickMessage = new MessageEmbed()
+            const kickMessage = new EmbedBuilder()
                 .setColor('ORANGE')
                 .setAuthor({
                     name: member.user.tag,
@@ -348,7 +348,7 @@ class CommandMod extends SlashCommand {
 
             if (member.isCommunicationDisabled()) return this.client.ui.ctx(ctx, 'warn', `**${member.user.tag}** is already muted.`, null, null, true);
 
-            const muteDM = new MessageEmbed()
+            const muteDM = new EmbedBuilder()
                 .setColor('GREY')
                 .setAuthor({
                     name: guild.name,
@@ -357,7 +357,7 @@ class CommandMod extends SlashCommand {
                 .setTitle('🔇 You have been muted.')
                 .setDescription(`**Reason:** ${ctx.options.mute.reason}`);
 
-            const muteMessage = new MessageEmbed()
+            const muteMessage = new EmbedBuilder()
                 .setColor('GREY')
                 .setAuthor({
                     name: member.user.tag,

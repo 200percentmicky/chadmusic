@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -66,7 +66,7 @@ module.exports = class CommandNowPlaying extends Command {
         let progressBar;
         if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
         const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: `Currently playing in ${currentVc.channel.name}`,

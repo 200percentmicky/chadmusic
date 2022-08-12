@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandSkip extends SlashCommand {
@@ -134,7 +134,7 @@ class CommandSkip extends SlashCommand {
                     await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
                     return channel.sendTyping();
                 } else {
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                         .setColor(parseInt(process.env.COLOR_INFO))
                         .setDescription('⏭ Skipping?')
                         .setFooter({

@@ -67,7 +67,7 @@ module.exports = class CommandEval extends Command {
         // const args = message.content.split(/ +/g)
         const code = args.code;
 
-        const closeButton = new Discord.MessageButton()
+        const closeButton = new Discord.ButtonBuilder()
             .setCustomId('close_eval')
             .setStyle('DANGER')
             .setEmoji('✖');
@@ -106,18 +106,18 @@ module.exports = class CommandEval extends Command {
                                 return message.channel.send(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
                             }
                         }
-                        return message.channel.send({ files: [file], components: [new Discord.MessageActionRow().addComponents(closeButton)] });
+                        return message.channel.send({ files: [file], components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
                     } catch {
                         return message.channel.send(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
                     } finally {
                         this.client.logger.info('Took %s ms. to complete.\n%s', end, clean(evaled));
                     }
                 } else {
-                    return message.channel.send({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.MessageActionRow().addComponents(closeButton)] });
+                    return message.channel.send({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
                 }
             }
         } catch (err) {
-            message.channel.send({ content: `\`\`\`js\n${err.name}: ${err.message}\`\`\``, components: [new Discord.MessageActionRow().addComponents(closeButton)] });
+            message.channel.send({ content: `\`\`\`js\n${err.name}: ${err.message}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
         }
     }
 };

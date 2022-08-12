@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyled } = require('discord.js');
 const { stripIndents } = require('common-tags');
 
 module.exports = class ListenerCreatorInteractionEtc extends Listener {
@@ -33,20 +33,20 @@ module.exports = class ListenerCreatorInteractionEtc extends Listener {
         case 'dice_help_button': {
             await ctx.defer(true);
 
-            const diceDocumentation = new MessageActionRow()
-                .addComponents(new MessageButton()
-                    .setStyle('LINK')
+            const diceDocumentation = new ActionRowBuilder()
+                .addComponents(new ButtonBuilder()
+                    .setStyle(ButtonStyle.Link)
                     .setLabel('Documentation')
                     .setEmoji('📚')
                     .setURL('https://dice-roller.github.io/documentation/guide/notation/')
-                , new MessageButton()
-                    .setStyle('LINK')
+                , new ButtonBuilder()
+                    .setStyle(ButtonStyle.Link)
                     .setLabel('JS Math Functions')
                     .setEmoji('🔢')
                     .setURL('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#Static_methods')
                 );
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor(parseInt(process.env.COLOR_INFO))
                 .setTitle('🎲 Dice Cheat Sheet')
                 .addField('Dice', stripIndents`

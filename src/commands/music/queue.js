@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed, MessageButton, MessageActionRow, Modal, TextInputComponent } = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, Modal, TextInputBuilder } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -84,7 +84,7 @@ module.exports = class CommandQueue extends Command {
             : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
 
         /* Making the embed. */
-        const queueEmbed = new MessageEmbed()
+        const queueEmbed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: `Queue for ${message.guild.name} - ${currentVc.channel.name}`,
@@ -101,49 +101,49 @@ module.exports = class CommandQueue extends Command {
         /* Creating the buttons to interact with the queue. */
 
         // First Page
-        const firstPage = new MessageButton()
+        const firstPage = new ButtonBuilder()
             .setStyle('PRIMARY')
             .setEmoji(process.env.FIRST_PAGE)
             .setCustomId('first_page')
             .setDisabled(true); // Since the embed opens on the first page.
 
         // Previous Page
-        const previousPage = new MessageButton()
+        const previousPage = new ButtonBuilder()
             .setStyle('PRIMARY')
             .setEmoji(process.env.PREVIOUS_PAGE)
             .setCustomId('previous_page')
             .setDisabled(true); // Since the embed opens on the first page.
 
         // Next Page
-        const nextPage = new MessageButton()
+        const nextPage = new ButtonBuilder()
             .setStyle('PRIMARY')
             .setEmoji(process.env.NEXT_PAGE)
             .setCustomId('next_page');
 
         // Last Page
-        const lastPage = new MessageButton()
+        const lastPage = new ButtonBuilder()
             .setStyle('PRIMARY')
             .setEmoji(process.env.LAST_PAGE)
             .setCustomId('last_page');
 
         // Jump to Page
-        const pageJump = new MessageButton()
+        const pageJump = new ButtonBuilder()
             .setStyle('PRIMARY')
             .setEmoji(process.env.JUMP_PAGE)
             .setCustomId('page_jump');
 
         // Cancel
-        const cancelButton = new MessageButton()
+        const cancelButton = new ButtonBuilder()
             .setStyle('DANGER')
             .setEmoji(process.env.CLOSE)
             .setCustomId('close_queue');
 
         /* Row of buttons! */
-        const buttonRow = new MessageActionRow()
+        const buttonRow = new ActionRowBuilder()
             .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
         /* Ran out of room for the cancel button, so... */
-        const cancelRow = new MessageActionRow()
+        const cancelRow = new ActionRowBuilder()
             .addComponents(cancelButton);
 
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -163,7 +163,7 @@ module.exports = class CommandQueue extends Command {
             if (interaction.user.id !== message.member.user.id) {
                 return interaction.reply({
                     embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor(parseInt(process.env.COLOR_NO))
                             .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                     ],
@@ -186,11 +186,11 @@ module.exports = class CommandQueue extends Command {
                     previousPage.setDisabled(true);
                 }
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Rand out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -221,11 +221,11 @@ module.exports = class CommandQueue extends Command {
                     previousPage.setDisabled(true);
                 }
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Rand out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -257,11 +257,11 @@ module.exports = class CommandQueue extends Command {
                 }
 
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Rand out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -291,11 +291,11 @@ module.exports = class CommandQueue extends Command {
                 }
 
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Rand out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -315,9 +315,9 @@ module.exports = class CommandQueue extends Command {
                     .setCustomId('modal_jump_page_msg')
                     .setTitle('Select Page')
                     .addComponents(
-                        new MessageActionRow()
+                        new ActionRowBuilder()
                             .addComponents(
-                                new TextInputComponent()
+                                new TextInputBuilder()
                                     .setCustomId('modal_jump_page_msg_short')
                                     .setLabel('Which page do you want to jump to?')
                                     .setMaxLength(3)
@@ -338,7 +338,7 @@ module.exports = class CommandQueue extends Command {
                     if (isNaN(pageNumber)) {
                         return interaction.followUp({
                             embeds: [
-                                new MessageEmbed()
+                                new EmbedBuilder()
                                     .setColor(parseInt(process.env.COLOR_ERROR))
                                     .setDescription(`${process.env.EMOJI_ERROR} A number must be provided in your response. Please try again.`)
                             ],
@@ -365,11 +365,11 @@ module.exports = class CommandQueue extends Command {
                             lastPage.setDisabled(true);
                         }
                         /* Row of buttons! */
-                        const buttonRow = new MessageActionRow()
+                        const buttonRow = new ActionRowBuilder()
                             .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                         /* Rand out of room for the cancel button, so... */
-                        const cancelRow = new MessageActionRow()
+                        const cancelRow = new ActionRowBuilder()
                             .addComponents(cancelButton);
 
                         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -398,11 +398,11 @@ module.exports = class CommandQueue extends Command {
                         }
 
                         /* Row of buttons! */
-                        const buttonRow = new MessageActionRow()
+                        const buttonRow = new ActionRowBuilder()
                             .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                         /* Rand out of room for the cancel button, so... */
-                        const cancelRow = new MessageActionRow()
+                        const cancelRow = new ActionRowBuilder()
                             .addComponents(cancelButton);
 
                         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -434,11 +434,11 @@ module.exports = class CommandQueue extends Command {
                     }
 
                     /* Row of buttons! */
-                    const buttonRow = new MessageActionRow()
+                    const buttonRow = new ActionRowBuilder()
                         .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                     /* Rand out of room for the cancel button, so... */
-                    const cancelRow = new MessageActionRow()
+                    const cancelRow = new ActionRowBuilder()
                         .addComponents(cancelButton);
 
                     const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];

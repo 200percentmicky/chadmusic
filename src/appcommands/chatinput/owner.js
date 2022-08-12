@@ -153,13 +153,13 @@ class CommandOwner extends SlashCommand {
                     return ctx.send(`:x: The bot is not a member of guild ID \`${ctx.options.guilds.leave}\` or the ID provided is not a valid guild ID.`);
                 }
 
-                const yesLeave = new Discord.MessageButton()
+                const yesLeave = new Discord.ButtonBuilder()
                     .setStyle('DANGER')
                     .setLabel('Leave Guild')
                     .setEmoji('🚪')
                     .setCustomId('confirm_guild_leave');
 
-                const buttonRow = new Discord.MessageActionRow()
+                const buttonRow = new Discord.ActionRowBuilder()
                     .addComponents(yesLeave);
 
                 await ctx.send(oneLine`
@@ -235,7 +235,7 @@ class CommandOwner extends SlashCommand {
             this.client.logger.warn('Cleaning up before shutting down...');
             if (ctx.options.shutdown.reason) {
                 const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setColor(process.env.COLOR_INFO)
                     .setTitle('🔄 Restart')
                     .setDescription(`\`\`\`js\n${ctx.options.shutdown.reason}\`\`\``)

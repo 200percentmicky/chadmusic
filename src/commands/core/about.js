@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -41,7 +41,7 @@ module.exports = class CommandAbout extends Command {
 
     async exec (message) {
         const owner = this.client.users.cache.get(this.client.ownerID);
-        const aboutembed = new MessageEmbed()
+        const aboutembed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'ChadMusic - The Chad Music Bot',
@@ -77,17 +77,17 @@ module.exports = class CommandAbout extends Command {
                 iconURL: owner.avatarURL({ dynamic: true })
             });
 
-        const urlGithub = new MessageButton()
-            .setStyle('LINK')
+        const urlGithub = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
-        const support = new MessageButton()
-            .setStyle('LINK')
+        const support = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://discord.com/invite/qQuJ9YQ')
             .setLabel('Support Server');
 
-        const actionRow = new MessageActionRow()
+        const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
         return message.reply({ embeds: [aboutembed], components: [actionRow] });

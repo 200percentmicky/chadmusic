@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandSkip extends Command {
@@ -88,7 +88,7 @@ module.exports = class CommandSkip extends Command {
                 return message.channel.sendTyping();
             } else {
                 const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setColor(process.env.COLOR_INFO)
                     .setDescription('⏭ Skipping?')
                     .setFooter({

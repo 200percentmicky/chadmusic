@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 class CommandGrab extends SlashCommand {
     constructor (creator) {
@@ -54,7 +54,7 @@ class CommandGrab extends SlashCommand {
 
         await ctx.defer(true);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',

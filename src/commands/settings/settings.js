@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { toColonNotation } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -58,7 +58,7 @@ module.exports = class CommandSettings extends Command {
         // All pornographic websites are blocked.
         const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,
@@ -84,7 +84,7 @@ module.exports = class CommandSettings extends Command {
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             });
 
-        const blockedEmbed = new MessageEmbed()
+        const blockedEmbed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,

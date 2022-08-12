@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, Permissions } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -169,7 +169,7 @@ class CommandPlayer extends SlashCommand {
             let progressBar;
             if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
                 .setAuthor({
                     name: `Currently playing in ${currentVc.channel.name}`,

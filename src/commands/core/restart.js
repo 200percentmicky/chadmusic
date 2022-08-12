@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = class CommandRestart extends Command {
     constructor () {
@@ -39,7 +39,7 @@ module.exports = class CommandRestart extends Command {
         if (!restartReport) restartReport = 'Just refreshing... nothing serious. :3';
         const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
         await message.channel.send('🔄 Restarting...');
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(process.env.COLOR_INFO)
             .setTitle('🔄 Restart')
             .setDescription(`\`\`\`js\n${restartReport}\`\`\``)

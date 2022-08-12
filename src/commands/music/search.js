@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, ButtonBuilder } = require('discord.js');
 const { Permissions } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -133,7 +133,7 @@ module.exports = class CommandSearch extends Command {
 
         const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
@@ -159,20 +159,20 @@ module.exports = class CommandSearch extends Command {
             menuOptions.push(track);
         }
 
-        const menu = new MessageSelectMenu()
+        const menu = new SelectMenuBuilder()
             .setCustomId('track_menu')
             .setPlaceholder('Pick a track!')
             .addOptions(menuOptions);
 
-        const cancel = new MessageButton()
+        const cancel = new ButtonBuilder()
             .setCustomId('cancel_search')
             .setStyle('DANGER')
             .setEmoji(process.env.CLOSE);
 
-        const trackMenu = new MessageActionRow()
+        const trackMenu = new ActionRowBuilder()
             .addComponents(menu);
 
-        const cancelButton = new MessageActionRow()
+        const cancelButton = new ActionRowBuilder()
             .addComponents(cancel);
 
         const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
@@ -203,7 +203,7 @@ module.exports = class CommandSearch extends Command {
     /*
     this.client.player.search(search).then(results => {
       const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n');
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
         .setAuthor({
           name: 'Which track do you wanna play?',

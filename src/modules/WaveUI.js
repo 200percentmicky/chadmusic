@@ -21,13 +21,14 @@
 
 const {
     Message,
-    MessageEmbed,
+    EmbedBuilder,
     CommandInteraction,
-    MessageActionRow,
+    ActionRowBuilder,
     ColorResolvable,
     EmojiResolvable,
     BaseGuildTextChannel,
-    GuildMember
+    GuildMember,
+    ChannelType
 } = require('discord.js');
 const { CommandContext, Member } = require('slash-create');
 
@@ -90,14 +91,14 @@ const embedColor = {
 };
 
 /**
- * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
+ * Allows you to create a window alert style UI utilizing `Discord.EmbedBuilder`, or a standard text message if the bot doesn't have the **Embed Links** permission.
  *
  * @param {Message} msg A MessageResolvable
  * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
  * @returns {Message} The message to send in the channel.
  */
 const say = (msg, type, description, title, footer, buttons) => {
@@ -117,7 +118,7 @@ const say = (msg, type, description, title, footer, buttons) => {
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     const embed = embedUI(embedColor[type], embedEmoji[type], title || null, msg.member, description || null, footer || null);
-    if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+    if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
         return msg.channel.send({
             embeds: [embed],
             components: buttons || []
@@ -145,7 +146,7 @@ const say = (msg, type, description, title, footer, buttons) => {
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
  * @returns {Message} The message to send in the channel.
  */
 const reply = (msg, type, description, title, footer, buttons) => {
@@ -165,7 +166,7 @@ const reply = (msg, type, description, title, footer, buttons) => {
     /* No embed */
     // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     const embed = embedUI(embedColor[type], embedEmoji[type], title || null, msg.member, description || null, footer || null);
-    if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+    if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
         return msg.reply({
             embeds: [embed],
             components: buttons || [],
@@ -206,7 +207,7 @@ const usage = (msg, syntax) => {
     if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
     const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setColor(process.env.COLOR_INFO)
         .setTitle(`${process.env.EMOJI_INFO} Usage`)
         .setDescription(`\`${guildPrefix}${syntax}\``);
@@ -226,14 +227,14 @@ const usage = (msg, syntax) => {
  * @param {string} description The overall message.
  * @param {string} title [Optional] The title of the message.
  * @param {string} footer [Optional] The footer of the message.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
  * @returns {Message} The message to reply to the user.
  */
 const custom = (msg, emoji, color, description, title, footer, buttons) => {
     if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
 
     const embed = embedUI(color, emoji || null, title || null, msg.member, description || null, footer || null);
-    if (msg.channel.type === 'dm') {
+    if (msg.channel.type === ChannelType.DM) {
         return msg.reply({
             embeds: [embed],
             allowedMentions: {
@@ -257,7 +258,7 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
 };
 
 /**
- * Allows you to create a window alert style UI utilizing `Discord.MessageEmbed`, or a standard text message if the bot doesn't have the **Embed Links** permission.
+ * Allows you to create a window alert style UI utilizing `Discord.EmbedBuilder`, or a standard text message if the bot doesn't have the **Embed Links** permission.
  *
  * @param {CommandContext} interaction The incoming interaction.
  * @param {BaseGuildTextChannel} channel The text channel of the interaction.
@@ -266,7 +267,7 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
  * @param {string} title [Optional] The title of the embed or message.
  * @param {string} footer [Optional] The footer of the embed.
  * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
  * @returns {Message} The message to send in the channel.
  */
 const ctx = (interaction, type, description, title, footer, ephemeral, buttons) => {
@@ -299,7 +300,7 @@ const ctx = (interaction, type, description, title, footer, ephemeral, buttons) 
  * @param {string} title [Optional] The title of the message.
  * @param {string} footer [Optional] The footer of the message.
  * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
- * @param {MessageActionRow[]} buttons [Optional] The components to add to the message. Supports only `Discord.MessageButton`.
+ * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
  * @returns {Message} The message to reply to the user.
  */
 const ctxCustom = (interaction, emoji, color, description, title, footer, ephemeral, buttons) => { // Temp name.
@@ -379,7 +380,7 @@ const send = (msg, prompt, extra) => {
         /* No embed */
         // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
         const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, msg.member, promptMessage[prompt], null);
-        if (msg.channel.type === 'dm') { /* DMs will always have embed links. */
+        if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
             return msg.reply({
                 embeds: [embed]
             });

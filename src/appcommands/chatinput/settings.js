@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, Permissions } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -275,7 +275,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
         switch (ctx.subcommands[0]) {
         case 'current': {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,
@@ -301,7 +301,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                 });
 
-            const blockedEmbed = new MessageEmbed()
+            const blockedEmbed = new EmbedBuilder()
                 .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,

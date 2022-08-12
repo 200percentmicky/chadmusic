@@ -22,22 +22,20 @@ const logger = require('./modules/winstonLogger');
 
 // Say hello!
 const { version } = require('../package.json');
-logger.info('                                                                      ');
-logger.info('███╗   ███╗██╗ ██████╗██╗  ██╗██╗   ██╗     ██████╗  ██████╗ ████████╗');
-logger.info('████╗ ████║██║██╔════╝██║ ██╔╝╚██╗ ██╔╝     ██╔══██╗██╔═══██╗╚══██╔══╝');
-logger.info('██╔████╔██║██║██║     █████╔╝  ╚████╔╝█████╗██████╔╝██║   ██║   ██║   ');
-logger.info('██║╚██╔╝██║██║██║     ██╔═██╗   ╚██╔╝ ╚════╝██╔══██╗██║   ██║   ██║   ');
-logger.info('██║ ╚═╝ ██║██║╚██████╗██║  ██╗   ██║        ██████╔╝╚██████╔╝   ██║   ');
-logger.info('╚═╝     ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝        ╚═════╝  ╚═════╝    ╚═╝   ');
-logger.info('                                                                      ');
+logger.info('   ________              ____  ___           _');
+logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
+logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
+logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
+logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
+logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
 logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { Intents } = require('discord.js');
+const { IntentsBitField, ChannelType } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
-const DisTube = require('../chadtube/dist').default;
+const DisTube = require('distube').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
@@ -54,7 +52,7 @@ class WaveBot extends AkairoClient {
             allowedMentions: {
                 repliedUser: false
             },
-            intents: new Intents(3192575)
+            intents: new IntentsBitField(3192575)
         });
 
         // Calling packages that can be used throughout the client.
@@ -68,7 +66,7 @@ class WaveBot extends AkairoClient {
                 new SpotifyPlugin({
                     emitEventsAfterFetching: true
                 }),
-                new YtDlpPlugin()
+                new YtDlpPlugin({ update: true })
             ],
             emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
             leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
@@ -81,8 +79,6 @@ class WaveBot extends AkairoClient {
                 dlChunkSize: 25000,
                 highWaterMark: 1024
             },
-            youtubeDL: false,
-            updateYouTubeDL: process.env.UPDATE_YOUTUBE_DL === 'true' || false,
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
@@ -112,7 +108,7 @@ class WaveBot extends AkairoClient {
             prefix: message => {
                 // This is an attempt to have custom prefixes, despite how Enmap likes to complain.
                 // If no key is found, this should return the configured prefix in the .env file.
-                if (message.channel.type === 'DM') {
+                if (message.channel.type === ChannelType.DM) {
                     return process.env.PREFIX;
                 } else {
                     this.settings.ensure(message.guild.id, this.defaultSettings); // Hoping that the bot doesn't have a panic attack.

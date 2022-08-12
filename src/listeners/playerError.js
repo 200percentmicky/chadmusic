@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, Permissions } = require('discord.js');
 
 module.exports = class ListenerPlayerError extends Listener {
     constructor () {
@@ -45,7 +45,7 @@ module.exports = class ListenerPlayerError extends Listener {
         };
 
         let formattedError = 'An unknown error occured:';
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_ERROR))
             .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
 

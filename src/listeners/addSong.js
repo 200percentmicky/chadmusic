@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { Permissions, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 const iheart = require('iheart');
 const ffprobe = require('ffprobe');
@@ -50,7 +50,7 @@ module.exports = class ListenerAddSong extends Listener {
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
 
-        const userEmbed = new MessageEmbed()
+        const userEmbed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_NO))
             .setAuthor({
                 name: `${song.user.tag}`,
@@ -121,7 +121,7 @@ module.exports = class ListenerAddSong extends Listener {
 
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: `Added to queue - ${member.voice.channel.name}`,

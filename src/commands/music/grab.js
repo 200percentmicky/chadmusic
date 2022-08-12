@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = class CommandGrab extends Command {
     constructor () {
@@ -51,7 +51,7 @@ module.exports = class CommandGrab extends Command {
             }
         }
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',

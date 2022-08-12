@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Permissions, MessageEmbed } = require('discord.js');
+const { Permissions, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 
 async function nowPlayingMsg (queue, song) {
@@ -30,7 +30,7 @@ async function nowPlayingMsg (queue, song) {
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted', true);
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
 
-        const userEmbed = new MessageEmbed()
+        const userEmbed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_NO))
             .setAuthor({
                 name: `${song.user.tag}`,
@@ -68,7 +68,7 @@ async function nowPlayingMsg (queue, song) {
 
     const author = song.uploader; // Video Uploader
 
-    const songNow = new MessageEmbed()
+    const songNow = new EmbedBuilder()
         .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
         .setAuthor({
             name: `Now playing in ${vc.name}`,

@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { Permissions, EmbedBuilder } = require('discord.js');
 const Genius = require('genius-lyrics');
 
 module.exports = class CommandLyrics extends Command {
@@ -70,7 +70,7 @@ module.exports = class CommandLyrics extends Command {
                 return this.client.ui.reply(message, 'error', 'Unable to retrieve lyrics from currently playing song. Try manually searching for the song using `lyrics [query]`.');
             }
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
                 .setAuthor({
                     name: songSearch[0].artist.name,

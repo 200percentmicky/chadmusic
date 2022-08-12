@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -42,7 +42,7 @@ class CommandAbout extends SlashCommand {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const app = await this.client.application.fetch();
         const owner = `${app.owner?.tag ?? app.owner?.name} (${app.owner?.id})`;
-        const aboutembed = new MessageEmbed()
+        const aboutembed = new EmbedBuilder()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: 'ChadMusic - The Chad Music Bot',
@@ -78,17 +78,17 @@ class CommandAbout extends SlashCommand {
                 iconURL: app.owner?.avatarURL({ dynamic: true })
             });
 
-        const urlGithub = new MessageButton()
-            .setStyle('LINK')
+        const urlGithub = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
-        const support = new MessageButton()
-            .setStyle('LINK')
+        const support = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://discord.com/invite/qQuJ9YQ')
             .setLabel('Support Server');
 
-        const actionRow = new MessageActionRow()
+        const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
         return ctx.send({ embeds: [aboutembed], components: [actionRow], ephemeral: true });

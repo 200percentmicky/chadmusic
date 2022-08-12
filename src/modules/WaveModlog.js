@@ -18,7 +18,7 @@
 
 const color = require('../colorcode.json');
 const emoji = require('../emoji.json');
-const { MessageEmbed, Guild, GuildMember, User } = require('discord.js');
+const { EmbedBuilder, Guild, GuildMember, User } = require('discord.js');
 const prettyms = require('pretty-ms');
 const { stripIndents } = require('common-tags');
 
@@ -74,7 +74,7 @@ const create = async (guild, type, modid, userid, reason, duration) => {
     const __type = `${emojiType[type]} ${_type}`;
     const __reason = `**Reason:** ${reason}`;
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setColor(colors[type])
         .setAuthor({
             name: `${moderator.user.tag}`,
@@ -125,7 +125,7 @@ const create = async (guild, type, modid, userid, reason, duration) => {
     // Some stupid shit happened idk...
         if (err.name === 'DiscordAPIError') return;
         const errorChannel = guild.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(color.error)
             .setTitle(`${emoji.error} Internal Error`)
             .setDescription(`\`\`\`js\n${err}\`\`\``)

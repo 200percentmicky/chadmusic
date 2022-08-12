@@ -18,7 +18,7 @@
 
 const { SlashCommand, CommandOptionType, ComponentType, ButtonStyle } = require('slash-create');
 const {
-    MessageEmbed,
+    EmbedBuilder,
     Permissions
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -136,7 +136,7 @@ class CommandSearch extends SlashCommand {
 
         const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
@@ -192,7 +192,7 @@ class CommandSearch extends SlashCommand {
                 if (ctx.user.id !== selCtx.user.id) {
                     return selCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -215,7 +215,7 @@ class CommandSearch extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
