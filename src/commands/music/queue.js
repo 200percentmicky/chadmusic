@@ -17,7 +17,14 @@
  */
 
 const { Command } = require('discord-akairo');
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, Modal, TextInputBuilder } = require('discord.js');
+const {
+    EmbedBuilder,
+    ButtonBuilder,
+    ActionRowBuilder,
+    Modal,
+    TextInputBuilder,
+    PermissionsBitField
+} = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -34,14 +41,14 @@ module.exports = class CommandQueue extends Command {
                 text: 'View the queue for this server.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -85,7 +92,7 @@ module.exports = class CommandQueue extends Command {
 
         /* Making the embed. */
         const queueEmbed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Queue for ${message.guild.name} - ${currentVc.channel.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })

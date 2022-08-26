@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 function pornPattern (url) {
@@ -38,7 +38,7 @@ module.exports = class CommandPlayNow extends Command {
                 usage: 'playnow <URL/search>'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -47,7 +47,7 @@ module.exports = class CommandPlayNow extends Command {
         const text = args.slice(1).join(' ');
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -76,17 +76,17 @@ module.exports = class CommandPlayNow extends Command {
 
             if (vc.type === 'stage') {
                 await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
                     const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
                     if (!requestToSpeak) {
                         vc.leave();
                         return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-                    } else if (message.guild.me.voice.suppress) {
-                        await message.guild.me.voice.setRequestToSpeak(true);
+                    } else if (message.guild.members.me.voice.suppress) {
+                        await message.guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await message.guild.me.voice.setSuppressed(false);
+                    await message.guild.members.me.voice.setSuppressed(false);
                 }
             } else {
                 this.client.vc.join(vc);

@@ -55,7 +55,7 @@ class CommandGrab extends SlashCommand {
         await ctx.defer(true);
 
         const embed = new EmbedBuilder()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'

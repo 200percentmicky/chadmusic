@@ -18,7 +18,7 @@
 
 /* eslint-disable no-var */
 const { Command } = require('discord-akairo');
-const { EmbedBuilder, ChannelType } = require('discord.js');
+const { EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandHelp extends Command {
     constructor () {
@@ -38,7 +38,7 @@ module.exports = class CommandHelp extends Command {
                     default: null
                 }
             ],
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -93,7 +93,7 @@ module.exports = class CommandHelp extends Command {
                 };
 
                 const commandEmbed = new EmbedBuilder()
-                    .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+                    .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                     .setAuthor({
                         name: 'ChadMusic - The Chad Music Bot Documentation',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
@@ -130,7 +130,7 @@ module.exports = class CommandHelp extends Command {
         }
 
         const helpEmbed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'ChadMusic - The Chad Music Bot Documentation',
                 iconURL: this.client.user.avatarURL({ dynamic: true })

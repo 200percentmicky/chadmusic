@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -30,8 +30,8 @@ module.exports = class CommandSettings extends Command {
             description: {
                 text: 'Shows you the current settings of the bot for this server.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 
@@ -59,7 +59,7 @@ module.exports = class CommandSettings extends Command {
         const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
         const embed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
@@ -85,7 +85,7 @@ module.exports = class CommandSettings extends Command {
             });
 
         const blockedEmbed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
@@ -100,7 +100,7 @@ module.exports = class CommandSettings extends Command {
 
         if (blockedPhrases.length === 0) {
             blockedEmbed.setDescription('');
-            blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, `To add phrases to the blocklist, run \`${process.env.PREFIX}blocklist add <phrase>\`.`);
+            blockedEmbed.addField(`${process.env.EMOJI_INFO} No songs are being blocked in this server.`, `To add phrases to the blocklist, run \`${process.env.PREFIX}blocksong add <phrase>\`.`);
         }
 
         return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });

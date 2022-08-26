@@ -17,20 +17,20 @@
  */
 
 const { Command } = require('discord-akairo');
-const { setqueuelimit } = require('../../aliases.json');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandSetQueueLimit extends Command {
     constructor () {
-        super(setqueuelimit !== undefined ? setqueuelimit[0] : 'setqueuelimit', {
-            aliases: setqueuelimit || ['setqueuelimit'],
+        super('setqueuelimit', {
+            aliases: ['setqueuelimit'],
             category: '⚙ Settings',
             description: {
                 text: 'Limits the number of entries that members can add to the queue.',
                 usage: '<number|0/none>',
                 details: '`<number|0/none>` The numbers of entries to limit for members.\n- DJs can bypass this limitation.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 

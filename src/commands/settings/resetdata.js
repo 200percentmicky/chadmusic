@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { ButtonBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandResetData extends Command {
     constructor () {
@@ -28,7 +28,7 @@ module.exports = class CommandResetData extends Command {
                 text: 'Allows you to reset the bot\'s music settings for this server.'
             },
             channel: 'guild',
-            userPermissions: ['ADMINISTRATOR']
+            userPermissions: [PermissionsBitField.Flags.Administrator]
         });
     }
 

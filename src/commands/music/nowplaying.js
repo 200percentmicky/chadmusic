@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -30,14 +30,14 @@ module.exports = class CommandNowPlaying extends Command {
                 text: 'Shows the currently playing song.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -67,7 +67,7 @@ module.exports = class CommandNowPlaying extends Command {
         if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
         const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
         const embed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Currently playing in ${currentVc.channel.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })

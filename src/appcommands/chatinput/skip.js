@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandSkip extends SlashCommand {
@@ -63,7 +63,7 @@ class CommandSkip extends SlashCommand {
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }

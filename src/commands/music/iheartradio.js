@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const iheart = require('iheart');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -32,7 +32,7 @@ module.exports = class CommandIHeartRadio extends Command {
                 details: '`<search>` The station to search for. The first result is queued.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -42,7 +42,7 @@ module.exports = class CommandIHeartRadio extends Command {
 
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -61,22 +61,22 @@ module.exports = class CommandIHeartRadio extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
             if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
                 await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
                         this.client.vc.leave(message);
                         return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-                    } else if (message.guild.me.voice.suppress) {
-                        await message.guild.me.voice.setRequestToSpeak(true);
+                    } else if (message.guild.members.me.voice.suppress) {
+                        await message.guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await message.guild.me.voice.setSuppressed(false);
+                    await message.guild.members.me.voice.setSuppressed(false);
                 }
             } else {
                 this.client.vc.join(vc);

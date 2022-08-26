@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Permissions, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 
 async function nowPlayingMsg (queue, song) {
@@ -38,7 +38,7 @@ async function nowPlayingMsg (queue, song) {
             });
 
         // Check if this member is a DJ
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (!allowAgeRestricted) {
             if (!dj) {
                 if (song.age_restricted) {
@@ -69,7 +69,7 @@ async function nowPlayingMsg (queue, song) {
     const author = song.uploader; // Video Uploader
 
     const songNow = new EmbedBuilder()
-        .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
         .setAuthor({
             name: `Now playing in ${vc.name}`,
             iconURL: guild.iconURL({ dynamic: true })

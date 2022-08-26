@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandDJMode extends Command {
     constructor () {
@@ -28,13 +29,13 @@ module.exports = class CommandDJMode extends Command {
                 usage: '<toggle:on/off>',
                 details: 'Requires the DJ role or the **Manage Channels** permission.'
             },
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks]
         });
     }
 
     async exec (message) {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (!dj) return this.client.ui.reply(message, 'no', 'You must have the DJ role or the **Manage Channels** permissions to toggle DJ Mode.');
 
         const args = message.content.split(/ +/g);

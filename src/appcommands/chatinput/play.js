@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const iheart = require('iheart');
 const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -100,7 +100,7 @@ class CommandPlay extends SlashCommand {
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -147,22 +147,22 @@ class CommandPlay extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
                 await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
                         this.client.vc.leave(guild);
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.me.voice.suppress) {
-                        await guild.me.voice.setRequestToSpeak(true);
+                    } else if (guild.members.me.voice.suppress) {
+                        await guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await guild.me.voice.setSuppressed(false);
+                    await guild.members.me.voice.setSuppressed(false);
                 }
             } else {
                 this.client.vc.join(vc);

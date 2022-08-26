@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandFreeVolume extends Command {
     constructor () {
@@ -28,8 +29,8 @@ module.exports = class CommandFreeVolume extends Command {
                 usage: '<toggle:on/off>',
                 details: 'Requires the DJ role or the **Manage Channels** permission.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 

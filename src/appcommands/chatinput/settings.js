@@ -276,7 +276,7 @@ module.exports = class CommandSettings extends SlashCommand {
         switch (ctx.subcommands[0]) {
         case 'current': {
             const embed = new EmbedBuilder()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
@@ -302,7 +302,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 });
 
             const blockedEmbed = new EmbedBuilder()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,
                     iconURL: guild.iconURL({ dynamic: true })

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandDefaultVolume extends Command {
     constructor () {
@@ -28,8 +29,8 @@ module.exports = class CommandDefaultVolume extends Command {
                 usage: '<int:volume|1-200>',
                 details: '`<int:volume|1-200>` The new volume for the server.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD'],
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'volume',

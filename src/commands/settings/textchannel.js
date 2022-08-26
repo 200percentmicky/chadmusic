@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandTextChannel extends Command {
     constructor () {
@@ -28,7 +29,7 @@ module.exports = class CommandTextChannel extends Command {
                 usage: '<text_channel>',
                 details: "`<text_channel>` The text channel to apply. Can be the channel's mention or the channel's ID."
             },
-            userPermissions: ['MANAGE_GUILD']
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 

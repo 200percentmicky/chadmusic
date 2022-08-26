@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandBindChannel extends Command {
     constructor () {
@@ -27,7 +28,7 @@ module.exports = class CommandBindChannel extends Command {
                 text: 'Changes the player\'s currently binded text or voice channel to a different one.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS'],
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     type: 'channel',
@@ -40,7 +41,7 @@ module.exports = class CommandBindChannel extends Command {
     async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }

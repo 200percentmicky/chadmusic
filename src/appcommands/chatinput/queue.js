@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, ComponentType, TextInputStyle, CommandOptionType } = require('slash-create');
-const { ButtonBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -79,7 +79,7 @@ class CommandQueue extends SlashCommand {
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -206,7 +206,7 @@ class CommandQueue extends SlashCommand {
 
             /* Making the embed. */
             const queueEmbed = new EmbedBuilder()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `Queue for ${guild.name} - ${currentVc.channel.name}`,
                     iconURL: guild.iconURL({ dynamic: true })

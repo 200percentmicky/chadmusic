@@ -33,7 +33,7 @@ module.exports = class ListenerAddList extends Listener {
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
         const embed = new EmbedBuilder()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Playlist added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })

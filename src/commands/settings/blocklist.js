@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandBlocklist extends Command {
     constructor () {
@@ -28,8 +29,8 @@ module.exports = class CommandBlocklist extends Command {
                 usage: '<add/remove> <phrase>',
                 details: '`<add/remove>` Subcommands to whether add or remove phrases from the list.\n`<phrase>` The phrase to add or remove from the list.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD'],
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'subcommand',

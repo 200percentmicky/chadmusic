@@ -17,27 +17,26 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
-const { stop } = require('../../aliases.json');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandStop extends Command {
     constructor () {
-        super(stop !== undefined ? stop[0] : 'stop', {
-            aliases: stop || ['stop'],
+        super('stop', {
+            aliases: ['stop'],
             category: '🎶 Music',
             description: {
                 text: 'Stops the player, and clears the queue.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }

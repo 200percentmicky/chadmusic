@@ -17,6 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -246,7 +247,7 @@ class CommandFilter extends SlashCommand {
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
         const allowFilters = this.client.settings.get(ctx.guildID, 'allowFilters');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode && !dj) return this.client.ui.send(ctx, 'DJ_MODE');
 

@@ -69,7 +69,7 @@ module.exports = class CommandEval extends Command {
 
         const closeButton = new Discord.ButtonBuilder()
             .setCustomId('close_eval')
-            .setStyle('DANGER')
+            .setStyle(Discord.ButtonStyle.Danger)
             .setEmoji('✖');
 
         try {

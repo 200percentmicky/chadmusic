@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { EmbedBuilder, Permissions } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -138,7 +138,7 @@ class CommandPlayer extends SlashCommand {
 
         const djMode = client.settings.get(ctx.guildID, 'djMode');
         const djRole = client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -170,7 +170,7 @@ class CommandPlayer extends SlashCommand {
             if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
             const embed = new EmbedBuilder()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `Currently playing in ${currentVc.channel.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
@@ -213,7 +213,7 @@ class CommandPlayer extends SlashCommand {
         }
 
         case 'join': {
-            const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             const currentVc = this.client.vc.get(vc);
@@ -224,17 +224,17 @@ class CommandPlayer extends SlashCommand {
                 if (vc.type === 'stage') {
                     await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
                     this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined \`${vc.name}\``);
-                    const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                    const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                     if (!stageMod) {
-                        const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
+                        const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                         if (!requestToSpeak) {
                             vc.leave();
                             return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                        } else if (guild.me.voice.suppress) {
-                            await guild.me.voice.setRequestToSpeak(true);
+                        } else if (guild.members.me.voice.suppress) {
+                            await guild.members.me.voice.setRequestToSpeak(true);
                         }
                     } else {
-                        await guild.me.voice.setSuppressed(false);
+                        await guild.members.me.voice.setSuppressed(false);
                     }
                 } else {
                     this.client.vc.join(vc);

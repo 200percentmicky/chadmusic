@@ -122,7 +122,7 @@ module.exports = class ListenerAddSong extends Listener {
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
         const embed = new EmbedBuilder()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })

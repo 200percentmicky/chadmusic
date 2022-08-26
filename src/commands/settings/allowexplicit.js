@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandAllowExplicit extends Command {
     constructor () {
@@ -28,7 +29,7 @@ module.exports = class CommandAllowExplicit extends Command {
                 usage: '<toggle:on/off>',
                 details: `\`<toggle:on/off>\` The toggle of the setting.\n${process.env.EMOJI_WARN} This setting only applies to videos on YouTube. All pornographic websites are blocked regardless if this setting is on or not.`
             },
-            userPermissions: ['MANAGE_GUILD']
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 

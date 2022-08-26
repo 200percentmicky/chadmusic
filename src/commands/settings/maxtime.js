@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { toMilliseconds } = require('colon-notation');
 
 module.exports = class CommandMaxTime extends Command {
@@ -29,8 +30,8 @@ module.exports = class CommandMaxTime extends Command {
                 usage: '<duration>',
                 details: '`<duration>` The max duration of the song to limit. Members will be unable to add any songs that go past this limit. DJs can bypass this.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD'],
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'time',

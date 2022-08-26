@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandGrab extends Command {
     constructor () {
@@ -28,7 +28,7 @@ module.exports = class CommandGrab extends Command {
                 text: 'Saves this song to your DMs.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks]
         });
     }
 
@@ -52,7 +52,7 @@ module.exports = class CommandGrab extends Command {
         }
 
         const embed = new EmbedBuilder()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'

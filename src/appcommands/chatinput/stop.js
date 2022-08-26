@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class CommandStop extends SlashCommand {
@@ -38,7 +38,7 @@ class CommandStop extends SlashCommand {
 
         const djMode = client.settings.get(ctx.guildID, 'djMode');
         const djRole = client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }

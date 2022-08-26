@@ -19,7 +19,7 @@
 const { SlashCommand, CommandOptionType, ComponentType, ButtonStyle } = require('slash-create');
 const {
     EmbedBuilder,
-    Permissions
+    PermissionsBitField
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -48,7 +48,7 @@ class CommandSearch extends SlashCommand {
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -78,22 +78,22 @@ class CommandSearch extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
                 await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
                         vc.leave();
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.me.voice.suppress) {
-                        await guild.me.voice.setRequestToSpeak(true);
+                    } else if (guild.members.me.voice.suppress) {
+                        await guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await guild.me.voice.setSuppressed(false);
+                    await guild.members.me.voice.setSuppressed(false);
                 }
             } else {
                 this.client.vc.join(vc);
@@ -137,7 +137,7 @@ class CommandSearch extends SlashCommand {
         const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
 
         const embed = new EmbedBuilder()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
                 iconURL: member.user.avatarURL({ dynamic: true })
