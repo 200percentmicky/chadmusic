@@ -52,7 +52,12 @@ class WaveBot extends AkairoClient {
             allowedMentions: {
                 repliedUser: false
             },
-            intents: new IntentsBitField(3192575)
+            intents: [
+                IntentsBitField.Flags.Guilds,
+                IntentsBitField.Flags.GuildMessages,
+                IntentsBitField.Flags.GuildVoiceStates,
+                IntentsBitField.Flags.MessageContent // Temp: May be remove in favor of App Commands only.
+            ]
         });
 
         // Calling packages that can be used throughout the client.
