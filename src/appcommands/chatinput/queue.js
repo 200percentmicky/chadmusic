@@ -16,8 +16,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand, ComponentType, TextInputStyle, CommandOptionType } = require('slash-create');
-const { ButtonBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommand, ComponentType, CommandOptionType } = require('slash-create');
+const {
+    ButtonBuilder,
+    ActionRowBuilder,
+    EmbedBuilder,
+    PermissionsBitField,
+    ButtonStyle,
+    TextInputStyle
+} = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -223,39 +230,39 @@ class CommandQueue extends SlashCommand {
 
             // First Page
             const firstPage = new ButtonBuilder()
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.FIRST_PAGE)
                 .setCustomId('qc_first_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Previous Page
             const previousPage = new ButtonBuilder()
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.PREVIOUS_PAGE)
                 .setCustomId('qc_previous_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Next Page
             const nextPage = new ButtonBuilder()
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.NEXT_PAGE)
                 .setCustomId('qc_next_page');
 
             // Last Page
             const lastPage = new ButtonBuilder()
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.LAST_PAGE)
                 .setCustomId('qc_last_page');
 
             // Jump to Page
             const pageJump = new ButtonBuilder()
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.JUMP_PAGE)
                 .setCustomId('qc_page_jump');
 
             // Cancel
             const cancelButton = new ButtonBuilder()
-                .setStyle('DANGER')
+                .setStyle(ButtonStyle.Danger)
                 .setEmoji(process.env.CLOSE)
                 .setCustomId('qc_cancel_button');
 

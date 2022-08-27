@@ -23,7 +23,9 @@ const {
     ActionRowBuilder,
     Modal,
     TextInputBuilder,
-    PermissionsBitField
+    PermissionsBitField,
+    TextInputStyle,
+    ButtonStyle
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
@@ -109,39 +111,39 @@ module.exports = class CommandQueue extends Command {
 
         // First Page
         const firstPage = new ButtonBuilder()
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji(process.env.FIRST_PAGE)
             .setCustomId('first_page')
             .setDisabled(true); // Since the embed opens on the first page.
 
         // Previous Page
         const previousPage = new ButtonBuilder()
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji(process.env.PREVIOUS_PAGE)
             .setCustomId('previous_page')
             .setDisabled(true); // Since the embed opens on the first page.
 
         // Next Page
         const nextPage = new ButtonBuilder()
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji(process.env.NEXT_PAGE)
             .setCustomId('next_page');
 
         // Last Page
         const lastPage = new ButtonBuilder()
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji(process.env.LAST_PAGE)
             .setCustomId('last_page');
 
         // Jump to Page
         const pageJump = new ButtonBuilder()
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji(process.env.JUMP_PAGE)
             .setCustomId('page_jump');
 
         // Cancel
         const cancelButton = new ButtonBuilder()
-            .setStyle('DANGER')
+            .setStyle(ButtonStyle.Danger)
             .setEmoji(process.env.CLOSE)
             .setCustomId('close_queue');
 
@@ -328,7 +330,7 @@ module.exports = class CommandQueue extends Command {
                                     .setCustomId('modal_jump_page_msg_short')
                                     .setLabel('Which page do you want to jump to?')
                                     .setMaxLength(3)
-                                    .setStyle('SHORT')
+                                    .setStyle(TextInputStyle.Short)
                                     .setRequired(true)
                             )
                     );

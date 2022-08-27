@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { ButtonBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, EmbedBuilder, PermissionsBitField, ButtonStyle } = require('discord.js');
 
 module.exports = class CommandResetData extends Command {
     constructor () {
@@ -34,13 +34,13 @@ module.exports = class CommandResetData extends Command {
 
     async exec (message) {
         const yesButton = new ButtonBuilder()
-            .setStyle('SUCCESS')
+            .setStyle(ButtonStyle.Success)
             .setLabel('Yes')
             .setEmoji('✔')
             .setCustomId('yes_data');
 
         const noButton = new ButtonBuilder()
-            .setStyle('DANGER')
+            .setStyle(ButtonStyle.Danger)
             .setLabel('No')
             .setEmoji('✖')
             .setCustomId('no_data');

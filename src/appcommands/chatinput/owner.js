@@ -29,6 +29,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
 const commonTags = require('common-tags');
+const { ButtonStyle } = require('discord.js');
 
 class CommandOwner extends SlashCommand {
     constructor (creator) {
@@ -154,7 +155,7 @@ class CommandOwner extends SlashCommand {
                 }
 
                 const yesLeave = new Discord.ButtonBuilder()
-                    .setStyle('DANGER')
+                    .setStyle(ButtonStyle.Danger)
                     .setLabel('Leave Guild')
                     .setEmoji('🚪')
                     .setCustomId('confirm_guild_leave');
