@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 const iheart = require('iheart');
 const ffprobe = require('ffprobe');
@@ -48,7 +48,7 @@ module.exports = class ListenerAddSong extends Listener {
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         const userEmbed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_NO))

@@ -100,7 +100,10 @@ module.exports = class CommandSettings extends Command {
 
         if (blockedPhrases.length === 0) {
             blockedEmbed.setDescription('');
-            blockedEmbed.addField(`${process.env.EMOJI_INFO} No songs are being blocked in this server.`, `To add phrases to the blocklist, run \`${process.env.PREFIX}blocksong add <phrase>\`.`);
+            blockedEmbed.addFields({
+                name: `${process.env.EMOJI_INFO} No songs are being blocked in this server.`,
+                value: `To add phrases to the blocklist, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
+            });
         }
 
         return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });

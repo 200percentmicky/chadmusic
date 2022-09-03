@@ -75,14 +75,40 @@ async function nowPlayingMsg (queue, song) {
             iconURL: guild.iconURL({ dynamic: true })
         });
 
-    if (song.age_restricted) songNow.addField(':underage: Explicit', 'This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
+    const songNowFields = [];
+
+    if (song.age_restricted) {
+        songNowFields.push({
+            name: ':underage: Explicit',
+            value: 'This track is **Age Restricted**'
+        }); // Only for YouTube so far...
+    }
+
     if (song.isFile) songNow.setDescription('📎 **File Upload**');
-    if (author.name) songNow.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})` || 'N/A');
-    if (song.station) songNow.addField(':tv: Station', `${song.station}`);
+
+    if (author.name) {
+        songNowFields.push({
+            name: ':arrow_upper_right: Uploader',
+            value: `[${author.name}](${author.url})` || 'N/A'
+        });
+    }
+
+    if (song.station) songNowFields.push({ name: ':tv: Station', value: `${song.station}` });
+
+    songNowFields.push({
+        name: ':raising_hand: Requested by',
+        value: `${song.user}`,
+        inline: true
+    });
+
+    songNowFields.push({
+        name: ':hourglass: Duration',
+        value: `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`,
+        inline: true
+    });
 
     songNow
-        .addField(':raising_hand: Requested by', `${song.user}`, true)
-        .addField(':hourglass: Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
+        .addFields(songNowFields)
         .setTitle(`${song.name}`)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)

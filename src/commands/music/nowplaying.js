@@ -77,17 +77,19 @@ module.exports = class CommandNowPlaying extends Command {
             .setURL(song.url)
             .setThumbnail(song.thumbnail);
 
+        const embedFields = [];
+
         if (queue.paused) {
             const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-            embed.addField('⏸ Paused', `Type '${prefix}resume' to resume playback.`);
+            embedFields.push({ name: '⏸ Paused', value: `Type '${prefix}resume' to resume playback.` });
         }
 
         if (song.age_restricted) {
-            embed.addField(':underage: Explicit', 'This track is **Age Restricted**');
+            embedFields.push({ name: ':underage: Explicit', value: 'This track is **Age Restricted**' });
         }
 
-        if (author.name) embed.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})`);
-        if (song.station) embed.addField(':tv: Station', `${song.station}`);
+        if (author.name) embedFields.push({ name: ':arrow_upper_right: Uploader', value: `[${author.name}](${author.url})` });
+        if (song.station) embedFields.push({ name: ':tv: Station', value: `${song.station}` });
 
         const volumeEmoji = () => {
             const volume = queue.volume;
@@ -100,10 +102,25 @@ module.exports = class CommandNowPlaying extends Command {
             return volumeIcon[Math.round(volume / 50) * 50];
         };
 
+        embedFields.push({
+            name: ':raising_hand: Requested by',
+            value: `${song.user}`,
+            inline: true
+        });
+
+        embedFields.push({
+            name: `${volumeEmoji()} Volume`,
+            value: `${queue.volume}%`,
+            inline: true
+        });
+
+        embedFields.push({
+            name: '📢 Filters',
+            value: `${queue.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`
+        });
+
         embed
-            .addField(':raising_hand: Requested by', `${song.user}`, true)
-            .addField(`${volumeEmoji()} Volume`, `${queue.volume}%`, true)
-            .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`)
+            .addFields(embedFields)
             .setTimestamp();
 
         return message.channel.send({ embeds: [embed] });

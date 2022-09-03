@@ -100,7 +100,10 @@ module.exports = class CommandQueue extends Command {
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
-            .addField(`${process.env.EMOJI_MUSIC} Currently Playing`, `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``)
+            .addFields({
+                name: `${process.env.EMOJI_MUSIC} Currently Playing`,
+                value: `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``
+            })
             .setTimestamp()
             .setFooter({
                 text: `${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,

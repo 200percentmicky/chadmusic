@@ -317,7 +317,10 @@ module.exports = class CommandSettings extends SlashCommand {
 
             if (blockedPhrases.length === 0) {
                 blockedEmbed.setDescription('');
-                blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, 'To add phrases to the blocklist, run `/settings blocklist add <phrase>`.');
+                blockedEmbed.addFields({
+                    name: `${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`,
+                    value: 'To add phrases to the blocklist, run `/settings blocksong add <phrase>`.'
+                });
             }
 
             return ctx.send({ embeds: [embed, blockedEmbed] });
@@ -396,10 +399,6 @@ module.exports = class CommandSettings extends SlashCommand {
             break;
         }
 
-        // ! Deprecated.
-        // This feature will be replaced when the Command Permissions page is fully
-        // implemented into the client.
-        // Server Settings -> Integrations -> <Any Application> -> Command Permissions
         case 'textchannel': {
             await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
             return this.client.ui.ctx(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);

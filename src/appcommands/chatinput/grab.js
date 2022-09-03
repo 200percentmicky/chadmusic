@@ -63,7 +63,10 @@ class CommandGrab extends SlashCommand {
             .setTitle(song.name)
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
-            .addField('Duration', `${song.formattedDuration}`)
+            .addFields({
+                name: 'Duration',
+                value: `${song.formattedDuration}`
+            })
             .setTimestamp();
 
         try {

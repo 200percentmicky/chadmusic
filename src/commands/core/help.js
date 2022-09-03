@@ -95,21 +95,34 @@ module.exports = class CommandHelp extends Command {
                 const commandEmbed = new EmbedBuilder()
                     .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                     .setAuthor({
-                        name: 'ChadMusic - The Chad Music Bot Documentation',
+                        name: 'ChadMusic - The Chad Music Bot',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
                     .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
-                    .addField(`${command.description.text}`, `${command.description.details ? command.description.details : '\u200b'}`)
                     .setTimestamp()
                     .setFooter({
                         text: '<Required> • [Optional]',
                         iconURL: message.author.avatarURL({ dynamic: true })
                     });
-                if (command.ownerOnly) commandEmbed.addField('🚫 Owner Only', 'This command is for the bot owner only.');
-                if (command.category === '🔞 NSFW') commandEmbed.addField('🔞 NSFW Command', 'This command must be used in a NSFW channel.');
-                if (command.category) commandEmbed.addField('Category', `${command.category}`, true);
+
+                const commandFields = [];
+
+                commandFields.push({
+                    name: `${command.description.text}`,
+                    value: `${command.description.details ? command.description.details : '\u200b'}`
+                });
+
+                if (command.ownerOnly) commandFields.push({ name: '🚫 Owner Only', value: 'This command is for the bot owner only.' });
+                if (command.category === '🔞 NSFW') commandFields.push({ name: '🔞 NSFW Command', value: 'This command must be used in a NSFW channel.' });
+                if (command.category) {
+                    commandFields.push({
+                        name: 'Category',
+                        value: `${command.category}`,
+                        inline: true
+                    });
+                }
                 // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
-                if (command.aliases.length > 1) commandEmbed.addField('Aliases', `${command.aliases}`, true);
+                if (command.aliases.length > 1) commandFields.push({ name: 'Aliases', value: `${command.aliases}`, inline: true });
 
                 // This gonna be a bruh moment.
                 // It do be Yandere Simulator lol
@@ -117,13 +130,14 @@ module.exports = class CommandHelp extends Command {
                 if (command.clientPermissions) var clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ');
                 const _uPerms = command.userPermissions ? `**User:** ${userPerms}\n` : '';
                 const _bPerms = command.clientPermissions ? `**Bot:** ${clientPerms}` : '';
-                if (userPerms || clientPerms) commandEmbed.addField('Permissions', `${_uPerms}${_bPerms}`);
+                if (userPerms || clientPerms) commandFields.push({ name: 'Permissions', value: `${_uPerms}${_bPerms}` });
 
                 /*
         if (command.clientPermissions) {
           const clientPerms = await command.clientPermissions.map(client => permissions[client]).join(', ');
           commandEmbed.addField('Bot Permissions', clientPerms, true);
         } */
+                commandEmbed.addFields(commandFields);
 
                 return message.channel.send({ embeds: [commandEmbed] });
             } else return;
@@ -132,7 +146,7 @@ module.exports = class CommandHelp extends Command {
         const helpEmbed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: 'ChadMusic - The Chad Music Bot Documentation',
+                name: 'ChadMusic - The Chad Music Bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setTimestamp()
@@ -141,6 +155,7 @@ module.exports = class CommandHelp extends Command {
             });
 
         this.handler.categories.forEach((value, key) => {
+            const helpFields = [];
             const field = {
                 name: key,
                 value: ''
@@ -149,7 +164,8 @@ module.exports = class CommandHelp extends Command {
                 field.value += `\`${commands.id}\` `;
             });
             field.value = `${field.value}`;
-            helpEmbed.fields.push(field);
+            helpFields.push(field);
+            helpEmbed.addFields(helpFields);
         });
         return message.channel.send({ embeds: [helpEmbed] });
     }

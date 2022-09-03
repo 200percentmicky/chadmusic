@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { EmbedBuilder, Permissions } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = class ListenerPlayerError extends Listener {
     constructor () {
@@ -44,12 +44,12 @@ module.exports = class ListenerPlayerError extends Listener {
             'Error [VOICE_CONNECTION_TIMEOUT]': 'The connection was not established within 15 seconds.'
         };
 
-        let formattedError = 'An unknown error occured:';
+        let formattedError = 'An unknown error occured.';
         const embed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_ERROR))
             .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
 
-        const linkPerms = channel.permissionsFor(this.client.user.id).has(Permissions.FLAGS.EMBED_LINKS);
+        const linkPerms = channel.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.EmbedLinks);
 
         // Iterates through the split error message. If it finds a match, it will
         // return an easier to understand message. Otherwise, return a more detailed

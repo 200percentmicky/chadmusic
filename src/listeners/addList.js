@@ -46,6 +46,8 @@ module.exports = class ListenerAddList extends Listener {
                 iconURL: playlist.user.avatarURL({ dynamic: true })
             });
 
+        const embedFields = [];
+
         // Cut some or many entries if maxQueueLimit is in place.
         const djRole = this.client.settings.get(channel.guild.id, 'djRole');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
@@ -59,11 +61,24 @@ module.exports = class ListenerAddList extends Listener {
                 // in the array, so we don't need to subtract the number to get
                 // the correct element.
                 queue.songs.splice(allowedLimit, playlist.songs.length - maxQueueLimit);
-                embed.addField(':warning: Not everything was added!', `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** was added to the queue.`);
+
+                embedFields.push({
+                    name: '🔢 Number of entries',
+                    value: `${playlist.songs.length}`
+                });
+                embedFields.push({
+                    name: ':warning: Not everything was added!',
+                    value: `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** were added to the queue.`
+                });
+                embed.addFields(embedFields);
                 return channel.send({ embeds: [embed] });
             }
         } else {
-            embed.addField('🔢 Number of entries', `${playlist.songs.length}`);
+            embedFields.push({
+                name: '🔢 Number of entries',
+                value: `${playlist.songs.length}`
+            });
+            embed.addFields(embedFields);
             channel.send({ embeds: [embed] });
         }
     }
