@@ -29,9 +29,13 @@ const _ = require('lodash');
 function pushFormatFilter (queue, name, value) {
     if (!queue) throw new Error('Queue is required.');
     if (!name) throw new Error('A filter name is required.');
-    if (!value) throw new Error('A filter value is required.');
 
-    if (name === 'All') queue.formattedFilters = [];
+    if (name === 'All') {
+        queue.formattedFilters = [];
+        return;
+    }
+
+    if (!value) throw new Error('A filter value is required.');
 
     const formatFilterArray = queue.formattedFilters;
 
