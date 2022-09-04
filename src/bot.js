@@ -35,7 +35,7 @@ logger.info('Loading libraries...');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { IntentsBitField, ChannelType } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
-const DisTube = require('distube').default;
+const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
