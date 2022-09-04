@@ -16,14 +16,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand, ComponentType, CommandOptionType } = require('slash-create');
+const { SlashCommand, ComponentType, CommandOptionType, TextInputStyle } = require('slash-create');
 const {
     ButtonBuilder,
     ActionRowBuilder,
     EmbedBuilder,
     PermissionsBitField,
-    ButtonStyle,
-    TextInputStyle
+    ButtonStyle
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');

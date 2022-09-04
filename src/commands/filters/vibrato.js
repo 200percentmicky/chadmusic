@@ -70,7 +70,7 @@ module.exports = class CommandVibrato extends Command {
         if (currentVc) {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'vibrato', false);
+                    await queue.filters.set('vibrato', null);
                     pushFormatFilter(queue, 'Vibrato', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Vibrato** Off');
                 } catch (err) {
@@ -92,7 +92,7 @@ module.exports = class CommandVibrato extends Command {
                 if (f < 0) {
                     return this.client.ui.reply(message, 'error', 'Frequency must be greater than 0.');
                 }
-                await this.client.player.setFilter(message.guild.id, 'vibrato', `vibrato=f=${f}:d=${d}`);
+                await queue.filters.set('vibrato', `vibrato=f=${f}:d=${d}`);
                 pushFormatFilter(queue, 'Vibrato', `Depth \`${d}\` at \`${f}Hz\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``);
             }

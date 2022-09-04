@@ -233,7 +233,7 @@ class CommandPlayer extends SlashCommand {
             });
             nowPlayingFields.push({
                 name: '📢 Filters',
-                value: `${queue.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`
+                value: `${queue.filters.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`
             });
 
             embed

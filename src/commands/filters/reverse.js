@@ -69,14 +69,14 @@ module.exports = class CommandReverse extends Command {
         if (currentVc) {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'reverse', false);
+                    await queue.filters.set('reverse', null);
                     pushFormatFilter(queue, 'Reverse', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** Off');
                 } catch (err) {
                     return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
             } else {
-                await this.client.player.setFilter(message.guild.id, 'reverse', 'areverse');
+                await queue.filters.set('reverse', 'areverse');
                 pushFormatFilter(queue, 'Reverse', 'Enabled');
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Reverse** On');
             }

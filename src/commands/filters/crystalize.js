@@ -67,7 +67,7 @@ module.exports = class CommandCrystalize extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'crystalize', false);
+                    await queue.filters.set('crystalize', null);
                     pushFormatFilter(queue, 'Crystalize', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Crystalize** Off');
                 } catch (err) {
@@ -80,7 +80,7 @@ module.exports = class CommandCrystalize extends Command {
                     return this.client.ui.reply(message, 'error', 'Intensity must be between **-10** to **10**, or **"off"**.');
                 }
 
-                await this.client.player.setFilter(message.guild.id, 'crystalize', `crystalizer=i=${intensity}`);
+                await queue.filters.set('crystalize', `crystalizer=i=${intensity}`);
                 pushFormatFilter(queue, 'Crystalize', `Intensity \`${intensity}\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
             }

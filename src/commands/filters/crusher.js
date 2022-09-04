@@ -86,7 +86,7 @@ module.exports = class CommandCrusher extends Command {
         if (currentVc) {
             if (args.samples === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'crusher', false);
+                    await queue.filters.set('crusher', null);
                     pushFormatFilter(queue, 'Crusher', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Crusher** Off');
                 } catch (err) {
@@ -115,7 +115,7 @@ module.exports = class CommandCrusher extends Command {
                     return this.client.ui.reply(message, 'error', 'Supported logarithmic modes are **lin** for linear and **log** for logarithmic.');
                 }
 
-                await this.client.player.setFilter(message.guild.id, 'crusher', `acrusher=samples=${samples}:bits=${bits}:mode=${mode}`);
+                await queue.filters.set('crusher', `acrusher=samples=${samples}:bits=${bits}:mode=${mode}`);
                 pushFormatFilter(queue, 'Crusher', `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
             }

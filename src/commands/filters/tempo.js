@@ -67,7 +67,7 @@ module.exports = class CommandTempo extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'tempo', false);
+                    await queue.filters.set('tempo', null);
                     pushFormatFilter(queue, 'Tempo', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tempo** Reverted');
                 } catch (err) {
@@ -82,7 +82,7 @@ module.exports = class CommandTempo extends Command {
             if (rate < 0.1 || rate > 11) {
                 return this.client.ui.reply(message, 'error', 'Tempo must be between **0.1-10** or **off**.');
             }
-            await this.client.player.setFilter(message, 'tempo', `rubberband=tempo=${rate}`);
+            await queue.filters.set('tempo', `rubberband=tempo=${rate}`);
             pushFormatFilter(queue, 'Tempo', `Rate: \`${rate}\``);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
         } else {

@@ -67,7 +67,7 @@ module.exports = class CommandBassBoost extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'bassboost', false);
+                    await queue.filters.set('bassboost', null);
                     pushFormatFilter(queue, 'Bass Boost', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off');
                 } catch (err) {
@@ -80,7 +80,7 @@ module.exports = class CommandBassBoost extends Command {
                     return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.');
                 }
 
-                await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`);
+                await queue.filters.set('bassboost', `bass=g=${gain}`);
                 pushFormatFilter(queue, 'Bass Boost', `Gain: \`${gain}dB\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
             }

@@ -66,7 +66,7 @@ module.exports = class CommandCustomFilter extends Command {
         if (currentVc) {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'custom', false);
+                    await queue.filters.set('custom', null);
                     pushFormatFilter(queue, 'Custom Filter', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed');
                 } catch (err) {
@@ -74,7 +74,7 @@ module.exports = class CommandCustomFilter extends Command {
                 }
             } else {
                 const custom = args[1];
-                await this.client.player.setFilter(message.guild.id, 'custom', custom);
+                await queue.filters.set('custom', custom);
                 pushFormatFilter(queue, 'Custom Filter', custom);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }
