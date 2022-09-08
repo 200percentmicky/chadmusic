@@ -57,7 +57,7 @@ module.exports = class CommandStop extends Command {
 
         if (vc.members.size <= 2 || dj) {
             this.client.player.stop(message);
-            this.client.vc.leave(message);
+            this.client.vc.leave(message.guild);
             return this.client.ui.custom(message, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');
