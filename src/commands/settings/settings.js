@@ -52,6 +52,7 @@ module.exports = class CommandSettings extends Command {
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
+        const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
         // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -75,6 +76,7 @@ module.exports = class CommandSettings extends Command {
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
             **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+            **🖼 Thumbnail Size:** ${thumbnailSize}
             **🔊 Default Volume:** ${defaultVolume}
             **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
             `)
@@ -99,7 +101,7 @@ module.exports = class CommandSettings extends Command {
             });
 
         if (blockedPhrases.length === 0) {
-            blockedEmbed.setDescription('');
+            blockedEmbed.setDescription(null);
             blockedEmbed.addFields({
                 name: `${process.env.EMOJI_INFO} No songs are being blocked in this server.`,
                 value: `To add phrases to the blocklist, run \`${process.env.PREFIX}blocksong add <phrase>\`.`

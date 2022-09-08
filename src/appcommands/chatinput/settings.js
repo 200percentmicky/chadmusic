@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { EmbedBuilder, Permissions } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -165,6 +165,27 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'thumbnailsize',
+                    description: "Changes the track's thumbnail size of the \"Now Playing\" embeds.",
+                    options: [{
+                        type: CommandOptionType.STRING,
+                        name: 'size',
+                        description: 'The size of the track\'s image.',
+                        required: true,
+                        choices: [
+                            {
+                                name: 'Small',
+                                value: 'small'
+                            },
+                            {
+                                name: 'Large',
+                                value: 'large'
+                            }
+                        ]
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'unlimitedvolume',
                     description: 'Allows or denies the ability to freely set the player\'s volume to any value.',
                     options: [{
@@ -249,7 +270,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
 
-        if (!channel.permissionsFor(ctx.user.id).has(Permissions.FLAGS.MANAGE_GUILD)) {
+        if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
             return this.client.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
@@ -266,7 +287,8 @@ module.exports = class CommandSettings extends SlashCommand {
         const allowLinks = settings.get(guild.id, 'allowLinks'); // Allow Links
         const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
-        const blockedPhrases = settings.get(guild.id, 'blockedPhrases');
+        const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
+        const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
         // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -292,6 +314,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                 **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                **🖼 Thumbnail Size:** ${thumbnailSize}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
                 `)
@@ -316,7 +339,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 });
 
             if (blockedPhrases.length === 0) {
-                blockedEmbed.setDescription('');
+                blockedEmbed.setDescription(null);
                 blockedEmbed.addFields({
                     name: `${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`,
                     value: 'To add phrases to the blocklist, run `/settings blocksong add <phrase>`.'
@@ -371,6 +394,11 @@ module.exports = class CommandSettings extends SlashCommand {
         case 'unlimitedvolume': {
             await settings.set(ctx.guildID, ctx.options.unlimitedvolume.toggle, 'allowFreeVolume');
             return this.client.ui.ctx(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
+        }
+
+        case 'thumbnailSize': {
+            await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
+            return this.client.ui.ctx(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
         }
 
         case 'defaultvolume': {
