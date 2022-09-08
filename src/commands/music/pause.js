@@ -52,12 +52,21 @@ module.exports = class CommandPause extends Command {
         if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
-        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+        const queue = this.client.player.getQueue(message.guild);
+        if (!queue || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
-            await this.client.player.pause(message);
             const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
+            try {
+                await this.client.player.pause(message);
+            } catch (err) {
+                if (queue.paused) {
+                    return this.client.ui.reply(message, 'warn', 'The player is already paused.', null, `Type ${prefix}resume to resume playback.`);
+                } else {
+                    return this.client.ui.reply(message, 'error', `An error occured while pausing the player. ${err.message}`);
+                }
+            }
             return this.client.ui.custom(message, '⏸', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}resume to resume playback.`);
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');

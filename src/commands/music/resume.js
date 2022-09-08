@@ -58,8 +58,13 @@ module.exports = class CommandResume extends Command {
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
-            if (!queue.paused) return this.client.ui.reply(message, 'warn', 'The player is not paused.');
-            await queue.resume();
+            try {
+                await queue.resume();
+            } catch (err) {
+                if (!queue.paused) return this.client.ui.reply(message, 'warn', 'The player is not paused.');
+                else return this.client.ui.reply(message, 'error', `An error occured while resuming playback. ${err.message}`);
+            }
+
             return this.client.ui.custom(message, '▶', process.env.COLOR_INFO, 'Resuming playback...');
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');
