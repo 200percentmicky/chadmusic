@@ -111,8 +111,20 @@ async function nowPlayingMsg (queue, song) {
         .addFields(songNowFields)
         .setTitle(`${song.name}`)
         .setURL(song.url)
-        .setThumbnail(song.thumbnail)
         .setTimestamp();
+
+    const thumbnailSize = await channel.client.settings.get(guild.id, 'thumbnailSize');
+
+    switch (thumbnailSize) {
+    case 'small': {
+        songNow.setThumbnail(song.thumbnail);
+        break;
+    }
+    case 'large': {
+        songNow.setImage(song.thumbnail);
+        break;
+    }
+    }
 
     channel.send({ embeds: [songNow] });
 }

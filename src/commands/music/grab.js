@@ -59,9 +59,21 @@ module.exports = class CommandGrab extends Command {
             })
             .setTitle(song.name)
             .setURL(song.url)
-            .setThumbnail(song.thumbnail)
             .addFields({ name: 'Duration', value: `${song.formattedDuration}` })
             .setTimestamp();
+
+        const thumbnailSize = await this.client.settings.get(message.guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
 
         try {
             await message.author.send({ embeds: [embed] });

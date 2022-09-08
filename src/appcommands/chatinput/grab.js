@@ -62,12 +62,24 @@ class CommandGrab extends SlashCommand {
             })
             .setTitle(song.name)
             .setURL(song.url)
-            .setThumbnail(song.thumbnail)
             .addFields({
                 name: 'Duration',
                 value: `${song.formattedDuration}`
             })
             .setTimestamp();
+
+        const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
 
         try {
             await _member.user.send({ embeds: [embed] });

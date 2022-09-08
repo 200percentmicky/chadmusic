@@ -104,7 +104,8 @@ class WaveBot extends AkairoClient {
             allowLinks: true,
             defaultVolume: 100,
             textChannel: null,
-            blockedPhrases: []
+            blockedPhrases: [],
+            thumbnailSize: 'small'
         };
 
         // Create Command Handler

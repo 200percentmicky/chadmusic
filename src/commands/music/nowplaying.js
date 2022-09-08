@@ -74,8 +74,20 @@ module.exports = class CommandNowPlaying extends Command {
             })
             .setDescription(`${duration}`)
             .setTitle(song.name)
-            .setURL(song.url)
-            .setThumbnail(song.thumbnail);
+            .setURL(song.url);
+
+        const thumbnailSize = await this.client.settings.get(message.guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
 
         const embedFields = [];
 
@@ -123,6 +135,6 @@ module.exports = class CommandNowPlaying extends Command {
             .addFields(embedFields)
             .setTimestamp();
 
-        return message.channel.send({ embeds: [embed] });
+        return message.reply({ embeds: [embed] });
     }
 };

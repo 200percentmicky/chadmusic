@@ -177,8 +177,20 @@ class CommandPlayer extends SlashCommand {
                 })
                 .setDescription(`${duration}`)
                 .setTitle(song.name)
-                .setURL(song.url)
-                .setThumbnail(song.thumbnail);
+                .setURL(song.url);
+
+            const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+            switch (thumbnailSize) {
+            case 'small': {
+                embed.setThumbnail(song.thumbnail);
+                break;
+            }
+            case 'large': {
+                embed.setImage(song.thumbnail);
+                break;
+            }
+            }
 
             const nowPlayingFields = [];
 
@@ -244,22 +256,25 @@ class CommandPlayer extends SlashCommand {
         }
 
         case 'join': {
-            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
-
             const currentVc = this.client.vc.get(vc);
             if (currentVc) {
                 if (vc.id !== currentVc.id) return this.client.ui.ctx(ctx, 'error', 'I\'m currently binded to a different voice channel.');
                 else return this.client.ui.ctx(ctx, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
             } else {
+                try {
+                    await this.client.vc.join(vc);
+                } catch (err) {
+                    const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                    if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                    else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+                }
+
                 if (vc.type === 'stage') {
-                    await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                    this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined \`${vc.name}\``);
                     const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                     if (!stageMod) {
                         const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                         if (!requestToSpeak) {
-                            vc.leave();
+                            this.client.vc.leave(guild);
                             return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
                         } else if (guild.members.me.voice.suppress) {
                             await guild.members.me.voice.setRequestToSpeak(true);
@@ -267,8 +282,6 @@ class CommandPlayer extends SlashCommand {
                     } else {
                         await guild.members.me.voice.setSuppressed(false);
                     }
-                } else {
-                    this.client.vc.join(vc);
                 }
                 return this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
             }
