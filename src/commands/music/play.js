@@ -100,16 +100,20 @@ module.exports = class CommandPlay extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-            if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+            try {
+                await this.client.vc.join(vc);
+            } catch (err) {
+                const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+                else return this.client.ui.reply(message, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+            }
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
                     const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
-                        this.client.vc.leave(message);
+                        this.client.vc.leave(message.guild);
                         return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
                     } else if (message.guild.members.me.voice.suppress) {
                         await message.guild.members.me.voice.setRequestToSpeak(true);
@@ -117,8 +121,6 @@ module.exports = class CommandPlay extends Command {
                 } else {
                     await message.guild.members.me.voice.setSuppressed(false);
                 }
-            } else {
-                this.client.vc.join(vc);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');

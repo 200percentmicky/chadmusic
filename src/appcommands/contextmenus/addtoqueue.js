@@ -70,11 +70,15 @@ class ContextMenuAddToQueue extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+            try {
+                await this.client.vc.join(vc);
+            } catch (err) {
+                const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+            }
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
                     const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
@@ -87,8 +91,6 @@ class ContextMenuAddToQueue extends SlashCommand {
                 } else {
                     await guild.members.me.voice.setSuppressed(false);
                 }
-            } else {
-                this.client.vc.join(vc);
             }
         } else {
             if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
@@ -119,7 +121,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 textChannel: channel,
                 member: _member
             });
-            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Requested \`${requested}\``);
+            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
