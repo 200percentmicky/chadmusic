@@ -262,10 +262,11 @@ class CommandPlayer extends SlashCommand {
                 else return this.client.ui.ctx(ctx, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
             } else {
                 try {
-                    await this.client.vc.join(vc);
+                    this.client.vc.join(vc);
                 } catch (err) {
                     const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                     if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                    else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
                     else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
                 }
 

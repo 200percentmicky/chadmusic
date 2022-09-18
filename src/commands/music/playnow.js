@@ -72,10 +72,11 @@ module.exports = class CommandPlayNow extends Command {
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
             try {
-                await this.client.vc.join(vc);
+                this.client.vc.join(vc);
             } catch (err) {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                 if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(message, 'FULL_CHANNEL');
                 else return this.client.ui.reply(message, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 

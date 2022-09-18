@@ -56,10 +56,11 @@ module.exports = class CommandSummon extends Command {
             else return this.client.ui.reply(message, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
         } else {
             try {
-                await this.client.vc.join(vc);
+                this.client.vc.join(vc);
             } catch (err) {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                 if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(message, 'FULL_CHANNEL');
                 else return this.client.ui.reply(message, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 

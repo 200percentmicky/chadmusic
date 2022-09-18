@@ -151,7 +151,12 @@ class CommandPlay extends SlashCommand {
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
                     const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
@@ -165,7 +170,12 @@ class CommandPlay extends SlashCommand {
                     await guild.members.me.voice.setSuppressed(false);
                 }
             } else {
-                this.client.vc.join(vc);
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
             }
         } else {
             if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
