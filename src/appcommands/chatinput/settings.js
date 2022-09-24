@@ -263,6 +263,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 }
             ]
         });
+
+        this.filePath = __filename;
     }
 
     async run (ctx) {
