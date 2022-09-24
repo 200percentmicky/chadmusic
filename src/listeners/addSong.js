@@ -135,6 +135,10 @@ module.exports = class ListenerAddSong extends Listener {
                 iconURL: song.user.avatarURL({ dynamic: true })
             });
 
-        channel.send({ embeds: [embed] });
+        try {
+            song.metadata?.ctx.send({ embeds: [embed] });
+        } catch {
+            channel.send({ embeds: [embed] });
+        }
     }
 };

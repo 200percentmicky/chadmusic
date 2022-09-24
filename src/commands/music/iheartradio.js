@@ -115,7 +115,10 @@ module.exports = class CommandIHeartRadio extends Command {
             await this.client.player.play(vc, url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message
+                message: message,
+                metadata: {
+                    ctx: undefined
+                }
             });
             return message.react(process.env.EMOJI_MUSIC);
         } catch (err) {

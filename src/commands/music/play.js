@@ -148,7 +148,10 @@ module.exports = class CommandPlay extends Command {
             await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message
+                message: message,
+                metadata: {
+                    ctx: undefined
+                }
             });
             return message.react(process.env.EMOJI_MUSIC);
         } catch (err) {

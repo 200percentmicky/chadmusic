@@ -222,14 +222,14 @@ class CommandPlay extends SlashCommand {
                 if (vc.members.size <= 3 || dj) {
                     requested = ctx.options.now.query;
 
-                    await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
-                    channel.sendTyping();
-
                     /* eslint-disable-next-line no-useless-escape */
                     await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                         textChannel: channel,
                         member: _member,
-                        position: 1
+                        position: 1,
+                        metadata: {
+                            ctx: ctx
+                        }
                     });
                     try {
                         await this.client.player.skip(guild);
@@ -238,13 +238,13 @@ class CommandPlay extends SlashCommand {
                     return this.client.ui.send(ctx, 'NOT_ALONE');
                 }
             } else {
-                await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
-                channel.sendTyping();
-
                 /* eslint-disable-next-line no-useless-escape */
                 await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                     textChannel: channel,
-                    member: _member
+                    member: _member,
+                    metadata: {
+                        ctx: ctx
+                    }
                 });
             }
             return;

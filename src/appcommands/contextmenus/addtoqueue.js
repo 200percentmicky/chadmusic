@@ -120,9 +120,11 @@ class ContextMenuAddToQueue extends SlashCommand {
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                 textChannel: channel,
-                member: _member
+                member: _member,
+                metadata: {
+                    ctx: ctx
+                }
             });
-            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');

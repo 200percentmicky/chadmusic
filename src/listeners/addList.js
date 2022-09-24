@@ -79,7 +79,12 @@ module.exports = class ListenerAddList extends Listener {
                 value: `${playlist.songs.length}`
             });
             embed.addFields(embedFields);
-            channel.send({ embeds: [embed] });
+
+            try {
+                playlist.metadata?.ctx.send({ embeds: [embed] });
+            } catch {
+                channel.send({ embeds: [embed] });
+            }
         }
     }
 };

@@ -102,15 +102,15 @@ module.exports = class CommandPlayNow extends Command {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
             message.channel.sendTyping();
-            // Adding song to position 1 of the queue. options.skip is shown to be unreliable.
-            // This is probably due to the addition of metadata being passed into the player.
-            // The bot does not use this for now, as its using events to parse info instead.
             // eslint-disable-next-line no-useless-escape
             await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
                 message: message,
-                skip: true
+                skip: true,
+                metadata: {
+                    ctx: undefined
+                }
             });
             await this.client.player.skip(message);
             message.react(process.env.REACTION_OK);

@@ -199,7 +199,10 @@ module.exports = class CommandSearch extends Command {
             await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message
+                message: message,
+                metadata: {
+                    ctx: undefined
+                }
             });
             message.react(process.env.EMOJI_MUSIC);
             collector.stop();

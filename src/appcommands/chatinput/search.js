@@ -205,7 +205,10 @@ class CommandSearch extends SlashCommand {
 
                 await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                     member: member,
-                    textChannel: channel
+                    textChannel: channel,
+                    metadata: {
+                        ctx: ctx
+                    }
                 });
                 return ctx.delete();
             },

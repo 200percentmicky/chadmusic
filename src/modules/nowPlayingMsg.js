@@ -126,7 +126,11 @@ async function nowPlayingMsg (queue, song) {
     }
     }
 
-    channel.send({ embeds: [songNow] });
+    try {
+        song.metadata.ctx.send({ embeds: [songNow] });
+    } catch {
+        channel.send({ embeds: [songNow] });
+    }
 }
 
 module.exports = { nowPlayingMsg };
