@@ -103,7 +103,7 @@ module.exports = class CommandSkip extends Command {
                 this.client.player.stop(message.guild);
                 return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
             }
-            this.client.player.skip(message);
+            this.client.player.skip(message.guild);
             await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
             return message.channel.sendTyping();
         }
