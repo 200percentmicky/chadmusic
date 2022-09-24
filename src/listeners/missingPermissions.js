@@ -27,42 +27,54 @@ module.exports = class CommandMissingPermissions extends Listener {
     }
 
     async exec (message, command, type, missing) {
-        const permissions = {
-            CREATE_INSTANT_INVITE: 'Create Instant Invite',
-            KICK_MEMBERS: 'Kick Members',
-            BAN_MEMBERS: 'Ban Members',
-            ADMINISTRATOR: 'Administrator',
-            MANAGE_CHANNELS: 'Manage Channels',
-            MANAGE_GUILD: 'Manage Server',
-            ADD_REACTIONS: 'Add Reactions',
-            VIEW_AUDIT_LOG: 'View Audit Log',
-            PRIORITY_SPEAKER: 'Priority Speaker',
-            STREAM: 'Video',
-            VIEW_CHANNEL: 'Read Messages',
-            SEND_MESSAGES: 'Send Messages',
-            SEND_TTS_MESSAGES: 'Send TTS Messages',
-            MANAGE_MESSAGES: 'Manage Messages',
-            EMBED_LINKS: 'Embed Links',
-            ATTACH_FILES: 'Attach Files',
-            READ_MESSAGE_HISTORY: 'Read Message History',
-            MENTION_EVERYONE: 'MENTION_EVERYONE',
-            USE_EXTERNAL_EMOJIS: 'Use External Emojis',
-            VIEW_GUILD_INSIGHTS: 'View Server Insights',
-            CONNECT: 'Connect',
-            SPEAK: 'Speak',
-            MUTE_MEMBERS: 'Mute Members',
-            DEAFEN_MEMBERS: 'Deafen Members',
-            MOVE_MEMBERS: 'Move Members',
-            USE_VAD: 'Use Voice Activity Detection',
-            CHANGE_NICKNAME: 'Change Nickname',
-            MANAGE_NICKNAMES: 'Manage Nicknames',
-            MANAGE_ROLES: 'Manage Roles',
-            MANAGE_WEBHOOKS: 'Manage Webhooks',
-            MANAGE_EMOJIS: 'Manage Emojis'
+        /* eslint-disable quote-props */
+        // Just so you know, they're being converted to BigInt.
+        const permissionsBits = {
+            '64': 'Add Reactions',
+            '8': 'Administrator',
+            '32768': 'Attach Files',
+            '4': 'Ban Members',
+            '67108864': 'Change Nickname',
+            '1048576': 'Connect',
+            '1': 'Create Instant Invite',
+            '68719476736': 'Create Private Threads',
+            '34359738368': 'Create Public Threads',
+            '8388608': 'Deafen Members',
+            '16384': 'Embed Links',
+            '2': 'Kick Members',
+            '16': 'Manage Channels',
+            '1073741824': 'Manage Emojis and Stickers',
+            '8589934592': 'Manage Events',
+            '32': 'Manage Server',
+            '8192': 'Manage Messages',
+            '134217728': 'Manage Nicknames',
+            '268435456': 'Manage Roles',
+            '17179869184': 'Manage Threads',
+            '536870912': 'Manage Webhooks',
+            '131072': 'Mention Everyone, Here, and All Roles',
+            '1099511627776': 'Moderate Members',
+            '16777216': 'Move Members',
+            '4194304': 'Mute Members',
+            '256': 'Priority Speaker',
+            '65536': 'Read Message History',
+            '4294967296': 'Request to Speak',
+            '2048': 'Send Messages',
+            '274877906944': 'Send Messages in Threads',
+            '4096': 'Send Text-To-Speech Messages',
+            '2097152': 'Speak',
+            '512': 'Stream',
+            '2147483648': 'Use Application Commands',
+            '549755813888': 'Use Embedded Activities',
+            '262144': 'Use External Emojis',
+            '137438953472': 'Use External Stickers',
+            '33554432': 'Use Voice Activity Detection',
+            '128': 'View Audit Log',
+            '1024': 'View Channel',
+            '524288': 'View Guild Insights'
         };
 
-        const clientPerms = await missing.map(missing => permissions[missing]).join(', ');
-        const userPerms = await missing.map(missing => permissions[missing]).join(', ');
+        const clientPerms = await missing.map(missing => permissionsBits[missing]).join(', ');
+        const userPerms = await missing.map(missing => permissionsBits[missing]).join(', ');
 
         if (type === 'client') {
             return this.client.ui.reply(message, 'warn', `I require the **${clientPerms}** permission(s) to execute that command.`);
