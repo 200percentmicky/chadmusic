@@ -25,7 +25,8 @@ const {
     TextInputBuilder,
     PermissionsBitField,
     TextInputStyle,
-    ButtonStyle
+    ButtonStyle,
+    ComponentType
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
@@ -165,7 +166,7 @@ module.exports = class CommandQueue extends Command {
 
         /* Button Collector */
         const collector = await msg.createMessageComponentCollector({
-            componentType: 'BUTTON',
+            componentType: ComponentType.Button,
             time: 1000 * 60 * 15
         });
 
