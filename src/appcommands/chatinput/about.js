@@ -97,7 +97,7 @@ class CommandAbout extends SlashCommand {
         const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
-        return ctx.send({ embeds: [aboutembed], components: [actionRow], ephemeral: true });
+        return ctx.send({ embeds: [aboutembed], components: [actionRow] });
     }
 }
 
