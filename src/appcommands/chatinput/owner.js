@@ -186,53 +186,8 @@ class CommandOwner extends SlashCommand {
             break;
         }
 
-        /*
-        // I'll fix this later.
-        case 'debug': {
-            const cpu = await si.cpu();
-            const osSi = await si.osInfo();
-            const memory = await si.mem();
-            const user = os.userInfo();
-            const owner = this.client.users.cache.get(this.client.ownerID);
-
-            const data = stripIndents`
-             === ChadMusic - The Chad Music Bot ===
-             Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
-             Owner :: ${owner.tag} (ID: ${owner.id})
-             Node.js :: ${process.version}
-             Discord.js :: ${require('discord.js/package.json').version}
-             Akairo Framework :: ${require('discord-akairo/package.json').version}
-             DisTube.js :: ${require('../../../chadtube/package.json').version}
-             Voice Connections :: ${this.client.vc.voices.collection.size}
-             Uptime :: ${prettyMs(this.client.uptime, { verbose: true })}
-
-             # Hardware Specifications
-             CPU :: ${cpu.manufacturer} ${cpu.brand} (${cpu.physicalCores} Cores / ${cpu.cores} Threads)
-             CPU Speed :: ${cpu.speed} GHz.
-             Memory Total :: ${prettyBytes(memory.total)}
-             Memory Used :: ${prettyBytes(memory.used)}
-             Memory Free :: ${prettyBytes(memory.free)}
-             Swap Total :: ${prettyBytes(memory.swaptotal)}
-             Swap Used :: ${prettyBytes(memory.swapused)}
-             Swap Free :: ${prettyBytes(memory.swapfree)}
-
-             # Operating System
-             Platform :: ${osSi.platform}
-             OS Version :: ${osSi.distro} ${osSi.release} ${osSi.platform === 'darwin' ? osSi.codename : ''}
-             Kernel :: ${osSi.kernel}
-             Architechture :: ${osSi.arch}
-             User :: ${user.username}
-             Shell :: ${user.shell}
-             ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
-             `;
-
-            ctx.send(`\`\`\`asciidoc\n${data}\`\`\``);
-            break;
-        }
-        */
-
         case 'shutdown': {
-            await ctx.send('Shutting down... see ya! 👋');
+            await ctx.send('⚠ Shutting down...');
             this.client.logger.warn('Cleaning up before shutting down...');
             if (ctx.options.shutdown.reason) {
                 const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
