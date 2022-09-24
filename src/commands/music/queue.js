@@ -21,12 +21,12 @@ const {
     EmbedBuilder,
     ButtonBuilder,
     ActionRowBuilder,
-    Modal,
     TextInputBuilder,
     PermissionsBitField,
     TextInputStyle,
     ButtonStyle,
-    ComponentType
+    ComponentType,
+    ModalBuilder
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
@@ -324,7 +324,7 @@ module.exports = class CommandQueue extends Command {
 
             // Jump to Page Button
             if (interaction.customId === 'page_jump') {
-                const modal = new Modal()
+                const modal = new ModalBuilder()
                     .setCustomId('modal_jump_page_msg')
                     .setTitle('Select Page')
                     .addComponents(
