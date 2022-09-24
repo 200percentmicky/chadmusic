@@ -27,13 +27,16 @@ module.exports = class CommandReload extends Command {
             aliases: ['reload'],
             category: '💻 Core',
             description: {
-                text: 'Reloads all of the bot\'s commands, listeners, and inhibitors.'
+                text: 'Reloads everything without restarting the bot.'
             },
             ownerOnly: true
         });
     }
 
     async exec (message) {
+        let resultEmoji = '✅';
+
+        // Akairo Modules
         try {
             message.channel.sendTyping();
 
@@ -43,19 +46,37 @@ module.exports = class CommandReload extends Command {
             await this.client.listeners.removeAll();  // Listeners
 
             // Now we can load everything.
-            this.client.commands.loadAll();
-            this.client.inhibitors.loadAll();
-            this.client.listeners.loadAll();
-
-            message.channel.send({ content: '✅ All modules have been successfully reloaded.' });
-
-            // Akario has a reloadAll() function, but this command was made specifically
-            // for adding new commands, inhibitors, and listeners without fully restarting
-            // the bot to apply new changes. Honestly, that process was getting on my damn
-            // nerves. This is also a music bot, so any disruptions is gonna piss off someone.
-
+            await this.client.commands.loadAll();
+            await this.client.inhibitors.loadAll();
+            await this.client.listeners.loadAll();
         } catch (err) {
-            if (err) return message.channel.send({ content: `❌ Error: \`${err}\`` });
+            message.channel.send({ content: `❌ Error reloading modules: \`${err.message}\`` });
+            resultEmoji = '❌';
         }
+
+        // Application Commands
+        // Now to resync all slash commands and reload them.
+        try {
+            await this.client.creator.syncCommandsAsync({
+                deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
+                skipGuildErrors: true,
+                syncGuilds: true,
+                syncPermissions: true
+            });
+        } catch (err) {
+            message.channel.send({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
+            resultEmoji = '❌';
+        }
+
+        await this.client.creator.commands.forEach(cmd => {
+            try {
+                cmd.reload();
+            } catch (err) {
+                message.channel.send({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                resultEmoji = '❌';
+            }
+        });
+
+        return message.react(resultEmoji);
     }
 };

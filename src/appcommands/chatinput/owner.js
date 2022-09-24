@@ -76,6 +76,11 @@ class CommandOwner extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'reload',
+                    description: 'Reloads everything without restarting the bot.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'debug',
                     description: 'Shows debug info.'
                 }
@@ -182,6 +187,54 @@ class CommandOwner extends SlashCommand {
                 const guildList = guilds.map(m => `${m.name} (${m.id}) :: ${m.members.cache.size} members`).join('\n');
                 return ctx.send(`ℹ This client is currently a member in **${guilds.size}** guild(s).\n\`\`\`js\n${guildList}\`\`\``);
             }
+
+            break;
+        }
+
+        case 'reload': {
+            // Akairo Modules
+            await ctx.defer(true);
+            let result = '✅ All modules and application commands have been reloaded.';
+
+            try {
+                // Everything must be unloaded before we can move on.
+                await this.client.commands.removeAll(); // Commands
+                await this.client.inhibitors.removeAll(); // Inhibitors
+                await this.client.listeners.removeAll(); // Listeners
+
+                // Now we can load everything.
+                await this.client.commands.loadAll();
+                await this.client.inhibitors.loadAll();
+                await this.client.listeners.loadAll();
+            } catch (err) {
+                await ctx.sendFollowUp({ content: `❌ Error reloading modules: \`${err.message}\`` });
+                result = '❌ Errors occured while reloading modules and slash commands.';
+            }
+
+            // Application Commands
+            // Now to resync all slash commands and reload them.
+            try {
+                await this.client.creator.syncCommandsAsync({
+                    deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
+                    skipGuildErrors: true,
+                    syncGuilds: true,
+                    syncPermissions: true
+                });
+            } catch (err) {
+                await ctx.sendFollowUp({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
+                result = '❌ Errors occured while reloading modules and slash commands.';
+            }
+
+            await this.client.creator.commands.forEach(async cmd => {
+                try {
+                    cmd.reload();
+                } catch (err) {
+                    await ctx.sendFollowUp({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    result = '❌ Errors occured while reloading modules and slash commands.';
+                }
+            });
+
+            await ctx.sendFollowUp(result);
 
             break;
         }
