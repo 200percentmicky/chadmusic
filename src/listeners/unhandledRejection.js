@@ -27,9 +27,6 @@ module.exports = class ListenerProcessUnhandledRejection extends Listener {
     }
 
     async exec (error) {
-        // Most of the time, interaction might be handled by Client. Ingoring exception...
-        if (error.message.endsWith('acknowledged.')) return this.client.logger.warn('[SlashCreator] Interaction already handled. Ignoring...');
-
-        this.client.logger.error(error.stack);
+        this.client.logger.error(`[process] Unhandled Rejection: ${error.stack}`);
     }
 };
