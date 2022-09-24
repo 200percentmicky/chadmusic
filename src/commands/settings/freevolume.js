@@ -26,8 +26,7 @@ module.exports = class CommandFreeVolume extends Command {
             category: '⚙ Settings',
             description: {
                 text: 'Toggles the ability to change the volume past 200%.',
-                usage: '<toggle:on/off>',
-                details: 'Requires the DJ role or the **Manage Channels** permission.'
+                usage: '<toggle:on/off>'
             },
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild]
