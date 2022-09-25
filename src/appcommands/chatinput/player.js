@@ -319,7 +319,7 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
-                if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.');
+                if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
                 await this.client.player.pause(guild);
                 return this.client.ui.ctxCustom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
             } else {
