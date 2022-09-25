@@ -54,13 +54,16 @@ class CommandGrab extends SlashCommand {
 
         await ctx.defer(true);
 
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
         const embed = new EmbedBuilder()
             .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
             .addFields({
                 name: 'Duration',

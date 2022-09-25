@@ -107,9 +107,12 @@ async function nowPlayingMsg (queue, song) {
         inline: true
     });
 
+    let songTitle = song.name;
+    if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
     songNow
         .addFields(songNowFields)
-        .setTitle(`${song.name}`)
+        .setTitle(`${songTitle}`)
         .setURL(song.url)
         .setTimestamp();
 

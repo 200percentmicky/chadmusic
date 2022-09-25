@@ -32,13 +32,16 @@ module.exports = class ListenerAddList extends Listener {
         const guild = channel.guild;
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
+        let playlistTitle = playlist.name;
+        if (playlistTitle.length > 256) playlistTitle = playlist.name.substring(0, 252) + '...';
+
         const embed = new EmbedBuilder()
             .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Playlist added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
             })
-            .setTitle(playlist.name)
+            .setTitle(`${playlistTitle}`)
             .setURL(playlist.url)
             .setThumbnail(playlist.thumbnail)
             .setFooter({

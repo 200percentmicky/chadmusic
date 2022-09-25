@@ -171,6 +171,9 @@ class CommandPlayer extends SlashCommand {
             const current = queue.currentTime;
             const author = song.uploader;
 
+            let songTitle = song.name;
+            if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
             let progressBar;
             if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
@@ -181,7 +184,7 @@ class CommandPlayer extends SlashCommand {
                     iconURL: guild.iconURL({ dynamic: true })
                 })
                 .setDescription(`${duration}`)
-                .setTitle(song.name)
+                .setTitle(`${songTitle}`)
                 .setURL(song.url);
 
             const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');

@@ -63,6 +63,9 @@ module.exports = class CommandNowPlaying extends Command {
         const current = queue.currentTime;
         const author = song.uploader;
 
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
         let progressBar;
         if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
         const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
@@ -73,7 +76,7 @@ module.exports = class CommandNowPlaying extends Command {
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setDescription(`${duration}`)
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url);
 
         const thumbnailSize = await this.client.settings.get(message.guild.id, 'thumbnailSize');

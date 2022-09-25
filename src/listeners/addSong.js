@@ -119,6 +119,9 @@ module.exports = class ListenerAddSong extends Listener {
         // TODO: Fix toColonNotation in queue.js
         if (song.isLive) song.duration = 1;
 
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
         const embed = new EmbedBuilder()
@@ -127,7 +130,7 @@ module.exports = class ListenerAddSong extends Listener {
                 name: `Added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
             .setFooter({

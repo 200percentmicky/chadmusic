@@ -51,13 +51,16 @@ module.exports = class CommandGrab extends Command {
             }
         }
 
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
         const embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
             .addFields({ name: 'Duration', value: `${song.formattedDuration}` })
             .setTimestamp();
