@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandAllowFilters extends Command {
     constructor () {
@@ -28,8 +29,8 @@ module.exports = class CommandAllowFilters extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 
@@ -43,7 +44,7 @@ module.exports = class CommandAllowFilters extends Command {
             await this.client.settings.set(message.guild.id, true, 'allowFilters');
             return this.client.ui.reply(message, 'ok', 'Filters have been enabled.');
         } else {
-            return this.client.ui.reply(message, 'error', 'Toggles must be **dj** or **all**');
+            return this.client.ui.reply(message, 'error', 'Toggles must be **on** or **off**');
         }
     }
 };

@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -86,6 +86,11 @@ class CommandPlayer extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'restart',
+                    description: 'Restarts the currently playing song.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'repeat',
                     description: 'Toggles repeat mode for the player.',
                     options: [
@@ -138,7 +143,7 @@ class CommandPlayer extends SlashCommand {
 
         const djMode = client.settings.get(ctx.guildID, 'djMode');
         const djRole = client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -166,31 +171,64 @@ class CommandPlayer extends SlashCommand {
             const current = queue.currentTime;
             const author = song.uploader;
 
+            let songTitle = song.name;
+            if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
             let progressBar;
             if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-            const embed = new MessageEmbed()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            const embed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `Currently playing in ${currentVc.channel.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
                 })
                 .setDescription(`${duration}`)
-                .setTitle(song.name)
-                .setURL(song.url)
-                .setThumbnail(song.thumbnail);
+                .setTitle(`${songTitle}`)
+                .setURL(song.url);
+
+            const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+            switch (thumbnailSize) {
+            case 'small': {
+                embed.setThumbnail(song.thumbnail);
+                break;
+            }
+            case 'large': {
+                embed.setImage(song.thumbnail);
+                break;
+            }
+            }
+
+            const nowPlayingFields = [];
 
             if (queue.paused) {
                 const prefix = this.client.settings.get(guild.id, 'prefix', process.env.PREFIX);
-                embed.addField('⏸ Paused', `Type '${prefix}resume' to resume playback.`);
+                nowPlayingFields.push({
+                    name: '⏸ Paused',
+                    value: `Type '${prefix}resume' to resume playback.`
+                });
             }
 
             if (song.age_restricted) {
-                embed.addField(':underage: Explicit', 'This track is **Age Restricted**');
+                nowPlayingFields.push({
+                    name: ':underage: Explicit',
+                    value: 'This track is **Age Restricted**'
+                });
             }
 
-            if (author.name) embed.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})`);
-            if (song.station) embed.addField(':tv: Station', `${song.station}`);
+            if (author.name) {
+                nowPlayingFields.push({
+                    name: ':arrow_upper_right: Uploader',
+                    value: `[${author.name}](${author.url})`
+                });
+            }
+
+            if (song.station) {
+                nowPlayingFields.push({
+                    name: ':tv: Station', value: `${song.station}`
+                });
+            }
 
             const volumeEmoji = () => {
                 const volume = queue.volume;
@@ -203,41 +241,56 @@ class CommandPlayer extends SlashCommand {
                 return volumeIcon[Math.round(volume / 50) * 50];
             };
 
+            nowPlayingFields.push({
+                name: ':raising_hand: Requested by',
+                value: `${song.user}`,
+                inline: true
+            });
+            nowPlayingFields.push({
+                name: `${volumeEmoji()} Volume`,
+                value: `${queue.volume}%`,
+                inline: true
+            });
+            nowPlayingFields.push({
+                name: '📢 Filters',
+                value: `${queue.filters.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`
+            });
+
             embed
-                .addField(':raising_hand: Requested by', `${song.user}`, true)
-                .addField(`${volumeEmoji()} Volume`, `${queue.volume}%`, true)
-                .addField('📢 Filters', `${queue.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`)
+                .addFields(nowPlayingFields)
                 .setTimestamp();
 
             return ctx.send({ embeds: [embed] });
         }
 
         case 'join': {
-            const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
-
             const currentVc = this.client.vc.get(vc);
             if (currentVc) {
                 if (vc.id !== currentVc.id) return this.client.ui.ctx(ctx, 'error', 'I\'m currently binded to a different voice channel.');
                 else return this.client.ui.ctx(ctx, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
             } else {
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                    if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                    else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+                }
+
                 if (vc.type === 'stage') {
-                    await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                    this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined \`${vc.name}\``);
-                    const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                    const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                     if (!stageMod) {
-                        const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
+                        const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                         if (!requestToSpeak) {
-                            vc.leave();
+                            this.client.vc.leave(guild);
                             return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                        } else if (guild.me.voice.suppress) {
-                            await guild.me.voice.setRequestToSpeak(true);
+                        } else if (guild.members.me.voice.suppress) {
+                            await guild.members.me.voice.setRequestToSpeak(true);
                         }
                     } else {
-                        await guild.me.voice.setSuppressed(false);
+                        await guild.members.me.voice.setSuppressed(false);
                     }
-                } else {
-                    this.client.vc.join(vc);
                 }
                 return this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
             }
@@ -266,7 +319,7 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
-                if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.');
+                if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
                 await this.client.player.pause(guild);
                 return this.client.ui.ctxCustom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
             } else {
@@ -361,6 +414,19 @@ class CommandPlayer extends SlashCommand {
                     this.client.ui.ctx(ctx, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
                 }
                 return this.client.ui.ctx(ctx, 'info', `Seeking to \`${ctx.options.seek.time}\`...`);
+            } else {
+                return this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+        }
+
+        case 'restart': {
+            const currentVc = this.client.vc.get(vc);
+            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            if (vc.members.size <= 2 || dj) {
+                this.client.player.seek(guild, 0);
+                return this.client.ui.ctx(ctx, 'info', 'Restarting song...');
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }

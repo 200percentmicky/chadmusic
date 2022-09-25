@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class ListenerMentionPrefix extends Listener {
     constructor () {
@@ -29,7 +29,7 @@ module.exports = class ListenerMentionPrefix extends Listener {
 
     async exec (message) {
         const prefix = this.client.settings.get(message.guild?.id, 'prefix') ?? process.env.PREFIX;
-        const canChange = message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_GUILD)
+        const canChange = message.channel.permissionsFor(message.member?.user?.id).has(PermissionsBitField.Flags.ManageGuild)
             ? ' You can change this using `prefix` or `/settings prefix`'
             : '';
 

@@ -29,6 +29,7 @@ const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
 const commonTags = require('common-tags');
+const { ButtonStyle } = require('discord.js');
 
 class CommandOwner extends SlashCommand {
     constructor (creator) {
@@ -72,6 +73,11 @@ class CommandOwner extends SlashCommand {
                             description: 'If provided, causes the client to leave the guild.'
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'reload',
+                    description: 'Reloads everything without restarting the bot.'
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
@@ -153,13 +159,13 @@ class CommandOwner extends SlashCommand {
                     return ctx.send(`:x: The bot is not a member of guild ID \`${ctx.options.guilds.leave}\` or the ID provided is not a valid guild ID.`);
                 }
 
-                const yesLeave = new Discord.MessageButton()
-                    .setStyle('DANGER')
+                const yesLeave = new Discord.ButtonBuilder()
+                    .setStyle(ButtonStyle.Danger)
                     .setLabel('Leave Guild')
                     .setEmoji('🚪')
                     .setCustomId('confirm_guild_leave');
 
-                const buttonRow = new Discord.MessageActionRow()
+                const buttonRow = new Discord.ActionRowBuilder()
                     .addComponents(yesLeave);
 
                 await ctx.send(oneLine`
@@ -185,57 +191,60 @@ class CommandOwner extends SlashCommand {
             break;
         }
 
-        /*
-        // I'll fix this later.
-        case 'debug': {
-            const cpu = await si.cpu();
-            const osSi = await si.osInfo();
-            const memory = await si.mem();
-            const user = os.userInfo();
-            const owner = this.client.users.cache.get(this.client.ownerID);
+        case 'reload': {
+            // Akairo Modules
+            await ctx.defer(true);
+            let result = '✅ All modules and application commands have been reloaded.';
 
-            const data = stripIndents`
-             === ChadMusic - The Chad Music Bot ===
-             Client :: ${this.client.user.tag} (ID: ${this.client.user.id})
-             Owner :: ${owner.tag} (ID: ${owner.id})
-             Node.js :: ${process.version}
-             Discord.js :: ${require('discord.js/package.json').version}
-             Akairo Framework :: ${require('discord-akairo/package.json').version}
-             DisTube.js :: ${require('../../../chadtube/package.json').version}
-             Voice Connections :: ${this.client.vc.voices.collection.size}
-             Uptime :: ${prettyMs(this.client.uptime, { verbose: true })}
+            try {
+                // Everything must be unloaded before we can move on.
+                await this.client.commands.removeAll(); // Commands
+                await this.client.inhibitors.removeAll(); // Inhibitors
+                await this.client.listeners.removeAll(); // Listeners
 
-             # Hardware Specifications
-             CPU :: ${cpu.manufacturer} ${cpu.brand} (${cpu.physicalCores} Cores / ${cpu.cores} Threads)
-             CPU Speed :: ${cpu.speed} GHz.
-             Memory Total :: ${prettyBytes(memory.total)}
-             Memory Used :: ${prettyBytes(memory.used)}
-             Memory Free :: ${prettyBytes(memory.free)}
-             Swap Total :: ${prettyBytes(memory.swaptotal)}
-             Swap Used :: ${prettyBytes(memory.swapused)}
-             Swap Free :: ${prettyBytes(memory.swapfree)}
+                // Now we can load everything.
+                await this.client.commands.loadAll();
+                await this.client.inhibitors.loadAll();
+                await this.client.listeners.loadAll();
+            } catch (err) {
+                await ctx.sendFollowUp({ content: `❌ Error reloading modules: \`${err.message}\`` });
+                result = '❌ Errors occured while reloading modules and slash commands.';
+            }
 
-             # Operating System
-             Platform :: ${osSi.platform}
-             OS Version :: ${osSi.distro} ${osSi.release} ${osSi.platform === 'darwin' ? osSi.codename : ''}
-             Kernel :: ${osSi.kernel}
-             Architechture :: ${osSi.arch}
-             User :: ${user.username}
-             Shell :: ${user.shell}
-             ${osSi.platform === 'win32' ? `Service Pack :: ${osSi.servicepack}` : ''}
-             `;
+            // Application Commands
+            // Now to resync all slash commands and reload them.
+            try {
+                await this.client.creator.syncCommandsAsync({
+                    deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
+                    skipGuildErrors: true,
+                    syncGuilds: true,
+                    syncPermissions: true
+                });
+            } catch (err) {
+                await ctx.sendFollowUp({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
+                result = '❌ Errors occured while reloading modules and slash commands.';
+            }
 
-            ctx.send(`\`\`\`asciidoc\n${data}\`\`\``);
+            await this.client.creator.commands.forEach(async cmd => {
+                try {
+                    cmd.reload();
+                } catch (err) {
+                    await ctx.sendFollowUp({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    result = '❌ Errors occured while reloading modules and slash commands.';
+                }
+            });
+
+            await ctx.sendFollowUp(result);
+
             break;
         }
-        */
 
         case 'shutdown': {
-            await ctx.send('Shutting down... see ya! 👋');
+            await ctx.send('⚠ Shutting down...');
             this.client.logger.warn('Cleaning up before shutting down...');
             if (ctx.options.shutdown.reason) {
                 const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setColor(process.env.COLOR_INFO)
                     .setTitle('🔄 Restart')
                     .setDescription(`\`\`\`js\n${ctx.options.shutdown.reason}\`\`\``)

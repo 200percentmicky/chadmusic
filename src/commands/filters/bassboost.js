@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -30,7 +31,7 @@ module.exports = class CommandBassBoost extends Command {
                 usage: 'bassboost <gain:int>'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -40,7 +41,7 @@ module.exports = class CommandBassBoost extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -66,7 +67,7 @@ module.exports = class CommandBassBoost extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'bassboost', false);
+                    await queue.filters.set('bassboost', null);
                     pushFormatFilter(queue, 'Bass Boost', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off');
                 } catch (err) {
@@ -79,7 +80,7 @@ module.exports = class CommandBassBoost extends Command {
                     return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.');
                 }
 
-                await this.client.player.setFilter(message.guild.id, 'bassboost', `bass=g=${gain}`);
+                await queue.filters.set('bassboost', `bass=g=${gain}`);
                 pushFormatFilter(queue, 'Bass Boost', `Gain: \`${gain}dB\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
             }

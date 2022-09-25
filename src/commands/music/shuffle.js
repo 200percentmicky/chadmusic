@@ -17,26 +17,26 @@
  */
 
 const { Command } = require('discord-akairo');
-const { shuffle } = require('../../aliases.json');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandShuffle extends Command {
     constructor () {
-        super(shuffle !== undefined ? shuffle[0] : 'shuffle', {
-            aliases: shuffle || ['shuffle'],
+        super('shuffle', {
+            aliases: ['shuffle'],
             category: '🎶 Music',
             description: {
                 text: 'Randomizes the entries in the queue.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }

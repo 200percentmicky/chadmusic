@@ -20,16 +20,14 @@ const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandClearQueue extends Command {
+module.exports = class CommandRestart extends Command {
     constructor () {
-        super('clearqueue', {
-            aliases: ['clearqueue', 'cq', 'clear'],
-            category: '🎶 Music',
+        super('restart', {
+            aliases: ['restart', 'startover'],
             description: {
-                text: "Clears the player's queue for this server."
+                text: 'Restarts the currently playing song.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            category: '🎶 Music'
         });
     }
 
@@ -52,15 +50,13 @@ module.exports = class CommandClearQueue extends Command {
         if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
+
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
-            const queue = this.client.player.getQueue(message);
-
-            // Clear everything from the queue.
-            queue.songs.splice(1, queue.songs.length);
-            return this.client.ui.custom(message, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
+            this.client.player.seek(message.guild, 0);
+            return this.client.ui.reply(message, 'info', 'Restarting song...');
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');
         }

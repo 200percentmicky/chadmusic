@@ -18,6 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -35,7 +36,7 @@ module.exports = class CommandTremolo extends Command {
         `
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -45,7 +46,7 @@ module.exports = class CommandTremolo extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -69,7 +70,7 @@ module.exports = class CommandTremolo extends Command {
         if (currentVc) {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'tremolo', false);
+                    await queue.filters.set('tremolo', null);
                     pushFormatFilter(queue, 'Tremolo', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tremolo** Off');
                 } catch (err) {
@@ -91,7 +92,7 @@ module.exports = class CommandTremolo extends Command {
                 if (f < 1) {
                     return this.client.ui.reply(message, 'error', 'Frequency must be greater than 0.');
                 }
-                await this.client.player.setFilter(message.guild.id, 'tremolo', `tremolo=f=${f}:d=${d}`);
+                await queue.filters.set('tremolo', `tremolo=f=${f}:d=${d}`);
                 pushFormatFilter(queue, 'Tremolo', `Depth \`${d}\` at \`${f}Hz\``);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``);
             }

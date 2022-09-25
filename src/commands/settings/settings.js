@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -30,8 +30,8 @@ module.exports = class CommandSettings extends Command {
             description: {
                 text: 'Shows you the current settings of the bot for this server.'
             },
-            clientPermissions: ['EMBED_LINKS'],
-            userPermissions: ['MANAGE_GUILD']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 
@@ -52,14 +52,15 @@ module.exports = class CommandSettings extends Command {
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
+        const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
         // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
         const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-        const embed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+        const embed = new EmbedBuilder()
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
@@ -75,6 +76,7 @@ module.exports = class CommandSettings extends Command {
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
             **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+            **🖼 Thumbnail Size:** ${thumbnailSize === 'Large' ? 'Large' : 'Small'}
             **🔊 Default Volume:** ${defaultVolume}
             **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
             `)
@@ -84,8 +86,8 @@ module.exports = class CommandSettings extends Command {
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             });
 
-        const blockedEmbed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+        const blockedEmbed = new EmbedBuilder()
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
@@ -99,8 +101,11 @@ module.exports = class CommandSettings extends Command {
             });
 
         if (blockedPhrases.length === 0) {
-            blockedEmbed.setDescription('');
-            blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, `To add phrases to the blocklist, run \`${process.env.PREFIX}blocklist add <phrase>\`.`);
+            blockedEmbed.setDescription(null);
+            blockedEmbed.addFields({
+                name: `${process.env.EMOJI_INFO} No song phrases are being blocked in this server.`,
+                value: `To add phrases to the list, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
+            });
         }
 
         return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });

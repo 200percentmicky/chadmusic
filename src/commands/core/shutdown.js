@@ -17,18 +17,17 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
 
-module.exports = class CommandRestart extends Command {
+module.exports = class CommandShutdown extends Command {
     constructor () {
-        super('restart', {
-            aliases: ['restart', 'jsrestart'],
+        super('shutdown', {
+            aliases: ['shutdown', 'poweroff'],
             ownerOnly: true,
             category: '💻 Core',
             description: {
-                text: 'Attempts to restart the bot.',
+                text: 'Shuts down the bot.',
                 usage: '[reason]',
-                details: '`[reason]` The reason for restarting the bot.'
+                details: '`[reason]` The reason for shutting down the bot.'
             }
         });
     }
@@ -36,17 +35,14 @@ module.exports = class CommandRestart extends Command {
     async exec (message) {
         const args = message.content.split(/ +/g);
         let restartReport = args.slice(1).join(' ');
-        if (!restartReport) restartReport = 'Just refreshing... nothing serious. :3';
+        if (!restartReport) restartReport = 'No reason. See ya! 👋';
+        this.client.logger.warn('Cleaning up before shutting down...');
         const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-        await message.channel.send('🔄 Restarting...');
-        const embed = new MessageEmbed()
-            .setColor(process.env.COLOR_INFO)
-            .setTitle('🔄 Restart')
-            .setDescription(`\`\`\`js\n${restartReport}\`\`\``)
-            .setTimestamp();
-        await errChannel.send({ embeds: [embed] });
-        this.client.logger.info('[Restart] %s', restartReport);
+        await message.channel.send('⚠ Shutting down...');
+        await errChannel.send({ content: `⚠ **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
+        this.client.logger.info('[Shutdown] %s', restartReport);
         this.client.logger.warn('Shutting down...');
+        this.client.creator.cleanRegisteredComponents();
         this.client.destroy();
         process.exit(0);
     }

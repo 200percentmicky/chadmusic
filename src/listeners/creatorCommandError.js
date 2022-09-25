@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { MessageButton, MessageActionRow } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class ListenerCreatorCommandError extends Listener {
     constructor () {
@@ -38,17 +38,17 @@ module.exports = class ListenerCreatorCommandError extends Listener {
 
         guru += `\`\`\`js\n${err.name}: ${err.message}\`\`\``;
 
-        const urlGithub = new MessageButton()
-            .setStyle('LINK')
+        const urlGithub = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
-        const support = new MessageButton()
-            .setStyle('LINK')
+        const support = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://discord.com/invite/qQuJ9YQ')
             .setLabel('Support Server');
 
-        const actionRow = new MessageActionRow()
+        const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
         await ctx.send(guru, {

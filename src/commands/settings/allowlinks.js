@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandAllowLinks extends Command {
     constructor () {
@@ -28,7 +29,7 @@ module.exports = class CommandAllowLinks extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            userPermissions: ['MANAGE_GUILD']
+            userPermissions: [PermissionsBitField.Flags.ManageGuild]
         });
     }
 

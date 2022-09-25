@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 // Handles various interaction requests not needed within the commands.
 
@@ -36,7 +36,7 @@ module.exports = class ListenerInteractionEtc extends Listener {
             if (interaction.user.id !== process.env.OWNER_ID) {
                 return interaction.followUp({
                     embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor(parseInt(process.env.COLOR_ERROR))
                             .setDescription(`${process.env.EMOJI_ERROR} This component can only be used by the bot owner.`)
                     ],

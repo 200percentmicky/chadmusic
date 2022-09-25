@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 const iheart = require('iheart');
 const ffprobe = require('ffprobe');
@@ -48,9 +48,9 @@ module.exports = class ListenerAddSong extends Listener {
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
-        const userEmbed = new MessageEmbed()
+        const userEmbed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_NO))
             .setAuthor({
                 name: `${song.user.tag}`,
@@ -119,15 +119,18 @@ module.exports = class ListenerAddSong extends Listener {
         // TODO: Fix toColonNotation in queue.js
         if (song.isLive) song.duration = 1;
 
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
-        const embed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+        const embed = new EmbedBuilder()
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
             .setFooter({
@@ -135,6 +138,10 @@ module.exports = class ListenerAddSong extends Listener {
                 iconURL: song.user.avatarURL({ dynamic: true })
             });
 
-        channel.send({ embeds: [embed] });
+        try {
+            song.metadata?.ctx.send({ embeds: [embed] });
+        } catch {
+            channel.send({ embeds: [embed] });
+        }
     }
 };

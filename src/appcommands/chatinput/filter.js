@@ -17,6 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -246,7 +247,7 @@ class CommandFilter extends SlashCommand {
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
         const allowFilters = this.client.settings.get(ctx.guildID, 'allowFilters');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode && !dj) return this.client.ui.send(ctx, 'DJ_MODE');
 
@@ -284,17 +285,22 @@ class CommandFilter extends SlashCommand {
                 };
 
                 try {
-                    await this.client.player.setFilter(guild.id,
-                        ctx.options.remove.filter === 'all'
-                            ? false
-                            : ctx.options.remove.filter
-                        , ctx.options.remove.filter === 'all'
-                            ? null
-                            : false);
-                    pushFormatFilter(queue, filterNames[ctx.options.remove.filter], 'Off');
-                    return this.client.ui.ctx(ctx, 'info', ctx.options.remove.filter === 'all'
-                        ? 'Removed all filters from the player.'
-                        : `**${filterNames[ctx.options.remove.filter]}** Off`);
+                    // TODO: Change to use FilterManager.clear() instead.
+                    if (ctx.options.remove.filter === 'all') {
+                        try {
+                            await queue.filters.clear();
+                            pushFormatFilter(queue, 'All');
+                            return this.client.ui.ctx(ctx, 'info', 'Removed all filters from the player.');
+                        } catch {
+                            return this.client.ui.ctx(ctx, 'warn', 'No filters are currently applied to the player.');
+                        }
+                    } else {
+                        await queue.filters.set(ctx.options.remove.filter, null);
+                        pushFormatFilter(queue, filterNames[ctx.options.remove.filter], 'Off');
+                        return this.client.ui.ctx(ctx, 'info', ctx.options.remove.filter === 'all'
+                            ? 'Removed all filters from the player.'
+                            : `**${filterNames[ctx.options.remove.filter]}** Off`);
+                    }
                 } catch {
                     return noFilter(filterNames[ctx.options.remove.filter]);
                 }
@@ -302,7 +308,7 @@ class CommandFilter extends SlashCommand {
 
             case 'bass': {
                 try {
-                    await this.client.player.setFilter(guild.id, 'bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
+                    await queue.filters.set('bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
@@ -317,7 +323,7 @@ class CommandFilter extends SlashCommand {
                 const f = ctx.options.tremolo.frequency ?? 5;
                 const d = ctx.options.tremolo.depth ?? 1;
                 try {
-                    await this.client.player.setFilter(guild.id, 'tremolo', f !== 0 ? `tremolo=f=${f}:d=${d}` : false);
+                    await queue.filters.set('tremolo', f !== 0 ? `tremolo=f=${f}:d=${d}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
@@ -332,7 +338,7 @@ class CommandFilter extends SlashCommand {
                 const f = ctx.options.vibrato.frequency ?? 5;
                 const d = ctx.options.vibrato.depth ?? 1;
                 try {
-                    await this.client.player.setFilter(guild.id, 'vibrato', f !== 0 ? `vibrato=f=${f}:d=${d}` : false);
+                    await queue.filters.set('vibrato', f !== 0 ? `vibrato=f=${f}:d=${d}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
@@ -346,7 +352,7 @@ class CommandFilter extends SlashCommand {
             case 'reverse': {
                 const reverse = ctx.options.reverse.toggle;
                 try {
-                    await this.client.player.setFilter(guild.id, 'reverse', reverse
+                    await queue.filters.set('reverse', reverse
                         ? 'areverse'
                         : false
                     );
@@ -363,7 +369,7 @@ class CommandFilter extends SlashCommand {
             case 'tempo': {
                 const rate = ctx.options.tempo.rate;
                 try {
-                    await this.client.player.setFilter(guild.id, 'tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
+                    await queue.filters.set('tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
                 }
@@ -374,7 +380,7 @@ class CommandFilter extends SlashCommand {
             case 'pitch': {
                 const rate = ctx.options.pitch.rate;
                 try {
-                    await this.client.player.setFilter(guild.id, 'pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
+                    await queue.filters.set('pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
                 }
@@ -387,7 +393,7 @@ class CommandFilter extends SlashCommand {
                 const bits = ctx.options.crusher.bits || 8;
                 const mode = ctx.options.crusher.mode || 'lin';
                 try {
-                    await this.client.player.setFilter(guild.id, 'crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
+                    await queue.filters.set('crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
@@ -398,7 +404,7 @@ class CommandFilter extends SlashCommand {
             case 'crystalize': {
                 const intensity = ctx.options.crystalize.intensity;
                 try {
-                    await this.client.player.setFilter(guild.id, 'crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
+                    await queue.filters.set('crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
@@ -409,7 +415,7 @@ class CommandFilter extends SlashCommand {
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
                 try {
-                    await this.client.player.setFilter(guild.id, 'custom', custom === 'OFF'.toLowerCase() ? false : custom);
+                    await queue.filters.set('custom', custom === 'OFF'.toLowerCase() ? false : custom);
                 } catch {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
                 }

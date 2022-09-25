@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandSkip extends Command {
@@ -31,14 +31,14 @@ module.exports = class CommandSkip extends Command {
                 details: '`|--force/-f|` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -88,7 +88,7 @@ module.exports = class CommandSkip extends Command {
                 return message.channel.sendTyping();
             } else {
                 const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                     .setColor(process.env.COLOR_INFO)
                     .setDescription('⏭ Skipping?')
                     .setFooter({
@@ -103,7 +103,7 @@ module.exports = class CommandSkip extends Command {
                 this.client.player.stop(message.guild);
                 return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
             }
-            this.client.player.skip(message);
+            this.client.player.skip(message.guild);
             await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
             return message.channel.sendTyping();
         }

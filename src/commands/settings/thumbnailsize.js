@@ -19,21 +19,21 @@
 const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 
-module.exports = class CommandDefaultVolume extends Command {
+module.exports = class CommandImageSize extends Command {
     constructor () {
-        super('defaultvolume', {
-            aliases: ['defaultvolume'],
+        super('imagesize', {
+            aliases: ['imagesize', 'thumbnailsize'],
             category: '⚙ Settings',
             description: {
-                text: "Changes the bot's default volume when starting a queue, or when disabling Earrape.",
-                usage: '<int:volume|1-200>',
-                details: '`<int:volume|1-200>` The new volume for the server.'
+                text: "Changes the track's thumbnail size of the \"Now Playing\" embeds.",
+                usage: '<string:size>',
+                details: '`<string:size>` The size of the track\'s image, either `small` or `large`. Default is `small`.'
             },
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
-                    id: 'volume',
+                    id: 'size',
                     type: 'string'
                 }
             ]
@@ -41,21 +41,26 @@ module.exports = class CommandDefaultVolume extends Command {
     }
 
     async exec (message, args) {
-        const volume = parseInt(args.volume);
+        if (!args.size) return this.client.ui.usage(message, 'imagesize <string:size>');
 
-        if (!volume) {
-            return this.client.ui.usage(message, 'defaultvolume <int:volume|1-200>');
+        switch ((args.size).toLowerCase()) {
+        case 'small': {
+            await this.client.settings.set(message.guild.id, 'small', 'thumbnailSize');
+            break;
         }
 
-        if (isNaN(volume)) {
-            return this.client.ui.reply(message, 'error', 'Default volume must be a number.');
+        case 'large': {
+            await this.client.settings.set(message.guild.id, 'large', 'thumbnailSize');
+            break;
         }
 
-        if (volume > 200 || volume < 1) {
-            return this.client.ui.reply(message, 'error', 'Default volume must be between **1-200**.');
+        default: {
+            await this.client.settings.set(message.guild.id, 'small', 'thumbnailSize');
+            break;
+        }
         }
 
-        await this.client.settings.set(message.guild.id, volume, 'defaultVolume');
-        return this.client.ui.reply(message, 'ok', `The default volume is now **${volume}%**.`);
+        await this.client.settings.set(message.guild.id, args.size, 'thumbnailSize');
+        return this.client.ui.reply(message, 'ok', `Thumbnail size has been set to **${args.size}**.`);
     }
 };

@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Permissions, MessageEmbed } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
 
 async function nowPlayingMsg (queue, song) {
@@ -30,7 +30,7 @@ async function nowPlayingMsg (queue, song) {
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted', true);
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
 
-        const userEmbed = new MessageEmbed()
+        const userEmbed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_NO))
             .setAuthor({
                 name: `${song.user.tag}`,
@@ -38,7 +38,7 @@ async function nowPlayingMsg (queue, song) {
             });
 
         // Check if this member is a DJ
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (!allowAgeRestricted) {
             if (!dj) {
                 if (song.age_restricted) {
@@ -68,27 +68,72 @@ async function nowPlayingMsg (queue, song) {
 
     const author = song.uploader; // Video Uploader
 
-    const songNow = new MessageEmbed()
-        .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+    const songNow = new EmbedBuilder()
+        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
         .setAuthor({
             name: `Now playing in ${vc.name}`,
             iconURL: guild.iconURL({ dynamic: true })
         });
 
-    if (song.age_restricted) songNow.addField(':underage: Explicit', 'This track is **Age Restricted**'); // Always 'false'. Must be a bug in ytdl-core.
+    const songNowFields = [];
+
+    if (song.age_restricted) {
+        songNowFields.push({
+            name: ':underage: Explicit',
+            value: 'This track is **Age Restricted**'
+        }); // Only for YouTube so far...
+    }
+
     if (song.isFile) songNow.setDescription('📎 **File Upload**');
-    if (author.name) songNow.addField(':arrow_upper_right: Uploader', `[${author.name}](${author.url})` || 'N/A');
-    if (song.station) songNow.addField(':tv: Station', `${song.station}`);
+
+    if (author.name) {
+        songNowFields.push({
+            name: ':arrow_upper_right: Uploader',
+            value: `[${author.name}](${author.url})` || 'N/A'
+        });
+    }
+
+    if (song.station) songNowFields.push({ name: ':tv: Station', value: `${song.station}` });
+
+    songNowFields.push({
+        name: ':raising_hand: Requested by',
+        value: `${song.user}`,
+        inline: true
+    });
+
+    songNowFields.push({
+        name: ':hourglass: Duration',
+        value: `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`,
+        inline: true
+    });
+
+    let songTitle = song.name;
+    if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
 
     songNow
-        .addField(':raising_hand: Requested by', `${song.user}`, true)
-        .addField(':hourglass: Duration', `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`, true)
-        .setTitle(`${song.name}`)
+        .addFields(songNowFields)
+        .setTitle(`${songTitle}`)
         .setURL(song.url)
-        .setThumbnail(song.thumbnail)
         .setTimestamp();
 
-    channel.send({ embeds: [songNow] });
+    const thumbnailSize = await channel.client.settings.get(guild.id, 'thumbnailSize');
+
+    switch (thumbnailSize) {
+    case 'small': {
+        songNow.setThumbnail(song.thumbnail);
+        break;
+    }
+    case 'large': {
+        songNow.setImage(song.thumbnail);
+        break;
+    }
+    }
+
+    try {
+        song.metadata.ctx.send({ embeds: [songNow] });
+    } catch {
+        channel.send({ embeds: [songNow] });
+    }
 }
 
 module.exports = { nowPlayingMsg };

@@ -18,6 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -35,7 +36,7 @@ module.exports = class CommandCustomFilter extends Command {
         `
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS'],
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             ownerOnly: true
         });
     }
@@ -45,7 +46,7 @@ module.exports = class CommandCustomFilter extends Command {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -65,7 +66,7 @@ module.exports = class CommandCustomFilter extends Command {
         if (currentVc) {
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'custom', false);
+                    await queue.filters.set('custom', null);
                     pushFormatFilter(queue, 'Custom Filter', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed');
                 } catch (err) {
@@ -73,7 +74,7 @@ module.exports = class CommandCustomFilter extends Command {
                 }
             } else {
                 const custom = args[1];
-                await this.client.player.setFilter(message.guild.id, 'custom', custom);
+                await queue.filters.set('custom', custom);
                 pushFormatFilter(queue, 'Custom Filter', custom);
                 return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }

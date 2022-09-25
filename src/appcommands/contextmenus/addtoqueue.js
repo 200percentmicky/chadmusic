@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, ApplicationCommandType } = require('slash-create');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 class ContextMenuAddToQueue extends SlashCommand {
@@ -37,7 +37,7 @@ class ContextMenuAddToQueue extends SlashCommand {
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -70,25 +70,28 @@ class ContextMenuAddToQueue extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+            try {
+                this.client.vc.join(vc);
+            } catch (err) {
+                const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+            }
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
                         this.client.vc.leave(guild);
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.me.voice.suppress) {
-                        await guild.me.voice.setRequestToSpeak(true);
+                    } else if (guild.members.me.voice.suppress) {
+                        await guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await guild.me.voice.setSuppressed(false);
+                    await guild.members.me.voice.setSuppressed(false);
                 }
-            } else {
-                this.client.vc.join(vc);
             }
         } else {
             if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
@@ -117,9 +120,11 @@ class ContextMenuAddToQueue extends SlashCommand {
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                 textChannel: channel,
-                member: _member
+                member: _member,
+                metadata: {
+                    ctx: ctx
+                }
             });
-            return this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Requested \`${requested}\``);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');

@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -31,7 +32,7 @@ module.exports = class CommandTempo extends Command {
                 details: '`<rate:int[0.1-10]>` The rate to change. Between 0.1-10.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -40,7 +41,7 @@ module.exports = class CommandTempo extends Command {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
@@ -66,7 +67,7 @@ module.exports = class CommandTempo extends Command {
 
             if (args[1] === 'OFF'.toLowerCase()) {
                 try {
-                    await this.client.player.setFilter(message.guild.id, 'pitch', false);
+                    await queue.filters.set('pitch', null);
                     pushFormatFilter(queue, 'Pitch', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Pitch** Removed');
                 } catch (err) {
@@ -81,7 +82,7 @@ module.exports = class CommandTempo extends Command {
             if (rate < 0.1 || rate > 11) {
                 return this.client.ui.reply(message, 'error', 'Pitch must be between **0.1-10** or **off**.');
             }
-            await this.client.player.setFilter(message, 'pitch', `rubberband=pitch=${rate}`);
+            await queue.filters.set('pitch', `rubberband=pitch=${rate}`);
             pushFormatFilter(queue, 'Pitch', `Rate: \`${rate}\``);
             return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
         } else {

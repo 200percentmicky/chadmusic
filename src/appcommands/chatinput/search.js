@@ -18,8 +18,8 @@
 
 const { SlashCommand, CommandOptionType, ComponentType, ButtonStyle } = require('slash-create');
 const {
-    MessageEmbed,
-    Permissions
+    EmbedBuilder,
+    PermissionsBitField
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -48,7 +48,7 @@ class CommandSearch extends SlashCommand {
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -78,25 +78,28 @@ class CommandSearch extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(['CONNECT']);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+            try {
+                this.client.vc.join(vc);
+            } catch (err) {
+                const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+                if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+            }
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(['REQUEST_TO_SPEAK']);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
-                        vc.leave();
+                        this.client.vc.leave(guild);
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.me.voice.suppress) {
-                        await guild.me.voice.setRequestToSpeak(true);
+                    } else if (guild.members.me.voice.suppress) {
+                        await guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await guild.me.voice.setSuppressed(false);
+                    await guild.members.me.voice.setSuppressed(false);
                 }
-            } else {
-                this.client.vc.join(vc);
             }
         } else {
             if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
@@ -136,8 +139,8 @@ class CommandSearch extends SlashCommand {
 
         const resultsFormattedList = results.map(x => `**${emojiNumber[results.indexOf(x) + 1]}** \`${x.formattedDuration}\` ${x.name}`).join('\n\n');
 
-        const embed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+        const embed = new EmbedBuilder()
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
                 iconURL: member.user.avatarURL({ dynamic: true })
@@ -192,7 +195,7 @@ class CommandSearch extends SlashCommand {
                 if (ctx.user.id !== selCtx.user.id) {
                     return selCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -202,7 +205,10 @@ class CommandSearch extends SlashCommand {
 
                 await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                     member: member,
-                    textChannel: channel
+                    textChannel: channel,
+                    metadata: {
+                        ctx: ctx
+                    }
                 });
                 return ctx.delete();
             },
@@ -215,7 +221,7 @@ class CommandSearch extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],

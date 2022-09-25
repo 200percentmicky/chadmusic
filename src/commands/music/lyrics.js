@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const Genius = require('genius-lyrics');
 
 module.exports = class CommandLyrics extends Command {
@@ -31,7 +31,7 @@ module.exports = class CommandLyrics extends Command {
                 details: '`[query]` The search query to find lyrics.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS'],
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'query',
@@ -45,7 +45,7 @@ module.exports = class CommandLyrics extends Command {
     async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
         }
@@ -70,8 +70,8 @@ module.exports = class CommandLyrics extends Command {
                 return this.client.ui.reply(message, 'error', 'Unable to retrieve lyrics from currently playing song. Try manually searching for the song using `lyrics [query]`.');
             }
 
-            const embed = new MessageEmbed()
-                .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+            const embed = new EmbedBuilder()
+                .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                 .setAuthor({
                     name: songSearch[0].artist.name,
                     url: songSearch[0].artist.url,

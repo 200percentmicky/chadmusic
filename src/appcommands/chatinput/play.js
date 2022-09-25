@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const iheart = require('iheart');
 const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -100,7 +100,7 @@ class CommandPlay extends SlashCommand {
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -147,25 +147,35 @@ class CommandPlay extends SlashCommand {
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.CONNECT);
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
             if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
-                await this.client.vc.join(vc); // Must be awaited only if the VC is a Stage Channel.
-                const stageMod = vc.permissionsFor(this.client.user.id).has(Permissions.STAGE_MODERATOR);
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(Permissions.FLAGS.REQUEST_TO_SPEAK);
+                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
                     if (!requestToSpeak) {
                         this.client.vc.leave(guild);
                         return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.me.voice.suppress) {
-                        await guild.me.voice.setRequestToSpeak(true);
+                    } else if (guild.members.me.voice.suppress) {
+                        await guild.members.me.voice.setRequestToSpeak(true);
                     }
                 } else {
-                    await guild.me.voice.setSuppressed(false);
+                    await guild.members.me.voice.setSuppressed(false);
                 }
             } else {
-                this.client.vc.join(vc);
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
             }
         } else {
             if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
@@ -212,14 +222,14 @@ class CommandPlay extends SlashCommand {
                 if (vc.members.size <= 3 || dj) {
                     requested = ctx.options.now.query;
 
-                    await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
-                    channel.sendTyping();
-
                     /* eslint-disable-next-line no-useless-escape */
                     await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                         textChannel: channel,
                         member: _member,
-                        position: 1
+                        position: 1,
+                        metadata: {
+                            ctx: ctx
+                        }
                     });
                     try {
                         await this.client.player.skip(guild);
@@ -228,13 +238,13 @@ class CommandPlay extends SlashCommand {
                     return this.client.ui.send(ctx, 'NOT_ALONE');
                 }
             } else {
-                await this.client.ui.ctxCustom(ctx, process.env.EMOJI_MUSIC, process.env.COLOR_MUSIC, `Searching \`${requested}\``);
-                channel.sendTyping();
-
                 /* eslint-disable-next-line no-useless-escape */
                 await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                     textChannel: channel,
-                    member: _member
+                    member: _member,
+                    metadata: {
+                        ctx: ctx
+                    }
                 });
             }
             return;

@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 class CommandGrab extends SlashCommand {
     constructor (creator) {
@@ -54,17 +54,35 @@ class CommandGrab extends SlashCommand {
 
         await ctx.defer(true);
 
-        const embed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
+        const embed = new EmbedBuilder()
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
-            .setThumbnail(song.thumbnail)
-            .addField('Duration', `${song.formattedDuration}`)
+            .addFields({
+                name: 'Duration',
+                value: `${song.formattedDuration}`
+            })
             .setTimestamp();
+
+        const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
 
         try {
             await _member.user.send({ embeds: [embed] });

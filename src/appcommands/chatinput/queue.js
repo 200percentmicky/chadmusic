@@ -16,8 +16,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand, ComponentType, TextInputStyle, CommandOptionType } = require('slash-create');
-const { MessageButton, MessageActionRow, MessageEmbed } = require('discord.js');
+const { SlashCommand, ComponentType, CommandOptionType, TextInputStyle } = require('slash-create');
+const {
+    ButtonBuilder,
+    ActionRowBuilder,
+    EmbedBuilder,
+    PermissionsBitField,
+    ButtonStyle
+} = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
@@ -79,7 +85,7 @@ class CommandQueue extends SlashCommand {
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
@@ -205,14 +211,17 @@ class CommandQueue extends SlashCommand {
                 : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
 
             /* Making the embed. */
-            const queueEmbed = new MessageEmbed()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            const queueEmbed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `Queue for ${guild.name} - ${currentVc.channel.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
                 })
                 .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
-                .addField(`${process.env.EMOJI_MUSIC} Currently Playing`, `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``)
+                .addFields({
+                    name: `${process.env.EMOJI_MUSIC} Currently Playing`,
+                    value: `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``
+                })
                 .setTimestamp()
                 .setFooter({
                     text: `${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
@@ -222,49 +231,49 @@ class CommandQueue extends SlashCommand {
             /* Creating the buttons to interact with the queue. */
 
             // First Page
-            const firstPage = new MessageButton()
-                .setStyle('PRIMARY')
+            const firstPage = new ButtonBuilder()
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.FIRST_PAGE)
                 .setCustomId('qc_first_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Previous Page
-            const previousPage = new MessageButton()
-                .setStyle('PRIMARY')
+            const previousPage = new ButtonBuilder()
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.PREVIOUS_PAGE)
                 .setCustomId('qc_previous_page')
                 .setDisabled(true); // Since the embed opens on the first page.
 
             // Next Page
-            const nextPage = new MessageButton()
-                .setStyle('PRIMARY')
+            const nextPage = new ButtonBuilder()
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.NEXT_PAGE)
                 .setCustomId('qc_next_page');
 
             // Last Page
-            const lastPage = new MessageButton()
-                .setStyle('PRIMARY')
+            const lastPage = new ButtonBuilder()
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.LAST_PAGE)
                 .setCustomId('qc_last_page');
 
             // Jump to Page
-            const pageJump = new MessageButton()
-                .setStyle('PRIMARY')
+            const pageJump = new ButtonBuilder()
+                .setStyle(ButtonStyle.Primary)
                 .setEmoji(process.env.JUMP_PAGE)
                 .setCustomId('qc_page_jump');
 
             // Cancel
-            const cancelButton = new MessageButton()
-                .setStyle('DANGER')
+            const cancelButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Danger)
                 .setEmoji(process.env.CLOSE)
                 .setCustomId('qc_cancel_button');
 
             /* Row of buttons! */
-            const buttonRow = new MessageActionRow()
+            const buttonRow = new ActionRowBuilder()
                 .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
             /* Ran out of room for the cancel button, so... */
-            const cancelRow = new MessageActionRow()
+            const cancelRow = new ActionRowBuilder()
                 .addComponents(cancelButton);
 
             const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -279,7 +288,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -300,11 +309,11 @@ class CommandQueue extends SlashCommand {
                     previousPage.setDisabled(true);
                 }
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Ran out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -323,7 +332,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -346,11 +355,11 @@ class CommandQueue extends SlashCommand {
                     previousPage.setDisabled(true);
                 }
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Ran out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -369,7 +378,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -393,11 +402,11 @@ class CommandQueue extends SlashCommand {
                 }
 
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Ran out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -416,7 +425,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -438,11 +447,11 @@ class CommandQueue extends SlashCommand {
                 }
 
                 /* Row of buttons! */
-                const buttonRow = new MessageActionRow()
+                const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                 /* Ran out of room for the cancel button, so... */
-                const cancelRow = new MessageActionRow()
+                const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -461,7 +470,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
@@ -490,7 +499,7 @@ class CommandQueue extends SlashCommand {
                     if (isNaN(pageNumber)) {
                         return modalCtx.send({
                             embeds: [
-                                new MessageEmbed()
+                                new EmbedBuilder()
                                     .setColor(parseInt(process.env.COLOR_ERROR))
                                     .setDescription(`${process.env.EMOJI_ERROR} A number must be provided in your response. Please try again.`)
                             ],
@@ -518,11 +527,11 @@ class CommandQueue extends SlashCommand {
                             lastPage.setDisabled(true);
                         }
                         /* Row of buttons! */
-                        const buttonRow = new MessageActionRow()
+                        const buttonRow = new ActionRowBuilder()
                             .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                         /* Ran out of room for the cancel button, so... */
-                        const cancelRow = new MessageActionRow()
+                        const cancelRow = new ActionRowBuilder()
                             .addComponents(cancelButton);
 
                         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -551,11 +560,11 @@ class CommandQueue extends SlashCommand {
                         }
 
                         /* Row of buttons! */
-                        const buttonRow = new MessageActionRow()
+                        const buttonRow = new ActionRowBuilder()
                             .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                         /* Ran out of room for the cancel button, so... */
-                        const cancelRow = new MessageActionRow()
+                        const cancelRow = new ActionRowBuilder()
                             .addComponents(cancelButton);
 
                         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -587,11 +596,11 @@ class CommandQueue extends SlashCommand {
                     }
 
                     /* Row of buttons! */
-                    const buttonRow = new MessageActionRow()
+                    const buttonRow = new ActionRowBuilder()
                         .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
                     /* Ran out of room for the cancel button, so... */
-                    const cancelRow = new MessageActionRow()
+                    const cancelRow = new ActionRowBuilder()
                         .addComponents(cancelButton);
 
                     const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
@@ -611,7 +620,7 @@ class CommandQueue extends SlashCommand {
                 if (ctx.user.id !== btnCtx.user.id) {
                     return btnCtx.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor(parseInt(process.env.COLOR_NO))
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],

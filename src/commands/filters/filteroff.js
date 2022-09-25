@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 
@@ -29,7 +30,7 @@ module.exports = class CommandFilterOff extends Command {
                 text: 'Removes all filters from the player.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -37,7 +38,7 @@ module.exports = class CommandFilterOff extends Command {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(['MANAGE_CHANNELS']);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) return this.client.ui.send(message, 'DJ_MODE');
@@ -57,10 +58,13 @@ module.exports = class CommandFilterOff extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (!queue.filters) return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.');
-            await this.client.player.setFilter(message.guild.id, false);
-            pushFormatFilter(queue, 'All', 'Off');
-            return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
+            try {
+                await queue.filters.clear();
+                pushFormatFilter(queue, 'All', 'Off');
+                return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
+            } catch {
+                return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.');
+            }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }

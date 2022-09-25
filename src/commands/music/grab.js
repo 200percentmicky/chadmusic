@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandGrab extends Command {
     constructor () {
@@ -28,7 +28,7 @@ module.exports = class CommandGrab extends Command {
                 text: 'Saves this song to your DMs.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks]
         });
     }
 
@@ -51,17 +51,32 @@ module.exports = class CommandGrab extends Command {
             }
         }
 
-        const embed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
+        const embed = new EmbedBuilder()
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Song saved!',
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
             })
-            .setTitle(song.name)
+            .setTitle(`${songTitle}`)
             .setURL(song.url)
-            .setThumbnail(song.thumbnail)
-            .addField('Duration', `${song.formattedDuration}`)
+            .addFields({ name: 'Duration', value: `${song.formattedDuration}` })
             .setTimestamp();
+
+        const thumbnailSize = await this.client.settings.get(message.guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
 
         try {
             await message.author.send({ embeds: [embed] });

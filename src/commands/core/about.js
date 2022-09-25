@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -41,53 +41,59 @@ module.exports = class CommandAbout extends Command {
 
     async exec (message) {
         const owner = this.client.users.cache.get(this.client.ownerID);
-        const aboutembed = new MessageEmbed()
-            .setColor(message.guild.me.displayColor !== 0 ? message.guild.me.displayColor : null)
+        const aboutembed = new EmbedBuilder()
+            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'ChadMusic - The Chad Music Bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setDescription('Cool open-source music bot.')
-            .addField('🎶 Features', stripIndents`
-            :white_small_square: Supports up to 700+ websites.
-            :white_small_square: Add multiple filters to the player.
-            :white_small_square: Alter filter values during playback.
-            :white_small_square: Unlimited volume! :joy::ok_hand:
-            :white_small_square: DJ commands to control the player.
-            :white_small_square: Queue and track length limits.
-            :white_small_square: Advanced queue management.
-            :white_small_square: Slash commands lol
-            :white_small_square: ???
-            :white_small_square: Profit!
-            `)
-            .addField(`${process.env.EMOJI_INFO} Stats`, stripIndents`
-            **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
-            **Bot Version:** ${bot.version}
-            **Node.js:** ${process.version}
-            **Discord.js:** ${discord.version}
-            **slash-create:** ${sc.version}
-            **Akairo Framework:** ${akairo.version}
-            **DisTube.js:** ${distube.version}
-            **Voice Connections:** ${this.client.vc.voices.collection.size}
-            **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
-            `, true)
+            .addFields({
+                name: '🎶 Features',
+                value: stripIndents`
+                :white_small_square: Supports up to 700+ websites.
+                :white_small_square: Add multiple filters to the player.
+                :white_small_square: Alter filter values during playback.
+                :white_small_square: Unlimited volume! :joy::ok_hand:
+                :white_small_square: DJ commands to control the player.
+                :white_small_square: Queue and track length limits.
+                :white_small_square: Advanced queue management.
+                :white_small_square: Slash commands lol
+                :white_small_square: ???
+                :white_small_square: Profit!
+                `
+            }, {
+                name: `${process.env.EMOJI_INFO} Stats`,
+                value: stripIndents`
+                **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
+                **Bot Version:** ${bot.version}
+                **Node.js:** ${process.version}
+                **Discord.js:** ${discord.version}
+                **slash-create:** ${sc.version}
+                **Akairo Framework:** ${akairo.version}
+                **DisTube.js:** ${distube.version}
+                **Voice Connections:** ${this.client.vc.voices.collection.size}
+                **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
+                `,
+                inline: true
+            })
             .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
             .setFooter({
                 text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
                 iconURL: owner.avatarURL({ dynamic: true })
             });
 
-        const urlGithub = new MessageButton()
-            .setStyle('LINK')
+        const urlGithub = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://github.com/200percentmicky/chadmusic')
             .setLabel('GitHub');
 
-        const support = new MessageButton()
-            .setStyle('LINK')
+        const support = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setURL('https://discord.com/invite/qQuJ9YQ')
             .setLabel('Support Server');
 
-        const actionRow = new MessageActionRow()
+        const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
         return message.reply({ embeds: [aboutembed], components: [actionRow] });

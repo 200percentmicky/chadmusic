@@ -17,7 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
-const { Permissions, MessageEmbed } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
@@ -32,13 +32,16 @@ module.exports = class ListenerAddList extends Listener {
         const guild = channel.guild;
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
-        const embed = new MessageEmbed()
-            .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+        let playlistTitle = playlist.name;
+        if (playlistTitle.length > 256) playlistTitle = playlist.name.substring(0, 252) + '...';
+
+        const embed = new EmbedBuilder()
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Playlist added to queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
             })
-            .setTitle(playlist.name)
+            .setTitle(`${playlistTitle}`)
             .setURL(playlist.url)
             .setThumbnail(playlist.thumbnail)
             .setFooter({
@@ -46,9 +49,11 @@ module.exports = class ListenerAddList extends Listener {
                 iconURL: playlist.user.avatarURL({ dynamic: true })
             });
 
+        const embedFields = [];
+
         // Cut some or many entries if maxQueueLimit is in place.
         const djRole = this.client.settings.get(channel.guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (!dj) {
             const maxQueueLimit = this.client.settings.get(channel.guild.id, 'maxQueueLimit');
             if (maxQueueLimit) {
@@ -59,12 +64,30 @@ module.exports = class ListenerAddList extends Listener {
                 // in the array, so we don't need to subtract the number to get
                 // the correct element.
                 queue.songs.splice(allowedLimit, playlist.songs.length - maxQueueLimit);
-                embed.addField(':warning: Not everything was added!', `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** was added to the queue.`);
+
+                embedFields.push({
+                    name: '🔢 Number of entries',
+                    value: `${playlist.songs.length}`
+                });
+                embedFields.push({
+                    name: ':warning: Not everything was added!',
+                    value: `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** were added to the queue.`
+                });
+                embed.addFields(embedFields);
                 return channel.send({ embeds: [embed] });
             }
         } else {
-            embed.addField('🔢 Number of entries', `${playlist.songs.length}`);
-            channel.send({ embeds: [embed] });
+            embedFields.push({
+                name: '🔢 Number of entries',
+                value: `${playlist.songs.length}`
+            });
+            embed.addFields(embedFields);
+
+            try {
+                playlist.metadata?.ctx.send({ embeds: [embed] });
+            } catch {
+                channel.send({ embeds: [embed] });
+            }
         }
     }
 };

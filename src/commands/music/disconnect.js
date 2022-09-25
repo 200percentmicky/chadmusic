@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
 module.exports = class CommandDisconnect extends Command {
@@ -29,14 +29,14 @@ module.exports = class CommandDisconnect extends Command {
                 text: 'Disconnects from the current voice channel.'
             },
             channel: 'guild',
-            clientPermissions: ['EMBED_LINKS']
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
     async exec (message) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(Permissions.FLAGS.MANAGE_CHANNELS);
+        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (!dj) {
                 return this.client.ui.send(message, 'DJ_MODE');
@@ -66,7 +66,7 @@ module.exports = class CommandDisconnect extends Command {
             if (this.client.player.getQueue(message)) {
                 this.client.player.stop(message);
             }
-            this.client.vc.leave(message);
+            this.client.vc.leave(message.guild);
             return this.client.ui.custom(message, '📤', 0xDD2E44, `Left <#${vc.id}>`);
         } else {
             return this.client.ui.send(message, 'NOT_ALONE');

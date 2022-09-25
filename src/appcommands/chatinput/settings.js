@@ -18,7 +18,7 @@
 
 const { stripIndents } = require('common-tags');
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 
@@ -165,6 +165,27 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'thumbnailsize',
+                    description: "Changes the track's thumbnail size of the \"Now Playing\" embeds.",
+                    options: [{
+                        type: CommandOptionType.STRING,
+                        name: 'size',
+                        description: 'The size of the track\'s image.',
+                        required: true,
+                        choices: [
+                            {
+                                name: 'Small',
+                                value: 'small'
+                            },
+                            {
+                                name: 'Large',
+                                value: 'large'
+                            }
+                        ]
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'unlimitedvolume',
                     description: 'Allows or denies the ability to freely set the player\'s volume to any value.',
                     options: [{
@@ -200,28 +221,28 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
-                    name: 'blocklist',
-                    description: "Manages the server's blocklist.",
+                    name: 'blocksong',
+                    description: "Manages the server's list of blocked search phrases.",
                     options: [
                         {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'add',
-                            description: "Adds a phrase to the server's blocklist.",
+                            description: "Adds a phrase to the server's list.",
                             options: [{
                                 type: CommandOptionType.STRING,
                                 name: 'phrase',
-                                description: 'The phrase to add to the blocklist',
+                                description: 'The phrase to add to the list',
                                 required: true
                             }]
                         },
                         {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'remove',
-                            description: 'Removes a phrase from the blocklist.',
+                            description: 'Removes a phrase from the list.',
                             options: [{
                                 type: CommandOptionType.STRING,
                                 name: 'phrase',
-                                description: 'The phrase to remove from the blocklist.',
+                                description: 'The phrase to remove from the list.',
                                 required: true
                             }]
                         }
@@ -242,6 +263,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 }
             ]
         });
+
+        this.filePath = __filename;
     }
 
     async run (ctx) {
@@ -249,7 +272,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
 
-        if (!channel.permissionsFor(ctx.user.id).has(Permissions.FLAGS.MANAGE_GUILD)) {
+        if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
             return this.client.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
@@ -266,7 +289,8 @@ module.exports = class CommandSettings extends SlashCommand {
         const allowLinks = settings.get(guild.id, 'allowLinks'); // Allow Links
         const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
-        const blockedPhrases = settings.get(guild.id, 'blockedPhrases');
+        const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
+        const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
         // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -275,8 +299,8 @@ module.exports = class CommandSettings extends SlashCommand {
 
         switch (ctx.subcommands[0]) {
         case 'current': {
-            const embed = new MessageEmbed()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            const embed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
@@ -292,6 +316,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                 **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                **🖼 Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
                 `)
@@ -301,8 +326,8 @@ module.exports = class CommandSettings extends SlashCommand {
                     iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                 });
 
-            const blockedEmbed = new MessageEmbed()
-                .setColor(guild.me.displayColor !== 0 ? guild.me.displayColor : null)
+            const blockedEmbed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `${guild.name}`,
                     iconURL: guild.iconURL({ dynamic: true })
@@ -316,8 +341,11 @@ module.exports = class CommandSettings extends SlashCommand {
                 });
 
             if (blockedPhrases.length === 0) {
-                blockedEmbed.setDescription('');
-                blockedEmbed.addField(`${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`, 'To add phrases to the blocklist, run `/settings blocklist add <phrase>`.');
+                blockedEmbed.setDescription(null);
+                blockedEmbed.addFields({
+                    name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
+                    value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
+                });
             }
 
             return ctx.send({ embeds: [embed, blockedEmbed] });
@@ -370,36 +398,37 @@ module.exports = class CommandSettings extends SlashCommand {
             return this.client.ui.ctx(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
         }
 
+        case 'thumbnailsize': {
+            await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
+            return this.client.ui.ctx(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
+        }
+
         case 'defaultvolume': {
             await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
             return this.client.ui.ctx(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
         }
 
-        case 'blocklist': {
+        case 'blocksong': {
             switch (ctx.subcommands[1]) {
             case 'add': {
-                if (this.client.settings.includes(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.add.phrase}\` already exists in the blocklist.`);
+                if (this.client.settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
                 }
-                await this.client.settings.push(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.add.phrase}\` has been added to the blocklist for this server.`, null, 'Any phrases in the blocklist will no longer be added to the queue.');
+                await this.client.settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
             }
 
             case 'remove': {
-                if (!this.client.settings.includes(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.remove.phrase}\` doesn't exists in the blocklist.`);
+                if (!this.client.settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
                 }
-                await this.client.settings.remove(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.remove.phrase}\` has been removed from the blocklist for this server.`);
+                await this.client.settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
             }
             }
             break;
         }
 
-        // ! Deprecated.
-        // This feature will be replaced when the Command Permissions page is fully
-        // implemented into the client.
-        // Server Settings -> Integrations -> <Any Application> -> Command Permissions
         case 'textchannel': {
             await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
             return this.client.ui.ctx(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
