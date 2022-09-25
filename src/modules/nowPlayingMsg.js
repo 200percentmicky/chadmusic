@@ -130,7 +130,7 @@ async function nowPlayingMsg (queue, song) {
     }
 
     try {
-        song.metadata.ctx.send({ embeds: [songNow] });
+        await song.metadata.ctx.send({ embeds: [songNow] });
     } catch {
         channel.send({ embeds: [songNow] });
     }
