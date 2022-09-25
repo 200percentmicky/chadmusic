@@ -86,6 +86,11 @@ class CommandPlayer extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'restart',
+                    description: 'Restarts the currently playing song.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'repeat',
                     description: 'Toggles repeat mode for the player.',
                     options: [
@@ -406,6 +411,19 @@ class CommandPlayer extends SlashCommand {
                     this.client.ui.ctx(ctx, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
                 }
                 return this.client.ui.ctx(ctx, 'info', `Seeking to \`${ctx.options.seek.time}\`...`);
+            } else {
+                return this.client.ui.send(ctx, 'NOT_ALONE');
+            }
+        }
+
+        case 'restart': {
+            const currentVc = this.client.vc.get(vc);
+            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            if (vc.members.size <= 2 || dj) {
+                this.client.player.seek(guild, 0);
+                return this.client.ui.ctx(ctx, 'info', 'Restarting song...');
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
