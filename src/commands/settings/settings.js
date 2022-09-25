@@ -76,7 +76,7 @@ module.exports = class CommandSettings extends Command {
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
             **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-            **🖼 Thumbnail Size:** ${thumbnailSize}
+            **🖼 Thumbnail Size:** ${thumbnailSize === 'Large' ? 'Large' : 'Small'}
             **🔊 Default Volume:** ${defaultVolume}
             **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
             `)
@@ -103,8 +103,8 @@ module.exports = class CommandSettings extends Command {
         if (blockedPhrases.length === 0) {
             blockedEmbed.setDescription(null);
             blockedEmbed.addFields({
-                name: `${process.env.EMOJI_INFO} No songs are being blocked in this server.`,
-                value: `To add phrases to the blocklist, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
+                name: `${process.env.EMOJI_INFO} No song phrases are being blocked in this server.`,
+                value: `To add phrases to the list, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
             });
         }
 

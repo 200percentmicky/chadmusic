@@ -19,10 +19,10 @@
 const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 
-module.exports = class CommandBlocklist extends Command {
+module.exports = class CommandBlocksong extends Command {
     constructor () {
-        super('blocklist', {
-            aliases: ['blocklist'],
+        super('blocksong', {
+            aliases: ['blocksong'],
             category: '⚙ Settings',
             description: {
                 text: 'Manages the server\'s list of blocked search phrases.',
@@ -47,29 +47,29 @@ module.exports = class CommandBlocklist extends Command {
     async exec (message, args) {
         switch (args.subcommand) {
         case 'add': {
-            if (!args.phrase) return this.client.ui.usage(message, 'blocklist <add/remove> <phrase>');
+            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove> <phrase>');
             if (this.client.settings.includes(message.guild.id, args.phrase, 'blockedPhrases')) {
-                return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the blocklist.`);
+                return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the list.`);
             }
 
             await this.client.settings.push(message.guild.id, args.phrase, 'blockedPhrases');
-            this.client.ui.reply(message, 'ok', `\`${args.phrase}\` has been added to the blocklist for this server.`, null, 'Any phrases in the blocklist will no longer be added to the queue.');
+            this.client.ui.reply(message, 'ok', `\`${args.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
             break;
         }
 
         case 'remove': {
-            if (!args.phrase) return this.client.ui.usage(message, 'blocklist <add/remove> <phrase>');
+            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove> <phrase>');
             if (!this.client.settings.includes(message.guild.id, args.phrase, 'blockedPhrases')) {
-                return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the blocklist.`);
+                return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the list.`);
             }
 
             await this.client.settings.remove(message.guild.id, args.phrase, 'blockedPhrases');
-            this.client.ui.reply(message, 'ok', `\`${args.phrase}\` has been removed from the blocklist for this server.`);
+            this.client.ui.reply(message, 'ok', `\`${args.phrase}\` is no longer blocked on this server.`);
             break;
         }
 
         default: {
-            this.client.ui.usage(message, 'blocklist <add/remove> <phrase>');
+            this.client.ui.usage(message, 'blocksong <add/remove> <phrase>');
         }
         }
     }

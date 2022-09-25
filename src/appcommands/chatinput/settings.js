@@ -221,28 +221,28 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
-                    name: 'blocklist',
-                    description: "Manages the server's blocklist.",
+                    name: 'blocksong',
+                    description: "Manages the server's list of blocked search phrases.",
                     options: [
                         {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'add',
-                            description: "Adds a phrase to the server's blocklist.",
+                            description: "Adds a phrase to the server's list.",
                             options: [{
                                 type: CommandOptionType.STRING,
                                 name: 'phrase',
-                                description: 'The phrase to add to the blocklist',
+                                description: 'The phrase to add to the list',
                                 required: true
                             }]
                         },
                         {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'remove',
-                            description: 'Removes a phrase from the blocklist.',
+                            description: 'Removes a phrase from the list.',
                             options: [{
                                 type: CommandOptionType.STRING,
                                 name: 'phrase',
-                                description: 'The phrase to remove from the blocklist.',
+                                description: 'The phrase to remove from the list.',
                                 required: true
                             }]
                         }
@@ -316,7 +316,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                 **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-                **🖼 Thumbnail Size:** ${thumbnailSize}
+                **🖼 Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
                 `)
@@ -343,8 +343,8 @@ module.exports = class CommandSettings extends SlashCommand {
             if (blockedPhrases.length === 0) {
                 blockedEmbed.setDescription(null);
                 blockedEmbed.addFields({
-                    name: `${process.env.EMOJI_INFO} Nothing is currently in this server's blocklist.`,
-                    value: 'To add phrases to the blocklist, run `/settings blocksong add <phrase>`.'
+                    name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
+                    value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
                 });
             }
 
@@ -398,7 +398,7 @@ module.exports = class CommandSettings extends SlashCommand {
             return this.client.ui.ctx(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
         }
 
-        case 'thumbnailSize': {
+        case 'thumbnailsize': {
             await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
             return this.client.ui.ctx(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
         }
@@ -408,22 +408,22 @@ module.exports = class CommandSettings extends SlashCommand {
             return this.client.ui.ctx(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
         }
 
-        case 'blocklist': {
+        case 'blocksong': {
             switch (ctx.subcommands[1]) {
             case 'add': {
-                if (this.client.settings.includes(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.add.phrase}\` already exists in the blocklist.`);
+                if (this.client.settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
                 }
-                await this.client.settings.push(guild.id, ctx.options.blocklist.add.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.add.phrase}\` has been added to the blocklist for this server.`, null, 'Any phrases in the blocklist will no longer be added to the queue.');
+                await this.client.settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
             }
 
             case 'remove': {
-                if (!this.client.settings.includes(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocklist.remove.phrase}\` doesn't exists in the blocklist.`);
+                if (!this.client.settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
+                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
                 }
-                await this.client.settings.remove(guild.id, ctx.options.blocklist.remove.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocklist.remove.phrase}\` has been removed from the blocklist for this server.`);
+                await this.client.settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
+                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
             }
             }
             break;
