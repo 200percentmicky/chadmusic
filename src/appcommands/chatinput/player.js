@@ -86,7 +86,7 @@ class CommandPlayer extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
-                    name: 'restart',
+                    name: 'startover',
                     description: 'Restarts the currently playing song.'
                 },
                 {
@@ -419,7 +419,7 @@ class CommandPlayer extends SlashCommand {
             }
         }
 
-        case 'restart': {
+        case 'startover': {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');

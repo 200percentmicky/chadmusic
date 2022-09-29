@@ -20,10 +20,10 @@ const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-module.exports = class CommandRestart extends Command {
+module.exports = class CommandStartover extends Command {
     constructor () {
-        super('restart', {
-            aliases: ['restart', 'startover'],
+        super('startover', {
+            aliases: ['startover', 'restart', 'so', 'rs'],
             description: {
                 text: 'Restarts the currently playing song.'
             },
