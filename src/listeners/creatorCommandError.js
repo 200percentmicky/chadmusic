@@ -36,7 +36,7 @@ module.exports = class ListenerCreatorCommandError extends Listener {
             guru += ' The owner of this application has also received a full error report.\n';
         }
 
-        guru += `\`\`\`js\n${err.name}: ${err.message}\`\`\``;
+        guru += `\`\`\`js\n${err.stack}\`\`\``;
 
         const urlGithub = new ButtonBuilder()
             .setStyle(ButtonStyle.Link)
