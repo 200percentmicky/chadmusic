@@ -73,12 +73,10 @@ module.exports = class CommandIHeartRadio extends Command {
             if (vc.type === 'stage') {
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
-                    if (!requestToSpeak) {
-                        this.client.vc.leave(message.guild);
-                        return this.client.ui.send(message, 'MISSING_SPEAK', vc.id);
-                    } else if (message.guild.members.me.voice.suppress) {
+                    try {
                         await message.guild.members.me.voice.setRequestToSpeak(true);
+                    } catch {
+                        await message.guild.members.me.voice.setSuppressed(false);
                     }
                 } else {
                     await message.guild.members.me.voice.setSuppressed(false);

@@ -82,12 +82,10 @@ class ContextMenuAddToQueue extends SlashCommand {
             if (vc.type === 'stage') {
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
-                    const requestToSpeak = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.RequestToSpeak);
-                    if (!requestToSpeak) {
-                        this.client.vc.leave(guild);
-                        return this.client.ui.send(ctx, 'MISSING_SPEAK', vc.id);
-                    } else if (guild.members.me.voice.suppress) {
+                    try {
                         await guild.members.me.voice.setRequestToSpeak(true);
+                    } catch {
+                        await guild.members.me.voice.setSuppressed(false);
                     }
                 } else {
                     await guild.members.me.voice.setSuppressed(false);
