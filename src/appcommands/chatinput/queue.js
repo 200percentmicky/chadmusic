@@ -283,36 +283,36 @@ class CommandQueue extends SlashCommand {
 
             // TODO: Look into combining the collector into a single function.
 
-            // First Page Button
-            ctx.registerComponent('qc_first_page', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
-
-                const paginateArray = queuePaginate.first();
+            const managePage = async (interaction, queuePage) => {
+                await interaction.acknowledge();
+                const paginateArray = queuePage;
 
                 /* Map the array. */
                 const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
 
-                /* Enable and disable buttons */
+                /* Need to make sure all buttons are available */
                 nextPage.setDisabled(false);
                 lastPage.setDisabled(false);
+                firstPage.setDisabled(false);
+                previousPage.setDisabled(false);
+
+                // No previous page.
                 if (!queuePaginate.hasPrevious()) {
                     firstPage.setDisabled(true);
                     previousPage.setDisabled(true);
                 }
+
+                // No next page.
+                if (!queuePaginate.hasNext()) {
+                    nextPage.setDisabled(true);
+                    lastPage.setDisabled(true);
+                }
+
                 /* Row of buttons! */
                 const buttonRow = new ActionRowBuilder()
                     .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
 
-                /* Ran out of room for the cancel button, so... */
+                /* Rand out of room for the cancel button, so... */
                 const cancelRow = new ActionRowBuilder()
                     .addComponents(cancelButton);
 
@@ -324,159 +324,46 @@ class CommandQueue extends SlashCommand {
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: member.user.avatarURL({ dynamic: true })
                 });
-                await btnCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+
+                await interaction.editParent({ embeds: [queueEmbed], components: components });
+            };
+
+            const youDidntClickThat = { // lol
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(parseInt(process.env.COLOR_NO))
+                        .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
+                ],
+                ephemeral: true
+            };
+
+            // First Page Button
+            ctx.registerComponent('qc_first_page', async (btnCtx) => {
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
+                await managePage(btnCtx, queuePaginate.first());
             }, 300 * 1000);
 
             // Previous Page Button
             ctx.registerComponent('qc_previous_page', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
-
-                const paginateArray = queuePaginate.previous();
-
-                /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                /* Need to make sure all buttons are available */
-                nextPage.setDisabled(false);
-                lastPage.setDisabled(false);
-                firstPage.setDisabled(false);
-                previousPage.setDisabled(false);
-                if (!queuePaginate.hasPrevious()) {
-                    firstPage.setDisabled(true);
-                    previousPage.setDisabled(true);
-                }
-                /* Row of buttons! */
-                const buttonRow = new ActionRowBuilder()
-                    .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                /* Ran out of room for the cancel button, so... */
-                const cancelRow = new ActionRowBuilder()
-                    .addComponents(cancelButton);
-
-                const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                /* Making the embed. */
-                queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                queueEmbed.setFooter({
-                    text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                    iconURL: member.user.avatarURL({ dynamic: true })
-                });
-                await btnCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
+                await managePage(btnCtx, queuePaginate.previous());
             }, 300 * 1000);
 
             // Next Page Button
             ctx.registerComponent('qc_next_page', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
-
-                const paginateArray = queuePaginate.next();
-
-                /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                /* Need to make sure all buttons are available */
-                nextPage.setDisabled(false);
-                lastPage.setDisabled(false);
-                firstPage.setDisabled(false);
-                previousPage.setDisabled(false);
-                if (!queuePaginate.hasNext()) {
-                    nextPage.setDisabled(true);
-                    lastPage.setDisabled(true);
-                }
-
-                /* Row of buttons! */
-                const buttonRow = new ActionRowBuilder()
-                    .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                /* Ran out of room for the cancel button, so... */
-                const cancelRow = new ActionRowBuilder()
-                    .addComponents(cancelButton);
-
-                const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                /* Making the embed. */
-                queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                queueEmbed.setFooter({
-                    text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                    iconURL: member.user.avatarURL({ dynamic: true })
-                });
-                await btnCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
+                await managePage(btnCtx, queuePaginate.next());
             }, 300 * 1000);
 
             // Last Page Button
             ctx.registerComponent('qc_last_page', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
-
-                const paginateArray = queuePaginate.last();
-
-                /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                /* Enable and disable buttons */
-                firstPage.setDisabled(false);
-                previousPage.setDisabled(false);
-                if (!queuePaginate.hasNext()) {
-                    nextPage.setDisabled(true);
-                    lastPage.setDisabled(true);
-                }
-
-                /* Row of buttons! */
-                const buttonRow = new ActionRowBuilder()
-                    .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                /* Ran out of room for the cancel button, so... */
-                const cancelRow = new ActionRowBuilder()
-                    .addComponents(cancelButton);
-
-                const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                /* Making the embed. */
-                queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                queueEmbed.setFooter({
-                    text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                    iconURL: member.user.avatarURL({ dynamic: true })
-                });
-                await btnCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
+                await managePage(btnCtx, queuePaginate.last());
             }, 300 * 1000);
 
             // Jump to Page Button
             ctx.registerComponent('qc_page_jump', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
 
                 await btnCtx.sendModal({
                     title: 'Select Page',
@@ -507,126 +394,19 @@ class CommandQueue extends SlashCommand {
                         });
                     }
 
-                    if (pageNumber <= 0) pageNumber = 1; // Pagination works with negative values wtf
-
                     if (pageNumber >= queuePaginate.total) {
                         // Stupid fix lol
                         pageNumber = queuePaginate.totalPages;
-                        const paginateArray = queuePaginate.page(pageNumber);
-
-                        /* Map the array. */
-                        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                        nextPage.setDisabled(false);
-                        lastPage.setDisabled(false);
-                        firstPage.setDisabled(false);
-                        previousPage.setDisabled(false);
-
-                        if (!queuePaginate.hasNext()) {
-                            nextPage.setDisabled(true);
-                            lastPage.setDisabled(true);
-                        }
-                        /* Row of buttons! */
-                        const buttonRow = new ActionRowBuilder()
-                            .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                        /* Ran out of room for the cancel button, so... */
-                        const cancelRow = new ActionRowBuilder()
-                            .addComponents(cancelButton);
-
-                        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                        /* Making the embed. */
-                        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                        queueEmbed.setFooter({
-                            text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                            iconURL: member.user.avatarURL({ dynamic: true })
-                        });
-                        await modalCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
-                    } else if (pageNumber <= queuePaginate.total) {
-                        const paginateArray = queuePaginate.first();
-
-                        /* Map the array. */
-                        const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                        nextPage.setDisabled(false);
-                        lastPage.setDisabled(false);
-                        firstPage.setDisabled(false);
-                        previousPage.setDisabled(false);
-
-                        if (!queuePaginate.hasPrevious()) {
-                            firstPage.setDisabled(true);
-                            previousPage.setDisabled(true);
-                        }
-
-                        /* Row of buttons! */
-                        const buttonRow = new ActionRowBuilder()
-                            .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                        /* Ran out of room for the cancel button, so... */
-                        const cancelRow = new ActionRowBuilder()
-                            .addComponents(cancelButton);
-
-                        const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                        /* Making the embed. */
-                        queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                        queueEmbed.setFooter({
-                            text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                            iconURL: member.user.avatarURL({ dynamic: true })
-                        });
-                        await modalCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                    } else if (pageNumber < 1) {
+                        return await managePage(modalCtx, queuePaginate.first());
                     }
-
-                    const paginateArray = queuePaginate.page(pageNumber);
-                    /* Map the array. */
-                    const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
-
-                    nextPage.setDisabled(false);
-                    lastPage.setDisabled(false);
-                    firstPage.setDisabled(false);
-                    previousPage.setDisabled(false);
-
-                    if (!queuePaginate.hasPrevious()) {
-                        firstPage.setDisabled(true);
-                        previousPage.setDisabled(true);
-                    } else if (!queuePaginate.hasNext()) {
-                        nextPage.setDisabled(true);
-                        lastPage.setDisabled(true);
-                    }
-
-                    /* Row of buttons! */
-                    const buttonRow = new ActionRowBuilder()
-                        .addComponents(firstPage, previousPage, nextPage, lastPage, pageJump);
-
-                    /* Ran out of room for the cancel button, so... */
-                    const cancelRow = new ActionRowBuilder()
-                        .addComponents(cancelButton);
-
-                    const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
-
-                    /* Making the embed. */
-                    queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
-                    queueEmbed.setFooter({
-                        text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                        iconURL: member.user.avatarURL({ dynamic: true })
-                    });
-                    await modalCtx.editParent({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                    return await managePage(modalCtx, queuePaginate.page(pageNumber));
                 });
             }, 300 * 1000);
 
             // Cancel Button
             ctx.registerComponent('qc_cancel_button', async (btnCtx) => {
-                if (ctx.user.id !== btnCtx.user.id) {
-                    return btnCtx.send({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
-                                .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
-                        ],
-                        ephemeral: true
-                    });
-                }
+                if (ctx.user.id !== btnCtx.user.id) return btnCtx.send(youDidntClickThat);
 
                 btnCtx.acknowledge();
                 btnCtx.delete();
