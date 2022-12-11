@@ -36,7 +36,7 @@ class CommandQueue extends SlashCommand {
             options: [
                 {
                     type: CommandOptionType.SUB_COMMAND,
-                    name: 'current',
+                    name: 'now',
                     description: "Shows the player's current queue on this server."
                 },
                 {
