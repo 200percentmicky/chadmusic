@@ -196,12 +196,13 @@ class CommandPlay extends SlashCommand {
 
         try {
             let requested = ctx.options.track?.query;
+            let station;
             if (ctx.subcommands[0] === 'attachment') requested = ctx.attachments.first().url;
             if (ctx.subcommands[0] === 'radio') {
                 switch (ctx.subcommands[1]) {
                 case 'iheartradio': {
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
-                    const station = search.stations[0];
+                    station = search.stations[0];
 
                     // To prevent overwrites, lock the command until the value is cleared.
                     if (await this.client.radio.get(guild.id)) {
@@ -241,7 +242,9 @@ class CommandPlay extends SlashCommand {
                     textChannel: channel,
                     member: _member,
                     metadata: {
-                        ctx: ctx
+                        ctx: ctx,
+                        isRadio: ctx.subcommands[0] === 'radio',
+                        radioStation: station ?? undefined
                     }
                 });
             }

@@ -67,8 +67,8 @@ module.exports = class CommandNowPlaying extends Command {
         if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
 
         let progressBar;
-        if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
-        const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
+        if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
+        const duration = song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
         const embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
@@ -101,6 +101,13 @@ module.exports = class CommandNowPlaying extends Command {
 
         if (song.age_restricted) {
             embedFields.push({ name: ':underage: Explicit', value: 'This track is **Age Restricted**' });
+        }
+
+        if (song.isFile) {
+            embedFields.push({
+                name: '📎 File',
+                value: `${song.codec}`
+            });
         }
 
         if (author.name) embedFields.push({ name: ':arrow_upper_right: Uploader', value: `[${author.name}](${author.url})` });

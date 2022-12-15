@@ -19,7 +19,6 @@
 const { Listener } = require('discord-akairo');
 const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const prettyms = require('pretty-ms');
-const iheart = require('iheart');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
@@ -69,9 +68,9 @@ module.exports = class ListenerAddSong extends Listener {
 
         if (maxTime) {
             if (!dj) {
-            // DisTube provide the duration as a decimal.
-            // Using Math.floor() to round down.
-            // Still need to apend '000' to be accurate.
+                // DisTube provide the duration as a decimal.
+                // Using Math.floor() to round down.
+                // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
                     userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                     channel.send({ embeds: [userEmbed] });
@@ -80,40 +79,26 @@ module.exports = class ListenerAddSong extends Listener {
             }
         }
 
-        if (await channel.client.radio.get(guild.id) !== undefined && !song.uploader.name) { // Assuming its a radio station.
-            // Changes the description of the track, in case its a
-            // radio station.
-            await iheart.search(`${await channel.client.radio.get(guild.id)}`).then(match => {
-                const station = match.stations[0];
-                song.name = `${station.name} - ${station.description}`;
-                song.isLive = true;
-                song.thumbnail = station.logo || station.newlogo;
-                song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`;
-            });
+        // If its a live radio station, lets add some extra info to it.
+        if (song.metadata?.isRadio) {
+            const station = song.metadata?.radioStation;
+
+            song.name = `${station.name} - ${station.description}`;
+            song.isLive = true;
+            song.thumbnail = station.logo || station.newlogo;
+            song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`;
         }
 
-        if (isAttachment(song.url)) {
-            const supportedFormats = [
-                'mp3',
-                'mp4',
-                'webm',
-                'ogg',
-                'wav'
-            ];
-            if (!supportedFormats.some(element => song.url.endsWith(element))) {
-                queue.songs.pop();
-                userEmbed.setColor(parseInt(process.env.COLOR_ERROR));
-                userEmbed.setDescription(`${process.env.EMOJI_ERROR} The attachment is invalid. Supported formats: ${supportedFormats.map(x => `\`${x}\``).join(', ')}`);
-                return channel.send({ embeds: [userEmbed] });
-            } else {
-                await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
-                    const time = Math.floor(info.streams[0].duration);
-                    song.duration = time;
-                    song.formattedDuration = toColonNotation(time + '000');
-                    song.isFile = true;
-                });
-            }
-        }
+        // Check if ffprobe can find any any additional metadata if none is available.
+        await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
+            if (song.metadata?.isRadio) return;
+
+            const time = Math.floor(info.streams[0].duration);
+            song.isFile = true;
+            song.duration = time;
+            song.formattedDuration = toColonNotation(time + '000');
+            song.codec = `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`;
+        }).catch(() => {});
 
         // Stupid fix to make sure that the queue doesn't break.
         // TODO: Fix toColonNotation in queue.js

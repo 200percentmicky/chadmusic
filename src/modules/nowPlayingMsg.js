@@ -84,7 +84,12 @@ async function nowPlayingMsg (queue, song) {
         }); // Only for YouTube so far...
     }
 
-    if (song.isFile) songNow.setDescription('📎 **File Upload**');
+    if (song.isFile) {
+        songNowFields.push({
+            name: '📎 File',
+            value: `${song.codec}`
+        });
+    }
 
     if (author.name) {
         songNowFields.push({
@@ -103,7 +108,7 @@ async function nowPlayingMsg (queue, song) {
 
     songNowFields.push({
         name: ':hourglass: Duration',
-        value: `${song.isLive ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`,
+        value: `${song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`,
         inline: true
     });
 

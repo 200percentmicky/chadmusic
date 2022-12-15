@@ -115,7 +115,9 @@ module.exports = class CommandIHeartRadio extends Command {
                 textChannel: message.channel,
                 message: message,
                 metadata: {
-                    ctx: undefined
+                    ctx: undefined,
+                    isRadio: true,
+                    radioStation: station
                 }
             });
             return message.react(process.env.EMOJI_MUSIC);

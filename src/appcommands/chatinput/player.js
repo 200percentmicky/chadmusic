@@ -217,6 +217,13 @@ class CommandPlayer extends SlashCommand {
                 });
             }
 
+            if (song.isFile) {
+                nowPlayingFields.push({
+                    name: '📎 File',
+                    value: `${song.codec}`
+                });
+            }
+
             if (author.name) {
                 nowPlayingFields.push({
                     name: ':arrow_upper_right: Uploader',
