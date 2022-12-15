@@ -19,6 +19,7 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
 const iheart = require('iheart');
+const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
@@ -44,7 +45,8 @@ class CommandPlay extends SlashCommand {
                         type: CommandOptionType.STRING,
                         name: 'query',
                         description: 'The track to play.',
-                        required: true
+                        required: true,
+                        autocomplete: true
                     }]
                 },
                 {
@@ -91,6 +93,13 @@ class CommandPlay extends SlashCommand {
         });
 
         this.filePath = __filename;
+    }
+
+    async autocomplete (ctx) {
+        AutoComplete(ctx.options.track.query, (err, queries) => {
+            if (err) this.client.logger.error('Unable to gather autocomplete data: %s', err);
+            return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
+        });
     }
 
     async run (ctx) {
