@@ -96,8 +96,12 @@ class CommandPlay extends SlashCommand {
     }
 
     async autocomplete (ctx) {
+        if (hasURL(ctx.options.track.query)) return [];
         AutoComplete(ctx.options.track.query, (err, queries) => {
-            if (err) this.client.logger.error('Unable to gather autocomplete data: %s', err);
+            if (err) {
+                this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                return ctx.sendResults([]);
+            }
             return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
         });
     }
