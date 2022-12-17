@@ -68,7 +68,8 @@ class CommandPlay extends SlashCommand {
                         type: CommandOptionType.STRING,
                         name: 'query',
                         description: 'The track to play.',
-                        required: true
+                        required: true,
+                        autocomplete: true
                     }]
                 },
                 {
@@ -96,8 +97,9 @@ class CommandPlay extends SlashCommand {
     }
 
     async autocomplete (ctx) {
-        if (hasURL(ctx.options.track.query)) return [];
-        AutoComplete(ctx.options.track.query, (err, queries) => {
+        const query = ctx.options[ctx.subcommands[0]][ctx.focused];
+        if (hasURL(query)) return [];
+        AutoComplete(query, (err, queries) => {
             if (err) {
                 this.client.logger.error('Unable to gather autocomplete data: %s', err);
                 return ctx.sendResults([]);
