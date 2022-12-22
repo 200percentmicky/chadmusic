@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "author": "mickykun-ar",
+  "author": "200percentmicky",
   "license": "MIT",
   "dependencies": {
     "@dice-roller/rpg-dice-roller": "^5.1.0",
