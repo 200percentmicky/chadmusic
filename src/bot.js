@@ -33,7 +33,7 @@ logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { IntentsBitField, ChannelType } = require('discord.js');
+const { ChannelType, GatewayIntentBits } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('../chadtube/dist').default;
 const { SpotifyPlugin } = require('@distube/spotify');
@@ -53,10 +53,10 @@ class WaveBot extends AkairoClient {
                 repliedUser: false
             },
             intents: [
-                IntentsBitField.Flags.Guilds,
-                IntentsBitField.Flags.GuildMessages,
-                IntentsBitField.Flags.GuildVoiceStates,
-                IntentsBitField.Flags.MessageContent // Temp: May be remove in favor of App Commands only.
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.GuildVoiceStates,
+                GatewayIntentBits.MessageContent
             ]
         });
 
