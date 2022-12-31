@@ -32,7 +32,7 @@ Absolutely! Follow the instructions below to get started.
 
 The bot requires the following to work:
 - ffmpeg
-- yt-dlp
+- yt-dlp (The bot should install this for you.)
 - git
 - Node.JS 16.9.0+
 - Python 3.7+ (for yt-dlp to work)
