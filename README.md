@@ -28,14 +28,26 @@ Cool open-source music bot that's based on a [forked](https://github.com/200perc
 * Profit!
 
 # All of this looks cool! Can I self host this?
-Sure, why not? Read the instructions below.
+Absolutely! Follow the instructions below to get started.
+
+The bot requires the following to work:
+- ffmpeg
+- yt-dlp
+- Node.JS 16.9.0+
+- Python 3.7+ (for yt-dlp to work)
+
+If you're running the bot on Linux, the following packages are required.
+- `make`
+- `gcc`
+- `clang`
+- `g++`
 
 ## Directions
-The bot requires Node.JS 16.0.0 to run. The latest LTS release is recommended.
 1. Clone this repo.
 2. Create a bot application **[here](https://discord.com/developers)**, and copy the bot's token.
 3. Fill out the `.env.example` file and rename it to `.env`
-4. Type `npm run build` to install all dependencies 
+4. Type `npm run build` to install all dependencies.
+    - It's safe to ignore any TypeScript errors that occur during the build. If any other errors occur during the process, please open an issue regarding this.
 
-5. Run `node index` to run the bot. (Consider using a process manager like PM2 to keep it running in the background.)
+5. Type `npm run bot` or `node index` to run the bot. (Consider using a process manager like PM2 to keep it running in the background.)
 
