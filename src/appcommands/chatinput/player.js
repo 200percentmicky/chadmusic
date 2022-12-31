@@ -54,15 +54,28 @@ class CommandPlayer extends SlashCommand {
                     description: 'Resumes the player, if the player is paused.'
                 },
                 {
-                    type: CommandOptionType.SUB_COMMAND,
+                    type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'volume',
                     description: "Manages the player's volume.",
                     options: [
                         {
-                            type: CommandOptionType.INTEGER,
+                            type: CommandOptionType.SUB_COMMAND,
                             name: 'set',
                             description: 'Sets the volume of the player.',
-                            min_value: 0
+                            options: [
+                                {
+                                    type: CommandOptionType.INTEGER,
+                                    name: 'value',
+                                    description: 'The value to set.',
+                                    min_value: 0,
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'view',
+                            description: 'Shows the current volume of the player.'
                         }
                     ]
                 },
@@ -352,7 +365,7 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const volume = queue.volume;
-            if (!ctx.options.volume.set) {
+            if (ctx.subcommands[1] === 'view') {
                 const volumeEmoji = () => {
                     const volumeIcon = {
                         50: '🔈',
@@ -364,7 +377,7 @@ class CommandPlayer extends SlashCommand {
                 };
                 return this.client.ui.ctxCustom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
             } else {
-                let newVolume = parseInt(ctx.options.volume.set);
+                let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');
                 if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200;
                 this.client.player.setVolume(guild.id, newVolume);
