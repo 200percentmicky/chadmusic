@@ -9,7 +9,7 @@
     "bot": "node index.js"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.9.0"
   },
   "author": "200percentmicky",
   "license": "MIT",
