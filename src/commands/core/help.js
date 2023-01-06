@@ -111,6 +111,7 @@ module.exports = class CommandHelp extends Command {
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
                     .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
+                    .setDescription(`**${command.description.text}**\n${command.description.details ?? ''}`)
                     .setTimestamp()
                     .setFooter({
                         text: '<Required> • [Optional]',
@@ -118,11 +119,6 @@ module.exports = class CommandHelp extends Command {
                     });
 
                 const commandFields = [];
-
-                commandFields.push({
-                    name: `${command.description.text}`,
-                    value: `${command.description.details ? command.description.details : '\u200b'}`
-                });
 
                 if (command.ownerOnly) commandFields.push({ name: '🚫 Owner Only', value: 'This command is for the bot owner only.' });
                 if (command.category === '🔞 NSFW') commandFields.push({ name: '🔞 NSFW Command', value: 'This command must be used in a NSFW channel.' });
@@ -134,12 +130,21 @@ module.exports = class CommandHelp extends Command {
                     });
                 }
                 // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
-                if (command.aliases.length > 1) commandFields.push({ name: 'Aliases', value: `${command.aliases}`, inline: true });
+                if (command.aliases.length > 1) commandFields.push({ name: 'Aliases', value: `${command.aliases.join('\n')}`, inline: true });
 
                 // This gonna be a bruh moment.
                 // It do be Yandere Simulator lol
-                if (command.userPermissions) var userPerms = await command.userPermissions.map(user => permissionsBits[BigInt(user)]).join(', ');
-                if (command.clientPermissions) var clientPerms = await command.clientPermissions.map(client => permissionsBits[BigInt(client)]).join(', ');
+                let userPerms = permissionsBits[command.userPermissions];
+                let clientPerms = permissionsBits[command.clientPermissions];
+
+                if (command.userPermissions instanceof Array) {
+                    userPerms = command.userPermissions.map(user => permissionsBits[BigInt(user)]).join(', ');
+                }
+
+                if (command.clientPermissions instanceof Array) {
+                    clientPerms = command.clientPermissions.map(client => permissionsBits[BigInt(client)]).join(', ');
+                }
+
                 const _uPerms = command.userPermissions ? `**User:** ${userPerms}\n` : '';
                 const _bPerms = command.clientPermissions ? `**Bot:** ${clientPerms}` : '';
                 if (userPerms || clientPerms) commandFields.push({ name: 'Permissions', value: `${_uPerms}${_bPerms}` });
