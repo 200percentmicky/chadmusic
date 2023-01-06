@@ -286,8 +286,8 @@ class CommandPlayer extends SlashCommand {
         case 'join': {
             const currentVc = this.client.vc.get(vc);
             if (currentVc) {
-                if (vc.id !== currentVc.id) return this.client.ui.ctx(ctx, 'error', 'I\'m currently binded to a different voice channel.');
-                else return this.client.ui.ctx(ctx, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
+                if (vc.id !== currentVc.id) return this.client.ui.reply(ctx, 'error', 'I\'m currently binded to a different voice channel.');
+                else return this.client.ui.reply(ctx, 'info', 'I\'m already in a voice channel. Let\'s get this party started!');
             } else {
                 try {
                     this.client.vc.join(vc);
@@ -295,7 +295,7 @@ class CommandPlayer extends SlashCommand {
                     const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                     if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
                     else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
-                    else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+                    else return this.client.ui.reply(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
                 }
 
                 if (vc.type === 'stage') {
@@ -310,14 +310,14 @@ class CommandPlayer extends SlashCommand {
                         await guild.members.me.voice.setSuppressed(false);
                     }
                 }
-                return this.client.ui.ctxCustom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
+                return this.client.ui.replyCustom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
             }
         }
 
         case 'leave': {
             const currentVc = this.client.vc.get(vc);
             if (!currentVc) {
-                return this.client.ui.ctx(ctx, 'error', 'I\'m not in any voice channel.');
+                return this.client.ui.reply(ctx, 'error', 'I\'m not in any voice channel.');
             }
 
             if (vc.members.size <= 2 || dj) {
@@ -325,7 +325,7 @@ class CommandPlayer extends SlashCommand {
                     this.client.player.stop(guild);
                 }
                 this.client.vc.leave(guild);
-                return this.client.ui.ctxCustom(ctx, '📤', 0xDD2E44, `Left <#${vc.id}>`);
+                return this.client.ui.replyCustom(ctx, '📤', 0xDD2E44, `Left <#${vc.id}>`);
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -337,9 +337,9 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
-                if (queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
+                if (queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
                 await this.client.player.pause(guild);
-                return this.client.ui.ctxCustom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
+                return this.client.ui.replyCustom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -351,9 +351,9 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
-                if (!queue.paused) return this.client.ui.ctx(ctx, 'warn', 'The player is not paused.');
+                if (!queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is not paused.');
                 await queue.resume();
-                return this.client.ui.ctxCustom(ctx, '▶', process.env.COLOR_INFO, 'Resuming playback...');
+                return this.client.ui.replyCustom(ctx, '▶', process.env.COLOR_INFO, 'Resuming playback...');
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -375,7 +375,7 @@ class CommandPlayer extends SlashCommand {
                     if (volume >= 175) return '🔊😭👌';
                     return volumeIcon[Math.round(volume / 50) * 50];
                 };
-                return this.client.ui.ctxCustom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
+                return this.client.ui.replyCustom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
             } else {
                 let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');
@@ -383,7 +383,7 @@ class CommandPlayer extends SlashCommand {
                 this.client.player.setVolume(guild.id, newVolume);
 
                 if (newVolume >= 201) {
-                    return this.client.ui.ctx(
+                    return this.client.ui.reply(
                         ctx,
                         'warn',
                         `Volume has been set to **${newVolume}%**.`,
@@ -391,7 +391,7 @@ class CommandPlayer extends SlashCommand {
                         'Volumes exceeding 200% may cause damage to self and equipment.'
                     );
                 } else {
-                    return this.client.ui.ctx(ctx, 'ok', `Volume has been set to **${newVolume}%**.`);
+                    return this.client.ui.reply(ctx, 'ok', `Volume has been set to **${newVolume}%**.`);
                 }
             }
         }
@@ -406,10 +406,10 @@ class CommandPlayer extends SlashCommand {
             const defaultVolume = this.client.settings.get(guild.id, 'defaultVolume', 100);
             if (volume >= 5000) {
                 this.client.player.setVolume(guild, defaultVolume);
-                return this.client.ui.ctx(ctx, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`);
+                return this.client.ui.reply(ctx, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`);
             } else {
                 this.client.player.setVolume(guild, earrape);
-                return this.client.ui.ctx(
+                return this.client.ui.reply(
                     ctx,
                     'warn',
                     `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,
@@ -429,9 +429,9 @@ class CommandPlayer extends SlashCommand {
                     const time = toMilliseconds(ctx.options.seek.time);
                     this.client.player.seek(guild, parseInt(Math.floor(time / 1000)));
                 } catch {
-                    this.client.ui.ctx(ctx, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
+                    this.client.ui.reply(ctx, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
                 }
-                return this.client.ui.ctx(ctx, 'info', `Seeking to \`${ctx.options.seek.time}\`...`);
+                return this.client.ui.reply(ctx, 'info', `Seeking to \`${ctx.options.seek.time}\`...`);
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -444,7 +444,7 @@ class CommandPlayer extends SlashCommand {
 
             if (vc.members.size <= 2 || dj) {
                 this.client.player.seek(guild, 0);
-                return this.client.ui.ctx(ctx, 'info', 'Restarting song...');
+                return this.client.ui.reply(ctx, 'info', 'Restarting song...');
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -463,7 +463,7 @@ class CommandPlayer extends SlashCommand {
                 };
 
                 await this.client.player.setRepeatMode(guild, mode);
-                return this.client.ui.ctx(ctx, 'ok', mode !== 0
+                return this.client.ui.reply(ctx, 'ok', mode !== 0
                     ? `Enabled repeat to **${selectedMode[mode]}**`
                     : 'Repeat mode has been disabled.'
                 );
@@ -480,7 +480,7 @@ class CommandPlayer extends SlashCommand {
             if (dj) {
                 const newBindChannel = await guild.channels.fetch(ctx.options.bindchannel.channel);
                 queue.textChannel = newBindChannel;
-                return this.client.ui.ctx(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
+                return this.client.ui.reply(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
             } else {
                 return this.client.ui.send(ctx, 'NO_DJ');
             }

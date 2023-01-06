@@ -125,7 +125,7 @@ class CommandQueue extends SlashCommand {
                 /* Finally, push the new queue into the player's queue. */
                 Array.prototype.push.apply(queue.songs, newQueue);
 
-                this.client.ui.ctx(ctx, 'ok', 'The order of the queue has been reversed.');
+                this.client.ui.reply(ctx, 'ok', 'The order of the queue has been reversed.');
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -136,7 +136,7 @@ class CommandQueue extends SlashCommand {
         case 'shuffle': {
             if (vc.members.size <= 2 || dj) {
                 this.client.player.shuffle(guild);
-                this.client.ui.ctx(ctx, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
+                this.client.ui.reply(ctx, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -158,7 +158,7 @@ class CommandQueue extends SlashCommand {
                     /* Modify queue to remove the entries. */
                     queue.songs.splice(start, n);
 
-                    this.client.ui.ctx(ctx, 'ok', `Removed **${n}** entries from the queue.`);
+                    this.client.ui.reply(ctx, 'ok', `Removed **${n}** entries from the queue.`);
                 } else {
                     /* Removing only one entry from the queue. */
                     const song = queue.songs[ctx.options.remove.index_or_start];
@@ -166,7 +166,7 @@ class CommandQueue extends SlashCommand {
                     /* Modify queue to remove the specified entry. */
                     queue.songs.splice(ctx.options.remove.index_or_start, 1);
 
-                    this.client.ui.ctx(ctx, 'ok', `Removed **${song.name}** from the queue.`);
+                    this.client.ui.reply(ctx, 'ok', `Removed **${song.name}** from the queue.`);
                 }
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
@@ -179,7 +179,7 @@ class CommandQueue extends SlashCommand {
             if (vc.members.size <= 2 || dj) {
                 // Clear everything from the queue.
                 queue.songs.splice(1, queue.songs.length);
-                this.client.ui.ctxCustom(ctx, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
+                this.client.ui.replyCustom(ctx, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
             }

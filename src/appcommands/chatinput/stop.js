@@ -60,7 +60,7 @@ class CommandStop extends SlashCommand {
         if (vc.members.size <= 2 || dj) {
             client.player.stop(guild);
             client.vc.leave(guild);
-            return this.client.ui.ctxCustom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
+            return this.client.ui.replyCustom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {
             return this.client.ui.send(ctx, 'NOT_ALONE');
         }

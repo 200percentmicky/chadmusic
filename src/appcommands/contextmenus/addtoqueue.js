@@ -45,7 +45,7 @@ class ContextMenuAddToQueue extends SlashCommand {
         const textChannel = this.client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.creator.ui.ctx(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.creator.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
@@ -61,7 +61,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 /* eslint-disable-next-line no-useless-escape */
                 if (list.includes(splitSearch[i].replace(/(^\\<+|\\>+$)/g, ''))) {
                     await ctx.defer(true);
-                    return this.client.ui.ctx(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                    return this.client.ui.reply(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
                 }
             }
         }
@@ -76,7 +76,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                 if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
                 else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
-                else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+                else return this.client.ui.reply(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 
             if (vc.type === 'stage') {
@@ -104,7 +104,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 if (maxQueueLimit) {
                     const queueMemberSize = queue.songs.filter(entries => entries.user.id === _member.user.id).length;
                     if (queueMemberSize >= maxQueueLimit) {
-                        return this.client.ui.ctx(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                        return this.client.ui.reply(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
                     }
                 }
             }
@@ -113,7 +113,7 @@ class ContextMenuAddToQueue extends SlashCommand {
         try {
             const requested = ctx.targetMessage.content;
 
-            if (!requested) return this.client.ui.ctx(ctx, 'error', 'Cannot add to the queue because the message doesn\'t contain any content to search for.');
+            if (!requested) return this.client.ui.reply(ctx, 'error', 'Cannot add to the queue because the message doesn\'t contain any content to search for.');
 
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
@@ -125,7 +125,7 @@ class ContextMenuAddToQueue extends SlashCommand {
             });
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
         }
     }
 }
