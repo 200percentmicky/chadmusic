@@ -67,7 +67,7 @@ class CommandSearch extends SlashCommand {
                 for (let i = 0; i < splitSearch.length; i++) {
                     if (list.includes(splitSearch[i])) {
                         await ctx.defer(true);
-                        return this.client.ui.ctx(ctx, 'no', 'Unable to search for your selection because your search contains a blocked phrase on this server.');
+                        return this.client.ui.reply(ctx, 'no', 'Unable to search for your selection because your search contains a blocked phrase on this server.');
                     }
                 }
             }
@@ -84,7 +84,7 @@ class CommandSearch extends SlashCommand {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
                 if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
                 else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
-                else return this.client.ui.ctx(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
+                else return this.client.ui.reply(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 
             if (vc.type === 'stage') {

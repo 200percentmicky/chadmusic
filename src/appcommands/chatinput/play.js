@@ -123,7 +123,7 @@ class CommandPlay extends SlashCommand {
         const textChannel = this.client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.creator.ui.ctx(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.creator.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
@@ -135,14 +135,14 @@ class CommandPlay extends SlashCommand {
         if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
             if (pornPattern(ctx.options.track?.query)) {
                 await ctx.defer(true);
-                return this.client.ui.ctx(ctx, 'no', "The URL you're requesting to play is not allowed.");
+                return this.client.ui.reply(ctx, 'no', "The URL you're requesting to play is not allowed.");
             }
 
             if (!dj) {
                 if (hasURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
                     const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
                     if (!allowLinks) {
-                        return this.client.ui.ctx(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+                        return this.client.ui.reply(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
                     }
                 }
 
@@ -152,7 +152,7 @@ class CommandPlay extends SlashCommand {
                     /* eslint-disable-next-line no-useless-escape */
                     if (list.includes(splitSearch[i].replace(/(^\\<+|\\>+$)/g, ''))) {
                         await ctx.defer(true);
-                        return this.client.ui.ctx(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                        return this.client.ui.reply(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
                     }
                 }
             }
@@ -170,7 +170,7 @@ class CommandPlay extends SlashCommand {
                     this.client.vc.join(vc);
                 } catch (err) {
                     if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
-                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
                 }
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
                 if (!stageMod) {
@@ -187,7 +187,7 @@ class CommandPlay extends SlashCommand {
                     this.client.vc.join(vc);
                 } catch (err) {
                     if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
-                    else return this.client.ui.ctx(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
                 }
             }
         } else {
@@ -203,7 +203,7 @@ class CommandPlay extends SlashCommand {
                 if (maxQueueLimit) {
                     const queueMemberSize = queue.songs.filter(entries => entries.user.id === _member.user.id).length;
                     if (queueMemberSize >= maxQueueLimit) {
-                        return this.client.ui.ctx(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                        return this.client.ui.reply(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
                     }
                 }
             }
@@ -222,7 +222,7 @@ class CommandPlay extends SlashCommand {
                     // To prevent overwrites, lock the command until the value is cleared.
                     if (await this.client.radio.get(guild.id)) {
                         await ctx.defer(true);
-                        return this.client.ui.ctx(ctx, 'warn', 'Request is still being processed. Please try again later.');
+                        return this.client.ui.reply(ctx, 'warn', 'Request is still being processed. Please try again later.');
                     }
 
                     requested = await iheart.streamURL(station.id);
@@ -266,7 +266,7 @@ class CommandPlay extends SlashCommand {
             return;
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.ctx(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
         }
     }
 }

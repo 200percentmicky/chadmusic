@@ -43,7 +43,7 @@ class CommandTest extends SlashCommand {
     async run (ctx) {
         switch (ctx.subcommands[0]) {
         case 'normal': {
-            return this.client.ui.ctx(ctx, 'ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗');
+            return this.client.ui.reply(ctx, 'ok', 'Yay! I\'m working as I should! What was I suppose to do again? 😗');
         }
 
         case 'error': {

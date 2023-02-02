@@ -353,77 +353,77 @@ module.exports = class CommandSettings extends SlashCommand {
 
         case 'remove': {
             await settings.set(ctx.guildID, this.client.defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
-            return this.client.ui.ctx(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
+            return this.client.ui.reply(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
         }
 
         case 'djrole': {
             await settings.set(ctx.guildID, ctx.options.djrole.role, 'djRole');
-            return this.client.ui.ctx(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
+            return this.client.ui.reply(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
         }
 
         case 'djmode': {
             await settings.set(ctx.guildID, ctx.options.djmode.toggle, 'djMode');
-            return this.client.ui.ctx(ctx, 'ok', 'DJ Mode has been enabled.');
+            return this.client.ui.reply(ctx, 'ok', 'DJ Mode has been enabled.');
         }
 
         case 'maxtime': {
             const time = toMilliseconds(ctx.options.maxtime.time);
-            if (isNaN(time)) return this.client.ui.ctx(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
+            if (isNaN(time)) return this.client.ui.reply(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
             await settings.set(ctx.guildID, time, 'maxTime');
-            return this.client.ui.ctx(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
+            return this.client.ui.reply(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
         }
 
         case 'maxqueuelimit': {
             await settings.set(ctx.guildID, ctx.options.maxqueuelimit.limit, 'maxQueueLimit');
-            return this.client.ui.ctx(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
+            return this.client.ui.reply(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
         }
 
         case 'allowfilters': {
             await settings.set(ctx.guildID, ctx.options.allowfilters.toggle, 'allowFilters');
-            return this.client.ui.ctx(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
+            return this.client.ui.reply(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
         }
 
         case 'allowexplicit': {
             await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
-            return this.client.ui.ctx(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
+            return this.client.ui.reply(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
         }
 
         case 'allowlinks': {
             await settings.set(ctx.guildID, ctx.options.allowlinks.toggle, 'allowLinks');
-            return this.client.ui.ctx(ctx, 'ok', `URLs can ${ctx.options.allowlinks.toggle ? 'now' : 'no longer'} be added to the queue.`);
+            return this.client.ui.reply(ctx, 'ok', `URLs can ${ctx.options.allowlinks.toggle ? 'now' : 'no longer'} be added to the queue.`);
         }
 
         case 'unlimitedvolume': {
             await settings.set(ctx.guildID, ctx.options.unlimitedvolume.toggle, 'allowFreeVolume');
-            return this.client.ui.ctx(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
+            return this.client.ui.reply(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
         }
 
         case 'thumbnailsize': {
             await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
-            return this.client.ui.ctx(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
+            return this.client.ui.reply(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
         }
 
         case 'defaultvolume': {
             await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
-            return this.client.ui.ctx(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
+            return this.client.ui.reply(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
         }
 
         case 'blocksong': {
             switch (ctx.subcommands[1]) {
             case 'add': {
                 if (this.client.settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
+                    return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
                 }
                 await this.client.settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
+                return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
             }
 
             case 'remove': {
                 if (!this.client.settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
-                    return this.client.ui.ctx(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
+                    return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
                 }
                 await this.client.settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
-                return this.client.ui.ctx(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
+                return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
             }
             }
             break;
@@ -431,13 +431,13 @@ module.exports = class CommandSettings extends SlashCommand {
 
         case 'textchannel': {
             await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
-            return this.client.ui.ctx(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
+            return this.client.ui.reply(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
         }
 
         // Message based commands only.
         case 'prefix': {
             await this.client.settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
-            return this.client.ui.ctx(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
+            return this.client.ui.reply(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
         }
         }
     }

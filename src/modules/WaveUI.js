@@ -29,7 +29,9 @@ const {
     BaseGuildTextChannel,
     GuildMember,
     ChannelType,
-    PermissionsBitField
+    PermissionsBitField,
+    ChatInputCommandInteraction,
+    InteractionResponse
 } = require('discord.js');
 const { CommandContext, Member } = require('slash-create');
 
@@ -92,104 +94,74 @@ const embedColor = {
 };
 
 /**
- * Allows you to create a window alert style UI utilizing `Discord.EmbedBuilder`, or a standard text message if the bot doesn't have the **Embed Links** permission.
+ * A UI function that replies to the user as an embed, or a standard text message if the bot
+ * doesn't have the **Embed Links** permission. Supported types are `ok` for success, `warn`
+ * for warnings, `error` for errors, `info` for information, and `no` for forbidden.
  *
- * @param {Message} msg A MessageResolvable
- * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
+ * @example <WaveUI>.reply(message, 'ok', 'The task failed successfully!')
+ * @param {(Message|CommandContext|ChatInputCommandInteraction)} msg The message object or an interaction.
+ * @param {string} type The type of interface to provide.
  * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the embed or message.
- * @param {string} footer [Optional] The footer of the embed.
- * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
- * @returns {Message} The message to send in the channel.
+ * @param {string} [title] The title of the embed or message.
+ * @param {string} [footer] The footer of the embed.
+ * @param {ActionRowBuilder[]} [buttons] The components to add to the message. Supports only `Discord.ButtonBuilder`.
+ * @param {boolean} [mention] Whether to mention the user.
+ * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
+ * @returns {(Message|InteractionResponse)} The message to send in the channel.
  */
-const say = (msg, type, description, title, footer, buttons) => {
-    if (!(msg instanceof Message)) throw new TypeError('Parameter "channel" must be an instance of "BaseGuildTextChannel".');
-
+const reply = (msg, type, description, title, footer, ephemeral, buttons, mention) => {
     /* The emoji of the embed */
-    // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-    const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
-    const embedEmoji = {
-        ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-        warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-        error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-        info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-        no: emojiPerms ? process.env.EMOJI_NO : '🚫'
+    let embedEmoji = {
+        ok: process.env.EMOJI_OK ?? '✅',
+        warn: process.env.EMOJI_WARN ?? '⚠',
+        error: process.env.EMOJI_ERROR ?? '❌',
+        info: process.env.EMOJI_INFO ?? 'ℹ',
+        no: process.env.EMOJI_NO ?? '🚫'
     };
 
-    /* No embed */
-    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
     const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-    if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
-        return msg.channel.send({
-            embeds: [embed],
-            components: buttons || []
-        });
-    } else {
-        if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
-            return msg.channel.send({
-                content: stringUI(embedEmoji[type], title || null, description || null),
-                components: buttons || []
-            });
-        } else {
-            return msg.channel.send({
-                embeds: [embed],
-                components: buttons || []
-            });
-        }
-    }
-};
-
-/**
- * Similar to `Message.say()` but replies to the user instead.
- *
- * @param {Message} msg A MessageResolvable
- * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
- * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the embed or message.
- * @param {string} footer [Optional] The footer of the embed.
- * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
- * @returns {Message} The message to send in the channel.
- */
-const reply = (msg, type, description, title, footer, buttons) => {
-    if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
-
-    /* The emoji of the embed */
-    // If the bot doesn't have permission to use external emojis, then the default emojis will be used.
-    const emojiPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
-    const embedEmoji = {
-        ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-        warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-        error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-        info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-        no: emojiPerms ? process.env.EMOJI_NO : '🚫'
-    };
-
-    /* No embed */
-    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-    if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
-        return msg.reply({
+    if (msg instanceof CommandContext) {
+        return msg.send({
             embeds: [embed],
             components: buttons || [],
-            allowedMentions: {
-                repliedUser: true
-            }
+            ephemeral: ephemeral ?? false
         });
     } else {
-        if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
+        const client = msg.channel.client;
+        const emojiPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
+        embedEmoji = {
+            ok: emojiPerms ? process.env.EMOJI_OK : '✅',
+            warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
+            error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
+            info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
+            no: emojiPerms ? process.env.EMOJI_NO : '🚫'
+        };
+
+        if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
+            return msg.reply({
+                embeds: [embed],
+                components: buttons || [],
+                ephemeral: ephemeral ?? false,
+                allowedMentions: {
+                    repliedUser: mention ?? false
+                }
+            });
+        } else if (!msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
             return msg.reply({
                 content: stringUI(embedEmoji[type], title || null, description || null),
                 components: buttons || [],
+                ephemeral: ephemeral ?? false,
                 allowedMentions: {
-                    repliedUser: false
+                    repliedUser: mention ?? false
                 }
             });
         } else {
             return msg.reply({
                 embeds: [embed],
                 components: buttons || [],
+                ephemeral: ephemeral ?? false,
                 allowedMentions: {
-                    repliedUser: false
+                    repliedUser: mention ?? false
                 }
             });
         }
@@ -197,16 +169,14 @@ const reply = (msg, type, description, title, footer, buttons) => {
 };
 
 /**
- * A UI element that returns the overall usage of the command if no arguments were provided.
+ * A UI function that returns the overall usage of the command if no arguments were provided.
  *
- * @example this.client.ui.usage(message, message, 'play <url|search>');
+ * @example <WaveUI>.usage(message, 'play <url|search>');
  * @param {Message} msg A MessageResolvable | `Discord.Message`
  * @param {string} syntax The usage of the command
  * @returns {Message} The embed containg the usage of the command.
  */
 const usage = (msg, syntax) => {
-    if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
-
     const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
     const embed = new EmbedBuilder()
         .setColor(process.env.COLOR_INFO)
@@ -220,38 +190,54 @@ const usage = (msg, syntax) => {
 };
 
 /**
- * A custom varient of `<Message>.say()` that allows you to input a custom emoji. If the bot has the **Embed Links** permission, a custom color can be provided to the embed.
+ * A UI function that lets you reply with a custom embed with any emoji or color of your choosing.
+ * If the bot doesn't have the permission to **Embed Links**, you can only apply a custom emoji.
  *
  * @param {Message} msg A MessageResolvable | `Discord.Message`
  * @param {string} emoji The emoji of the message.
- * @param {number} color [Optional] The color of the embed, if the bot has the **Embed Links** permission.
+ * @param {number} [color] The color of the embed, if the bot has the **Embed Links** permission.
  * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the message.
- * @param {string} footer [Optional] The footer of the message.
- * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
- * @returns {Message} The message to reply to the user.
+ * @param {string} [title] The title of the message.
+ * @param {string} [footer] The footer of the message.
+ * @param {ActionRowBuilder[]} [buttons] The components to add to the message. Supports only `Discord.ButtonBuilder`.
+ * @param {boolean} [mention] Whether to mention the user.
+ * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
+ * @returns {(Message|InteractionResponse)} The message to reply to the user.
  */
-const custom = (msg, emoji, color, description, title, footer, buttons) => {
-    if (!(msg instanceof Message)) throw new TypeError('Parameter "msg" must be an instance of "Message".');
-
+const custom = (msg, emoji, color, description, title, footer, ephemeral, buttons, mention) => {
     const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
-    if (msg.channel.type === ChannelType.DM) {
-        return msg.reply({
+    if (msg instanceof CommandContext) {
+        return msg.send({
             embeds: [embed],
-            allowedMentions: {
-                repliedUser: false
-            }
+            components: buttons || [],
+            ephemeral: ephemeral ?? false
         });
     } else {
-        if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
-            return msg.reply(stringUI(emoji || null, title || null, description || null)
-                , { allowedMentions: { repliedUser: false } });
+        if (msg.channel.type === ChannelType.DM) {
+            return msg.reply({
+                embeds: [embed],
+                components: buttons || [],
+                ephemeral: ephemeral ?? false,
+                allowedMentions: {
+                    repliedUser: mention ?? false
+                }
+            });
+        } else if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
+            return msg.reply({
+                content: stringUI(emoji || null, title || null, description || null),
+                components: buttons || [],
+                ephemeral: ephemeral ?? false,
+                allowedMentions: {
+                    repliedUser: mention ?? false
+                }
+            });
         } else {
             return msg.reply({
                 embeds: [embed],
                 components: buttons || [],
+                ephemeral: ephemeral ?? false,
                 allowedMentions: {
-                    repliedUser: false
+                    repliedUser: mention ?? false
                 }
             });
         }
@@ -259,64 +245,7 @@ const custom = (msg, emoji, color, description, title, footer, buttons) => {
 };
 
 /**
- * Allows you to create a window alert style UI utilizing `Discord.EmbedBuilder`, or a standard text message if the bot doesn't have the **Embed Links** permission.
- *
- * @param {CommandContext} interaction The incoming interaction.
- * @param {BaseGuildTextChannel} channel The text channel of the interaction.
- * @param {string} type The type of interface to provide. Supported are `ok` for success, `warn` for warnings, `error` for errors, `info` for information, and `no` for forbidden.
- * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the embed or message.
- * @param {string} footer [Optional] The footer of the embed.
- * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
- * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
- * @returns {Message} The message to send in the channel.
- */
-const ctx = (interaction, type, description, title, footer, ephemeral, buttons) => {
-    /* The emoji of the embed */
-    const embedEmoji = {
-        ok: process.env.EMOJI_OK ?? '✅',
-        warn: process.env.EMOJI_WARN ?? '⚠',
-        error: process.env.EMOJI_ERROR ?? '❌',
-        info: process.env.EMOJI_INFO ?? 'ℹ',
-        no: process.env.EMOJI_NO ?? '🚫'
-    };
-
-    /* No embed */
-    // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-    const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
-    return interaction.send({
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: ephemeral
-    });
-};
-
-/**
- * A custom varient of `<Message>.say()` that allows you to input a custom emoji. If the bot has the **Embed Links** permission, a custom color can be provided to the embed.
- *
- * @param {CommandInteraction} interaction The incoming interaction.
- * @param {string} emoji The emoji of the message.
- * @param {number} color [Optional] The color of the embed, if the bot has the **Embed Links** permission.
- * @param {string} description The overall message.
- * @param {string} title [Optional] The title of the message.
- * @param {string} footer [Optional] The footer of the message.
- * @param {boolean} ephemeral Whether the response should be sent as an ephemeral message.
- * @param {ActionRowBuilder[]} buttons [Optional] The components to add to the message. Supports only `Discord.ButtonBuilder`.
- * @returns {Message} The message to reply to the user.
- */
-const ctxCustom = (interaction, emoji, color, description, title, footer, ephemeral, buttons) => { // Temp name.
-    const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
-    return interaction.send({
-        embeds: [embed],
-        components: buttons || [],
-        ephemeral: ephemeral
-    });
-};
-
-/**
- * Pre-configured messages for common prompts throughout the bot.
- *
- * DJ_MODE, NO_DJ, FILTER_NOT_APPLIED, FILTERS_NOT_ALLOWED, NOT_ALONE, NOT_PLAYING, NOT_IN_VC, ALREADY_SUMMONED_ELSEWHERE, MISSING_CONNECT, MISSING_SPEAK, WRONG_TEXT_CHANNEL_MUSIC, OWNER_ONLY, NSFW_ONLY
+ * Contains pre-configured messages for common prompts throughout the bot.
  *
  * @param {Message|CommandContext} msg The overall message, or an interaction.
  * @param {string} prompt The prompt to provide in the message.
@@ -423,4 +352,4 @@ const recordError = async (client, command, title, error) => { // TODO: Remove '
     return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
 };
 
-module.exports = { say, reply, usage, custom, send, ctx, ctxCustom, recordError };
+module.exports = { reply, usage, custom, send, recordError };

@@ -27,13 +27,22 @@ module.exports = class CommandReload extends Command {
             aliases: ['reload'],
             category: '💻 Core',
             description: {
-                text: 'Reloads everything without restarting the bot.'
+                text: 'Reloads everything without restarting the bot.',
+                usage: '[reload_slash]',
+                details: '`[reload_slash]` Whether to reload the application\'s slash commands.'
             },
+            args: [
+                {
+                    id: 'reload_slash',
+                    match: 'text',
+                    default: true
+                }
+            ],
             ownerOnly: true
         });
     }
 
-    async exec (message) {
+    async exec (message, args) {
         let resultEmoji = '✅';
 
         // Akairo Modules
@@ -55,27 +64,30 @@ module.exports = class CommandReload extends Command {
         }
 
         // Application Commands
-        // Now to resync all slash commands and reload them.
-        try {
-            await this.client.creator.syncCommandsAsync({
-                deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
-                skipGuildErrors: true,
-                syncGuilds: true,
-                syncPermissions: true
-            });
-        } catch (err) {
-            message.channel.send({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
-            resultEmoji = '❌';
-        }
+        // Now to resync all slash commands and reload them, if one chooses to.
 
-        await this.client.creator.commands.forEach(cmd => {
+        if (args.reloadslash) {
             try {
-                cmd.reload();
+                await this.client.creator.syncCommandsAsync({
+                    deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
+                    skipGuildErrors: true,
+                    syncGuilds: true,
+                    syncPermissions: true
+                });
             } catch (err) {
-                message.channel.send({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                message.channel.send({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
                 resultEmoji = '❌';
             }
-        });
+
+            await this.client.creator.commands.forEach(cmd => {
+                try {
+                    cmd.reload();
+                } catch (err) {
+                    message.channel.send({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    resultEmoji = '❌';
+                }
+            });
+        }
 
         return message.react(resultEmoji);
     }

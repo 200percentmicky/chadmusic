@@ -86,9 +86,9 @@ class CommandGrab extends SlashCommand {
 
         try {
             await _member.user.send({ embeds: [embed] });
-            return this.client.ui.ctx(ctx, 'ok', 'Saved! Check your DMs. 📩');
+            return this.client.ui.reply(ctx, 'ok', 'Saved! Check your DMs. 📩');
         } catch {
-            return this.client.ui.ctx(ctx, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
+            return this.client.ui.reply(ctx, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
         }
     }
 }

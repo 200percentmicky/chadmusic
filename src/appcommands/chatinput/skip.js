@@ -89,10 +89,10 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                 }
                 this.client.player.skip(guild);
-                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
             } else {
                 this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -107,10 +107,10 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 try {
                     this.client.player.jump(guild, parseInt(ctx.options.jump.index));
-                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
                     return channel.sendTyping();
                 } catch {
-                    return this.client.ui.ctx(ctx, 'error', 'Not a valid entry in the queue.');
+                    return this.client.ui.reply(ctx, 'error', 'Not a valid entry in the queue.');
                 }
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
@@ -122,16 +122,16 @@ class CommandSkip extends SlashCommand {
                 const vcSize = Math.floor(vc.members.size / 2);
                 const neededVotes = queue.votes.length >= vcSize;
                 const votesLeft = Math.floor(vcSize - queue.votes.length);
-                if (queue.votes.includes(member.user.id)) return this.client.ui.ctx(ctx, 'warn', 'You already voted to skip.');
+                if (queue.votes.includes(member.user.id)) return this.client.ui.reply(ctx, 'warn', 'You already voted to skip.');
                 queue.votes.push(member.user.id);
                 if (neededVotes) {
                     queue.votes = [];
                     if (!queue.songs[1]) {
                         this.client.player.stop(guild);
-                        return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                        return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                     }
                     this.client.player.skip(guild);
-                    await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
                     return channel.sendTyping();
                 } else {
                     const embed = new EmbedBuilder()
@@ -147,10 +147,10 @@ class CommandSkip extends SlashCommand {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    return this.client.ui.ctxCustom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
                 }
                 this.client.player.skip(guild);
-                await this.client.ui.ctxCustom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
                 return channel.sendTyping();
             }
         }
