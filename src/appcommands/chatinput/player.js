@@ -310,7 +310,7 @@ class CommandPlayer extends SlashCommand {
                         await guild.members.me.voice.setSuppressed(false);
                     }
                 }
-                return this.client.ui.replyCustom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
+                return this.client.ui.custom(ctx, '📥', 0x77B255, `Joined <#${vc.id}>`);
             }
         }
 
@@ -325,7 +325,7 @@ class CommandPlayer extends SlashCommand {
                     this.client.player.stop(guild);
                 }
                 this.client.vc.leave(guild);
-                return this.client.ui.replyCustom(ctx, '📤', 0xDD2E44, `Left <#${vc.id}>`);
+                return this.client.ui.custom(ctx, '📤', 0xDD2E44, `Left <#${vc.id}>`);
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -339,7 +339,7 @@ class CommandPlayer extends SlashCommand {
             if (vc.members.size <= 2 || dj) {
                 if (queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
                 await this.client.player.pause(guild);
-                return this.client.ui.replyCustom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
+                return this.client.ui.custom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -353,7 +353,7 @@ class CommandPlayer extends SlashCommand {
             if (vc.members.size <= 2 || dj) {
                 if (!queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is not paused.');
                 await queue.resume();
-                return this.client.ui.replyCustom(ctx, '▶', process.env.COLOR_INFO, 'Resuming playback...');
+                return this.client.ui.custom(ctx, '▶', process.env.COLOR_INFO, 'Resuming playback...');
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
@@ -375,7 +375,7 @@ class CommandPlayer extends SlashCommand {
                     if (volume >= 175) return '🔊😭👌';
                     return volumeIcon[Math.round(volume / 50) * 50];
                 };
-                return this.client.ui.replyCustom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
+                return this.client.ui.custom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
             } else {
                 let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');

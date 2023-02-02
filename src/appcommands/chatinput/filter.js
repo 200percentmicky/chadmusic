@@ -313,7 +313,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
                 pushFormatFilter(queue, 'Bass Boost', ctx.options.bass.db !== 0 ? `Gain: \`${ctx.options.bass.db}dB\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
                     ? 'Off'
                     : `Gain: \`${ctx.options.bass.db}dB\``
                 }`);
@@ -328,7 +328,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
                 pushFormatFilter(queue, 'Tremolo', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${f === 0
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${f === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
@@ -343,7 +343,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
                 pushFormatFilter(queue, 'Vibrato', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${f === 0
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${f === 0
                     ? 'Off'
                     : `Depth \`${d}\` at \`${f}Hz\``
                 }`);
@@ -360,7 +360,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
                 pushFormatFilter(queue, 'Reverse', reverse ? 'Enabled' : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
                     ? 'On'
                     : 'Off'
                 }`);
@@ -374,7 +374,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
                 }
                 pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
             }
 
             case 'pitch': {
@@ -385,7 +385,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
                 }
                 pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
             }
 
             case 'crusher': {
@@ -398,7 +398,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
                 pushFormatFilter(queue, 'Crusher', samples !== 0 ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
             }
 
             case 'crystalize': {
@@ -409,7 +409,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
                 pushFormatFilter(queue, 'Crystalize', intensity !== 0 ? `Intensity \`${intensity}\`` : 'Off');
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
             }
 
             case 'customfilter': {
@@ -420,7 +420,7 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
                 }
                 pushFormatFilter(queue, 'Custom Filter', custom === 'OFF'.toLowerCase() ? 'Off' : custom);
-                return this.client.ui.replyCustom(ctx, '📢', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
             }
             }
         } else {
