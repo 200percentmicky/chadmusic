@@ -59,6 +59,16 @@ module.exports = class CommandEval extends Command {
     }
 
     async exec (message, args) {
+        // Safety measure.
+        if (!process.env.USE_EVAL) {
+            return message.channel.send(commonTags.oneLine`
+                ${process.env.EMOJI_INFO} The \`eval\` command is currently disabled. If you need to use this command, you can
+                enable it through the bot's environment variables by setting **USE_EVAL** to \`true\`.` + '\n' + commonTags.oneLine`
+                ${process.env.EMOJI_WARN} Do not enable this command unless you know what you're doing. If someone is telling you
+                to enable it to have you run something, you're most likely being scammed.
+            `);
+        }
+
         const t1 = process.hrtime();
         const clean = text => {
             if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); } else { return text; }
@@ -77,7 +87,7 @@ module.exports = class CommandEval extends Command {
             let evaled = await eval(code);
 
             if (typeof evaled !== 'string') {
-                evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
+                evaled = require('util').inspect(evaled, { depth: 5, sorted: true, maxArrayLength: 5 });
             }
 
             message.channel.sendTyping();
@@ -85,21 +95,16 @@ module.exports = class CommandEval extends Command {
             const t2 = process.hrtime(t1);
             const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
-            if (code.includes('.token')) {
-                await message.react(process.env.REACTION_WARN);
-                try {
-                    message.author.send(clean(evaled));
-                } catch (err) {
-                    if (err.name === 'DiscordAPIError') return;
-                }
-                return this.client.logger.info('Took %s ms. to complete.\n%d', end, clean(evaled));
+            let result = clean(evaled);
+
+            if (code.match(/\.token/gmi)) {
+                result = 'REACTED';
             } else {
-                const result = clean(evaled);
                 if (result.length > 2000) {
                     try {
                         const buffer = Buffer.from(`// ✅ Evaluated in ${end} ms.\n${result}`);
-                        const file = new Discord.MessageAttachment(buffer, 'eval_output.json');
-                        if (!message.channel.permissionsFor(this.client.user.id).has(Discord.Permissions.FLAGS.ATTACH_FILES)) {
+                        const file = new Discord.AttachmentBuilder(buffer, { name: 'eval.txt' });
+                        if (!message.channel.permissionsFor(this.client.user.id).has(Discord.PermissionsBitField.Flags.AttachFiles)) {
                             try {
                                 await message.author.send({ files: [file] });
                             } catch {
