@@ -17,6 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
+const { stripIndents } = require('common-tags');
 
 class CommandPing extends SlashCommand {
     constructor (creator) {
@@ -29,7 +30,15 @@ class CommandPing extends SlashCommand {
     }
 
     async run (ctx) {
-        return ctx.send(`✅ **Pong!** \`${Math.round(this.client.ws.ping)}ms.\``);
+        const ping = await ctx.send(`${process.env.EMOJI_LOADING} Ping?`);
+
+        const timeDiff = ping.invokedAt - ctx.invokedAt;
+
+        return ctx.editOriginal(stripIndents`
+            ${process.env.EMOJI_OK} **Pong!**
+            :heartbeat: \`${Math.round(this.client.ws.ping)}ms.\`
+            :arrows_counterclockwise: \`${timeDiff}ms.\``
+        );
     }
 }
 
