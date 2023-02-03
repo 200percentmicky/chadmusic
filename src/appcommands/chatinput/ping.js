@@ -30,14 +30,9 @@ class CommandPing extends SlashCommand {
     }
 
     async run (ctx) {
-        const ping = await ctx.send(`${process.env.EMOJI_LOADING} Ping?`);
-
-        const timeDiff = ping.invokedAt - ctx.invokedAt;
-
         return ctx.editOriginal(stripIndents`
             ${process.env.EMOJI_OK} **Pong!**
-            :heartbeat: \`${Math.round(this.client.ws.ping)}ms.\`
-            :arrows_counterclockwise: \`${timeDiff}ms.\``
+            :heartbeat: \`${Math.round(this.client.ws.ping)}ms.\``
         );
     }
 }
