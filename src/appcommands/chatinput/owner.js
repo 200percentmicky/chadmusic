@@ -64,25 +64,8 @@ class CommandOwner extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
-                    name: 'guilds',
-                    description: 'Shows how many guilds the client is a member of.',
-                    options: [
-                        {
-                            type: CommandOptionType.STRING,
-                            name: 'leave',
-                            description: 'If provided, causes the client to leave the guild.'
-                        }
-                    ]
-                },
-                {
-                    type: CommandOptionType.SUB_COMMAND,
                     name: 'reload',
                     description: 'Reloads everything without restarting the bot.'
-                },
-                {
-                    type: CommandOptionType.SUB_COMMAND,
-                    name: 'debug',
-                    description: 'Shows debug info.'
                 }
             ],
             deferEphemeral: true
@@ -146,48 +129,6 @@ class CommandOwner extends SlashCommand {
                 await ctx.send(`\`\`\`js\n// ❌ Error during eval\n${err.name}: ${err.message}\`\`\``);
                 this.client.logger.error('[eval] Error during eval: %s', err);
             }
-            break;
-        }
-
-        case 'guilds': {
-            await ctx.defer(true);
-            if (ctx.options.guilds.leave) {
-                let guild;
-                try {
-                    guild = await this.client.guilds.fetch(ctx.options.guilds.leave);
-                } catch {
-                    return ctx.send(`:x: The bot is not a member of guild ID \`${ctx.options.guilds.leave}\` or the ID provided is not a valid guild ID.`);
-                }
-
-                const yesLeave = new Discord.ButtonBuilder()
-                    .setStyle(ButtonStyle.Danger)
-                    .setLabel('Leave Guild')
-                    .setEmoji('🚪')
-                    .setCustomId('confirm_guild_leave');
-
-                const buttonRow = new Discord.ActionRowBuilder()
-                    .addComponents(yesLeave);
-
-                await ctx.send(oneLine`
-                    ⚠ Are you sure you want me to leave guild ID \`${ctx.options.guilds.leave}\`? Please confirm that you
-                    want me to leave this guild. Otherwise, close this message to cancel.`, {
-                    components: [buttonRow]
-                });
-
-                ctx.registerComponent('confirm_guild_leave', async (btnCtx) => {
-                    try {
-                        await guild.leave();
-                        return btnCtx.editParent(`ℹ Successfully left guild ID \`${ctx.options.guilds.leave}\``, { components: [] });
-                    } catch (err) {
-                        return btnCtx.editParent(`❌ Error leaving guild: \`${err.name}: ${err.message}\``, { components: [] });
-                    }
-                }, 300 * 1000);
-            } else {
-                const guilds = await this.client.guilds.cache;
-                const guildList = guilds.map(m => `${m.name} (${m.id}) :: ${m.members.cache.size} members`).join('\n');
-                return ctx.send(`ℹ This client is currently a member in **${guilds.size}** guild(s).\n\`\`\`js\n${guildList}\`\`\``);
-            }
-
             break;
         }
 
