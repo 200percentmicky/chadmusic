@@ -59,7 +59,7 @@ module.exports = class CommandReload extends Command {
             await this.client.inhibitors.loadAll();
             await this.client.listeners.loadAll();
         } catch (err) {
-            message.channel.send({ content: `❌ Error reloading modules: \`${err.message}\`` });
+            message.reply({ content: `❌ Error reloading modules: \`${err.message}\`` });
             resultEmoji = '❌';
         }
 
@@ -75,7 +75,7 @@ module.exports = class CommandReload extends Command {
                     syncPermissions: true
                 });
             } catch (err) {
-                message.channel.send({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
+                message.reply({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
                 resultEmoji = '❌';
             }
 
@@ -83,7 +83,7 @@ module.exports = class CommandReload extends Command {
                 try {
                     cmd.reload();
                 } catch (err) {
-                    message.channel.send({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    message.reply({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
                     resultEmoji = '❌';
                 }
             });

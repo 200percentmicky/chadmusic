@@ -156,7 +156,7 @@ module.exports = class CommandHelp extends Command {
         } */
                 commandEmbed.addFields(commandFields);
 
-                return message.channel.send({ embeds: [commandEmbed] });
+                return message.reply({ embeds: [commandEmbed] });
             } else return;
         }
 
@@ -184,6 +184,6 @@ module.exports = class CommandHelp extends Command {
             helpFields.push(field);
             helpEmbed.addFields(helpFields);
         });
-        return message.channel.send({ embeds: [helpEmbed] });
+        return message.reply({ embeds: [helpEmbed] });
     }
 };

@@ -61,7 +61,7 @@ module.exports = class CommandEval extends Command {
     async exec (message, args) {
         // Safety measure.
         if (!process.env.USE_EVAL) {
-            return message.channel.send(commonTags.oneLine`
+            return message.reply(commonTags.oneLine`
                 ${process.env.EMOJI_INFO} The \`eval\` command is currently disabled. If you need to use this command, you can
                 enable it through the bot's environment variables by setting **USE_EVAL** to \`true\`.` + '\n' + commonTags.oneLine`
                 ${process.env.EMOJI_WARN} Do not enable this command unless you know what you're doing. If someone is telling you
@@ -108,21 +108,21 @@ module.exports = class CommandEval extends Command {
                             try {
                                 await message.author.send({ files: [file] });
                             } catch {
-                                return message.channel.send(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
+                                return message.reply(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
                             }
                         }
-                        return message.channel.send({ files: [file], components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
+                        return message.reply({ files: [file], components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
                     } catch {
-                        return message.channel.send(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
+                        return message.reply(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
                     } finally {
                         this.client.logger.info('Took %s ms. to complete.\n%s', end, clean(evaled));
                     }
                 } else {
-                    return message.channel.send({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
+                    return message.reply({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
                 }
             }
         } catch (err) {
-            message.channel.send({ content: `\`\`\`js\n${err.name}: ${err.message}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
+            message.reply({ content: `\`\`\`js\n${err.name}: ${err.message}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });
         }
     }
 };
