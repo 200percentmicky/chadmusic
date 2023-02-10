@@ -31,12 +31,17 @@ module.exports = class CommandSkipTo extends Command {
                 details: '`<int:queue_entry>` The number of the queue entry to skip to. Skips all other entries of the queue.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'index',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
@@ -58,24 +63,12 @@ module.exports = class CommandSkipTo extends Command {
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        // For breaking use only.
-        // this.client.player.skip(message)
-        // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
-
-        /*
-    if (args[1] === ('--force' || '-f')) {
-      if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
-      this.client.player.skip(message)
-      return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
-    }
-    */
-
         const queue = this.client.player.getQueue(message);
-        const song = queue.songs[args[1]];
+        const song = queue.songs[args.index];
 
         if (vc.members.size <= 2) {
             try {
-                this.client.player.jump(message, parseInt(args[1]));
+                this.client.player.jump(message, parseInt(args.index));
                 await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
                 return message.channel.sendTyping();
             } catch {
@@ -84,7 +77,7 @@ module.exports = class CommandSkipTo extends Command {
         } else {
             if (dj) {
                 try {
-                    this.client.player.jump(message, parseInt(args[1]));
+                    this.client.player.jump(message, parseInt(args.index));
                     await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
                     return message.channel.sendTyping();
                 } catch {
