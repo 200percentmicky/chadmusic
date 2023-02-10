@@ -49,7 +49,7 @@ module.exports = class CommandResetData extends Command {
 
         const msg = await this.client.ui.reply(message, 'warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow]);
 
-        const filter = interaction => interaction.user.id === message.author.id;
+        const filter = interaction => interaction.user.id === message.member.user.id;
 
         const collector = await msg.createMessageComponentCollector({
             filter,

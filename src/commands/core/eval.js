@@ -106,7 +106,7 @@ module.exports = class CommandEval extends Command {
                         const file = new Discord.AttachmentBuilder(buffer, { name: 'eval.txt' });
                         if (!message.channel.permissionsFor(this.client.user.id).has(Discord.PermissionsBitField.Flags.AttachFiles)) {
                             try {
-                                await message.author.send({ files: [file] });
+                                await message.member.user.send({ files: [file] });
                             } catch {
                                 return message.reply(':no_entry_sign: You are not accepting DMs. Check the console or logs for the output.');
                             }

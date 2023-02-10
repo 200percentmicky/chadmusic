@@ -144,7 +144,7 @@ module.exports = class CommandSearch extends Command {
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
-                iconURL: message.author.avatarURL({ dynamic: true })
+                iconURL: message.member.user.avatarURL({ dynamic: true })
             })
             .setDescription(`${resultsFormattedList}`)
             .setFooter({
@@ -217,7 +217,7 @@ module.exports = class CommandSearch extends Command {
         .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
         .setAuthor({
           name: 'Which track do you wanna play?',
-          iconURL: message.author.avatarURL({ dynamic: true })
+          iconURL: message.member.user.avatarURL({ dynamic: true })
         })
         .setDescription(`${resultMap}`)
         .setFooter({
@@ -227,7 +227,7 @@ module.exports = class CommandSearch extends Command {
       // TODO: Replace collector for a select menu instead.
 
       message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
-        const filter = m => m.author.id === message.author.id;
+        const filter = m => m.author.id === message.member.user.id;
         const collector = message.channel.createMessageCollector({
           filter,
           max: 1,

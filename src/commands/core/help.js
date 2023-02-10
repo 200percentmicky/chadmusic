@@ -115,7 +115,7 @@ module.exports = class CommandHelp extends Command {
                     .setTimestamp()
                     .setFooter({
                         text: '<Required> • [Optional]',
-                        iconURL: message.author.avatarURL({ dynamic: true })
+                        iconURL: message.member.user.avatarURL({ dynamic: true })
                     });
 
                 const commandFields = [];

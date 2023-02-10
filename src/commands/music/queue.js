@@ -108,7 +108,7 @@ module.exports = class CommandQueue extends Command {
             .setTimestamp()
             .setFooter({
                 text: `${songs.length > 0 ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                iconURL: message.author.avatarURL({ dynamic: true })
+                iconURL: message.member.user.avatarURL({ dynamic: true })
             });
 
         /* Creating the buttons to interact with the queue. */
@@ -222,7 +222,7 @@ module.exports = class CommandQueue extends Command {
                 queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
                 queueEmbed.setFooter({
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
-                    iconURL: message.author.avatarURL({ dynamic: true })
+                    iconURL: message.member.user.avatarURL({ dynamic: true })
                 });
 
                 await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });

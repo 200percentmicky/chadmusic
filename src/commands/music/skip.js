@@ -93,7 +93,7 @@ module.exports = class CommandSkip extends Command {
                     .setDescription('⏭ Skipping?')
                     .setFooter({
                         text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
-                        icon_url: message.author.avatarURL({ dynamic: true })
+                        icon_url: message.member.user.avatarURL({ dynamic: true })
                     });
                 return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
             }
