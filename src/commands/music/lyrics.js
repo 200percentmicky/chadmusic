@@ -55,7 +55,7 @@ module.exports = class CommandLyrics extends Command {
         const query = queue?.songs[0]?.name ?? args.query;
 
         if (!queue && !query) {
-            return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. You can `lyrics [query]` to manually search for lyrics.');
+            return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. You can use `lyrics [query]` to manually search for lyrics.');
         }
 
         message.channel.sendTyping();
