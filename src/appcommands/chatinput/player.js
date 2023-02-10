@@ -21,6 +21,7 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { handleCommand } = require('../../modules/handleCommand');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -126,6 +127,18 @@ class CommandPlayer extends SlashCommand {
                                 }
                             ],
                             required: true
+                        }
+                    ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'lyrics',
+                    description: 'Retrieves lyrics from the playing track or from search query.',
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'query',
+                            description: 'The search query to find lyrics.'
                         }
                     ]
                 },
@@ -470,6 +483,12 @@ class CommandPlayer extends SlashCommand {
             } else {
                 return this.client.ui.send(ctx, 'NOT_ALONE');
             }
+        }
+
+        case 'lyrics': {
+            return handleCommand(this.client, ctx, 'lyrics', {
+                query: ctx.options.lyrics.query
+            });
         }
 
         case 'bindchannel': {
