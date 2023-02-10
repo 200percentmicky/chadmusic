@@ -17,6 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
+const { CommandContext } = require('slash-create');
 
 module.exports = class ListenerClientCommandStarted extends Listener {
     constructor () {
@@ -27,6 +28,33 @@ module.exports = class ListenerClientCommandStarted extends Listener {
     }
 
     async exec (message, command, args) {
+        if (message instanceof CommandContext) {
+            const guild = this.client.guilds.cache.get(message.guildID);
+
+            let channel;
+            let member;
+
+            if (guild.available) {
+                channel = guild.channels.cache.get(message.channelID);
+                member = guild.members.cache.get(message.user.id);
+            }
+
+            // Override the reply function since it doesn't exist.
+            const reply = (string) => {
+                return message.send(string);
+            };
+
+            // Override reaction to return null since it doesn't exist.
+            const react = () => { return null; };
+
+            Object.assign(message, {
+                guild: guild,
+                channel: channel,
+                member: member,
+                reply: reply,
+                react: react
+            });
+        }
         this.client.settings.ensure(message.guild.id, this.client.defaultSettings);
     }
 };
