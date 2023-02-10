@@ -17,9 +17,10 @@
  */
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField, Message } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { hasURL } = require('../../modules/hasURL');
+const { CommandContext } = require('slash-create');
 
 /* eslint-disable no-useless-escape */
 
@@ -53,6 +54,8 @@ module.exports = class CommandPlay extends Command {
     }
 
     async exec (message, args) {
+        if (message instanceof CommandContext) await message.defer();
+
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
@@ -127,7 +130,8 @@ module.exports = class CommandPlay extends Command {
 
         const queue = this.client.player.getQueue(message.guild.id);
 
-        message.channel.sendTyping();
+        if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+        else message.channel.sendTyping();
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
@@ -146,9 +150,9 @@ module.exports = class CommandPlay extends Command {
             await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message,
+                message: message instanceof Message ? message : undefined,
                 metadata: {
-                    ctx: undefined
+                    ctx: message instanceof CommandContext ? message : undefined
                 }
             });
             return message.react(process.env.EMOJI_MUSIC);

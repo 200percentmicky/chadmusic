@@ -17,9 +17,10 @@
  */
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField, Message } = require('discord.js');
 const iheart = require('iheart');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { CommandContext } = require('slash-create');
 
 module.exports = class CommandIHeartRadio extends Command {
     constructor () {
@@ -32,13 +33,20 @@ module.exports = class CommandIHeartRadio extends Command {
                 details: '`<search>` The station to search for. The first result is queued.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'station',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        const text = args.slice(1).join(' ');
+    async exec (message, args) {
+        if (message instanceof CommandContext) await message.defer();
+
+        const text = args.station;
 
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
@@ -86,7 +94,9 @@ module.exports = class CommandIHeartRadio extends Command {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        message.channel.sendTyping();
+        if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+        else message.channel.sendTyping();
+
         const queue = this.client.player.getQueue(message.guild.id);
 
         // These limitations should not affect a member with DJ permissions.
@@ -113,9 +123,9 @@ module.exports = class CommandIHeartRadio extends Command {
             await this.client.player.play(vc, url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message,
+                message: message instanceof Message ? message : undefined,
                 metadata: {
-                    ctx: undefined,
+                    ctx: message instanceof CommandContext ? message : undefined,
                     isRadio: true,
                     radioStation: station
                 }

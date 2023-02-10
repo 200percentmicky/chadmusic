@@ -17,8 +17,9 @@
  */
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
+const { Message, PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { CommandContext } = require('slash-create');
 
 function pornPattern (url) {
     // ! TODO: Come up with a better regex lol
@@ -38,13 +39,20 @@ module.exports = class CommandPlayNow extends Command {
                 usage: 'playnow <URL/search>'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'track',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        const text = args.slice(1).join(' ');
+    async exec (message, args) {
+        if (message instanceof CommandContext) await message.defer();
+
+        const text = args.track;
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
@@ -99,15 +107,17 @@ module.exports = class CommandPlayNow extends Command {
         if (vc.members.size <= 3 || dj) {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-            message.channel.sendTyping();
+            if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+            else message.channel.sendTyping();
+
             // eslint-disable-next-line no-useless-escape
             await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message,
+                message: message instanceof Message ? message : undefined,
                 skip: true,
                 metadata: {
-                    ctx: undefined
+                    ctx: message instanceof CommandContext ? message : undefined
                 }
             });
             await this.client.player.skip(message);

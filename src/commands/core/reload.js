@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { CommandContext } = require('slash-create');
 
 /* eslint-disable padded-blocks */
 /* eslint-disable no-multi-spaces */
@@ -47,7 +48,8 @@ module.exports = class CommandReload extends Command {
 
         // Akairo Modules
         try {
-            message.channel.sendTyping();
+            if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+            else message.channel.sendTyping();
 
             // Everything must be unloaded before we can move on.
             await this.client.commands.removeAll();   // Commands
