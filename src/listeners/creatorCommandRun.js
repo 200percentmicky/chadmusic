@@ -17,6 +17,7 @@
  */
 
 const { Listener } = require('discord-akairo');
+const { handleContext } = require('../modules/handleContext');
 
 module.exports = class ListenerCreatorCommandRun extends Listener {
     constructor () {
@@ -27,6 +28,7 @@ module.exports = class ListenerCreatorCommandRun extends Listener {
     }
 
     async exec (command, promise, ctx) {
+        handleContext(this.client, ctx);
         this.client.settings.ensure(ctx.guildID, this.client.defaultSettings);
     }
 };

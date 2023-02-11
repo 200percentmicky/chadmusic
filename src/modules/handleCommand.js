@@ -21,10 +21,10 @@ const { Client } = require('discord.js'); // eslint-disable-line no-unused-vars
 const { CommandContext } = require('slash-create'); // eslint-disable-line no-unused-vars
 
 /**
- * Used mainly for slash commands to run message based commands
- * attached to the Client.
+ * Allows for slash-create's slash commands to run commands attached to Akairo.
  *
  * This function relies on slash-create and Discord Akairo.
+ * Will most likely be removed when the bot gets updated to Discord.js 15.
  * @param {Client|AkairoClient} client Discord.JS Client attached to Akairo Client.
  * @param {CommandContext} string CommandContext
  * @param {Command|string} commandName The command attached to Akairo.
