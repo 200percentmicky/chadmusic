@@ -17,9 +17,19 @@
  */
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
+const { PermissionsBitField } = require('discord.js');
+const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../modules/hasURL');
-const { handleCommand } = require('../../modules/handleCommand');
+const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+
+const pornPattern = (url) => {
+    // ! TODO: Come up with a better regex lol
+    // eslint-disable-next-line no-useless-escape
+    const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+    const pornRegex = new RegExp(pornPattern);
+    return url.match(pornRegex);
+};
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {
@@ -99,34 +109,164 @@ class CommandPlay extends SlashCommand {
     }
 
     async run (ctx) {
-        switch (ctx.subcommands[0]) {
-        case 'track': {
-            return handleCommand(this.client, ctx, 'play', {
-                track: ctx.options.track.query
-            });
+        const guild = this.client.guilds.cache.get(ctx.guildID);
+        const channel = await guild.channels.fetch(ctx.channelID);
+        const _member = await guild.members.fetch(ctx.member.id);
+
+        const djMode = this.client.settings.get(ctx.guildID, 'djMode');
+        const djRole = this.client.settings.get(ctx.guildID, 'djRole');
+        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        if (djMode) {
+            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
-        case 'attachment': {
-            return handleCommand(this.client, ctx, 'play', {
-                track: ctx.options.attachment.file
-            });
+        const textChannel = this.client.settings.get(ctx.guildID, 'textChannel');
+        if (textChannel) {
+            if (textChannel !== channel.id) {
+                return this.creator.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            }
         }
 
-        case 'now': {
-            return handleCommand(this.client, ctx, 'playnow', {
-                track: ctx.options.now.query
-            });
+        const vc = _member.voice.channel;
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+
+        // if (!text && !message.attachments.first()) return client.ui.usage(message, 'play <url/search/attachment>');
+
+        if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
+            if (pornPattern(ctx.options.track?.query)) {
+                await ctx.defer(true);
+                return this.client.ui.reply(ctx, 'no', "The URL you're requesting to play is not allowed.");
+            }
+
+            if (!dj) {
+                if (hasURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
+                    const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
+                    if (!allowLinks) {
+                        return this.client.ui.reply(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
+                    }
+                }
+
+                const list = await this.client.settings.get(guild.id, 'blockedPhrases');
+                const splitSearch = ctx.options.track?.query.split(/ +/g);
+                for (let i = 0; i < splitSearch.length; i++) {
+                    /* eslint-disable-next-line no-useless-escape */
+                    if (list.includes(splitSearch[i].replace(/(^\\<+|\\>+$)/g, ''))) {
+                        await ctx.defer(true);
+                        return this.client.ui.reply(ctx, 'no', 'Unable to queue your selection because your search contains a blocked phrase on this server.');
+                    }
+                }
+            }
         }
 
-        case 'radio': {
-            switch (ctx.subcommands[1]) {
-            case 'iheartradio': {
-                return handleCommand(this.client, ctx, 'iheartradio', {
-                    station: ctx.options.radio.iheartradio.station
+        await ctx.defer();
+
+        const currentVc = this.client.vc.get(vc);
+        if (!currentVc) {
+            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
+            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+
+            if (vc.type === 'stage') {
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
+                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
+                if (!stageMod) {
+                    try {
+                        await guild.members.me.voice.setRequestToSpeak(true);
+                    } catch {
+                        await guild.members.me.voice.setSuppressed(false);
+                    }
+                } else {
+                    await guild.members.me.voice.setSuppressed(false);
+                }
+            } else {
+                try {
+                    this.client.vc.join(vc);
+                } catch (err) {
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
+                }
+            }
+        } else {
+            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        }
+
+        const queue = this.client.player.getQueue(guild.id);
+
+        // These limitations should not affect a member with DJ permissions.
+        if (!dj) {
+            if (queue) {
+                const maxQueueLimit = await this.client.settings.get(guild.id, 'maxQueueLimit');
+                if (maxQueueLimit) {
+                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === _member.user.id).length;
+                    if (queueMemberSize >= maxQueueLimit) {
+                        return this.client.ui.reply(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                    }
+                }
+            }
+        }
+
+        try {
+            let requested = ctx.options.track?.query;
+            let station;
+            if (ctx.subcommands[0] === 'attachment') requested = ctx.attachments.first().url;
+            if (ctx.subcommands[0] === 'radio') {
+                switch (ctx.subcommands[1]) {
+                case 'iheartradio': {
+                    const search = await iheart.search(ctx.options.radio.iheartradio.station);
+                    station = search.stations[0];
+
+                    // To prevent overwrites, lock the command until the value is cleared.
+                    if (await this.client.radio.get(guild.id)) {
+                        await ctx.defer(true);
+                        return this.client.ui.reply(ctx, 'warn', 'Request is still being processed. Please try again later.');
+                    }
+
+                    requested = await iheart.streamURL(station.id);
+
+                    await this.client.radio.set(guild.id, ctx.options.radio.iheartradio.station, 10000);
+                }
+                }
+            }
+
+            if (ctx.subcommands[0] === 'now') {
+                if (vc.members.size <= 3 || dj) {
+                    requested = ctx.options.now.query;
+
+                    /* eslint-disable-next-line no-useless-escape */
+                    await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
+                        textChannel: channel,
+                        member: _member,
+                        position: 1,
+                        metadata: {
+                            ctx: ctx
+                        }
+                    });
+                    try {
+                        await this.client.player.skip(guild);
+                    } catch {}
+                } else {
+                    return this.client.ui.send(ctx, 'NOT_ALONE');
+                }
+            } else {
+                /* eslint-disable-next-line no-useless-escape */
+                await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
+                    textChannel: channel,
+                    member: _member,
+                    metadata: {
+                        ctx: ctx,
+                        isRadio: ctx.subcommands[0] === 'radio',
+                        radioStation: station ?? undefined
+                    }
                 });
             }
-            }
-        }
+            return;
+        } catch (err) {
+            this.client.logger.error(err.stack); // Just in case.
+            return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
         }
     }
 }

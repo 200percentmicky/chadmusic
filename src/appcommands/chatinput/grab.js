@@ -17,7 +17,7 @@
  */
 
 const { SlashCommand } = require('slash-create');
-const { handleCommand } = require('../../modules/handleCommand');
+const { EmbedBuilder } = require('discord.js');
 
 class CommandGrab extends SlashCommand {
     constructor (creator) {
@@ -30,7 +30,66 @@ class CommandGrab extends SlashCommand {
     }
 
     async run (ctx) {
-        return handleCommand(this.client, ctx, 'grab');
+        const client = this.creator.client;
+        const guild = client.guilds.cache.get(ctx.guildID);
+        const channel = await guild.channels.fetch(ctx.channelID);
+        const _member = await guild.members.fetch(ctx.member.id);
+
+        const vc = _member.voice.channel;
+        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+
+        const currentVc = this.client.vc.get(vc);
+
+        if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+
+        const queue = this.client.player.getQueue(guild);
+        const song = queue.songs[0];
+
+        const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
+        if (textChannel) {
+            if (textChannel !== channel.id) {
+                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+            }
+        }
+
+        await ctx.defer(true);
+
+        let songTitle = song.name;
+        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
+        const embed = new EmbedBuilder()
+            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+            .setAuthor({
+                name: 'Song saved!',
+                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
+            })
+            .setTitle(`${songTitle}`)
+            .setURL(song.url)
+            .addFields({
+                name: 'Duration',
+                value: `${song.formattedDuration}`
+            })
+            .setTimestamp();
+
+        const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+        switch (thumbnailSize) {
+        case 'small': {
+            embed.setThumbnail(song.thumbnail);
+            break;
+        }
+        case 'large': {
+            embed.setImage(song.thumbnail);
+            break;
+        }
+        }
+
+        try {
+            await _member.user.send({ embeds: [embed] });
+            return this.client.ui.reply(ctx, 'ok', 'Saved! Check your DMs. 📩');
+        } catch {
+            return this.client.ui.reply(ctx, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
+        }
     }
 }
 
