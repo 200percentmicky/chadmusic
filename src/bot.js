@@ -69,7 +69,8 @@ class WaveBot extends AkairoClient {
         this.player = new DisTube(this, {
             plugins: [
                 new SpotifyPlugin({
-                    emitEventsAfterFetching: true
+                    emitEventsAfterFetching: true,
+                    parallel: false
                 }),
                 new YtDlpPlugin({ update: true })
             ],
