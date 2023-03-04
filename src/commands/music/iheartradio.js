@@ -117,9 +117,6 @@ module.exports = class CommandIHeartRadio extends Command {
             const station = search.stations[0];
             const url = await iheart.streamURL(station.id);
 
-            // To prevent overwrites, lock the command until the value is cleared.
-            if (await this.client.radio.get(message.guild.id)) return this.client.ui.reply(message, 'warn', 'Request is still being processed. Please try again later.');
-            await this.client.radio.set(message.guild.id, text, 10000);
             await this.client.player.play(vc, url, {
                 member: message.member,
                 textChannel: message.channel,

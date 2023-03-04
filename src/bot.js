@@ -88,10 +88,11 @@ class WaveBot extends AkairoClient {
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
-        this.radio = new Keyv(); // Parse radio info. TODO: Replace this with Map() instead.
 
         this.settings = new Enmap({ name: 'settings' });
         this.tags = new Enmap({ name: 'tags' });
+
+        this.depWarnMsg = new Keyv();
 
         this.defaultSettings = {
             prefix: process.env.PREFIX,

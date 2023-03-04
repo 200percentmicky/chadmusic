@@ -218,16 +218,7 @@ class CommandPlay extends SlashCommand {
                 case 'iheartradio': {
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
                     station = search.stations[0];
-
-                    // To prevent overwrites, lock the command until the value is cleared.
-                    if (await this.client.radio.get(guild.id)) {
-                        await ctx.defer(true);
-                        return this.client.ui.reply(ctx, 'warn', 'Request is still being processed. Please try again later.');
-                    }
-
                     requested = await iheart.streamURL(station.id);
-
-                    await this.client.radio.set(guild.id, ctx.options.radio.iheartradio.station, 10000);
                 }
                 }
             }
