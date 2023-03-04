@@ -28,12 +28,12 @@ module.exports = class ListenerCreatorCommandError extends Listener {
     }
 
     async exec (command, err, ctx) {
-        await ctx.defer({ ephemeral: true });
+        await ctx.defer();
         let guru = '💢 **Bruh Moment**\nSomething bad happened. Please report this to the developer.';
 
         const guild = this.client.guilds.cache.get(ctx.guildID);
         if (guild.channels.cache.get(process.env.BUG_CHANNEL)) {
-            guru += ' The owner of this application has also received a full error report.\n';
+            guru += ' The owner of this application has also received an error report.\n';
         }
 
         guru += `\`\`\`js\n${err.stack}\`\`\``;
