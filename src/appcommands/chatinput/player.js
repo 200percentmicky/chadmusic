@@ -21,7 +21,7 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const { handleCommand } = require('../../modules/handleCommand');
+const Genius = require('genius-lyrics');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -154,6 +154,16 @@ class CommandPlayer extends SlashCommand {
                             required: true
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'grab',
+                    description: 'Sends the currently playing song as a direct message.'
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'stop',
+                    description: 'Destroys the player.'
                 }
             ]
         });
@@ -171,7 +181,8 @@ class CommandPlayer extends SlashCommand {
         const djRole = client.settings.get(ctx.guildID, 'djRole');
         const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            if (ctx.subcommands[0] === 'grab') {} // eslint-disable-line no-empty, brace-style
+            else if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
         }
 
         const vc = _member.voice.channel;
@@ -486,9 +497,45 @@ class CommandPlayer extends SlashCommand {
         }
 
         case 'lyrics': {
-            return handleCommand(this.client, ctx, 'lyrics', {
-                query: ctx.options.lyrics.query
-            });
+            const geniusClient = new Genius.Client(process.env.GENIUS_TOKEN);
+            const queue = this.client.player.getQueue(ctx.guild);
+            const query = queue?.songs[0]?.name ?? ctx.options.lyrics.query;
+
+            if (!queue && !query) {
+                return this.client.ui.reply(ctx, 'warn', 'Nothing is currently playing in this server. You can use `lyrics [query]` to manually search for lyrics.');
+            }
+
+            await ctx.defer();
+
+            try {
+                const songSearch = await geniusClient.songs.search(query);
+                const songLyrics = await songSearch[0].lyrics();
+
+                if (songLyrics.length > 4096) {
+                    // Since Genius likes to give you weird results, it most likely didn't
+                    // retrieve lyrics causing the embed to exceed its limits.
+                    return this.client.ui.reply(ctx, 'error', 'Unable to retrieve lyrics from currently playing song. Try manually searching for the song using `lyrics [query]`.');
+                }
+
+                const embed = new EmbedBuilder()
+                    .setColor(ctx.guild.members.me.displayColor !== 0 ? ctx.guild.members.me.displayColor : null)
+                    .setAuthor({
+                        name: songSearch[0].artist.name,
+                        url: songSearch[0].artist.url,
+                        iconURL: songSearch[0].artist.image
+                    })
+                    .setTitle(songSearch[0].title)
+                    .setURL(songSearch[0].url)
+                    .setDescription(`${songLyrics}`)
+                    .setThumbnail(songSearch[0].image)
+                    .setFooter({
+                        text: `${ctx.member.user.tag} • Powered by Genius API. (https://genius.com)`,
+                        iconURL: ctx.member.user.avatarURL({ dynamic: true })
+                    });
+                return ctx.send({ embeds: [embed] });
+            } catch (err) {
+                return this.client.ui.reply(ctx, 'error', err.message, 'Genius API Error');
+            }
         }
 
         case 'bindchannel': {
@@ -502,6 +549,67 @@ class CommandPlayer extends SlashCommand {
                 return this.client.ui.reply(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
             } else {
                 return this.client.ui.send(ctx, 'NO_DJ');
+            }
+        }
+
+        case 'grab': {
+            const currentVc = this.client.vc.get(vc);
+            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            await ctx.defer(true);
+
+            const song = this.client.player.getQueue(ctx.guild).songs[0];
+
+            let songTitle = song.name;
+            if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
+
+            const embed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                .setAuthor({
+                    name: 'Song saved!',
+                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/673819399245004800/pOk2_2.png'
+                })
+                .setTitle(`${songTitle}`)
+                .setURL(song.url)
+                .addFields({
+                    name: 'Duration',
+                    value: `${song.formattedDuration}`
+                })
+                .setTimestamp();
+
+            const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
+
+            switch (thumbnailSize) {
+            case 'small': {
+                embed.setThumbnail(song.thumbnail);
+                break;
+            }
+            case 'large': {
+                embed.setImage(song.thumbnail);
+                break;
+            }
+            }
+
+            try {
+                await _member.user.send({ embeds: [embed] });
+                return this.client.ui.reply(ctx, 'ok', 'Saved! Check your DMs. 📩');
+            } catch {
+                return this.client.ui.reply(ctx, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
+            }
+        }
+
+        case 'stop': {
+            const currentVc = this.client.vc.get(vc);
+            if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            if (vc.members.size <= 2 || dj) {
+                this.client.player.stop(guild);
+                this.client.vc.leave(guild);
+                return this.client.ui.custom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
+            } else {
+                return this.client.ui.send(ctx, 'NOT_ALONE');
             }
         }
         }
