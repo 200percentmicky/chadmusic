@@ -179,7 +179,6 @@ const reply = (msg, type, description, title, footer, ephemeral, buttons, mentio
 const usage = (msg, syntax) => {
     const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
     const embed = new EmbedBuilder()
-        .setColor(process.env.COLOR_INFO)
         .setTitle(`${process.env.EMOJI_INFO} Usage`)
         .setDescription(`\`${guildPrefix}${syntax}\``);
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
