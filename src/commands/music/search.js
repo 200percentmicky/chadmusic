@@ -66,6 +66,8 @@ module.exports = class CommandSearch extends Command {
             }
         }
 
+        if (!args.query) return this.client.ui.usage(message, 'search <query>');
+
         const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
         const splitSearch = args.query.split(/ +/g);
         if (list.length > 0) {
@@ -109,8 +111,6 @@ module.exports = class CommandSearch extends Command {
         }
 
         const queue = this.client.player.getQueue(message.guild.id);
-
-        if (!args.query) return this.client.ui.usage(message, 'search <query>');
 
         if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
         else message.channel.sendTyping();
