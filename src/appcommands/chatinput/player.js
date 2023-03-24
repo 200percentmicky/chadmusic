@@ -214,7 +214,7 @@ class CommandPlayer extends SlashCommand {
             let progressBar;
             if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-            const embed = new EmbedBuilder()
+            let embed = new EmbedBuilder()
                 .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
                     name: `Currently playing in ${currentVc.channel.name}`,
@@ -237,15 +237,7 @@ class CommandPlayer extends SlashCommand {
             }
             }
 
-            const nowPlayingFields = [];
-
-            if (queue.paused) {
-                const prefix = this.client.settings.get(guild.id, 'prefix', process.env.PREFIX);
-                nowPlayingFields.push({
-                    name: '⏸ Paused',
-                    value: `Type '${prefix}resume' to resume playback.`
-                });
-            }
+            let nowPlayingFields = [];
 
             if (song.age_restricted) {
                 nowPlayingFields.push({
@@ -271,6 +263,33 @@ class CommandPlayer extends SlashCommand {
             if (song.station) {
                 nowPlayingFields.push({
                     name: ':tv: Station', value: `${song.station}`
+                });
+            }
+
+            if (song.metadata?.silent && song.user.id !== _member.user.id) {
+                embed = new EmbedBuilder()
+                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                    .setAuthor({
+                        name: `Currently playing in ${currentVc.channel.name}`,
+                        iconURL: guild.iconURL({ dynamic: true })
+                    });
+
+                nowPlayingFields = [];
+                nowPlayingFields.push({
+                    name: '🔇 Silent',
+                    value: 'This track is hidden. The user that added this track can reveal it.'
+                });
+            } else if (song.metadata?.silent) {
+                nowPlayingFields.push({
+                    name: '🔇 Silent',
+                    value: 'This track is hidden.'
+                });
+            }
+
+            if (queue.paused) {
+                nowPlayingFields.push({
+                    name: '⏸ Paused',
+                    value: 'Type `/player resume` to resume playback.'
                 });
             }
 

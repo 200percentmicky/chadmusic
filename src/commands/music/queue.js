@@ -84,13 +84,21 @@ module.exports = class CommandQueue extends Command {
         const paginateArray = queuePaginate.page(1);
 
         // This includes the currently playing song btw...
-        const numOfEntries = songs.length > 0 ? `${songs.length} entr${queue.songs.length === 1 ? 'y' : 'ies'}` : '';
+        const numOfHiddenEntries = songs.filter(x => x.metadata.silent).length;
+        const numOfEntries = songs.length > 0 ? `${songs.length} entr${queue.songs.length === 1 ? 'y' : 'ies'} (${numOfHiddenEntries} hidden)` : '';
         const trueTime = songs.map(x => x.duration).reduce((a, b) => a + b, 0);
         const totalTime = songs.length > 0 ? ` • Total Length: \`${trueTime ? toColonNotation(parseInt(trueTime + '000')) : '00:00'}\`` : '';
 
+        // For tracks added silently...
+        const songEntry = (song) => {
+            return song.metadata?.silent
+                ? '🔇 This track is hidden.'
+                : `${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`;
+        };
+
         /* Map the array. */
         const queueMap = songs.length > 0
-            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n')
+            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n')
             : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
 
         /* Making the embed. */
@@ -103,7 +111,7 @@ module.exports = class CommandQueue extends Command {
             .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
             .addFields({
                 name: `${process.env.EMOJI_MUSIC} Currently Playing`,
-                value: `**[${song.name}](${song.url})**\n${song.user} \`${song.formattedDuration}\``
+                value: songEntry(song)
             })
             .setTimestamp()
             .setFooter({
@@ -188,7 +196,7 @@ module.exports = class CommandQueue extends Command {
                 const paginateArray = queuePage;
 
                 /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
+                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n');
 
                 /* Need to make sure all buttons are available */
                 nextPage.setDisabled(false);

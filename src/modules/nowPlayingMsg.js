@@ -135,10 +135,16 @@ async function nowPlayingMsg (queue, song) {
     }
 
     try {
-        if (channel.id !== song.metadata.ctx.channelID) {
+        if (channel.id !== song.metadata?.ctx.channelID) {
             await channel.send({ embeds: [songNow] });
         } else {
-            await song.metadata.ctx.send({ embeds: [songNow] });
+            if (song.metadata?.silent) {
+                if (queue.songs.length === 1) {
+                    // Again, only if someone started a new queue, but with a silent track.
+                    return await song.metadata?.ctx.send({ embeds: [songNow] });
+                } else return;
+            }
+            await song.metadata?.ctx.send({ embeds: [songNow] });
         }
     } catch {
         channel.send({ embeds: [songNow] });
