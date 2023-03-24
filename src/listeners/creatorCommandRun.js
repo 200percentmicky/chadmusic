@@ -27,6 +27,23 @@ module.exports = class ListenerCreatorCommandRun extends Listener {
     }
 
     async exec (command, promise, ctx) {
+        // Adding guild, channel, and member info from Discord.js into CommandContext.
+        const guild = this.client.guilds.cache.get(ctx.guildID);
+
+        let channel;
+        let member;
+
+        if (guild.available) {
+            channel = guild.channels.cache.get(ctx.channelID);
+            member = guild.members.cache.get(ctx.user.id);
+        }
+
+        Object.assign(ctx, {
+            guild: guild,
+            channel: channel,
+            member: member
+        });
+
         this.client.settings.ensure(ctx.guildID, this.client.defaultSettings);
     }
 };

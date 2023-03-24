@@ -17,6 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
+const { CommandContext } = require('slash-create');
 
 /* eslint-disable padded-blocks */
 /* eslint-disable no-multi-spaces */
@@ -47,7 +48,8 @@ module.exports = class CommandReload extends Command {
 
         // Akairo Modules
         try {
-            message.channel.sendTyping();
+            if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+            else message.channel.sendTyping();
 
             // Everything must be unloaded before we can move on.
             await this.client.commands.removeAll();   // Commands
@@ -59,7 +61,7 @@ module.exports = class CommandReload extends Command {
             await this.client.inhibitors.loadAll();
             await this.client.listeners.loadAll();
         } catch (err) {
-            message.channel.send({ content: `❌ Error reloading modules: \`${err.message}\`` });
+            message.reply({ content: `❌ Error reloading modules: \`${err.message}\`` });
             resultEmoji = '❌';
         }
 
@@ -75,7 +77,7 @@ module.exports = class CommandReload extends Command {
                     syncPermissions: true
                 });
             } catch (err) {
-                message.channel.send({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
+                message.reply({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
                 resultEmoji = '❌';
             }
 
@@ -83,7 +85,7 @@ module.exports = class CommandReload extends Command {
                 try {
                     cmd.reload();
                 } catch (err) {
-                    message.channel.send({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    message.reply({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
                     resultEmoji = '❌';
                 }
             });

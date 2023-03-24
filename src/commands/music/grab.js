@@ -18,6 +18,7 @@
 
 const { Command } = require('discord-akairo');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { CommandContext } = require('slash-create');
 
 module.exports = class CommandGrab extends Command {
     constructor () {
@@ -79,8 +80,13 @@ module.exports = class CommandGrab extends Command {
         }
 
         try {
-            await message.author.send({ embeds: [embed] });
-            return message.react(process.env.REACTION_OK);
+            await message.member.user.send({ embeds: [embed] });
+            if (message instanceof CommandContext) {
+                await message.defer(true);
+                return this.client.ui.reply(message, 'ok', 'Saved! Check your DMs. 📩');
+            } else {
+                return message.react(process.env.REACTION_OK);
+            }
         } catch {
             return this.client.ui.reply(message, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');
         }

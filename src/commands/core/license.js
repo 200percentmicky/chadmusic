@@ -45,7 +45,7 @@ module.exports = class LicenseCommand extends Command {
         const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
-        return message.channel.send({
+        return message.reply({
             content: stripIndents`
             ChadMusic is licensed under the GNU General Public License version 3.
 

@@ -16,21 +16,28 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { SlashCommand } = require('slash-create');
+const { Listener } = require('discord-akairo');
 
-class CommandPing extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'ping',
-            description: "Pong! Measures the bot's latency to Discord."
+// For various interactions throughout the bot. (Excluding Discord.js interactions.)
+
+module.exports = class ListenerCreatorComponentInteraction extends Listener {
+    constructor () {
+        super('creatorComponentInteraction', {
+            emitter: 'creator',
+            event: 'componentInteraction'
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        return ctx.send(`✅ **Pong!** \`${Math.round(this.client.ws.ping)}ms.\``);
-    }
-}
+    async exec (ctx) {
+        const app = await this.client.application.fetch();
 
-module.exports = CommandPing;
+        switch (ctx.customID) {
+        case 'sc_close_eval': {
+            if (app.owner?.id !== ctx.user.id) return ctx.sendFollowUp('🚫 Only the owner of this application can use this command.', { ephemeral: true });
+
+            ctx.acknowledge();
+            ctx.delete();
+        }
+        }
+    }
+};

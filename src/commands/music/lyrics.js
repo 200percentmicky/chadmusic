@@ -19,6 +19,7 @@
 const { Command } = require('discord-akairo');
 const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const Genius = require('genius-lyrics');
+const { CommandContext } = require('slash-create');
 
 module.exports = class CommandLyrics extends Command {
     constructor () {
@@ -55,10 +56,11 @@ module.exports = class CommandLyrics extends Command {
         const query = queue?.songs[0]?.name ?? args.query;
 
         if (!queue && !query) {
-            return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. You can `lyrics [query]` to manually search for lyrics.');
+            return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. You can use `lyrics [query]` to manually search for lyrics.');
         }
 
-        message.channel.sendTyping();
+        if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+        else message.channel.sendTyping();
 
         try {
             const songSearch = await geniusClient.songs.search(query);

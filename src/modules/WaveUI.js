@@ -179,7 +179,7 @@ const reply = (msg, type, description, title, footer, ephemeral, buttons, mentio
 const usage = (msg, syntax) => {
     const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
     const embed = new EmbedBuilder()
-        .setColor(process.env.COLOR_INFO)
+        .setColor(parseInt(process.env.COLOR_INFO))
         .setTitle(`${process.env.EMOJI_INFO} Usage`)
         .setDescription(`\`${guildPrefix}${syntax}\``);
     if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
@@ -193,7 +193,7 @@ const usage = (msg, syntax) => {
  * A UI function that lets you reply with a custom embed with any emoji or color of your choosing.
  * If the bot doesn't have the permission to **Embed Links**, you can only apply a custom emoji.
  *
- * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {(Message|CommandContext|ChatInputCommandInteraction)} msg A MessageResolvable | `Discord.Message`
  * @param {string} emoji The emoji of the message.
  * @param {number} [color] The color of the embed, if the bot has the **Embed Links** permission.
  * @param {string} description The overall message.

@@ -23,9 +23,11 @@ const {
     SelectMenuBuilder,
     ButtonBuilder,
     PermissionsBitField,
-    ButtonStyle
+    ButtonStyle,
+    Message
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { CommandContext } = require('slash-create');
 
 module.exports = class CommandSearch extends Command {
     constructor () {
@@ -48,6 +50,8 @@ module.exports = class CommandSearch extends Command {
     }
 
     async exec (message, args) {
+        if (message instanceof CommandContext) await message.defer();
+
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
@@ -61,6 +65,8 @@ module.exports = class CommandSearch extends Command {
                 return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
+
+        if (!args.query) return this.client.ui.usage(message, 'search <query>');
 
         const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
         const splitSearch = args.query.split(/ +/g);
@@ -106,9 +112,8 @@ module.exports = class CommandSearch extends Command {
 
         const queue = this.client.player.getQueue(message.guild.id);
 
-        if (!args.query) return this.client.ui.usage(message, 'search <query>');
-
-        message.channel.sendTyping();
+        if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
+        else message.channel.sendTyping();
 
         // These limitations should not affect a member with DJ permissions.
         if (!dj) {
@@ -144,7 +149,7 @@ module.exports = class CommandSearch extends Command {
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: 'Which track do you wanna play?',
-                iconURL: message.author.avatarURL({ dynamic: true })
+                iconURL: message.member.user.avatarURL({ dynamic: true })
             })
             .setDescription(`${resultsFormattedList}`)
             .setFooter({
@@ -197,9 +202,9 @@ module.exports = class CommandSearch extends Command {
             await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
                 member: message.member,
                 textChannel: message.channel,
-                message: message,
+                message: message instanceof Message ? message : undefined,
                 metadata: {
-                    ctx: undefined
+                    ctx: message instanceof CommandContext ? message : undefined
                 }
             });
             message.react(process.env.EMOJI_MUSIC);
@@ -209,58 +214,5 @@ module.exports = class CommandSearch extends Command {
         collector.on('end', () => {
             msg.delete();
         });
-
-    /*
-    this.client.player.search(search).then(results => {
-      const resultMap = results.slice(0, 10).map(result => `${results.indexOf(result) + 1}: \`${result.formattedDuration}\` [${result.name}](${result.url})`).join('\n\n');
-      const embed = new EmbedBuilder()
-        .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-        .setAuthor({
-          name: 'Which track do you wanna play?',
-          iconURL: message.author.avatarURL({ dynamic: true })
-        })
-        .setDescription(`${resultMap}`)
-        .setFooter({
-          text: 'Type the number of your selection, or type "cancel" if you changed your mind.'
-        });
-
-      // TODO: Replace collector for a select menu instead.
-
-      message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } }).then(msg => {
-        const filter = m => m.author.id === message.author.id;
-        const collector = message.channel.createMessageCollector({
-          filter,
-          max: 1,
-          time: 30000,
-          errors: ['time']
-        });
-
-        collector.on('collect', async collected => {
-          collector.stop();
-          collected.delete();
-          if (collected.content === 'CANCEL'.toLowerCase()) return;
-          message.channel.sendTyping();
-          let selected = results[parseInt(collected.content - 1)].url;
-          if (collected.content > 10) {
-            selected = results[9].url;
-            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 10th result was queued instead.`);
-          } else if (collected.content <= 0) { // Why even bother? The bot can't comprehend a negative integer for some reason...
-            selected = results[0].url;
-            this.client.ui.reply(message, 'info', `Your input was \`${collected.content}\`. The 1st result was queued instead.`);
-          }
-          await this.client.player.play(vc, selected, {
-            member: message.member,
-            textChannel: message.channel,
-            message: message
-          });
-          message.react(process.env.REACTION_OK);
-        });
-
-        collector.on('end', () => {
-          msg.delete();
-        });
-      });
-    });
-    */
     }
 };

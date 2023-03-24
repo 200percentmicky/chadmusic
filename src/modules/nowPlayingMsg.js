@@ -23,7 +23,7 @@ async function nowPlayingMsg (queue, song) {
     const channel = queue.textChannel; // TextChannel
     const guild = channel.guild; // Guild
     const member = guild.members.cache?.get(queue.songs[queue.songs.length - 1]?.user.id); // GuildMember
-    const vc = member.voice.channel; // VoiceChannel
+    const vc = member.voice.channel ?? guild.members.me.voice.channel; // VoiceChannel
 
     if (queue.songs.length === 1) { // If someone started a new queue.
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
@@ -135,7 +135,17 @@ async function nowPlayingMsg (queue, song) {
     }
 
     try {
-        await song.metadata.ctx.send({ embeds: [songNow] });
+        if (channel.id !== song.metadata?.ctx.channelID) {
+            await channel.send({ embeds: [songNow] });
+        } else {
+            if (song.metadata?.silent) {
+                if (queue.songs.length === 1) {
+                    // Again, only if someone started a new queue, but with a silent track.
+                    return await song.metadata?.ctx.send({ embeds: [songNow] });
+                } else return;
+            }
+            await song.metadata?.ctx.send({ embeds: [songNow] });
+        }
     } catch {
         channel.send({ embeds: [songNow] });
     }

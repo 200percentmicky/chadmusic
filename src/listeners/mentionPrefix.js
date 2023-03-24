@@ -34,7 +34,7 @@ module.exports = class ListenerMentionPrefix extends Listener {
                 ? ' You can change this using `prefix` or `/settings prefix`'
                 : '';
 
-            return message.channel.send(`${process.env.EMOJI_MUSIC} My prefix in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
+            return message.reply(`${process.env.EMOJI_MUSIC} My prefix in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
         }
     }
 };

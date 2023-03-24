@@ -23,14 +23,6 @@ const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
 
-const isAttachment = (url) => {
-    // ! TODO: Come up with a better regex lol
-    // eslint-disable-next-line no-useless-escape
-    const urlPattern = /https?:\/\/(cdn\.)?(discordapp)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-    const urlRegex = new RegExp(urlPattern);
-    return url.match(urlRegex);
-};
-
 module.exports = class ListenerAddSong extends Listener {
     constructor () {
         super('addSong', {
@@ -122,6 +114,13 @@ module.exports = class ListenerAddSong extends Listener {
                 text: song.user.tag,
                 iconURL: song.user.avatarURL({ dynamic: true })
             });
+
+        if (song.metadata?.silent) {
+            embed.setAuthor({
+                name: `Added silently to the queue - ${member.voice.channel.name}`,
+                iconURL: guild.iconURL({ dynamic: true })
+            });
+        }
 
         try {
             song.metadata?.ctx.send({ embeds: [embed] });

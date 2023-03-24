@@ -260,6 +260,19 @@ module.exports = class CommandSettings extends SlashCommand {
                             required: true
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'allowsilent',
+                    description: 'Toggles the ability to silently add tracks to the queue.',
+                    options: [
+                        {
+                            type: CommandOptionType.BOOLEAN,
+                            name: 'toggle',
+                            description: 'Enables or disables the feature.',
+                            required: true
+                        }
+                    ]
                 }
             ]
         });
@@ -287,6 +300,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const allowFilters = settings.get(guild.id, 'allowFilters'); // Allow the use of Filters
         const allowFreeVolume = settings.get(guild.id, 'allowFreeVolume'); // Unlimited Volume
         const allowLinks = settings.get(guild.id, 'allowLinks'); // Allow Links
+        const allowSilent = settings.get(guild.id, 'allowSilent'); // Allow Silent Tracks
         const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
@@ -316,6 +330,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                 **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                 **🖼 Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
@@ -406,6 +421,11 @@ module.exports = class CommandSettings extends SlashCommand {
         case 'defaultvolume': {
             await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
             return this.client.ui.reply(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
+        }
+
+        case 'allowsilent': {
+            await settings.set(ctx.guildID, ctx.options.allowsilent.toggle, 'allowSilent');
+            return this.client.ui.reply(ctx, 'ok', `Silent tracks have been **${ctx.options.allowsilent.toggle === true ? 'enabled' : 'disabled'}**.`);
         }
 
         case 'blocksong': {

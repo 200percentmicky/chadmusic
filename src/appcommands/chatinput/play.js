@@ -89,6 +89,18 @@ class CommandPlay extends SlashCommand {
                             }]
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'silently',
+                    description: 'Plays a track silently. It will not be sent in chat, and will be hidden from others in the queue.',
+                    options: [{
+                        type: CommandOptionType.STRING,
+                        name: 'query',
+                        description: 'The track to silently play.',
+                        required: true,
+                        autocomplete: true
+                    }]
                 }
             ]
         });
@@ -130,8 +142,6 @@ class CommandPlay extends SlashCommand {
         const vc = _member.voice.channel;
         if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
 
-        // if (!text && !message.attachments.first()) return client.ui.usage(message, 'play <url/search/attachment>');
-
         if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
             if (pornPattern(ctx.options.track?.query)) {
                 await ctx.defer(true);
@@ -158,7 +168,14 @@ class CommandPlay extends SlashCommand {
             }
         }
 
-        await ctx.defer();
+        if (ctx.subcommands[0] === 'silently') {
+            const allowSilent = this.client.settings.get(ctx.guildID, 'allowSilent');
+            if (!dj && !allowSilent) {
+                return this.client.ui.reply(ctx, 'no', 'You cannot add silent tracks to the queue in this server.');
+            }
+        }
+
+        await ctx.defer(ctx.subcommands[0] === 'silently');
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
@@ -218,16 +235,7 @@ class CommandPlay extends SlashCommand {
                 case 'iheartradio': {
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
                     station = search.stations[0];
-
-                    // To prevent overwrites, lock the command until the value is cleared.
-                    if (await this.client.radio.get(guild.id)) {
-                        await ctx.defer(true);
-                        return this.client.ui.reply(ctx, 'warn', 'Request is still being processed. Please try again later.');
-                    }
-
                     requested = await iheart.streamURL(station.id);
-
-                    await this.client.radio.set(guild.id, ctx.options.radio.iheartradio.station, 10000);
                 }
                 }
             }
@@ -252,6 +260,8 @@ class CommandPlay extends SlashCommand {
                     return this.client.ui.send(ctx, 'NOT_ALONE');
                 }
             } else {
+                if (ctx.subcommands[0] === 'silently') requested = ctx.options.silently.query;
+
                 /* eslint-disable-next-line no-useless-escape */
                 await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                     textChannel: channel,
@@ -259,7 +269,8 @@ class CommandPlay extends SlashCommand {
                     metadata: {
                         ctx: ctx,
                         isRadio: ctx.subcommands[0] === 'radio',
-                        radioStation: station ?? undefined
+                        radioStation: station ?? undefined,
+                        silent: ctx.subcommands[0] === 'silently'
                     }
                 });
             }

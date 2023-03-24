@@ -69,7 +69,7 @@ module.exports = class CommandNowPlaying extends Command {
         let progressBar;
         if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
         const duration = song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `Currently playing in ${currentVc.channel.name}`,
@@ -92,12 +92,7 @@ module.exports = class CommandNowPlaying extends Command {
         }
         }
 
-        const embedFields = [];
-
-        if (queue.paused) {
-            const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-            embedFields.push({ name: '⏸ Paused', value: `Type '${prefix}resume' to resume playback.` });
-        }
+        let embedFields = [];
 
         if (song.age_restricted) {
             embedFields.push({ name: ':underage: Explicit', value: 'This track is **Age Restricted**' });
@@ -112,6 +107,31 @@ module.exports = class CommandNowPlaying extends Command {
 
         if (author.name) embedFields.push({ name: ':arrow_upper_right: Uploader', value: `[${author.name}](${author.url})` });
         if (song.station) embedFields.push({ name: ':tv: Station', value: `${song.station}` });
+
+        if (song.metadata?.silent && song.user.id !== message.member.user.id) {
+            embed = new EmbedBuilder()
+                .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
+                .setAuthor({
+                    name: `Currently playing in ${currentVc.channel.name}`,
+                    iconURL: message.guild.iconURL({ dynamic: true })
+                });
+
+            embedFields = [];
+            embedFields.push({
+                name: '🔇 Silent',
+                value: 'This track is hidden. The user that added this track can reveal it.'
+            });
+        } else if (song.metadata?.silent) {
+            embedFields.push({
+                name: '🔇 Silent',
+                value: 'This track is hidden.'
+            });
+        }
+
+        if (queue.paused) {
+            const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
+            embedFields.push({ name: '⏸ Paused', value: `Type '${prefix}resume' to resume playback.` });
+        }
 
         const volumeEmoji = () => {
             const volume = queue.volume;

@@ -16,6 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 
 module.exports = class PingCommand extends Command {
@@ -30,10 +31,14 @@ module.exports = class PingCommand extends Command {
     }
 
     async exec (message) {
-        const ping = await message.channel.send(process.env.EMOJI_LOADING + 'Ping?');
+        const ping = await message.reply(process.env.EMOJI_LOADING + 'Ping?');
 
         const timeDiff = (ping.editedAt || ping.createdAt) - (message.editedAt || message.createdAt);
 
-        await ping.edit(`${process.env.EMOJI_OK} **Pong!**\n📩 \`${timeDiff}ms.\`\n💟 \`${Math.round(this.client.ws.ping)}ms.\``);
+        await ping.edit(stripIndents`
+            ${process.env.EMOJI_OK} **Pong!**
+            :heartbeat: \`${Math.round(this.client.ws.ping)}ms.\`
+            :arrows_counterclockwise: \`${timeDiff}ms.\``
+        );
     }
 };
