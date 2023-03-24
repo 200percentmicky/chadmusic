@@ -39,9 +39,19 @@ class CommandQueue extends SlashCommand {
                     name: 'now',
                     description: "Shows the player's current queue on this server.",
                     options: [{
-                        type: CommandOptionType.BOOLEAN,
+                        type: CommandOptionType.STRING,
                         name: 'show_hidden',
-                        description: 'Reveals silently added tracks. This will only show YOUR silent tracks while the rest are hidden.'
+                        description: 'Reveals silently added tracks.',
+                        choices: [
+                            {
+                                name: 'Your hidden tracks.',
+                                value: 'self'
+                            },
+                            {
+                                name: '[DJ] All hidden tracks.',
+                                value: 'dj'
+                            }
+                        ]
                     }]
                 },
                 {
@@ -213,16 +223,25 @@ class CommandQueue extends SlashCommand {
 
             // For tracks added silently...
             const songEntry = (song) => {
-                if (ctx.options.now.show_hidden) {
+                switch (ctx.options.now.show_hidden) {
+                case 'self': {
                     return song.metadata?.silent
                         ? song.user.id === ctx.user.id
                             ? `🔇 ${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`
                             : '🔇 This track is hidden.'
                         : `${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`;
-                } else {
+                }
+
+                case 'dj': {
+                    if (!dj) return this.client.ui.send(ctx, 'NO_DJ');
+                    return `${song.metadata?.silent ? '🔇 ' : ''}${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`;
+                }
+
+                default: {
                     return song.metadata?.silent
                         ? '🔇 This track is hidden.'
                         : `${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`;
+                }
                 }
             };
 
