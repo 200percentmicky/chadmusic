@@ -192,7 +192,7 @@ const usage = (msg, syntax) => {
  * A UI function that lets you reply with a custom embed with any emoji or color of your choosing.
  * If the bot doesn't have the permission to **Embed Links**, you can only apply a custom emoji.
  *
- * @param {Message} msg A MessageResolvable | `Discord.Message`
+ * @param {(Message|CommandContext|ChatInputCommandInteraction)} msg A MessageResolvable | `Discord.Message`
  * @param {string} emoji The emoji of the message.
  * @param {number} [color] The color of the embed, if the bot has the **Embed Links** permission.
  * @param {string} description The overall message.
