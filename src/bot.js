@@ -104,6 +104,7 @@ class WaveBot extends AkairoClient {
             allowAgeRestricted: true,
             allowFreeVolume: true,
             allowLinks: true,
+            allowSilent: true,
             defaultVolume: 100,
             textChannel: null,
             blockedPhrases: [],

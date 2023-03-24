@@ -49,6 +49,7 @@ module.exports = class CommandSettings extends Command {
         const allowFilters = settings.get(message.guild.id, 'allowFilters'); // Allow the use of Filters
         const allowFreeVolume = settings.get(message.guild.id, 'allowFreeVolume'); // Unlimited Volume
         const allowLinks = settings.get(message.guild.id, 'allowLinks'); // Allow Links
+        const allowSilent = settings.get(message.guild.id, 'allowSilent'); // Allow Silent Tracks
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
@@ -76,6 +77,7 @@ module.exports = class CommandSettings extends Command {
             **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
             **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
             **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+            **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
             **🖼 Thumbnail Size:** ${thumbnailSize === 'Large' ? 'Large' : 'Small'}
             **🔊 Default Volume:** ${defaultVolume}
             **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
