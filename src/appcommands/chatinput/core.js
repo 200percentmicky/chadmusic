@@ -156,19 +156,24 @@ class CommandCore extends SlashCommand {
                     let evaled = await eval(code);
 
                     if (typeof evaled !== 'string') {
-                        evaled = require('util').inspect(evaled, { depth: 5, sorted: true, maxArrayLength: 5 });
+                        evaled = require('util').inspect(evaled, { depth: 2, sorted: true, maxArrayLength: 5 });
                     }
 
                     const t2 = process.hrtime(t1);
                     const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
-                    let result = `// ✅ Took ${end} ms. to complete.\n${clean(evaled)}`;
+                    let result = clean(evaled);
+                    const embed = new Discord.EmbedBuilder()
+                        .setDescription(`\`\`\`js\n${result}\`\`\``)
+                        .setFooter({
+                            text: `Took ${end} ms. to complete.`
+                        });
 
                     if (code.match(/\.token/gmi)) {
                         result = 'REACTED';
                     } else {
-                        if (result.length > 2000) {
-                            const buffer = Buffer.from(result);
+                        if (result.length > 4000) {
+                            const buffer = Buffer.from(`// ✅ Took ${end} ms. to complete. ${result}`);
 
                             try {
                                 await ctx.send({ file: [{ file: buffer, name: 'eval.txt' }], components: [closeEval] });
@@ -183,11 +188,11 @@ class CommandCore extends SlashCommand {
                                 this.client.logger.info('✅ Took %s ms. to complete.\n%s', end, clean(evaled));
                             }
                         } else {
-                            await ctx.send(`\`\`\`js\n${result}\`\`\``, { components: [closeEval] });
+                            await ctx.send({ embeds: [embed], components: [closeEval] });
                         }
                     }
                 } catch (err) {
-                    return ctx.send(`\`\`\`js\n// ${process.env.EMOJI_ERROR} Error in eval\n${err.name}: ${err.message}\`\`\``, { components: [closeEval] });
+                    return this.client.ui.reply(ctx, 'error', `\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Eval Error', null, null, [closeEval]);
                 }
                 break;
             }
