@@ -19,6 +19,7 @@
 'use strict';
 
 const logger = require('./modules/winstonLogger');
+const buildNum = require('child_process').execSync('git rev-parse --short HEAD').toString().trim();
 
 // Say hello!
 const { version } = require('../package.json');
@@ -29,7 +30,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s', version);
+logger.info('Bot Version: %s (Build %s)', version, buildNum);
 logger.info('Loading libraries...');
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
@@ -59,6 +60,9 @@ class WaveBot extends AkairoClient {
                 GatewayIntentBits.MessageContent
             ]
         });
+
+        // Build Number
+        this.buildNum = buildNum;
 
         // Calling packages that can be used throughout the client.
         this.logger = logger;
