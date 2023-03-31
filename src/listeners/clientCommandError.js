@@ -49,7 +49,7 @@ module.exports = class ListenerClientCommandError extends Listener {
         const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support]);
 
-        await this.client.ui.custom(message, '💢', process.env.COLOR_ERROR, `${guru}`, 'Bruh Moment', null, null, [actionRow], true);
+        await message.reply({ content: `${guru}`, components: [actionRow] });
         this.client.ui.recordError(this.client, command, '❌ Command Error', error.stack);
         this.client.logger.error('[Client] Error in command "%s": %s', command, error.stack);
     }
