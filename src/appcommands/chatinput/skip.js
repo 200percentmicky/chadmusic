@@ -107,7 +107,11 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 try {
                     this.client.player.jump(guild, parseInt(ctx.options.jump.index));
-                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to ${
+                        song.metadata?.silent
+                            ? 'a hidden track'
+                            : `**${song.name}**`
+                    }...`);
                     return channel.sendTyping();
                 } catch {
                     return this.client.ui.reply(ctx, 'error', 'Not a valid entry in the queue.');
