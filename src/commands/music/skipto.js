@@ -76,7 +76,11 @@ module.exports = class CommandSkipTo extends Command {
         if (vc.members.size <= 2) {
             try {
                 this.client.player.jump(message, parseInt(args[1]));
-                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
+                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, `Skipping to ${
+                    song.metadata?.silent
+                        ? 'a hidden track'
+                        : `**${song.name}**`
+                }...`);
                 return message.channel.sendTyping();
             } catch {
                 return this.client.ui.reply(message, 'error', 'Not a valid entry in the queue.');
