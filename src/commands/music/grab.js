@@ -36,11 +36,11 @@ module.exports = class CommandGrab extends Command {
     async exec (message) {
         // Grab will not be affected by DJ Mode.
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
 
-        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         const queue = this.client.player.getQueue(message);
         const song = queue.songs[0];
@@ -48,7 +48,7 @@ module.exports = class CommandGrab extends Command {
         const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 

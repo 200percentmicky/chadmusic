@@ -48,7 +48,7 @@ module.exports = class CommandLyrics extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
         }
 
         const geniusClient = new Genius.Client(process.env.GENIUS_TOKEN);

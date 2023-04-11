@@ -38,23 +38,23 @@ module.exports = class CommandPause extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
         const queue = this.client.player.getQueue(message.guild);
-        if (!queue || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+        if (!queue || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
             const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
@@ -69,7 +69,7 @@ module.exports = class CommandPause extends Command {
             }
             return this.client.ui.custom(message, '⏸', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}resume to resume playback.`);
         } else {
-            return this.client.ui.send(message, 'NOT_ALONE');
+            return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }
     }
 };

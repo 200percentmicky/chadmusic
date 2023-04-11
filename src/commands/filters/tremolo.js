@@ -50,21 +50,21 @@ module.exports = class CommandTremolo extends Command {
 
         if (djMode) {
             if (!dj) {
-                return this.client.ui.send(message, 'DJ_MODE');
+                return this.client.ui.sendPrompt(message, 'DJ_MODE');
             }
         }
 
         if (allowFilters === 'dj') {
             if (!dj) {
-                return this.client.ui.send(message, 'FILTERS_NOT_ALLOWED');
+                return this.client.ui.sendPrompt(message, 'FILTERS_NOT_ALLOWED');
             }
         }
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(message.guild.id);
-        if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!queue) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
@@ -74,7 +74,7 @@ module.exports = class CommandTremolo extends Command {
                     pushFormatFilter(queue, 'Tremolo', 'Off');
                     return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tremolo** Off');
                 } catch (err) {
-                    return this.client.ui.send(message, 'FILTER_NOT_APPLIED', 'Tremolo');
+                    return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
             } else {
                 if (!args[1]) {
@@ -98,7 +98,7 @@ module.exports = class CommandTremolo extends Command {
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {
-                return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+                return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
             }
         }
     }

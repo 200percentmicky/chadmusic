@@ -182,26 +182,26 @@ class CommandPlayer extends SlashCommand {
         const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
             if (ctx.subcommands[0] === 'grab') {} // eslint-disable-line no-empty, brace-style
-            else if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            else if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }
 
         const vc = _member.voice.channel;
         const textChannel = client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', vc.id);
+                return this.client.ui.sendPrompt(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', vc.id);
             }
         }
 
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(guild);
 
         switch (ctx.subcommands[0]) {
         case 'nowplaying': {
             const currentVc = client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const song = queue.songs[0];
             const total = song.duration;
@@ -336,8 +336,8 @@ class CommandPlayer extends SlashCommand {
                     this.client.vc.join(vc);
                 } catch (err) {
                     const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-                    if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
-                    else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    if (!permissions) return this.client.ui.sendPrompt(ctx, 'MISSING_CONNECT', vc.id);
+                    else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
                     else return this.client.ui.reply(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
                 }
 
@@ -370,42 +370,42 @@ class CommandPlayer extends SlashCommand {
                 this.client.vc.leave(guild);
                 return this.client.ui.custom(ctx, '📤', 0xDD2E44, `Left <#${vc.id}>`);
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
         case 'pause': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 if (queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is already paused.', null, "Type '/player resume' to resume playback.");
                 await this.client.player.pause(guild);
                 return this.client.ui.custom(ctx, '⏸', process.env.COLOR_INFO, 'Paused', null, "Type '/player resume' to resume playback.");
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
         case 'resume': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 if (!queue.paused) return this.client.ui.reply(ctx, 'warn', 'The player is not paused.');
                 await queue.resume();
                 return this.client.ui.custom(ctx, '▶', process.env.COLOR_INFO, 'Resuming playback...');
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
         case 'volume': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const volume = queue.volume;
             if (ctx.subcommands[1] === 'view') {
@@ -441,8 +441,8 @@ class CommandPlayer extends SlashCommand {
 
         case 'earrape': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             const earrape = 69420; // 😂👌👌💯
             const volume = queue.volume;
@@ -464,8 +464,8 @@ class CommandPlayer extends SlashCommand {
 
         case 'seek': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 try {
@@ -476,27 +476,27 @@ class CommandPlayer extends SlashCommand {
                 }
                 return this.client.ui.reply(ctx, 'info', `Seeking to \`${ctx.options.seek.time}\`...`);
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
         case 'startover': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 this.client.player.seek(guild, 0);
                 return this.client.ui.reply(ctx, 'info', 'Restarting song...');
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
         case 'repeat': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 const mode = parseInt(ctx.options.repeat.mode);
@@ -511,7 +511,7 @@ class CommandPlayer extends SlashCommand {
                     : 'Repeat mode has been disabled.'
                 );
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
@@ -559,22 +559,22 @@ class CommandPlayer extends SlashCommand {
 
         case 'bindchannel': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (dj) {
                 const newBindChannel = await guild.channels.fetch(ctx.options.bindchannel.channel);
                 queue.textChannel = newBindChannel;
                 return this.client.ui.reply(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
             } else {
-                return this.client.ui.send(ctx, 'NO_DJ');
+                return this.client.ui.sendPrompt(ctx, 'NO_DJ');
             }
         }
 
         case 'grab': {
             const currentVc = this.client.vc.get(vc);
-            if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             await ctx.defer(true);
 
@@ -620,15 +620,15 @@ class CommandPlayer extends SlashCommand {
 
         case 'stop': {
             const currentVc = this.client.vc.get(vc);
-            if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+            else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
                 this.client.player.stop(guild);
                 this.client.vc.leave(guild);
                 return this.client.ui.custom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
         }

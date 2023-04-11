@@ -129,18 +129,18 @@ class CommandPlay extends SlashCommand {
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
         const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(ctx.guildID, 'textChannel');
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.creator.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.creator.ui.sendPrompt(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const vc = _member.voice.channel;
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
             if (pornPattern(ctx.options.track?.query)) {
@@ -180,13 +180,13 @@ class CommandPlay extends SlashCommand {
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
             const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-            if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
+            if (!permissions) return this.client.ui.sendPrompt(ctx, 'MISSING_CONNECT', vc.id);
 
             if (vc.type === 'stage') {
                 try {
                     this.client.vc.join(vc);
                 } catch (err) {
-                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
                     else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
                 }
                 const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
@@ -203,12 +203,12 @@ class CommandPlay extends SlashCommand {
                 try {
                     this.client.vc.join(vc);
                 } catch (err) {
-                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
                     else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
                 }
             }
         } else {
-            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(guild.id);
@@ -257,7 +257,7 @@ class CommandPlay extends SlashCommand {
                         await this.client.player.skip(guild);
                     } catch {}
                 } else {
-                    return this.client.ui.send(ctx, 'NOT_ALONE');
+                    return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
                 }
             } else {
                 if (ctx.subcommands[0] === 'silently') requested = ctx.options.silently.query;

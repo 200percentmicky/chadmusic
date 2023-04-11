@@ -38,29 +38,29 @@ module.exports = class CommandShuffle extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(message);
-        if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!queue) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         if (vc.members.size <= 2 || dj) {
-            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
             this.client.player.shuffle(message);
             return this.client.ui.reply(message, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
         } else {
-            return this.client.ui.send(message, 'NOT_ALONE');
+            return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }
     }
 };

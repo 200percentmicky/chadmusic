@@ -249,20 +249,20 @@ class CommandFilter extends SlashCommand {
         const allowFilters = this.client.settings.get(ctx.guildID, 'allowFilters');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
-        if (djMode && !dj) return this.client.ui.send(ctx, 'DJ_MODE');
+        if (djMode && !dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
 
-        if (!allowFilters && !dj) return this.client.ui.send(ctx, 'FILTERS_NOT_ALLOWED');
+        if (!allowFilters && !dj) return this.client.ui.sendPrompt(ctx, 'FILTERS_NOT_ALLOWED');
 
         const vc = member.voice.channel;
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(guild.id);
-        if (!queue) return this.client.ui.send(ctx, 'NOT_PLAYING');
+        if (!queue) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
             const noFilter = (filter) => {
-                return this.client.ui.send(
+                return this.client.ui.sendPrompt(
                     ctx,
                     'FILTER_NOT_APPLIED',
                     filter
@@ -310,7 +310,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('bassboost', ctx.options.bass.db !== 0 ? `bass=g=${ctx.options.bass.db}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
                 pushFormatFilter(queue, 'Bass Boost', ctx.options.bass.db !== 0 ? `Gain: \`${ctx.options.bass.db}dB\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
@@ -325,7 +325,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('tremolo', f !== 0 ? `tremolo=f=${f}:d=${d}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
                 pushFormatFilter(queue, 'Tremolo', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Tremolo** ${f === 0
@@ -340,7 +340,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('vibrato', f !== 0 ? `vibrato=f=${f}:d=${d}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
                 pushFormatFilter(queue, 'Vibrato', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Vibrato** ${f === 0
@@ -357,7 +357,7 @@ class CommandFilter extends SlashCommand {
                         : false
                     );
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
                 pushFormatFilter(queue, 'Reverse', reverse ? 'Enabled' : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, `**Reverse** ${reverse
@@ -371,7 +371,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
                 }
                 pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
@@ -382,7 +382,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('pitch', rate !== 0 ? `rubberband=pitch=${rate}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
                 }
                 pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
@@ -395,7 +395,7 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('crusher', samples !== 0 ? `acrusher=samples=${samples}:bits=${bits}:mode=${mode}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
                 pushFormatFilter(queue, 'Crusher', samples !== 0 ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
@@ -406,25 +406,39 @@ class CommandFilter extends SlashCommand {
                 try {
                     await queue.filters.set('crystalize', intensity !== 0 ? `crystalizer=i=${intensity}` : false);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
                 pushFormatFilter(queue, 'Crystalize', intensity !== 0 ? `Intensity \`${intensity}\`` : 'Off');
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
             }
+
+            case 'normalize': {
+                const gain = ctx.options.normalize.gain;
+                const intensity = ctx.options.normalize.intensity;
+                try {
+                    await queue.filters.set('normalize', gain >= 1 ? `normalizer=dynaudnorm=g=${gain}:f=${intensity}` : false);
+                } catch {
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Normalize');
+                }
+                pushFormatFilter(queue, 'Normalize', gain >= 1 ? `Gain \`${gain}\` at \`${intensity}Hz.\`` : 'Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Normalize**  Gain \`${gain}\` at \`${intensity}Hz.\`` : '**Normalize** Off');
+            }
+
+            // TODO: Add the rest of the new filters.
 
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
                 try {
                     await queue.filters.set('custom', custom === 'OFF'.toLowerCase() ? false : custom);
                 } catch {
-                    return this.client.ui.send(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
                 }
                 pushFormatFilter(queue, 'Custom Filter', custom === 'OFF'.toLowerCase() ? 'Off' : custom);
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
             }
             }
         } else {
-            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
     }
 }

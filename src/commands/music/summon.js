@@ -37,18 +37,18 @@ module.exports = class CommandSummon extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(message.guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== message.channel.id) {
-                return this.client.ui.send(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(message, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
@@ -59,8 +59,8 @@ module.exports = class CommandSummon extends Command {
                 this.client.vc.join(vc);
             } catch (err) {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-                if (!permissions) return this.client.ui.send(message, 'MISSING_CONNECT', vc.id);
-                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(message, 'FULL_CHANNEL');
+                if (!permissions) return this.client.ui.sendPrompt(message, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(message, 'FULL_CHANNEL');
                 else return this.client.ui.reply(message, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 

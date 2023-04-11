@@ -50,17 +50,17 @@ module.exports = class CommandCustomFilter extends Command {
 
         if (djMode) {
             if (!dj) {
-                return this.client.ui.send(message, 'DJ_MODE');
+                return this.client.ui.sendPrompt(message, 'DJ_MODE');
             }
         }
 
         if (!args[1]) return this.client.ui.usage(message, 'customfilter <argument:str>');
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(message.guild.id);
-        if (!queue) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!queue) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
@@ -80,7 +80,7 @@ module.exports = class CommandCustomFilter extends Command {
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {
-                return this.client.ui.send(message, 'ALREADY_SUMMONED_ELSEWHERE');
+                return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
             }
         }
     }

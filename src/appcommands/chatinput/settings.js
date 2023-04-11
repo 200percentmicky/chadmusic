@@ -286,7 +286,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const channel = guild.channels.cache.get(ctx.channelID);
 
         if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
-            return this.client.ui.send(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
+            return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
         await settings.ensure(ctx.guildID, this.client.defaultSettings);

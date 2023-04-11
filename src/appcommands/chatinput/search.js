@@ -50,13 +50,13 @@ class CommandSearch extends SlashCommand {
         const djRole = this.client.settings.get(guild.id, 'djRole');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
@@ -74,7 +74,7 @@ class CommandSearch extends SlashCommand {
         }
 
         const vc = member.voice.channel;
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
         if (!currentVc) {
@@ -82,8 +82,8 @@ class CommandSearch extends SlashCommand {
                 this.client.vc.join(vc);
             } catch (err) {
                 const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-                if (!permissions) return this.client.ui.send(ctx, 'MISSING_CONNECT', vc.id);
-                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.send(ctx, 'FULL_CHANNEL');
+                if (!permissions) return this.client.ui.sendPrompt(ctx, 'MISSING_CONNECT', vc.id);
+                else if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
                 else return this.client.ui.reply(ctx, 'error', `An error occured connecting to the voice channel. ${err.message}`);
             }
 
@@ -100,7 +100,7 @@ class CommandSearch extends SlashCommand {
                 }
             }
         } else {
-            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+            if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
         const queue = this.client.player.getQueue(guild.id);

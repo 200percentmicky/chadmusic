@@ -43,17 +43,17 @@ module.exports = class CommandBindChannel extends Command {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(message, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
         }
 
-        if (!dj) return this.client.ui.send(message, 'NO_DJ');
+        if (!dj) return this.client.ui.sendPrompt(message, 'NO_DJ');
 
         const vc = message.member.voice.channel;
-        if (!vc) return this.client.ui.send(message, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
 
-        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.send(message, 'NOT_PLAYING');
+        if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         const queue = this.client.player.getQueue(message.guild);
 

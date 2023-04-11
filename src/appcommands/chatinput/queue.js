@@ -102,25 +102,25 @@ class CommandQueue extends SlashCommand {
         const djRole = this.client.settings.get(guild.id, 'djRole');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const queue = this.client.player.getQueue(guild);
         const vc = member.voice.channel;
 
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         const currentVc = this.client.vc.get(vc);
 
-        if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        if (!this.client.player.getQueue(guild) || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         switch (ctx.subcommands[0]) {
         case 'reverse': {
@@ -142,7 +142,7 @@ class CommandQueue extends SlashCommand {
 
                 this.client.ui.reply(ctx, 'ok', 'The order of the queue has been reversed.');
             } else {
-                this.client.ui.send(ctx, 'NOT_ALONE');
+                this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
 
             break;
@@ -153,7 +153,7 @@ class CommandQueue extends SlashCommand {
                 this.client.player.shuffle(guild);
                 this.client.ui.reply(ctx, 'ok', `**${queue.songs.length - 1}** entries have been shuffled.`);
             } else {
-                this.client.ui.send(ctx, 'NOT_ALONE');
+                this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
 
             break;
@@ -184,7 +184,7 @@ class CommandQueue extends SlashCommand {
                     this.client.ui.reply(ctx, 'ok', `Removed **${song.name}** from the queue.`);
                 }
             } else {
-                this.client.ui.send(ctx, 'NOT_ALONE');
+                this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
 
             break;
@@ -196,7 +196,7 @@ class CommandQueue extends SlashCommand {
                 queue.songs.splice(1, queue.songs.length);
                 this.client.ui.custom(ctx, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
             } else {
-                this.client.ui.send(ctx, 'NOT_ALONE');
+                this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
 
             break;
@@ -233,7 +233,7 @@ class CommandQueue extends SlashCommand {
                 }
 
                 case 'dj': {
-                    if (!dj) return this.client.ui.send(ctx, 'NO_DJ');
+                    if (!dj) return this.client.ui.sendPrompt(ctx, 'NO_DJ');
                     return `${song.metadata?.silent ? '🔇 ' : ''}${song.user} \`${song.formattedDuration}\` [${song.name}](${song.url})`;
                 }
 

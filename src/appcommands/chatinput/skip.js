@@ -65,24 +65,24 @@ class CommandSkip extends SlashCommand {
         const djRole = this.client.settings.get(guild.id, 'djRole');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (djMode) {
-            if (!dj) return this.client.ui.send(ctx, 'DJ_MODE');
+            if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }
 
         const textChannel = this.client.settings.get(guild.id, 'textChannel', null);
         if (textChannel) {
             if (textChannel !== channel.id) {
-                return this.client.ui.send(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
+                return this.client.ui.sendPrompt(ctx, 'WRONG_TEXT_CHANNEL_MUSIC', textChannel);
             }
         }
 
         const vc = member.voice.channel;
-        if (!vc) return this.client.ui.send(ctx, 'NOT_IN_VC');
+        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         const queue = this.client.player.getQueue(guild);
 
         const currentVc = this.client.vc.get(vc);
-        if (!queue || !currentVc) return this.client.ui.send(ctx, 'NOT_PLAYING');
-        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.send(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+        if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
+        else if (!isSameVoiceChannel(this.client, member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
         switch (ctx.subcommands[0]) {
         case 'force': {
@@ -94,7 +94,7 @@ class CommandSkip extends SlashCommand {
                 this.client.player.skip(guild);
                 await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
             } else {
-                this.client.ui.send(ctx, 'NOT_ALONE');
+                this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
 
             channel.sendTyping();
@@ -117,7 +117,7 @@ class CommandSkip extends SlashCommand {
                     return this.client.ui.reply(ctx, 'error', 'Not a valid entry in the queue.');
                 }
             } else {
-                return this.client.ui.send(ctx, 'NOT_ALONE');
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
         }
 
