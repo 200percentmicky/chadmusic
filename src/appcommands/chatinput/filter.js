@@ -69,6 +69,18 @@ class CommandFilter extends SlashCommand {
                             value: 'crystalize'
                         },
                         {
+                            name: 'normalize',
+                            value: 'normalize'
+                        },
+                        {
+                            name: 'treble',
+                            value: 'treble'
+                        },
+                        {
+                            name: 'pulsator',
+                            value: 'pulsator'
+                        },
+                        {
                             name: 'customfilter',
                             value: 'custom'
                         },
@@ -222,6 +234,64 @@ class CommandFilter extends SlashCommand {
                     max_value: 10,
                     required: true
                 }]
+            },
+            {
+                type: CommandOptionType.SUB_COMMAND,
+                name: 'normalize',
+                description: 'Normalizes the audio.',
+                options: [
+                    {
+                        type: CommandOptionType.INTEGER,
+                        name: 'gain',
+                        description: 'The gain factor of the normalizer. Set to anything less than 1 to disable.',
+                        min_value: 0,
+                        max_value: 100,
+                        required: true
+                    },
+                    {
+                        type: CommandOptionType.INTEGER,
+                        name: 'intensity',
+                        description: 'The intensity of the normalizer.',
+                        min_value: 3,
+                        max_value: 301
+                    }
+                ]
+            },
+            {
+                type: CommandOptionType.SUB_COMMAND,
+                name: 'treble',
+                description: 'Boosts or cuts upper frequencies of the audio.',
+                options: [
+                    {
+                        type: CommandOptionType.INTEGER,
+                        name: 'gain',
+                        description: 'The treble gain. Clipping occurs at positive values! 0 to disable.',
+                        min_value: -20,
+                        max_value: 20,
+                        required: true
+                    },
+                    {
+                        type: CommandOptionType.INTEGER,
+                        name: 'frequency',
+                        description: 'The frequency of the effect in Hz.',
+                        min_value: 0
+                    }
+                ]
+            },
+            {
+                type: CommandOptionType.SUB_COMMAND,
+                name: 'pulsator',
+                description: 'Adds a pulsating effect to the audio.',
+                options: [
+                    {
+                        type: CommandOptionType.INTEGER,
+                        name: 'frequency',
+                        description: 'The frequency of the effect in Hz. 0 to disable.',
+                        min_value: 0,
+                        max_value: 100,
+                        required: true
+                    }
+                ]
             },
             {
                 type: CommandOptionType.SUB_COMMAND,
