@@ -113,7 +113,7 @@ class WaveUI {
      * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
      * @returns {(Message|CommandContext|InteractionResponse)} The message to send in the channel.
      */
-    reply (msg, type, description, title, footer, ephemeral, buttons, mention) {
+    static reply (msg, type, description, title, footer, ephemeral, buttons, mention) {
         /* The emoji of the embed */
         let embedEmoji = {
             ok: process.env.EMOJI_OK ?? '✅',
@@ -180,7 +180,7 @@ class WaveUI {
      * @param {string} syntax The usage of the command
      * @returns {Message} The embed containg the usage of the command.
      */
-    usage (msg, syntax) {
+    static usage (msg, syntax) {
         const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
         const embed = new EmbedBuilder()
             .setColor(parseInt(process.env.COLOR_INFO))
@@ -208,7 +208,7 @@ class WaveUI {
      * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
      * @returns {(Message|CommandContext|InteractionResponse)} The message to reply to the user.
      */
-    custom (msg, emoji, color, description, title, footer, ephemeral, buttons, mention) {
+    static custom (msg, emoji, color, description, title, footer, ephemeral, buttons, mention) {
         const embed = embedUI(color, emoji || null, title || null, description || null, footer || null);
         if (msg instanceof CommandContext) {
             return msg.send({
@@ -256,7 +256,7 @@ class WaveUI {
      * @param {any} extra Any extra variables to provide to the prompt.
      * @returns {(Message|CommandContext|InteractionResponse)} The selected prompt.
      */
-    sendPrompt (msg, prompt, extra) {
+    static sendPrompt (msg, prompt, extra) {
         const promptMessage = {
             DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
             NO_DJ: 'You must be a DJ or have the **Manage Channels** permission to use that.',
@@ -350,7 +350,7 @@ class WaveUI {
      * @param {Error} error The error of the bug report.
      * @returns {Message} The overall bug report.
      */
-    async recordError (client, command, title, error) { // TODO: Remove 'type'.
+    static recordError (client, command, title, error) { // TODO: Remove 'type'.
         const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
         if (!errorChannel) return;
 
