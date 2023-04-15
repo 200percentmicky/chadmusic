@@ -69,14 +69,6 @@ class CommandFilter extends SlashCommand {
                             value: 'crystalize'
                         },
                         {
-                            name: 'normalize',
-                            value: 'normalize'
-                        },
-                        {
-                            name: 'treble',
-                            value: 'treble'
-                        },
-                        {
                             name: 'pulsator',
                             value: 'pulsator'
                         },
@@ -234,49 +226,6 @@ class CommandFilter extends SlashCommand {
                     max_value: 10,
                     required: true
                 }]
-            },
-            {
-                type: CommandOptionType.SUB_COMMAND,
-                name: 'normalize',
-                description: 'Normalizes the audio.',
-                options: [
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'gain',
-                        description: 'The gain factor of the normalizer. Set to anything less than 1 to disable.',
-                        min_value: 0,
-                        max_value: 100,
-                        required: true
-                    },
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'intensity',
-                        description: 'The intensity of the normalizer.',
-                        min_value: 3,
-                        max_value: 301
-                    }
-                ]
-            },
-            {
-                type: CommandOptionType.SUB_COMMAND,
-                name: 'treble',
-                description: 'Boosts or cuts upper frequencies of the audio.',
-                options: [
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'gain',
-                        description: 'The treble gain. Clipping occurs at positive values! 0 to disable.',
-                        min_value: -20,
-                        max_value: 20,
-                        required: true
-                    },
-                    {
-                        type: CommandOptionType.INTEGER,
-                        name: 'frequency',
-                        description: 'The frequency of the effect in Hz.',
-                        min_value: 0
-                    }
-                ]
             },
             {
                 type: CommandOptionType.SUB_COMMAND,
@@ -482,16 +431,15 @@ class CommandFilter extends SlashCommand {
                 return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
             }
 
-            case 'normalize': {
-                const gain = ctx.options.normalize.gain;
-                const intensity = ctx.options.normalize.intensity;
+            case 'pulsator': {
+                const frequency = ctx.options.pulsator.frequency;
                 try {
-                    await queue.filters.set('normalize', gain >= 1 ? `normalizer=dynaudnorm=g=${gain}:f=${intensity}` : false);
+                    await queue.filters.set('pulsator', frequency >= 0.01 ? `apulsator=hz=${frequency}` : false);
                 } catch {
-                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Normalize');
+                    return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Pulsator');
                 }
-                pushFormatFilter(queue, 'Normalize', gain >= 1 ? `Gain \`${gain}\` at \`${intensity}Hz.\`` : 'Off');
-                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, intensity !== 0 ? `**Normalize**  Gain \`${gain}\` at \`${intensity}Hz.\`` : '**Normalize** Off');
+                pushFormatFilter(queue, 'Pulsator', frequency >= 0.01 ? `\`${frequency}Hz.\`` : 'Off');
+                return this.client.ui.custom(ctx, '📢', process.env.COLOR_INFO, frequency !== 0 ? `**Pulsator** \`${frequency}Hz.\`` : '**Pulsator** Off');
             }
 
             // TODO: Add the rest of the new filters.
