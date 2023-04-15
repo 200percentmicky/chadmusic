@@ -41,7 +41,8 @@ const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
-const ui = require('./modules/WaveUI');
+const WaveUI = require('./modules/WaveUI');
+const WaveUtils = require('./modules/WaveUtils')
 const path = require('path');
 
 // Let's boogie!
@@ -66,8 +67,9 @@ class WaveBot extends AkairoClient {
 
         // Calling packages that can be used throughout the client.
         this.logger = logger;
-        this.ui = ui;
-        this.utils = require('bot-utils');
+        this.ui = WaveUI;
+        this.utils = WaveUtils;
+        this.extraUtils = require('bot-utils');
 
         // Music Player.
         this.player = new DisTube(this, {
