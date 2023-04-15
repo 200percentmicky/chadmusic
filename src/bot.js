@@ -87,7 +87,8 @@ class WaveBot extends AkairoClient {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
-                highWaterMark: 1024
+                highWaterMark: 1024,
+                IPv6Block: process.env.IPV6_BLOCK
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
