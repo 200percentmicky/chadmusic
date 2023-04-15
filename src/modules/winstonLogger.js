@@ -31,7 +31,9 @@ const logger = createLogger({
     ),
     transports: [
         new transports.File({
-            filename: 'console.log'
+            filename: 'console.log',
+            level: 'silly',
+            maxsize: 10 * 1000000
         })
     ]
 });
@@ -44,7 +46,8 @@ if (process.env.USE_CONSOLE === 'true') {
             format.printf(({ timestamp, label, level, message }) => {
                 return `${chalk.black.cyan(`[${timestamp}]`)} ${label} ${level}: ${message}`;
             })
-        )
+        ),
+        level: 'silly'
     }));
 }
 
