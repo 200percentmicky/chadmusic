@@ -75,7 +75,7 @@ module.exports = class CommandPlay extends Command {
 
         if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (pornPattern(args.track?.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
+        if (this.client.utils.pornPattern(args.track?.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
             return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
         }
 

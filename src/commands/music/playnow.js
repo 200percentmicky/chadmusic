@@ -72,7 +72,7 @@ module.exports = class CommandPlayNow extends Command {
 
         if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'playnow <url/search/attachment>');
 
-        if (pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
+        if (this.client.utils.pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
 
         const queue = this.client.player.getQueue(message);
         if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.');

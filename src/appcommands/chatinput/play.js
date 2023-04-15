@@ -23,14 +23,6 @@ const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 
-const pornPattern = (url) => {
-    // ! TODO: Come up with a better regex lol
-    // eslint-disable-next-line no-useless-escape
-    const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-    const pornRegex = new RegExp(pornPattern);
-    return url.match(pornRegex);
-};
-
 class CommandPlay extends SlashCommand {
     constructor (creator) {
         super(creator, {
@@ -143,7 +135,7 @@ class CommandPlay extends SlashCommand {
         if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
-            if (pornPattern(ctx.options.track?.query)) {
+            if (this.client.utils.pornPattern(ctx.options.track?.query)) {
                 await ctx.defer(true);
                 return this.client.ui.reply(ctx, 'no', "The URL you're requesting to play is not allowed.");
             }
