@@ -450,7 +450,7 @@ class CommandQueue extends SlashCommand {
 
                 btnCtx.acknowledge();
                 btnCtx.delete();
-            });
+            }, 300 * 1000);
         }
         }
     }
