@@ -42,7 +42,7 @@ const bot = require('../../../package.json');
 const sc = require('slash-create/package.json');
 const akairo = require('discord-akairo/package.json');
 const discord = require('discord.js/package.json');
-const distube = require('../../../chadtube/package.json'); // Temporary
+const distube = require('../../../node_modules/distube/package.json'); // Temporary
 
 class CommandCore extends SlashCommand {
     constructor (creator) {
@@ -391,7 +391,7 @@ class CommandCore extends SlashCommand {
                      Node.js: ${process.version}
                   Discord.js: ${require('discord.js/package.json').version}
             Akairo Framework: ${require('discord-akairo/package.json').version}
-                  DisTube.js: ${require('../../../chadtube/package.json').version}
+                  DisTube.js: ${require('../../../node_modules/distube/package.json').version}
                 slash-create: ${require('slash-create/package.json').version}
            Voice Connections: ${this.client.vc.voices.collection.size}
                       Uptime: ${prettyMs(this.client.uptime, { verbose: true })}

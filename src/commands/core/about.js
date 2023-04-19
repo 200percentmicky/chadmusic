@@ -26,7 +26,7 @@ const bot = require('../../../package.json');
 const sc = require('../../../node_modules/slash-create/package.json');
 const akairo = require('../../../node_modules/discord-akairo/package.json');
 const discord = require('../../../node_modules/discord.js/package.json');
-const distube = require('../../../chadtube/package.json'); // Temporary
+const distube = require('../../../node_modules/distube/package.json'); // Temporary
 
 module.exports = class CommandAbout extends Command {
     constructor () {

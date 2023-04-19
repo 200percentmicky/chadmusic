@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { Queue } = require('../../chadtube/dist'); // eslint-disable-line no-unused-vars
+const { Queue } = require('distube'); // eslint-disable-line no-unused-vars
 const _ = require('lodash');
 
 /**
