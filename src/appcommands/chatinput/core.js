@@ -332,6 +332,7 @@ class CommandCore extends SlashCommand {
                     :white_small_square: Add multiple filters to the player.
                     :white_small_square: Alter filter values during playback.
                     :white_small_square: Unlimited volume! :joy::ok_hand:
+                    :white_small_square: Hide tracks by silently adding them. 🤫
                     :white_small_square: DJ commands to control the player.
                     :white_small_square: Queue and track length limits.
                     :white_small_square: Advanced queue management.
