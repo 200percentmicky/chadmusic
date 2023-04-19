@@ -17,7 +17,7 @@
  */
 
 const { Command } = require('discord-akairo');
-const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle, Team } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
@@ -40,7 +40,8 @@ module.exports = class CommandAbout extends Command {
     }
 
     async exec (message) {
-        const owner = this.client.users.cache.get(this.client.ownerID);
+        const app = this.client.application;
+        const owner = app.owner instanceof Team ? `${app.owner?.name}` : `${app.owner?.tag} (${app.owner?.id})`;
         const aboutembed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
@@ -79,8 +80,8 @@ module.exports = class CommandAbout extends Command {
             })
             .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
             .setFooter({
-                text: `The owner of this instance is ${owner.tag} (${owner.id}).`,
-                iconURL: owner.avatarURL({ dynamic: true })
+                text: `The owner of this instance is ${owner}`,
+                iconURL: app.owner instanceof Team ? app.owner?.iconURL(): app.owner?.avatarURL({ dynamic: true })
             });
 
         const urlGithub = new ButtonBuilder()

@@ -314,8 +314,8 @@ class CommandCore extends SlashCommand {
         }
 
         case 'about': {
-            app = this.client.application.fetch();
-            const owner = `${app.owner?.tag ?? app.owner?.name} (${app.owner?.id})`;
+            app = this.client.application;
+            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag} (${app.owner?.id})`;
             // Had to fetch this for some reason...
             const botColor = await this.client.guilds.cache.get(ctx.guildID).members.me.displayColor ?? null;
             const aboutembed = new Discord.EmbedBuilder()
@@ -356,8 +356,8 @@ class CommandCore extends SlashCommand {
                 })
                 .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
                 .setFooter({
-                    text: `The owner of this instance is ${owner}.`,
-                    iconURL: app.owner?.avatarURL({ dynamic: true })
+                    text: `The owner of this instance is ${owner}`,
+                    iconURL: app.owner instanceof Discord.Team ? app.owner?.iconURL() : app.owner?.avatarURL({ dynamic: true })
                 });
 
             const urlGithub = new Discord.ButtonBuilder()
