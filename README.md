@@ -49,6 +49,6 @@ If you're running the bot on Linux, install the following packages:
 1. Clone this repo.
 2. Create a bot application [here](https://discord.com/developers), and copy the bot's token.
 3. Fill out the `.env.example` file and rename it to `.env`
-4. Type `npm ci` to install the dependencies.
+4. Type `mpn run build` or `npm ci` to install the dependencies.
 5. Type `npm run bot` or `node index` to run the bot. (Consider using a process manager like PM2 to keep it running in the background.)
 
