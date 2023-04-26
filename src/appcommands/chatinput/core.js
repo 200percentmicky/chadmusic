@@ -313,6 +313,9 @@ class CommandCore extends SlashCommand {
 
         case 'about': {
             app = this.client.application;
+
+            if (!app.owner) await this.client.application.fetch();
+
             const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag} (${app.owner?.id})`;
             // Had to fetch this for some reason...
             const botColor = await this.client.guilds.cache.get(ctx.guildID).members.me.displayColor ?? null;

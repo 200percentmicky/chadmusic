@@ -39,6 +39,9 @@ module.exports = class CommandAbout extends Command {
 
     async exec (message) {
         const app = this.client.application;
+
+        if (!app.owner) await this.client.application.fetch();
+
         const owner = app.owner instanceof Team ? `${app.owner?.name}` : `${app.owner?.tag} (${app.owner?.id})`;
         const aboutembed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
