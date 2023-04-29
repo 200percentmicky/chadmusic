@@ -623,7 +623,6 @@ class CommandPlayer extends SlashCommand {
 
             if (vc.members.size <= 2 || dj) {
                 this.client.player.stop(guild);
-                this.client.vc.leave(guild);
                 return this.client.ui.custom(ctx, '⏹', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
             } else {
                 return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
