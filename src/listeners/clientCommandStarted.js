@@ -25,10 +25,6 @@ module.exports = class ListenerClientCommandStarted extends Listener {
     }
 
     async exec (message, command, args) {
-        if (!await this.client.depWarnMsg.get(message.guild.id)) {
-            this.client.ui.reply(message, 'warn', 'Message based commands are deprecated. Please use slash commands instead.');
-            return this.client.depWarnMsg.set(message.guild.id, true, 1000 * 60 * 60 * 12);
-        }
         this.client.settings.ensure(message.guild.id, this.client.defaultSettings);
     }
 };
