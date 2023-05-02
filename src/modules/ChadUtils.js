@@ -20,7 +20,7 @@ const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField } = requ
 /**
  * A set of custom utilities for the bot to use.
  */
-class WaveUtils {
+class ChadUtils {
     /**
      * Verifys if the user is in the same voice channel as the client.
      * @param {Client} client Discord Client
@@ -88,4 +88,4 @@ class WaveUtils {
     };    
 }
 
-module.exports = WaveUtils;
+module.exports = ChadUtils;

@@ -94,13 +94,13 @@ const embedColor = {
 /**
  * The bot's user interface.
  */
-class WaveUI {
+class ChadUI {
     /**
      * Replies to the user as an embed, or a standard text message if the bot doesn't
      * have the **Embed Links** permission. Supported types are `ok` for success, `warn`
      * for warnings, `error` for errors, `info` for information, and `no` for forbidden.
      *
-     * @example <WaveUI>.reply(message, 'ok', 'The task failed successfully!')
+     * @example <ChadUI>.reply(message, 'ok', 'The task failed successfully!')
      * @param {(Message|CommandContext|ChatInputCommandInteraction)} msg The message object or an interaction.
      * @param {string} type The type of interface to provide.
      * @param {string} description The overall message.
@@ -173,7 +173,7 @@ class WaveUI {
     /**
      * Returns the overall usage of a message based command if no arguments were provided.
      *
-     * @example <WaveUI>.usage(message, 'play <url|search>');
+     * @example <ChadUI>.usage(message, 'play <url|search>');
      * @param {Message} msg A MessageResolvable | `Discord.Message`
      * @param {string} syntax The usage of the command
      * @returns {Message} The embed containg the usage of the command.
@@ -356,4 +356,4 @@ class WaveUI {
     }
 }
 
-module.exports = WaveUI;
+module.exports = ChadUI;

@@ -39,12 +39,12 @@ const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
-const WaveUI = require('./modules/WaveUI');
-const WaveUtils = require('./modules/WaveUtils')
+const ChadUI = require('./modules/ChadUI');
+const ChadUtils = require('./modules/ChadUtils')
 const path = require('path');
 
 // Let's boogie!
-class WaveBot extends AkairoClient {
+class ChadMusic extends AkairoClient {
     constructor () {
         super({
             ownerID: process.env.OWNER_ID
@@ -65,8 +65,8 @@ class WaveBot extends AkairoClient {
 
         // Calling packages that can be used throughout the client.
         this.logger = logger;
-        this.ui = WaveUI;
-        this.utils = WaveUtils;
+        this.ui = ChadUI;
+        this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
 
         // Music Player.
@@ -199,4 +199,4 @@ class WaveBot extends AkairoClient {
     }
 }
 
-module.exports = WaveBot;
+module.exports = ChadMusic;
