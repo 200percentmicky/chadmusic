@@ -24,9 +24,7 @@ module.exports = class CommandSkip extends Command {
             aliases: ['skip', 's'],
             category: '🎶 Music',
             description: {
-                text: 'Skips the currently playing song.',
-                usage: '|--force/-f|',
-                details: '`|--force/-f|` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
+                text: 'Skips the currently playing song.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks

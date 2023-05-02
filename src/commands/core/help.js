@@ -23,9 +23,9 @@ module.exports = class CommandHelp extends Command {
         super('help', {
             aliases: ['help'],
             description: {
-                text: 'You\'re looking at it! Displays info about available commands.',
+                text: 'Displays available commands and how to use them.',
                 usage: '[command]',
-                details: '`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires to operate.'
+                details: '`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires.'
             },
             category: '💻 Core',
             args: [

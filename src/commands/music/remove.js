@@ -25,8 +25,8 @@ module.exports = class CommandRemove extends Command {
             category: '🎶 Music',
             description: {
                 text: 'Removes an entry or multiple entries from the queue.',
-                usage: '<int:queue_entry/start> [int:end]',
-                details: '`<int:queue_entry/starting>` The queue entry to remove from the queue, or the starting position.\n[int:end] The end position for removing multiple entries.\nEvery entry from the starting to end position will be removed from the queue.'
+                usage: '<queue_entry/start> [end]',
+                details: '`<queue_entry/starting>` The queue entry to remove from the queue, or the starting position.\n[end] The end position for removing multiple entries.\nEvery entry from the starting to end position will be removed from the queue.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
@@ -65,7 +65,7 @@ module.exports = class CommandRemove extends Command {
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        if (!args.start) return this.client.ui.usage(message, 'remove <int:queue_entry/starting> [int:end]');
+        if (!args.start) return this.client.ui.usage(message, 'remove <queue_entry/starting> [end]');
 
         if (vc.members.size <= 2 || dj) {
             const queue = this.client.player.getQueue(message);

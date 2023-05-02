@@ -26,16 +26,21 @@ module.exports = class CommandTempo extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Changes the tempo of the playing track.',
-                usage: '<rate:int[0.1-10]>',
-                details: '`<rate:int[0.1-10]>` The rate to change. Between 0.1-10'
+                usage: '<rate:0.1-10>',
+                details: '`<rate:0.1-10>` The rate to change. Must be between 0.1 to 10 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'rate',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
@@ -59,11 +64,11 @@ module.exports = class CommandTempo extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (!args[1]) {
+            if (!args.rate) {
                 return this.client.ui.usage(message, 'tempo <rate:int[0.1-10]/off>');
             }
 
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.rate === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('tempo', null);
                     pushFormatFilter(queue, 'Tempo', 'Off');
@@ -73,7 +78,7 @@ module.exports = class CommandTempo extends Command {
                 }
             }
 
-            const rate = parseFloat(args[1]);
+            const rate = parseFloat(args.rate);
             if (isNaN(rate)) {
                 return this.client.ui.reply(message, 'error', 'Tempo requires a number or **off**.');
             }

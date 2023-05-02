@@ -27,21 +27,26 @@ module.exports = class CommandDJMode extends Command {
                 usage: '<toggle:on/off>',
                 details: 'Requires the DJ role or the **Manage Channels** permission.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks]
+            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
+            args: [
+                {
+                    id: 'toggle',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
+    async exec (message, args) {
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
-        if (!dj) return this.client.ui.reply(message, 'no', 'You must have the DJ role or the **Manage Channels** permissions to toggle DJ Mode.');
+        if (!dj) return this.client.ui.sendPrompt(message, 'NO_DJ')
 
-        const args = message.content.split(/ +/g);
-        if (!args[1]) return this.client.ui.usage(message, 'djmode <toggle:on/off>');
-        if (args[1] === 'ON'.toLowerCase()) {
+        if (!args.toggle) return this.client.ui.usage(message, 'djmode <toggle:on/off>');
+        if (args.toggle === 'ON'.toLowerCase()) {
             await this.client.settings.set(message.guild.id, true, 'djMode');
             return this.client.ui.reply(message, 'ok', 'DJ Mode has been **enabled**.');
-        } else if (args[1] === 'OFF'.toLowerCase()) {
+        } else if (args.toggle === 'OFF'.toLowerCase()) {
             await this.client.settings.set(message.guild.id, false, 'djMode');
             return this.client.ui.reply(message, 'ok', 'DJ Mode has been **disabled**.');
         } else {

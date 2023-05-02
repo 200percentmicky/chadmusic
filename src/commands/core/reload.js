@@ -26,7 +26,7 @@ module.exports = class CommandReload extends Command {
             aliases: ['reload'],
             category: '💻 Core',
             description: {
-                text: 'Reloads everything without restarting the bot.',
+                text: 'Reloads commands.',
                 usage: '[reload_slash]',
                 details: '`[reload_slash]` Whether to reload the application\'s slash commands.'
             },

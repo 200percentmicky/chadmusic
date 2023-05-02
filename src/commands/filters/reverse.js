@@ -29,21 +29,26 @@ module.exports = class CommandReverse extends Command {
                 text: 'Plays the music in reverse.',
                 usage: '[off]',
                 details: stripIndents`
-        \`[off]\` Turns off reverse if its active.
-        `
+                \`[off]\` Turns off reverse if its active.
+                `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'toggle',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -65,7 +70,7 @@ module.exports = class CommandReverse extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.toggle === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('reverse', null);
                     pushFormatFilter(queue, 'Reverse', 'Off');

@@ -24,28 +24,32 @@ module.exports = class CommandSetQueueLimit extends Command {
             category: '⚙ Settings',
             description: {
                 text: 'Limits the number of entries that members can add to the queue.',
-                usage: '<number|0/none>',
-                details: '`<number|0/none>` The numbers of entries to limit for members.\n- DJs can bypass this limitation.'
+                usage: '<number>',
+                details: '`<number>` The numbers of entries to limit for members.'
             },
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
-            userPermissions: [PermissionsBitField.Flags.ManageGuild]
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            args: [
+                {
+                    id: 'number',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
+        if (!args.number) return this.client.ui.usage(message, 'setqueuelimit <number>');
 
-        if (!args[1]) return this.client.ui.usage(message, 'setqueuelimit <number|0/none>');
-
-        if (args[1] === (0 || 'NONE'.toLowerCase())) {
+        if (args.number === (0 || 'NONE'.toLowerCase())) {
             await this.client.settings.delete(message.guild.id, 'maxQueueLimit');
             return this.client.ui.reply(message, 'ok', 'Queue Limits have been removed.');
         }
 
-        if (isNaN(args[1])) return this.client.ui.reply(message, 'error', 'You must provide a number.');
-        else if (args[1] < 0) return this.client.ui.reply(message, 'error', 'You cannot use a negative value.');
+        if (isNaN(args.number)) return this.client.ui.reply(message, 'error', 'You must provide a number.');
+        else if (args.number < 0) return this.client.ui.reply(message, 'error', 'You cannot use a negative value.');
 
-        await this.client.settings.set(message.guild.id, parseInt(args[1]), 'maxQueueLimit');
-        return this.client.ui.reply(message, 'ok', `Queue Limits have been set to \`${args[1]}\``);
+        await this.client.settings.set(message.guild.id, parseInt(args.number), 'maxQueueLimit');
+        return this.client.ui.reply(message, 'ok', `Queue Limits have been set to \`${args.number}\``);
     }
 };

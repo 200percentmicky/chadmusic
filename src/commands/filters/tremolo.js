@@ -27,24 +27,34 @@ module.exports = class CommandTremolo extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Adds a tremolo filter to the player.',
-                usage: '<depth:int(0.1-1)/off> [frequency:int]',
+                usage: '<depth:0.1-1/off> [frequency]',
                 details: stripIndents`
-        \`<depth:int(0.1-1)/off>\` The depth of the tremolo between 0.1-1, or "off" to disable it.
-        \`[frequency:int]\` The frequency of the tremolo.
-        `
+                \`<depth:int(0.1-1)/off>\` The depth of the tremolo. Must be between 0.1 to 1 or off.
+                \`[frequency:int]\` The frequency of the tremolo.
+                `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'depth',
+                    match: 'text'
+                },
+                {
+                    id: 'frequency',
+                    match: 'text',
+                    default: 5
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -66,7 +76,7 @@ module.exports = class CommandTremolo extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.depth === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('tremolo', null);
                     pushFormatFilter(queue, 'Tremolo', 'Off');
@@ -75,15 +85,14 @@ module.exports = class CommandTremolo extends Command {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
             } else {
-                if (!args[1]) {
-                    return this.client.ui.usage(message, 'tremolo <depth:int(0.1-1)/off> [frequency:int]');
+                if (!args.depth) {
+                    return this.client.ui.usage(message, 'tremolo <depth:0.1-1/off> [frequency]');
                 }
-                const d = parseFloat(args[1]);
-                let f = parseFloat(args[2]);
+                const d = parseFloat(args.depth);
+                let f = parseFloat(args.frequency);
                 if (d < 0.1 || d > 1 || isNaN(d)) {
                     return this.client.ui.reply(message, 'error', 'Depth must be between **0.1** to **1**, or **off**.');
                 }
-                if (!args[2]) f = 5;
                 if (isNaN(f)) {
                     return this.client.ui.reply(message, 'error', 'Frequency requires a number.');
                 }

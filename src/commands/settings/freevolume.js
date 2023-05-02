@@ -27,22 +27,27 @@ module.exports = class CommandFreeVolume extends Command {
                 usage: '<toggle:on/off>'
             },
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
-            userPermissions: [PermissionsBitField.Flags.ManageGuild]
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            args: [
+                {
+                    id: 'toggle',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const volume = this.client.settings.get(message.guild.id, 'defaultVolume');
-        if (!args[1]) return this.client.ui.usage(message, 'freevolume <toggle:on/off>');
-        if (args[1] === 'OFF'.toLowerCase()) {
+        if (!args.toggle) return this.client.ui.usage(message, 'freevolume <toggle:on/off>');
+        if (args.toggle === 'OFF'.toLowerCase()) {
             const queue = this.client.player.getQueue(message);
             if (queue) {
                 if (queue.volume > 200) this.client.player.setVolume(message, volume);
             }
             await this.client.settings.set(message.guild.id, false, 'allowFreeVolume');
             return this.client.ui.reply(message, 'ok', 'Unlimited Volume has been **disabled**. Volume is now limited to **200%**.');
-        } else if (args[1] === 'ON'.toLowerCase()) {
+        } else if (args.toggle === 'ON'.toLowerCase()) {
             await this.client.settings.set(message.guild.id, true, 'allowFreeVolume');
             return this.client.ui.reply(message, 'ok', 'Unlimited Volume has been **enabled**.');
         } else {

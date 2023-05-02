@@ -26,20 +26,26 @@ module.exports = class CommandTempo extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Changes the pitch of the playing track.',
-                usage: '<rate:int[0.1-10]>',
-                details: '`<rate:int[0.1-10]>` The rate to change. Between 0.1-10.'
+                usage: '<rate:0.1-10/off>',
+                details: '`<rate:0.1-10/off>` The rate to change. Must be between 0.1 to 10 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'rate',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = message.member.roles.cache.has(djRole) ||
+            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) return this.client.ui.sendPrompt(message, 'DJ_MODE');
@@ -59,11 +65,11 @@ module.exports = class CommandTempo extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (!args[1]) {
-                return this.client.ui.usage(message, 'pitch <rate:int[0.1-10]/off>');
+            if (!args.rate) {
+                return this.client.ui.usage(message, 'pitch <rate:0.1-10/off>');
             }
 
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.rate === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('pitch', null);
                     pushFormatFilter(queue, 'Pitch', 'Off');
@@ -73,7 +79,7 @@ module.exports = class CommandTempo extends Command {
                 }
             }
 
-            const rate = parseFloat(args[1]);
+            const rate = parseFloat(args.rate);
             if (isNaN(rate)) {
                 return this.client.ui.reply(message, 'error', 'Pitch requires a number or **off**.');
             }

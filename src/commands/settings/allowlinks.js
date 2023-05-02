@@ -27,16 +27,21 @@ module.exports = class CommandAllowLinks extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            userPermissions: [PermissionsBitField.Flags.ManageGuild]
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            args: [
+                {
+                    id: 'toggle',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        if (!args[1]) return this.client.ui.usage(message, 'allowlinks <toggle:on/off>');
+    async exec (message, args) {
+        if (!args.toggle) return this.client.ui.usage(message, 'allowlinks <toggle:on/off>');
 
         const settings = this.client.settings;
-        switch (args[1]) {
+        switch (args.toggle) {
         case 'on': {
             await settings.set(message.guild.id, true, 'allowLinks');
             this.client.ui.reply(message, 'ok', 'URLs can now be added to the queue.');

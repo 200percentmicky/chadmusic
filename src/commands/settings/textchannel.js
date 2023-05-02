@@ -27,16 +27,21 @@ module.exports = class CommandTextChannel extends Command {
                 usage: '<text_channel>',
                 details: "`<text_channel>` The text channel to apply. Can be the channel's mention or the channel's ID."
             },
-            userPermissions: [PermissionsBitField.Flags.ManageGuild]
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            args: [
+                {
+                    id: 'channel',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        if (args[1]) {
-            const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]);
+    async exec (message, args) {
+        if (args.channel) {
+            const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args.channel);
             if (!channel) {
-                return this.client.ui.reply(message, 'error', `\`${args[1]}\` is not a valid text channel.`);
+                return this.client.ui.reply(message, 'error', `\`${args.channel}\` is not a valid text channel.`);
             } else {
                 await this.client.settings.set(message.guild.id, channel.id, 'textChannel');
                 return this.client.ui.reply(message, 'ok', `<#${channel.id}> will be used for music commands.`);

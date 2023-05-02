@@ -26,7 +26,7 @@ module.exports = class CommandSeek extends Command {
             description: {
                 text: 'Sets the playing time of the track to a new position.',
                 usage: '<time>',
-                details: '`<time>` The time of the track to seek to.'
+                details: '`<time>` The time of the track to seek to in colon notation or in milliseconds.'
             },
             category: '🎶 Music'
         });
