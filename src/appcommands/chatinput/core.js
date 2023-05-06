@@ -345,7 +345,7 @@ class CommandCore extends SlashCommand {
                     name: `${process.env.EMOJI_INFO} Stats`,
                     value: stripIndents`
                     **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
-                    **Bot Version:** ${bot.version} (Build ${this.client.buildNum})
+                    **Bot Version:** ${bot.version}
                     **Node.js:** ${process.version}
                     **Discord.js:** ${discord.version}
                     **slash-create:** ${sc.version}
