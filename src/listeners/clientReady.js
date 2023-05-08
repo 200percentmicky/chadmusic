@@ -25,8 +25,6 @@ module.exports = class SurferReady extends Listener {
     }
 
     async exec () {
-        this.client.settings.ensure('global', this.client.defaultGlobalSettings);
-
         this.client.logger.info('Logged in as %s (%d)', this.client.user.tag, this.client.user.id);
         this.client.logger.info('[Ready!<3♪] Let\'s party!!');
     }
