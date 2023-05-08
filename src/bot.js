@@ -65,31 +65,6 @@ class ChadMusic extends AkairoClient {
         this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
 
-        // Music Player.
-        this.player = new DisTube(this, {
-            plugins: [
-                new SpotifyPlugin({
-                    emitEventsAfterFetching: true,
-                    parallel: false
-                }),
-                new YtDlpPlugin({ update: true })
-            ],
-            emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
-            leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
-            leaveOnEmpty: process.env.LEAVE_ON_EMPTY === 'true' || false,
-            leaveOnFinish: process.env.LEAVE_ON_FINISH === 'true' || false,
-            youtubeCookie: process.env.YOUTUBE_COOKIE,
-            ytdlOptions: {
-                quality: 'highestaudio',
-                filter: 'audioonly',
-                dlChunkSize: 25000,
-                highWaterMark: 1024,
-                IPv6Block: process.env.IPV6_BLOCK
-            },
-            nsfw: true // Being handled on a per guild basis, not client-wide.
-        });
-        this.vc = this.player.voices; // @discordjs/voice
-
         this.settings = new Enmap({ name: 'settings' });
         this.tags = new Enmap({ name: 'tags' });
 
@@ -111,6 +86,42 @@ class ChadMusic extends AkairoClient {
             blockedPhrases: [],
             thumbnailSize: 'small'
         };
+
+        this.defaultGlobalSettings = {
+            emitNewSongOnly: true,
+            emptyCooldown: 60,
+            leaveOnStop: true,
+            leaveOnEmpty: true,
+            leaveOnFinish: true,
+            streamType: 0
+        };
+
+        // Music Player.
+        this.player = new DisTube(this, {
+            plugins: [
+                new SpotifyPlugin({
+                    emitEventsAfterFetching: true,
+                    parallel: false
+                }),
+                new YtDlpPlugin({ update: true })
+            ],
+            emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
+            emptyCooldown: this.settings.get('global', 'emptyCooldown') ?? 60,
+            leaveOnStop: this.settings.get('global', 'leaveOnStop') ?? true,
+            leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
+            leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
+            streamType: this.settings.get('global', 'streamType') ?? 0,
+            youtubeCookie: process.env.YOUTUBE_COOKIE,
+            ytdlOptions: {
+                quality: 'highestaudio',
+                filter: 'audioonly',
+                dlChunkSize: 25000,
+                highWaterMark: 1024,
+                IPv6Block: process.env.IPV6_BLOCK
+            },
+            nsfw: true // Being handled on a per guild basis, not client-wide.
+        });
+        this.vc = this.player.voices; // @discordjs/voice
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {
