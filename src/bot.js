@@ -96,7 +96,7 @@ class ChadMusic extends AkairoClient {
             streamType: 0
         };
 
-        this.settings.ensure('global', this.client.defaultGlobalSettings);
+        this.settings.ensure('global', this.defaultGlobalSettings);
 
         // Music Player.
         this.player = new DisTube(this, {
