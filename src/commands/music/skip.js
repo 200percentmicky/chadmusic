@@ -77,7 +77,7 @@ module.exports = class CommandSkip extends Command {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(message.guild);
-                    return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue.");
                 }
                 this.client.player.skip(message);
                 await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
@@ -97,7 +97,7 @@ module.exports = class CommandSkip extends Command {
             queue.votes = [];
             if (!queue.songs[1]) {
                 this.client.player.stop(message.guild);
-                return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue.");
             }
             this.client.player.skip(message.guild);
             await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');

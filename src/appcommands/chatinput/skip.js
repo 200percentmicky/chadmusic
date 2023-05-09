@@ -87,7 +87,7 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue.");
                 }
                 this.client.player.skip(guild);
                 await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
@@ -130,7 +130,7 @@ class CommandSkip extends SlashCommand {
                     queue.votes = [];
                     if (!queue.songs[1]) {
                         this.client.player.stop(guild);
-                        return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                        return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue.");
                     }
                     this.client.player.skip(guild);
                     await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
@@ -149,7 +149,7 @@ class CommandSkip extends SlashCommand {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue.");
                 }
                 this.client.player.skip(guild);
                 await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
