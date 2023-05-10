@@ -93,7 +93,48 @@ class ChadMusic extends AkairoClient {
             leaveOnStop: true,
             leaveOnEmpty: true,
             leaveOnFinish: true,
-            streamType: 0
+            streamType: 0,
+            emojis: {
+                message: {
+                    ok: '✅',
+                    warn: '⚠️',
+                    err: '❌',
+                    info: 'ℹ️',
+                    question: '❓',
+                    no: '🚫',
+                    loading: '⌚',
+                    cutie: '🎶',
+                    music: '🎵'
+                },
+                reaction: {
+                    ok: '✅',
+                    warn: '⚠️',
+                    err: '❌',
+                    info: 'ℹ️',
+                    question: '❓',
+                    no: '🚫',
+                    loading: '⌚',
+                    cutie: '🎶',
+                    music: '🎵'
+                },
+                buttons: {
+                    first: '⏮',
+                    previous: '⬅',
+                    nest: '➡',
+                    last: '⏭',
+                    jump: '↗',
+                    close: '✖'
+                }
+            },
+            colors: {
+                ok: 7844437,
+                warn: 16763981,
+                info: 37887,
+                err: 16711680,
+                question: 12020223,
+                no: 14495300,
+                music: 37887
+            }
         };
 
         this.settings.ensure('global', this.defaultGlobalSettings);
