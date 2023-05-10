@@ -154,7 +154,7 @@ class CommandCore extends SlashCommand {
                     let evaled = await eval(code);
 
                     if (typeof evaled !== 'string') {
-                        evaled = require('util').inspect(evaled, { depth: 2, sorted: true, maxArrayLength: 5 });
+                        evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
                     }
 
                     const t2 = process.hrtime(t1);
