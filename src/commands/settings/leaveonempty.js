@@ -37,10 +37,10 @@ module.exports = class CommandLeaveOnEmpty extends Command {
     }
 
     async exec (message, args) {
-        if (!args[1]) return this.client.ui.usage(message, 'leaveonempty <toggle:on/off>');
+        if (!args.toggle) return this.client.ui.usage(message, 'leaveonempty <toggle:on/off>');
 
         const settings = this.client.settings;
-        switch (args.text) {
+        switch (args.toggle) {
         case 'on': {
             await settings.set('global', true, 'leaveOnEmpty');
             this.client.player.options.leaveOnEmpty = true;

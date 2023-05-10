@@ -37,10 +37,10 @@ module.exports = class CommandLeaveOnStop extends Command {
     }
 
     async exec (message, args) {
-        if (!args[1]) return this.client.ui.usage(message, 'leaveonstop <toggle:on/off>');
+        if (!args.toggle) return this.client.ui.usage(message, 'leaveonstop <toggle:on/off>');
 
         const settings = this.client.settings;
-        switch (args.text) {
+        switch (args.toggle) {
         case 'on': {
             await settings.set('global', true, 'leaveOnStop');
             this.client.player.options.leaveOnStop = true;
