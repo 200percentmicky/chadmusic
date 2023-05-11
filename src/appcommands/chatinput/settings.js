@@ -271,6 +271,101 @@ module.exports = class CommandSettings extends SlashCommand {
                             required: true
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND_GROUP,
+                    name: 'global',
+                    description: "[Owner Only] Manages the bot's global settings.",
+                    options: [
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonempty',
+                            description: 'Toggles whether the bot should leave when the voice channel is empty for a period of time.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonfinish',
+                            description: 'Toggles whether the bot should leave when the end of the queue has been reached.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonstop',
+                            description: 'Toggles whether the bot should leave when the player is stopped.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'shownewsongonly',
+                            description: 'Toggles whether the Now Playing alerts are shown for new songs only.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'streamtype',
+                            description: 'Selects which audio encoder the bot should use during streams.',
+                            options: [
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'encoder',
+                                    description: 'The audio encoder to use.',
+                                    choices: [
+                                        {
+                                            name: 'Opus (Better quality, uses more resources.)',
+                                            value: 'opus'
+                                        },
+                                        {
+                                            name: 'RAW (Better performance, uses less resources.)',
+                                            value: 'raw'
+                                        }
+                                    ],
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'emptycooldown',
+                            description: 'Sets how long the bots stays in an empty voice channel.',
+                            options: [
+                                {
+                                    type: CommandOptionType.NUMBER,
+                                    name: 'time',
+                                    description: 'The time the bot will stay in seconds.',
+                                    required: true
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         });
@@ -283,7 +378,10 @@ module.exports = class CommandSettings extends SlashCommand {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
 
-        if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
+        if (
+            !channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)
+            && ctx.subcommand[0] !== 'global'
+        ) {
             return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
         }
 
