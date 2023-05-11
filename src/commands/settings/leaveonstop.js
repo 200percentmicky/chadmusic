@@ -41,22 +41,24 @@ module.exports = class CommandLeaveOnStop extends Command {
 
         const settings = this.client.settings;
         switch (args.toggle) {
-        case 'on': {
-            await settings.set('global', true, 'leaveOnStop');
-            this.client.player.options.leaveOnStop = true;
-            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the player is stopped.');
-            break;
-        }
-        case 'off': {
-            await settings.set('global', false, 'leaveOnStop');
-            this.client.player.options.leaveOnStop = false;
-            this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the player was stopped.');
-            break;
-        }
-        default: {
-            this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
-            break;
-        }
+            case 'true':
+            case 'on': {
+                await settings.set('global', true, 'leaveOnStop');
+                this.client.player.options.leaveOnStop = true;
+                this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the player is stopped.');
+                break;
+            }
+            case 'false':
+            case 'off': {
+                await settings.set('global', false, 'leaveOnStop');
+                this.client.player.options.leaveOnStop = false;
+                this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the player was stopped.');
+                break;
+            }
+            default: {
+                this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
+                break;
+            }
         }
     }
 };

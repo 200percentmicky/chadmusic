@@ -41,22 +41,24 @@ module.exports = class CommandShowNewSongOnly extends Command {
 
         const settings = this.client.settings;
         switch (args.toggle) {
-        case 'on': {
-            await settings.set('global', true, 'emitNewSongOnly');
-            this.client.player.options.emitNewSongOnly = true;
-            this.client.ui.reply(message, 'ok', 'Now Playing alerts will now only show for new songs.');
-            break;
-        }
-        case 'off': {
-            await settings.set('global', false, 'emitNewSongOnly');
-            this.client.player.options.emitNewSongOnly = false;
-            this.client.ui.reply(message, 'ok', 'Now Playing alerts will now show for every song.');
-            break;
-        }
-        default: {
-            this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
-            break;
-        }
+            case 'true':
+            case 'on': {
+                await settings.set('global', true, 'emitNewSongOnly');
+                this.client.player.options.emitNewSongOnly = true;
+                this.client.ui.reply(message, 'ok', 'Now Playing alerts will now only show for new songs.');
+                break;
+            }
+            case 'false':
+            case 'off': {
+                await settings.set('global', false, 'emitNewSongOnly');
+                this.client.player.options.emitNewSongOnly = false;
+                this.client.ui.reply(message, 'ok', 'Now Playing alerts will now show for every song.');
+                break;
+            }
+            default: {
+                this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
+                break;
+            }
         }
     }
 };
