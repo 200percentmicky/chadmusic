@@ -20,6 +20,10 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 
+// TODO: Look into condensing all changes into a single method.
+// A majority of this command is nothing but copying and pasting
+// the same thing because I'm lazy as shit... oh well... ¯\_(ツ)_/¯
+
 module.exports = class CommandSettings extends SlashCommand {
     constructor (creator) {
         super(creator, {
@@ -288,20 +292,10 @@ module.exports = class CommandSettings extends SlashCommand {
                             description: 'Toggles whether the bot should leave when the voice channel is empty for a period of time.',
                             options: [
                                 {
-                                    type: CommandOptionType.STRING,
+                                    type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
                                     description: 'Enables or disables the feature.',
-                                    required: true,
-                                    choices: [
-                                        {
-                                            name: 'On',
-                                            value: 'on'
-                                        },
-                                        {
-                                            name: 'Off',
-                                            value: 'off'
-                                        }
-                                    ]
+                                    required: true
                                 }
                             ]
                         },
@@ -311,20 +305,10 @@ module.exports = class CommandSettings extends SlashCommand {
                             description: 'Toggles whether the bot should leave when the end of the queue has been reached.',
                             options: [
                                 {
-                                    type: CommandOptionType.STRING,
+                                    type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
                                     description: 'Enables or disables the feature.',
-                                    required: true,
-                                    choices: [
-                                        {
-                                            name: 'On',
-                                            value: 'on'
-                                        },
-                                        {
-                                            name: 'Off',
-                                            value: 'off'
-                                        }
-                                    ]
+                                    required: true
                                 }
                             ]
                         },
@@ -334,20 +318,10 @@ module.exports = class CommandSettings extends SlashCommand {
                             description: 'Toggles whether the bot should leave when the player is stopped.',
                             options: [
                                 {
-                                    type: CommandOptionType.STRING,
+                                    type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
                                     description: 'Enables or disables the feature.',
-                                    required: true,
-                                    choices: [
-                                        {
-                                            name: 'On',
-                                            value: 'on'
-                                        },
-                                        {
-                                            name: 'Off',
-                                            value: 'off'
-                                        }
-                                    ]
+                                    required: true
                                 }
                             ]
                         },
@@ -357,20 +331,10 @@ module.exports = class CommandSettings extends SlashCommand {
                             description: 'Toggles whether the Now Playing alerts are shown for new songs only.',
                             options: [
                                 {
-                                    type: CommandOptionType.STRING,
+                                    type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
                                     description: 'Enables or disables the feature.',
-                                    required: true,
-                                    choices: [
-                                        {
-                                            name: 'On',
-                                            value: 'on'
-                                        },
-                                        {
-                                            name: 'Off',
-                                            value: 'off'
-                                        }
-                                    ]
+                                    required: true
                                 }
                             ]
                         },
@@ -458,36 +422,82 @@ module.exports = class CommandSettings extends SlashCommand {
         // All pornographic websites are blocked.
         const allowAgeRestricted = settings.get(guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-        const runCommand = async (command, args) => {
-            return await this.client.commands.findCommand(command).exec(ctx, args);
-        };
-
         if (ctx.subcommands[0] === 'global') {
+            if (ctx.user.id !== this.client.ownerID) {
+                return this.client.ui.sendPrompt(ctx, 'OWNER_ONLY');
+            }
+
             switch (ctx.subcommands[1]) {
             case 'shownewsongonly': {
-                runCommand('shownewsongonly', { toggle: ctx.options.global.shownewsongonly.toggle });
+                const toggle = ctx.options.global.shownewsongonly.toggle;
+
+                await settings.set('global', toggle, 'emitNewSongOnly');
+                this.client.player.options.emitNewSongOnly = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'Now Playing alerts will now only show for new songs.'
+                    : 'Now Playing alerts will now show for every song.'
+                );
                 break;
             }
+
             case 'emptycooldown': {
-                runCommand('emptycooldown', { time: ctx.options.global.emptycooldown.time });
+                const time = ctx.options.global.emptycooldown.time;
+
+                await settings.set('global', time, 'emptyCooldown');
+                this.client.player.options.emptyCooldown = time;
+                this.client.ui.reply(ctx, 'ok', `Empty Cooldown has been set to \`${parseInt(time)}\` seconds.`);
                 break;
             }
+
             case 'leaveonempty': {
-                runCommand('leaveonempty', { toggle: ctx.options.global.leaveonempty.toggle });
+                const toggle = ctx.options.global.leaveonempty.toggle;
+
+                await settings.set('global', toggle, 'leaveOnEmpty');
+                this.client.player.options.leaveOnEmpty = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
+                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
+                );
                 break;
             }
+
             case 'leaveonfinish': {
-                runCommand('leaveonfinish', { toggle: ctx.options.global.leaveonfinish.toggle });
+                const toggle = ctx.options.global.leaveonfinish.toggle;
+
+                await settings.set('global', toggle, 'leaveOnFinish');
+                this.client.player.options.leaveOnFinish = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
+                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
+                );
                 break;
             }
+
             case 'leaveonstop': {
-                runCommand('leaveonstop', { toggle: ctx.options.global.leaveonstop.toggle });
+                const toggle = ctx.options.global.leaveonstop.toggle;
+
+                await settings.set('global', toggle, 'leaveOnStop');
+                this.client.player.options.leaveOnStop = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the player is stopped.'
+                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
+                );
                 break;
             }
+
             case 'streamtype': {
-                runCommand('streamtype', { encoder: ctx.options.global.streamtype.encoder });
+                const encoderType = {
+                    opus: 0,
+                    raw: 1
+                };
+
+                const encoder = ctx.options.global.streamtype.encoder;
+
+                this.client.player.options.streamType = encoderType[encoder];
+                this.client.ui.reply(ctx, 'ok', `Audio encoder has been set to **${encoder}**.`);
                 break;
             }
+
             default: { // current
                 const embed = new EmbedBuilder()
                     .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
@@ -643,18 +653,19 @@ module.exports = class CommandSettings extends SlashCommand {
             case 'blocksong': {
                 switch (ctx.subcommands[1]) {
                 case 'add': {
-                    runCommand('blocksong', {
-                        subcommand: 'add',
-                        phrase: ctx.options.blocksong.add.phrase
-                    });
-                    break;
+                    if (settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
+                        return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
+                    }
+                    await settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
+                    return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
                 }
 
                 case 'remove': {
-                    runCommand('blocksong', {
-                        subcommand: 'remove',
-                        phrase: ctx.options.blocksong.remove.phrase
-                    });
+                    if (!settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
+                        return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
+                    }
+                    await settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
+                    return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
                 }
                 }
                 break;
@@ -667,7 +678,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
             // Message based commands only.
             case 'prefix': {
-                await this.client.settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
+                await settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
                 return this.client.ui.reply(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
             }
             }
