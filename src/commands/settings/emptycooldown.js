@@ -48,6 +48,6 @@ module.exports = class CommandEmptyCooldown extends Command {
 
         await this.client.settings.set('global', parseInt(args.time), 'emptyCooldown');
         this.client.player.options.emptyCooldown = parseInt(args.time);
-        return this.client.ui.reply(message, 'ok', `Empty Cooldown has been set to \`${parseInt(args.time)}\` seconds.`)
+        return this.client.ui.reply(message, 'ok', `Empty Cooldown has been set to \`${parseInt(args.time)}\` seconds.`);
     }
 };
