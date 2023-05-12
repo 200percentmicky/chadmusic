@@ -24,7 +24,7 @@ module.exports = class CommandLeaveOnFinish extends Command {
             description: {
                 text: 'Toggles whether the bot should leave when the end of the queue has been reached.',
                 usage: '<toggle:on/off>',
-                details: `\`<toggle:on/off>\` The toggle of the setting.`
+                details: '`<toggle:on/off>` The toggle of the setting.'
             },
             ownerOnly: true,
             args: [
@@ -41,24 +41,24 @@ module.exports = class CommandLeaveOnFinish extends Command {
 
         const settings = this.client.settings;
         switch (args.toggle) {
-            case 'true':
-            case 'on': {
-                await settings.set('global', true, 'leaveOnFinish');
-                this.client.player.options.leaveOnFinish = true;
-                this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the end of the queue is reached.');
-                break;
-            }
-            case 'false':
-            case 'off': {
-                await settings.set('global', false, 'leaveOnFinish');
-                this.client.player.options.leaveOnFinish = false;
-                this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the queue is finished.');
-                break;
-            }
-            default: {
-                this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
-                break;
-            }
+        case 'true':
+        case 'on': {
+            await settings.set('global', true, 'leaveOnFinish');
+            this.client.player.options.leaveOnFinish = true;
+            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the end of the queue is reached.');
+            break;
+        }
+        case 'false':
+        case 'off': {
+            await settings.set('global', false, 'leaveOnFinish');
+            this.client.player.options.leaveOnFinish = false;
+            this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the queue is finished.');
+            break;
+        }
+        default: {
+            this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
+            break;
+        }
         }
     }
 };

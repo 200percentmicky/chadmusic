@@ -41,24 +41,24 @@ module.exports = class CommandLeaveOnEmpty extends Command {
 
         const settings = this.client.settings;
         switch (args.toggle) {
-            case 'true':
-            case 'on': {
-                await settings.set('global', true, 'leaveOnEmpty');
-                this.client.player.options.leaveOnEmpty = true;
-                this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the channel is empty for a period of time. See **Empty Cooldown** for how long I\'ll stay when the channel is empty.');
-                break;
-            }
-            case 'false':
-            case 'off': {
-                await settings.set('global', false, 'leaveOnEmpty');
-                this.client.player.options.leaveOnEmpty = false;
-                this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the channel is empty.');
-                break;
-            }
-            default: {
-                this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
-                break;
-            }
+        case 'true':
+        case 'on': {
+            await settings.set('global', true, 'leaveOnEmpty');
+            this.client.player.options.leaveOnEmpty = true;
+            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the channel is empty for a period of time. See **Empty Cooldown** for how long I\'ll stay when the channel is empty.');
+            break;
+        }
+        case 'false':
+        case 'off': {
+            await settings.set('global', false, 'leaveOnEmpty');
+            this.client.player.options.leaveOnEmpty = false;
+            this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the channel is empty.');
+            break;
+        }
+        default: {
+            this.client.ui.reply(message, 'error', 'Toggle must be **on** or **off**.');
+            break;
+        }
         }
     }
 };

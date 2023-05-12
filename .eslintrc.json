@@ -1,14 +1,14 @@
 {
     "env": {
         "commonjs": true,
-        "es2023": true,
+        "es2021": true,
         "node": true
     },
-    "extends": [
-        "semistandard"
+    "extends": "semistandard",
+    "overrides": [
     ],
     "parserOptions": {
-        "ecmaVersion": 12
+        "ecmaVersion": "latest"
     },
     "rules": {
         "indent": ["error", 4]

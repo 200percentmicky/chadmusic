@@ -72,7 +72,7 @@ class ChadUtils {
      */
     static hasURL (string) {
         const urlPattern = /(mailto|news|tel(net)?|urn|ldap|ftp|https?):\+?(\/\/)?\[?([a-zA-Z0-9]\]?.{0,})/gmi;
-        return this.#matchRegex(urlPattern, string)
+        return this.#matchRegex(urlPattern, string);
     }
 
     /**
@@ -85,7 +85,7 @@ class ChadUtils {
         // eslint-disable-next-line no-useless-escape
         const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
         return this.#matchRegex(pornPattern, url);
-    };    
+    };
 }
 
 module.exports = ChadUtils;
