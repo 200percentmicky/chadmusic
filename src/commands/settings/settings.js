@@ -36,7 +36,7 @@ module.exports = class CommandSettings extends Command {
     async exec (message) {
         const settings = this.client.settings;
 
-        settings.ensure(message.guild.id, this.client.defaultSettings);
+        await settings.ensure(message.guild.id, this.client.defaultSettings);
 
         // All Settings
         const prefix = settings.get(message.guild.id, 'prefix'); // Server Prefix
@@ -65,21 +65,29 @@ module.exports = class CommandSettings extends Command {
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setTitle(':gear: Settings')
-            .setDescription(stripIndents`
-            **⁉ Prefix:** \`${prefix}\`
-            **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-            **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-            **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-            **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-            **📢 Allow Filters:** ${allowFilters === true ? 'Yes' : 'No'}
-            **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-            **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-            **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-            **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-            **🖼 Thumbnail Size:** ${thumbnailSize === 'Large' ? 'Large' : 'Small'}
-            **🔊 Default Volume:** ${defaultVolume}
-            **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'} 
-            `)
+            .addFields({
+                name: '🎶 Player',
+                value: stripIndents`
+                **⁉️ Prefix:** \`${prefix}\`
+                **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+                **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+                **🖼️ Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
+                **🔊 Default Volume:** ${defaultVolume}
+                **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                `
+            },
+            {
+                name: '🛡️ Moderation',
+                value: stripIndents`
+                **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+                **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+                **📢 Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
+                **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+                **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
+                **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                `
+            })
             .setTimestamp()
             .setFooter({
                 text: `ChadMusic v${version}`,
