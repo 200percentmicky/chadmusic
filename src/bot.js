@@ -39,7 +39,7 @@ const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ChadUI = require('./modules/ChadUI');
-const ChadUtils = require('./modules/ChadUtils')
+const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 
 // Let's boogie!
