@@ -46,8 +46,7 @@ let baseEmbed = {};
 const embedUI = (color, emoji, title, desc, footer) => {
     baseEmbed = new EmbedBuilder()
         .setColor(color)
-        .setDescription(`${emoji} ${desc}`)
-        .setTimestamp();
+        .setDescription(`${emoji} ${desc}`);
 
     if (title) {
         baseEmbed
