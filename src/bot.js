@@ -96,15 +96,15 @@ class ChadMusic extends AkairoClient {
             streamType: 0,
             emojis: {
                 message: {
-                    ok: '✅',
-                    warn: '⚠️',
-                    err: '❌',
-                    info: 'ℹ️',
-                    question: '❓',
-                    no: '🚫',
-                    loading: '⌚',
-                    cutie: '🎶',
-                    music: '🎵'
+                    ok: ':white_check_mark:',
+                    warn: ':warning:',
+                    err: ':x:',
+                    info: ':information_source:',
+                    question: ':question_mark:',
+                    no: ':no_entry_sign:',
+                    loading: ':watch:',
+                    cutie: ':notes:',
+                    music: ':musical_note:'
                 },
                 reaction: {
                     ok: '✅',
@@ -121,7 +121,7 @@ class ChadMusic extends AkairoClient {
                     first: '⏮',
                     previous: '⬅',
                     nest: '➡',
-                    last: '⏭',
+                    last: '⏭️',
                     jump: '↗',
                     close: '✖'
                 }

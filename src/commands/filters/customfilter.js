@@ -71,7 +71,7 @@ module.exports = class CommandCustomFilter extends Command {
                 try {
                     await queue.filters.set('custom', null);
                     pushFormatFilter(queue, 'Custom Filter', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Custom Filter** Removed');
                 } catch (err) {
                     return this.client.ui.reply(message, 'error', 'No custom filters are applied to the player.');
                 }
@@ -79,7 +79,7 @@ module.exports = class CommandCustomFilter extends Command {
                 const custom = args.custom;
                 await queue.filters.set('custom', custom);
                 pushFormatFilter(queue, 'Custom Filter', custom);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

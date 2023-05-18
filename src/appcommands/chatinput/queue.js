@@ -192,7 +192,7 @@ class CommandQueue extends SlashCommand {
             if (vc.members.size <= 2 || dj) {
                 // Clear everything from the queue.
                 queue.songs.splice(1, queue.songs.length);
-                this.client.ui.custom(ctx, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
+                this.client.ui.custom(ctx, ':boom:', 0xDF6C3B, '**BOOM!** Cleared the queue.');
             } else {
                 this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }

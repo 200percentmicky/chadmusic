@@ -73,7 +73,7 @@ module.exports = class CommandCrystalize extends Command {
                 try {
                     await queue.filters.set('crystalize', null);
                     pushFormatFilter(queue, 'Crystalize', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Crystalize** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Crystalize** Off');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
@@ -86,7 +86,7 @@ module.exports = class CommandCrystalize extends Command {
 
                 await queue.filters.set('crystalize', `crystalizer=i=${intensity}`);
                 pushFormatFilter(queue, 'Crystalize', `Intensity \`${intensity}\``);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Crystalize** Intensity \`${intensity}\``);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

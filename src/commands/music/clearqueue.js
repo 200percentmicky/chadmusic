@@ -58,7 +58,7 @@ module.exports = class CommandClearQueue extends Command {
 
             // Clear everything from the queue.
             queue.songs.splice(1, queue.songs.length);
-            return this.client.ui.custom(message, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
+            return this.client.ui.custom(message, ':boom:', 0xDF6C3B, '**BOOM!** Cleared the queue.');
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }

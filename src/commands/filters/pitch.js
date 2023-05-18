@@ -73,7 +73,7 @@ module.exports = class CommandTempo extends Command {
                 try {
                     await queue.filters.set('pitch', null);
                     pushFormatFilter(queue, 'Pitch', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Pitch** Removed');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Pitch** Removed');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Pitch');
                 }
@@ -88,7 +88,7 @@ module.exports = class CommandTempo extends Command {
             }
             await queue.filters.set('pitch', `rubberband=pitch=${rate}`);
             pushFormatFilter(queue, 'Pitch', `Rate: \`${rate}\``);
-            return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
+            return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Pitch** Rate: \`${rate}\``);
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }

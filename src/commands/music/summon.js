@@ -74,7 +74,7 @@ module.exports = class CommandSummon extends Command {
                     await message.guild.members.me.voice.setSuppressed(false);
                 }
             }
-            return this.client.ui.custom(message, '📥', 0x77B255, `Joined <#${vc.id}>`);
+            return this.client.ui.custom(message, ':inbox_tray:', 0x77B255, `Joined <#${vc.id}>`);
         }
     }
 };

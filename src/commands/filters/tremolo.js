@@ -80,7 +80,7 @@ module.exports = class CommandTremolo extends Command {
                 try {
                     await queue.filters.set('tremolo', null);
                     pushFormatFilter(queue, 'Tremolo', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Tremolo** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Tremolo** Off');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
@@ -101,7 +101,7 @@ module.exports = class CommandTremolo extends Command {
                 }
                 await queue.filters.set('tremolo', `tremolo=f=${f}:d=${d}`);
                 pushFormatFilter(queue, 'Tremolo', `Depth \`${d}\` at \`${f}Hz\``);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Tremolo** Depth \`${d}\` at \`${f}Hz\``);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {
