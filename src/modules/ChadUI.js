@@ -26,7 +26,8 @@ const {
     ChannelType,
     PermissionsBitField,
     ChatInputCommandInteraction,
-    InteractionResponse
+    InteractionResponse,
+    EmbedBuilder
 } = require('discord.js');
 const { CommandContext, Member } = require('slash-create');
 
@@ -43,21 +44,21 @@ let baseEmbed = {};
  * @returns The object used to construct an embed.
  */
 const embedUI = (color, emoji, title, desc, footer) => {
-    baseEmbed = {
-        color: `#${color}`,
-        title: null,
-        description: `${emoji} ${desc}`
-    };
+    baseEmbed = new EmbedBuilder()
+        .setColor(color)
+        .setDescription(`${emoji} ${desc}`)
+        .setTimestamp();
 
     if (title) {
-        baseEmbed.title = `${emoji} ${title}`;
-        baseEmbed.description = `${desc}`;
+        baseEmbed
+            .setTitle(`${emoji} ${title}`)
+            .setDescription(`${desc}`);
     }
 
     if (footer) {
-        baseEmbed.footer = {
+        baseEmbed.setFooter({
             text: `${footer}`
-        };
+        });
     }
 
     return baseEmbed;
