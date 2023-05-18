@@ -19,12 +19,9 @@
 
 const {
     Message,
-    EmbedBuilder,
-    CommandInteraction,
     ActionRowBuilder,
     ColorResolvable,
     EmojiResolvable,
-    BaseGuildTextChannel,
     GuildMember,
     ChannelType,
     PermissionsBitField,
