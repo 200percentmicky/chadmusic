@@ -200,7 +200,7 @@ class ChadUI {
      * @param {string} description The overall message.
      * @param {string} [title] The title of the message.
      * @param {string} [footer] The footer of the message.
-     * @param {ActionRowBuilder[]} [buttons] The components to add to the message. Supports only `Discord.ButtonBuilder`.
+     * @param {ActionRowBuilder[]} [buttons] The components to add to the message.`.
      * @param {boolean} [mention] Whether to mention the user.
      * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
      * @returns {(Message|CommandContext|InteractionResponse)} The message to reply to the user.
