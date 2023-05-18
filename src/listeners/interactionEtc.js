@@ -35,7 +35,7 @@ module.exports = class ListenerInteractionEtc extends Listener {
                 return interaction.followUp({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(parseInt(process.env.COLOR_ERROR))
+                            .setColor(process.env.COLOR_ERROR)
                             .setDescription(`${process.env.EMOJI_ERROR} This component can only be used by the bot owner.`)
                     ],
                     ephemeral: true

@@ -137,7 +137,7 @@ class CommandSkip extends SlashCommand {
                     return channel.sendTyping();
                 } else {
                     const embed = new EmbedBuilder()
-                        .setColor(parseInt(process.env.COLOR_INFO))
+                        .setColor(process.env.COLOR_INFO)
                         .setDescription('⏭ Skipping?')
                         .setFooter({
                             text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? " Yo DJ, you can force skip the track by using '/skip force'." : ''}`,

@@ -29,7 +29,7 @@ async function nowPlayingMsg (queue, song) {
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
 
         const userEmbed = new EmbedBuilder()
-            .setColor(parseInt(process.env.COLOR_NO))
+            .setColor(process.env.COLOR_NO)
             .setAuthor({
                 name: `${song.user.tag}`,
                 iconURL: song.user.avatarURL({ dynamic: true })

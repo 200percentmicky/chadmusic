@@ -40,7 +40,7 @@ module.exports = class ListenerAddSong extends Listener {
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         const userEmbed = new EmbedBuilder()
-            .setColor(parseInt(process.env.COLOR_NO))
+            .setColor(process.env.COLOR_NO)
             .setAuthor({
                 name: `${song.user.tag}`,
                 iconURL: song.user.avatarURL({ dynamic: true })

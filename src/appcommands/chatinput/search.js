@@ -192,7 +192,7 @@ class CommandSearch extends SlashCommand {
                     return selCtx.send({
                         embeds: [
                             new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
+                                .setColor(process.env.COLOR_NO)
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
                         ephemeral: true
@@ -218,7 +218,7 @@ class CommandSearch extends SlashCommand {
                     return btnCtx.send({
                         embeds: [
                             new EmbedBuilder()
-                                .setColor(parseInt(process.env.COLOR_NO))
+                                .setColor(process.env.COLOR_NO)
                                 .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                         ],
                         ephemeral: true

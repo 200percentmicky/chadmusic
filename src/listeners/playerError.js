@@ -44,7 +44,7 @@ module.exports = class ListenerPlayerError extends Listener {
 
         let formattedError = 'An unknown error occured.';
         const embed = new EmbedBuilder()
-            .setColor(parseInt(process.env.COLOR_ERROR))
+            .setColor(process.env.COLOR_ERROR)
             .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
 
         const linkPerms = channel.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.EmbedLinks);
