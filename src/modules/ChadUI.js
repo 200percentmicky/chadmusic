@@ -47,7 +47,7 @@ let baseEmbed = {};
  */
 const embedUI = (color, emoji, title, desc, footer) => {
     baseEmbed = {
-        color: parseInt(color),
+        color: `#${color}`,
         title: null,
         description: `${emoji} ${desc}`
     };
@@ -181,7 +181,7 @@ class ChadUI {
     static usage (msg, syntax) {
         const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
         const embed = new EmbedBuilder()
-            .setColor(parseInt(process.env.COLOR_INFO))
+            .setColor(`#${process.env.COLOR_INFO}`)
             .setTitle(`${process.env.EMOJI_INFO} Usage`)
             .setDescription(`\`${guildPrefix}${syntax}\``);
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
