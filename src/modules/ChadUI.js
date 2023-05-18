@@ -180,14 +180,13 @@ class ChadUI {
      */
     static usage (msg, syntax) {
         const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
-        const embed = new EmbedBuilder()
-            .setColor(`#${process.env.COLOR_INFO}`)
-            .setTitle(`${process.env.EMOJI_INFO} Usage`)
-            .setDescription(`\`${guildPrefix}${syntax}\``);
+        let usagePrompt;
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
-            return msg.reply(`${process.env.EMOJI_INFO} **Usage** | \`${guildPrefix}${syntax}\``);
+            usagePrompt = stringUI(process.env.EMOJI_INFO, 'Usage', `\`\`\`${guildPrefix}${syntax}\`\`\``);
+            return msg.reply({ content: usagePrompt });
         } else {
-            return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+            usagePrompt = embedUI(process.env.COLOR_INFO, process.env.EMOJI_INFO, 'Usage', `\`\`\`${guildPrefix}${syntax}\`\`\``);
+            return msg.reply({ embeds: [usagePrompt] });
         }
     }
 
