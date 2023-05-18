@@ -225,7 +225,7 @@ class ChadMusic extends AkairoClient {
 
         // Set custom emitters
         this.listeners.setEmitters({
-            process: process,
+            process,
             commandHandler: this.commands,
             player: this.player,
             creator: this.creator
