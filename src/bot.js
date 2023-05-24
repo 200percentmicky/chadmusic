@@ -108,11 +108,11 @@ class ChadMusic extends AkairoClient {
                 },
                 reaction: {
                     ok: '✅',
-                    warn: '⚠️',
-                    err: '❌',
-                    info: 'ℹ️',
+                    warn: ':warning:️',
+                    err: ':x:',
+                    info: ':information_source:',
                     question: '❓',
-                    no: '🚫',
+                    no: ':no_entry_sign:',
                     loading: '⌚',
                     cutie: '🎶',
                     music: '🎵'

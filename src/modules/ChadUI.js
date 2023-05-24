@@ -111,11 +111,11 @@ class ChadUI {
     static reply (msg, type, description, title, footer, ephemeral, buttons, mention) {
         /* The emoji of the embed */
         let embedEmoji = {
-            ok: process.env.EMOJI_OK ?? '✅',
-            warn: process.env.EMOJI_WARN ?? '⚠',
-            error: process.env.EMOJI_ERROR ?? '❌',
-            info: process.env.EMOJI_INFO ?? 'ℹ',
-            no: process.env.EMOJI_NO ?? '🚫'
+            ok: process.env.EMOJI_OK ?? ':white_check_mark:',
+            warn: process.env.EMOJI_WARN ?? ':warning:',
+            error: process.env.EMOJI_ERROR ?? ':x:',
+            info: process.env.EMOJI_INFO ?? ':information_source:',
+            no: process.env.EMOJI_NO ?? ':no_entry_sign:'
         };
 
         const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
@@ -129,11 +129,11 @@ class ChadUI {
             const client = msg.channel.client;
             const emojiPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
             embedEmoji = {
-                ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-                warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-                error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-                info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-                no: emojiPerms ? process.env.EMOJI_NO : '🚫'
+                ok: emojiPerms ? process.env.EMOJI_OK : ':white_check_mark:',
+                warn: emojiPerms ? process.env.EMOJI_WARN : ':warning:',
+                error: emojiPerms ? process.env.EMOJI_ERROR : ':x:',
+                info: emojiPerms ? process.env.EMOJI_INFO : ':information_source:',
+                no: emojiPerms ? process.env.EMOJI_NO : ':no_entry_sign:'
             };
 
             if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
@@ -290,21 +290,21 @@ class ChadUI {
         };
 
         const promptEmoji = {
-            DJ_MODE: process.env.EMOJI_NO ?? '🚫',
-            NO_DJ: process.env.EMOJI_NO ?? '🚫',
-            FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? '❌',
-            FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? '🚫',
-            FULL_CHANNEL: process.env.EMOJI_ERROR ?? '❌',
-            NOT_ALONE: process.env.EMOJI_NO ?? '🚫',
-            NOT_PLAYING: process.env.EMOJI_WARN ?? '⚠',
-            NOT_IN_VC: process.env.EMOJI_ERROR ?? '❌',
-            ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? '❌',
-            MISSING_CONNECT: process.env.EMOJI_NO ?? '🚫',
-            MISSING_SPEAK: process.env.EMOJI_NO ?? '🚫',
-            MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? '⚠',
-            MISSING_PERMISSIONS: process.envEMOJI_NO ?? '🚫',
-            WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? '🚫',
-            OWNER_ONLY: process.env.EMOJI_NO ?? '🚫',
+            DJ_MODE: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            NO_DJ: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? ':x:',
+            FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            FULL_CHANNEL: process.env.EMOJI_ERROR ?? ':x:',
+            NOT_ALONE: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            NOT_PLAYING: process.env.EMOJI_WARN ?? ':warning:',
+            NOT_IN_VC: process.env.EMOJI_ERROR ?? ':x:',
+            ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? ':x:',
+            MISSING_CONNECT: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            MISSING_SPEAK: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? ':warning:',
+            MISSING_PERMISSIONS: process.envEMOJI_NO ?? ':no_entry_sign:',
+            WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            OWNER_ONLY: process.env.EMOJI_NO ?? ':no_entry_sign:',
             NSFW_ONLY: '🔞'
         };
 

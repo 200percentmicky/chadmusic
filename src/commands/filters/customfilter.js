@@ -30,7 +30,7 @@ module.exports = class CommandCustomFilter extends Command {
                 usage: 'customfilter <argument>',
                 details: stripIndents`
                 \`<argument:str>\` The filter argument to provide to FFMPEG.
-                ⚠ If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
+                :warning: If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
                 `
             },
             channel: 'guild',

@@ -101,7 +101,7 @@ module.exports = class CommandSettings extends Command {
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-            .setTitle('🎶❌ Blocked Songs')
+            .setTitle(':notes::x: Blocked Songs')
             .setTimestamp()
             .setFooter({
                 text: `ChadMusic v${version}`,

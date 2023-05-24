@@ -31,7 +31,7 @@ module.exports = class ListenerCreatorComponentInteraction extends Listener {
 
         switch (ctx.customID) {
         case 'sc_close_eval': {
-            if (app.owner?.id !== ctx.user.id) return ctx.sendFollowUp('🚫 Only the owner of this application can use this command.', { ephemeral: true });
+            if (app.owner?.id !== ctx.user.id) return ctx.sendFollowUp(':no_entry_sign: Only the owner of this application can use this command.', { ephemeral: true });
 
             ctx.acknowledge();
             ctx.delete();

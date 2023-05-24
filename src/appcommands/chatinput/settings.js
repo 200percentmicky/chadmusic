@@ -569,7 +569,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         name: `${guild.name}`,
                         iconURL: guild.iconURL({ dynamic: true })
                     })
-                    .setTitle('🎶❌ Blocked Songs')
+                    .setTitle(':notes::x: Blocked Songs')
                     .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
                     .setTimestamp()
                     .setFooter({

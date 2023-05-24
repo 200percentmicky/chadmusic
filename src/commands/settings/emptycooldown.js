@@ -27,7 +27,7 @@ module.exports = class CommandEmptyCooldown extends Command {
                 usage: '<time>',
                 details: stripIndent`
                 \`<time>\` The time the bot will stay in seconds.
-                ℹ️ This settings only works if **Leave on Empty** is on.
+                :information_source: This settings only works if **Leave on Empty** is on.
                 `
             },
             ownerOnly: true,

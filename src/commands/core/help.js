@@ -118,7 +118,7 @@ module.exports = class CommandHelp extends Command {
 
                 const commandFields = [];
 
-                if (command.ownerOnly) commandFields.push({ name: '🚫 Owner Only', value: 'This command is for the bot owner only.' });
+                if (command.ownerOnly) commandFields.push({ name: ':no_entry_sign: Owner Only', value: 'This command is for the bot owner only.' });
                 if (command.category === '🔞 NSFW') commandFields.push({ name: '🔞 NSFW Command', value: 'This command must be used in a NSFW channel.' });
                 if (command.category) {
                     commandFields.push({

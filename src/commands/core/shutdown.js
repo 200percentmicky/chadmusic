@@ -36,8 +36,8 @@ module.exports = class CommandShutdown extends Command {
         if (!restartReport) restartReport = 'No reason. See ya! 👋';
         this.client.logger.warn('Cleaning up before shutting down...');
         const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-        await message.reply('⚠ Shutting down...');
-        await errChannel.send({ content: `⚠ **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
+        await message.reply(':warning: Shutting down...');
+        await errChannel.send({ content: `:warning: **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
         this.client.logger.info('[Shutdown] %s', restartReport);
         this.client.logger.warn('Shutting down...');
         this.client.creator.cleanRegisteredComponents();
