@@ -44,21 +44,20 @@ module.exports = class CommandImageSize extends Command {
         switch ((args.size).toLowerCase()) {
         case 'small': {
             await this.client.settings.set(message.guild.id, 'small', 'thumbnailSize');
+            this.client.ui.reply(message, 'ok', 'Thumbnail size has been set to **small**.');
             break;
         }
 
         case 'large': {
             await this.client.settings.set(message.guild.id, 'large', 'thumbnailSize');
+            this.client.ui.reply(message, 'ok', 'Thumbnail size has been set to **large**.');
             break;
         }
 
         default: {
-            await this.client.settings.set(message.guild.id, 'small', 'thumbnailSize');
+            this.client.ui.reply(message, 'error', 'Toggle must be **large** or **small**.');
             break;
         }
         }
-
-        await this.client.settings.set(message.guild.id, args.size, 'thumbnailSize');
-        return this.client.ui.reply(message, 'ok', `Thumbnail size has been set to **${args.size}**.`);
     }
 };
