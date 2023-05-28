@@ -67,7 +67,7 @@ module.exports = class CommandSkipTo extends Command {
 
         if (vc.members.size <= 2) {
             try {
-                this.client.player.jump(message, parseInt(args[1]));
+                this.client.player.jump(message, parseInt(args.entry));
                 await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, `Skipping to ${
                     song.metadata?.silent
                         ? 'a hidden track'
@@ -80,7 +80,7 @@ module.exports = class CommandSkipTo extends Command {
         } else {
             if (dj) {
                 try {
-                    this.client.player.jump(message, parseInt(args[1]));
+                    this.client.player.jump(message, parseInt(args.entry));
                     await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, `Skipping to **${song.name}**...`);
                     return message.channel.sendTyping();
                 } catch {
