@@ -26,20 +26,26 @@ module.exports = class CommandBassBoost extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Boosts the bass of the player.',
-                usage: 'bassboost <gain:int>'
+                usage: '<gain:1-100/off>',
+                details: '`<gain:1-100/off> The gain of the bass boost. Must be between 1-100 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
+            args: [
+                {
+                    id: 'gain',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -61,18 +67,18 @@ module.exports = class CommandBassBoost extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (!args[1]) return this.client.ui.usage(message, 'bassboost <gain:int(1-100)/off>');
+            if (!args.gain) return this.client.ui.usage(message, 'bassboost <gain:1-100/off>');
 
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.gain === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('bassboost', null);
                     pushFormatFilter(queue, 'Bass Boost', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Bass Boost** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Bass Boost** Off');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
             } else {
-                const gain = parseFloat(args[1]);
+                const gain = parseFloat(args.gain);
 
                 if (gain < 1 || gain > 100 || isNaN(gain)) {
                     return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.');
@@ -80,7 +86,7 @@ module.exports = class CommandBassBoost extends Command {
 
                 await queue.filters.set('bassboost', `bass=g=${gain}`);
                 pushFormatFilter(queue, 'Bass Boost', `Gain: \`${gain}dB\``);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

@@ -192,7 +192,7 @@ class CommandQueue extends SlashCommand {
             if (vc.members.size <= 2 || dj) {
                 // Clear everything from the queue.
                 queue.songs.splice(1, queue.songs.length);
-                this.client.ui.custom(ctx, '💥', 0xDF6C3B, '**BOOM!** Cleared the queue.');
+                this.client.ui.custom(ctx, ':boom:', 0xDF6C3B, '**BOOM!** Cleared the queue.');
             } else {
                 this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
@@ -369,7 +369,7 @@ class CommandQueue extends SlashCommand {
             const youDidntClickThat = { // lol
                 embeds: [
                     new EmbedBuilder()
-                        .setColor(parseInt(process.env.COLOR_NO))
+                        .setColor(process.env.COLOR_NO)
                         .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                 ],
                 ephemeral: true
@@ -425,7 +425,7 @@ class CommandQueue extends SlashCommand {
                         return modalCtx.send({
                             embeds: [
                                 new EmbedBuilder()
-                                    .setColor(parseInt(process.env.COLOR_ERROR))
+                                    .setColor(process.env.COLOR_ERROR)
                                     .setDescription(`${process.env.EMOJI_ERROR} A number must be provided in your response. Please try again.`)
                             ],
                             ephemeral: true

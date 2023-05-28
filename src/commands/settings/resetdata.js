@@ -60,7 +60,7 @@ module.exports = class CommandResetData extends Command {
                 return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(parseInt(process.env.COLOR_NO))
+                            .setColor(process.env.COLOR_NO)
                             .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                     ],
                     ephemeral: true

@@ -87,10 +87,10 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                 }
                 this.client.player.skip(guild);
-                await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(ctx, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
             } else {
                 this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
             }
@@ -105,7 +105,7 @@ class CommandSkip extends SlashCommand {
             if (dj || vc.members.size <= 2) {
                 try {
                     this.client.player.jump(guild, parseInt(ctx.options.jump.index));
-                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, `Skipping to ${
+                    await this.client.ui.custom(ctx, ':next_track:', process.env.COLOR_INFO, `Skipping to ${
                         song.metadata?.silent
                             ? 'a hidden track'
                             : `**${song.name}**`
@@ -130,14 +130,14 @@ class CommandSkip extends SlashCommand {
                     queue.votes = [];
                     if (!queue.songs[1]) {
                         this.client.player.stop(guild);
-                        return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                        return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                     }
                     this.client.player.skip(guild);
-                    await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                    await this.client.ui.custom(ctx, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
                     return channel.sendTyping();
                 } else {
                     const embed = new EmbedBuilder()
-                        .setColor(parseInt(process.env.COLOR_INFO))
+                        .setColor(process.env.COLOR_INFO)
                         .setDescription('⏭ Skipping?')
                         .setFooter({
                             text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? " Yo DJ, you can force skip the track by using '/skip force'." : ''}`,
@@ -149,10 +149,10 @@ class CommandSkip extends SlashCommand {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(guild);
-                    return this.client.ui.custom(ctx, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                 }
                 this.client.player.skip(guild);
-                await this.client.ui.custom(ctx, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(ctx, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
                 return channel.sendTyping();
             }
         }

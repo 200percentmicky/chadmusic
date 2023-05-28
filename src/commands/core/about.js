@@ -32,7 +32,7 @@ module.exports = class CommandAbout extends Command {
             aliases: ['about'],
             category: '💻 Core',
             description: {
-                text: 'This application is running an instance of ChadMusic - The Chad Music Bot!'
+                text: 'Displays information about the bot.'
             }
         });
     }
@@ -69,7 +69,7 @@ module.exports = class CommandAbout extends Command {
                 name: `${process.env.EMOJI_INFO} Stats`,
                 value: stripIndents`
                 **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
-                **Bot Version:** ${bot.version} (Build ${this.client.buildNum})
+                **Bot Version:** ${bot.version}
                 **Node.js:** ${process.version}
                 **Discord.js:** ${discord.version}
                 **slash-create:** ${sc.version}

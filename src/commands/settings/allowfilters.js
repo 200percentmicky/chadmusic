@@ -28,17 +28,22 @@ module.exports = class CommandAllowFilters extends Command {
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
-            userPermissions: [PermissionsBitField.Flags.ManageGuild]
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            args: [
+                {
+                    id: 'toggle',
+                    match: 'text'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        if (!args[1]) return this.client.ui.usage(message, 'allowfilters <toggle>');
-        if (args[1] === 'OFF'.toLowerCase()) {
+    async exec (message, args) {
+        if (!args.toggle) return this.client.ui.usage(message, 'allowfilters <toggle:on/off>');
+        if (args.toggle === 'OFF'.toLowerCase()) {
             await this.client.settings.set(message.guild.id, false, 'allowFilters');
             return this.client.ui.reply(message, 'ok', 'Filters have been disabled. Only DJs will be able to apply filters.');
-        } else if (args[1] === 'ON'.toLowerCase()) {
+        } else if (args.toggle === 'ON'.toLowerCase()) {
             await this.client.settings.set(message.guild.id, true, 'allowFilters');
             return this.client.ui.reply(message, 'ok', 'Filters have been enabled.');
         } else {

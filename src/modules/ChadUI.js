@@ -19,17 +19,15 @@
 
 const {
     Message,
-    EmbedBuilder,
-    CommandInteraction,
     ActionRowBuilder,
     ColorResolvable,
     EmojiResolvable,
-    BaseGuildTextChannel,
     GuildMember,
     ChannelType,
     PermissionsBitField,
     ChatInputCommandInteraction,
-    InteractionResponse
+    InteractionResponse,
+    EmbedBuilder
 } = require('discord.js');
 const { CommandContext, Member } = require('slash-create');
 
@@ -46,21 +44,20 @@ let baseEmbed = {};
  * @returns The object used to construct an embed.
  */
 const embedUI = (color, emoji, title, desc, footer) => {
-    baseEmbed = {
-        color: parseInt(color),
-        title: null,
-        description: `${emoji} ${desc}`
-    };
+    baseEmbed = new EmbedBuilder()
+        .setColor(color)
+        .setDescription(`${emoji} ${desc}`);
 
     if (title) {
-        baseEmbed.title = `${emoji} ${title}`;
-        baseEmbed.description = `${desc}`;
+        baseEmbed
+            .setTitle(`${emoji} ${title}`)
+            .setDescription(`${desc}`);
     }
 
     if (footer) {
-        baseEmbed.footer = {
+        baseEmbed.setFooter({
             text: `${footer}`
-        };
+        });
     }
 
     return baseEmbed;
@@ -94,13 +91,13 @@ const embedColor = {
 /**
  * The bot's user interface.
  */
-class WaveUI {
+class ChadUI {
     /**
      * Replies to the user as an embed, or a standard text message if the bot doesn't
      * have the **Embed Links** permission. Supported types are `ok` for success, `warn`
      * for warnings, `error` for errors, `info` for information, and `no` for forbidden.
      *
-     * @example <WaveUI>.reply(message, 'ok', 'The task failed successfully!')
+     * @example <ChadUI>.reply(message, 'ok', 'The task failed successfully!')
      * @param {(Message|CommandContext|ChatInputCommandInteraction)} msg The message object or an interaction.
      * @param {string} type The type of interface to provide.
      * @param {string} description The overall message.
@@ -114,11 +111,11 @@ class WaveUI {
     static reply (msg, type, description, title, footer, ephemeral, buttons, mention) {
         /* The emoji of the embed */
         let embedEmoji = {
-            ok: process.env.EMOJI_OK ?? '✅',
-            warn: process.env.EMOJI_WARN ?? '⚠',
-            error: process.env.EMOJI_ERROR ?? '❌',
-            info: process.env.EMOJI_INFO ?? 'ℹ',
-            no: process.env.EMOJI_NO ?? '🚫'
+            ok: process.env.EMOJI_OK ?? ':white_check_mark:',
+            warn: process.env.EMOJI_WARN ?? ':warning:',
+            error: process.env.EMOJI_ERROR ?? ':x:',
+            info: process.env.EMOJI_INFO ?? ':information_source:',
+            no: process.env.EMOJI_NO ?? ':no_entry_sign:'
         };
 
         const embed = embedUI(embedColor[type], embedEmoji[type], title || null, description || null, footer || null);
@@ -132,11 +129,11 @@ class WaveUI {
             const client = msg.channel.client;
             const emojiPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
             embedEmoji = {
-                ok: emojiPerms ? process.env.EMOJI_OK : '✅',
-                warn: emojiPerms ? process.env.EMOJI_WARN : '⚠',
-                error: emojiPerms ? process.env.EMOJI_ERROR : '❌',
-                info: emojiPerms ? process.env.EMOJI_INFO : 'ℹ',
-                no: emojiPerms ? process.env.EMOJI_NO : '🚫'
+                ok: emojiPerms ? process.env.EMOJI_OK : ':white_check_mark:',
+                warn: emojiPerms ? process.env.EMOJI_WARN : ':warning:',
+                error: emojiPerms ? process.env.EMOJI_ERROR : ':x:',
+                info: emojiPerms ? process.env.EMOJI_INFO : ':information_source:',
+                no: emojiPerms ? process.env.EMOJI_NO : ':no_entry_sign:'
             };
 
             if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
@@ -173,21 +170,20 @@ class WaveUI {
     /**
      * Returns the overall usage of a message based command if no arguments were provided.
      *
-     * @example <WaveUI>.usage(message, 'play <url|search>');
+     * @example <ChadUI>.usage(message, 'play <url|search>');
      * @param {Message} msg A MessageResolvable | `Discord.Message`
      * @param {string} syntax The usage of the command
      * @returns {Message} The embed containg the usage of the command.
      */
     static usage (msg, syntax) {
         const guildPrefix = msg.channel.client.settings.get(msg.guild.id, 'prefix') ?? process.env.PREFIX;
-        const embed = new EmbedBuilder()
-            .setColor(parseInt(process.env.COLOR_INFO))
-            .setTitle(`${process.env.EMOJI_INFO} Usage`)
-            .setDescription(`\`${guildPrefix}${syntax}\``);
+        let usagePrompt;
         if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
-            return msg.reply(`${process.env.EMOJI_INFO} **Usage** | \`${guildPrefix}${syntax}\``);
+            usagePrompt = stringUI(process.env.EMOJI_INFO, 'Usage', `\`\`\`${guildPrefix}${syntax}\`\`\``);
+            return msg.reply({ content: usagePrompt });
         } else {
-            return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+            usagePrompt = embedUI(process.env.COLOR_INFO, process.env.EMOJI_INFO, 'Usage', `\`\`\`${guildPrefix}${syntax}\`\`\``);
+            return msg.reply({ embeds: [usagePrompt] });
         }
     }
 
@@ -201,7 +197,7 @@ class WaveUI {
      * @param {string} description The overall message.
      * @param {string} [title] The title of the message.
      * @param {string} [footer] The footer of the message.
-     * @param {ActionRowBuilder[]} [buttons] The components to add to the message. Supports only `Discord.ButtonBuilder`.
+     * @param {ActionRowBuilder[]} [buttons] The components to add to the message.`.
      * @param {boolean} [mention] Whether to mention the user.
      * @param {boolean} [ephemeral] Whether the response to the interaction should be ephemeral.
      * @returns {(Message|CommandContext|InteractionResponse)} The message to reply to the user.
@@ -294,21 +290,21 @@ class WaveUI {
         };
 
         const promptEmoji = {
-            DJ_MODE: process.env.EMOJI_NO ?? '🚫',
-            NO_DJ: process.env.EMOJI_NO ?? '🚫',
-            FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? '❌',
-            FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? '🚫',
-            FULL_CHANNEL: process.env.EMOJI_ERROR ?? '❌',
-            NOT_ALONE: process.env.EMOJI_NO ?? '🚫',
-            NOT_PLAYING: process.env.EMOJI_WARN ?? '⚠',
-            NOT_IN_VC: process.env.EMOJI_ERROR ?? '❌',
-            ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? '❌',
-            MISSING_CONNECT: process.env.EMOJI_NO ?? '🚫',
-            MISSING_SPEAK: process.env.EMOJI_NO ?? '🚫',
-            MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? '⚠',
-            MISSING_PERMISSIONS: process.envEMOJI_NO ?? '🚫',
-            WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? '🚫',
-            OWNER_ONLY: process.env.EMOJI_NO ?? '🚫',
+            DJ_MODE: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            NO_DJ: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? ':x:',
+            FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            FULL_CHANNEL: process.env.EMOJI_ERROR ?? ':x:',
+            NOT_ALONE: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            NOT_PLAYING: process.env.EMOJI_WARN ?? ':warning:',
+            NOT_IN_VC: process.env.EMOJI_ERROR ?? ':x:',
+            ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? ':x:',
+            MISSING_CONNECT: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            MISSING_SPEAK: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? ':warning:',
+            MISSING_PERMISSIONS: process.envEMOJI_NO ?? ':no_entry_sign:',
+            WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            OWNER_ONLY: process.env.EMOJI_NO ?? ':no_entry_sign:',
             NSFW_ONLY: '🔞'
         };
 
@@ -356,4 +352,4 @@ class WaveUI {
     }
 }
 
-module.exports = WaveUI;
+module.exports = ChadUI;

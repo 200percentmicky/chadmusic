@@ -44,7 +44,7 @@ module.exports = class CommandSetGame extends Command {
                 await this.client.user.setActivity(status, { type: type });
                 return message.react('✅');
             } catch (err) {
-                message.reply({ content: `❌ Unable to set status: \`${err.message}\`` });
+                message.reply({ content: `:x: Unable to set status: \`${err.message}\`` });
             }
         };
 

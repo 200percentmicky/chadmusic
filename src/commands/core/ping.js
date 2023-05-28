@@ -22,7 +22,7 @@ module.exports = class PingCommand extends Command {
         super('ping', {
             aliases: ['ping'],
             description: {
-                text: 'Shows the bot\'s latency to Discord.'
+                text: 'Shows the bot\'s latency.'
             },
             category: '💻 Core'
         });

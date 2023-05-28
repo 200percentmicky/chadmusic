@@ -26,7 +26,7 @@ module.exports = class CommandMaxTime extends Command {
             description: {
                 text: 'Allows you to restrict songs from being added to the queue if the duration of the video exceeds this.',
                 usage: '<duration>',
-                details: '`<duration>` The max duration of the song to limit. Members will be unable to add any songs that go past this limit. DJs can bypass this.'
+                details: '`<duration>` The max duration of the song to limit. Members will be unable to add any songs that go past this limit.'
             },
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],

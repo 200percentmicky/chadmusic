@@ -24,9 +24,7 @@ module.exports = class CommandSkip extends Command {
             aliases: ['skip', 's'],
             category: '🎶 Music',
             description: {
-                text: 'Skips the currently playing song.',
-                usage: '|--force/-f|',
-                details: '`|--force/-f|` Only a DJ can use this. Bypasses voting and skips the currently playing song.'
+                text: 'Skips the currently playing song.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks
@@ -59,13 +57,13 @@ module.exports = class CommandSkip extends Command {
 
         // For breaking use only.
         // this.client.player.skip(message)
-        // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+        // return this.client.ui.reply(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
 
         /*
     if (args[1] === ('--force' || '-f')) {
       if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
-      return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+      return this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
     }
     */
 
@@ -79,10 +77,10 @@ module.exports = class CommandSkip extends Command {
                 queue.votes = [];
                 if (!queue.songs[1]) {
                     this.client.player.stop(message.guild);
-                    return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                    return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
                 }
                 this.client.player.skip(message);
-                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
                 return message.channel.sendTyping();
             } else {
                 const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
@@ -99,10 +97,10 @@ module.exports = class CommandSkip extends Command {
             queue.votes = [];
             if (!queue.songs[1]) {
                 this.client.player.stop(message.guild);
-                return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
             }
             this.client.player.skip(message.guild);
-            await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+            await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
             return message.channel.sendTyping();
         }
     }

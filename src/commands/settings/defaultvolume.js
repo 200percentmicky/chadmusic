@@ -24,8 +24,8 @@ module.exports = class CommandDefaultVolume extends Command {
             category: '⚙ Settings',
             description: {
                 text: "Changes the bot's default volume when starting a queue, or when disabling Earrape.",
-                usage: '<int:volume|1-200>',
-                details: '`<int:volume|1-200>` The new volume for the server.'
+                usage: '<volume:1-200>',
+                details: '`<volume:1-200>` The new default volume for the server.'
             },
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
@@ -42,7 +42,7 @@ module.exports = class CommandDefaultVolume extends Command {
         const volume = parseInt(args.volume);
 
         if (!volume) {
-            return this.client.ui.usage(message, 'defaultvolume <int:volume|1-200>');
+            return this.client.ui.usage(message, 'defaultvolume <volume:1-200>');
         }
 
         if (isNaN(volume)) {

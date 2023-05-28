@@ -48,7 +48,7 @@ module.exports = class ListenerClientCommandError extends Listener {
             .addComponents([urlGithub, support]);
 
         await message.reply({ content: `${guru}`, components: [actionRow] });
-        this.client.ui.recordError(this.client, command, '❌ Command Error', error.stack);
+        this.client.ui.recordError(this.client, command, ':x: Command Error', error.stack);
         this.client.logger.error('[Client] Error in command "%s": %s', command, error.stack);
     }
 };

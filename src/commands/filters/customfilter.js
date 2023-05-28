@@ -27,24 +27,29 @@ module.exports = class CommandCustomFilter extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Allows you to add a custom FFMPEG filter to the player.',
-                usage: 'customfilter <argument:str>',
+                usage: 'customfilter <argument>',
                 details: stripIndents`
-        \`<argument:str>\` The argument to provide to FFMPEG.
-        ⚠ If the argument is invalid or not supported by FFMPEG, the stream will end.
-        `
+                \`<argument:str>\` The filter argument to provide to FFMPEG.
+                :warning: If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
+                `
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
-            ownerOnly: true
+            ownerOnly: true,
+            args: [
+                {
+                    id: 'custom',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const dj = message.member.roles.cache.has(djRole) ||
-      message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (djMode) {
             if (!dj) {
@@ -52,7 +57,7 @@ module.exports = class CommandCustomFilter extends Command {
             }
         }
 
-        if (!args[1]) return this.client.ui.usage(message, 'customfilter <argument:str>');
+        if (!args.custom) return this.client.ui.usage(message, 'customfilter <argument>');
 
         const vc = message.member.voice.channel;
         if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
@@ -62,19 +67,19 @@ module.exports = class CommandCustomFilter extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (args[1] === 'OFF'.toLowerCase()) {
+            if (args.custom === 'OFF'.toLowerCase()) {
                 try {
                     await queue.filters.set('custom', null);
                     pushFormatFilter(queue, 'Custom Filter', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Custom Filter** Removed');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Custom Filter** Removed');
                 } catch (err) {
                     return this.client.ui.reply(message, 'error', 'No custom filters are applied to the player.');
                 }
             } else {
-                const custom = args[1];
+                const custom = args.custom;
                 await queue.filters.set('custom', custom);
                 pushFormatFilter(queue, 'Custom Filter', custom);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Custom Filter** Argument: \`${custom}\``);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

@@ -26,7 +26,7 @@ module.exports = class CommandReload extends Command {
             aliases: ['reload'],
             category: '💻 Core',
             description: {
-                text: 'Reloads everything without restarting the bot.',
+                text: 'Reloads commands.',
                 usage: '[reload_slash]',
                 details: '`[reload_slash]` Whether to reload the application\'s slash commands.'
             },
@@ -59,8 +59,8 @@ module.exports = class CommandReload extends Command {
             await this.client.inhibitors.loadAll();
             await this.client.listeners.loadAll();
         } catch (err) {
-            message.reply({ content: `❌ Error reloading modules: \`${err.message}\`` });
-            resultEmoji = '❌';
+            message.reply({ content: `:x: Error reloading modules: \`${err.message}\`` });
+            resultEmoji = ':x:';
         }
 
         // Application Commands
@@ -75,16 +75,16 @@ module.exports = class CommandReload extends Command {
                     syncPermissions: true
                 });
             } catch (err) {
-                message.reply({ content: `❌ Error syncing slash commands: \`${err.message}\`\n` });
-                resultEmoji = '❌';
+                message.reply({ content: `:x: Error syncing slash commands: \`${err.message}\`\n` });
+                resultEmoji = ':x:';
             }
 
             await this.client.creator.commands.forEach(cmd => {
                 try {
                     cmd.reload();
                 } catch (err) {
-                    message.reply({ content: `❌ Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
-                    resultEmoji = '❌';
+                    message.reply({ content: `:x: Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
+                    resultEmoji = ':x:';
                 }
             });
         }

@@ -27,11 +27,11 @@ module.exports = class CommandCrusher extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Crushes the audio without changing the bit depth. Makes it sound more harsh and "digital".',
-                usage: '<sample:int(1-250)/off> [bits:int(1-64)] [mode:str(log, lin)]',
+                usage: '<sample:1-250/off> [bits:1-64] [mode:log/lin]',
                 details: stripIndents`
-                \`<sample:int(1-250)/off>\` The sample reduction. Must be between 1-250 or off.
-                \`[bits:int(1-64)]\` The bit reduction. Must be between 1-64. Default is \`8\`.
-                \`[mode:str(log, lin)]\` Changes logarithmic mode to either linear (lin) or logarithmic (log). \`lin\` is default.
+                \`<sample:1-250/off>\` The sample reduction. Must be between 1-250 or off.
+                \`[bits:1-64]\` The bit reduction. Must be between 1-64. Default is \`8\`.
+                \`[mode:log/lin]\` Changes logarithmic mode to either linear (lin) or logarithmic (log). \`lin\` is default.
                 `
             },
             channel: 'guild',
@@ -86,13 +86,13 @@ module.exports = class CommandCrusher extends Command {
                 try {
                     await queue.filters.set('crusher', null);
                     pushFormatFilter(queue, 'Crusher', 'Off');
-                    return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, '**Crusher** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Crusher** Off');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
             } else {
                 if (!args.samples) {
-                    return this.client.ui.usage(message, 'crusher <sample:int(1-250)/off> [bits:int(1-64)] [mode:str(log, lin)]');
+                    return this.client.ui.usage(message, 'crusher <sample:1-250/off> [bits:1-64] [mode:log/lin]');
                 }
                 const samples = parseFloat(args.samples);
                 let bits = parseFloat(args.bits);
@@ -115,7 +115,7 @@ module.exports = class CommandCrusher extends Command {
 
                 await queue.filters.set('crusher', `acrusher=samples=${samples}:bits=${bits}:mode=${mode}`);
                 pushFormatFilter(queue, 'Crusher', `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
-                return this.client.ui.custom(message, '📢', process.env.COLOR_INFO, `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

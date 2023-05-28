@@ -33,8 +33,9 @@ module.exports = class CommandSearch extends Command {
             aliases: ['search'],
             category: '🎶 Music',
             description: {
-                text: 'Searches for a song on YouTube.',
-                usage: '<query>'
+                text: 'Searches for a track to play.',
+                usage: '<query>',
+                detail: '`<query>` The phrase(s) to search for.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,

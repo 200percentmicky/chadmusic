@@ -63,7 +63,7 @@ module.exports = class CommandResume extends Command {
                 else return this.client.ui.reply(message, 'error', `An error occured while resuming playback. ${err.message}`);
             }
 
-            return this.client.ui.custom(message, '▶', process.env.COLOR_INFO, 'Resuming playback...');
+            return this.client.ui.custom(message, ':arrow_forward:', process.env.COLOR_INFO, 'Resuming playback...');
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }

@@ -55,13 +55,13 @@ module.exports = class CommandForceSkip extends Command {
 
         // For breaking use only.
         // this.client.player.skip(message)
-        // return this.client.ui.reply(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+        // return this.client.ui.reply(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
 
         /*
     if (args[1] === ('--force' || '-f')) {
       if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
       this.client.player.skip(message)
-      return this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipped!')
+      return this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
     }
     */
 
@@ -71,15 +71,15 @@ module.exports = class CommandForceSkip extends Command {
         if (vc.members.size <= 2) {
             if (!this.client.player.getQueue(message).songs[1]) {
                 this.client.player.stop(message);
-                return this.client.ui.custom(message, '🏁', process.env.COLOR_INFO, "Reached the end of the queue. I'm outta here!");
+                return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
             }
             this.client.player.skip(message);
-            await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+            await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
             return message.channel.sendTyping();
         } else {
             if (dj) {
                 this.client.player.skip(message);
-                await this.client.ui.custom(message, '⏭', process.env.COLOR_INFO, 'Skipping...');
+                await this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipping...');
                 return message.channel.sendTyping();
             } else {
                 return this.client.ui.sendPrompt(message, 'NOT_ALONE');

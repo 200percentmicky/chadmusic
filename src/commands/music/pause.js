@@ -65,7 +65,7 @@ module.exports = class CommandPause extends Command {
                     return this.client.ui.reply(message, 'error', `An error occured while pausing the player. ${err.message}`);
                 }
             }
-            return this.client.ui.custom(message, '⏸', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}resume to resume playback.`);
+            return this.client.ui.custom(message, ':pause_button:', process.env.COLOR_INFO, 'Paused', null, `Type ${prefix}resume to resume playback.`);
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }

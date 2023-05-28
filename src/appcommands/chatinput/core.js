@@ -154,7 +154,7 @@ class CommandCore extends SlashCommand {
                     let evaled = await eval(code);
 
                     if (typeof evaled !== 'string') {
-                        evaled = require('util').inspect(evaled, { depth: 2, sorted: true, maxArrayLength: 5 });
+                        evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
                     }
 
                     const t2 = process.hrtime(t1);
@@ -345,7 +345,7 @@ class CommandCore extends SlashCommand {
                     name: `${process.env.EMOJI_INFO} Stats`,
                     value: stripIndents`
                     **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
-                    **Bot Version:** ${bot.version} (Build ${this.client.buildNum})
+                    **Bot Version:** ${bot.version}
                     **Node.js:** ${process.version}
                     **Discord.js:** ${discord.version}
                     **slash-create:** ${sc.version}

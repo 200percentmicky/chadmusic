@@ -183,7 +183,7 @@ module.exports = class CommandQueue extends Command {
                 return interaction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(parseInt(process.env.COLOR_NO))
+                            .setColor(process.env.COLOR_NO)
                             .setDescription(`${process.env.EMOJI_NO} That component can only be used by the user that ran this command.`)
                     ],
                     ephemeral: true
@@ -283,7 +283,7 @@ module.exports = class CommandQueue extends Command {
                         return interaction.followUp({
                             embeds: [
                                 new EmbedBuilder()
-                                    .setColor(parseInt(process.env.COLOR_ERROR))
+                                    .setColor(process.env.COLOR_ERROR)
                                     .setDescription(`${process.env.EMOJI_ERROR} A number must be provided in your response. Please try again.`)
                             ],
                             ephemeral: true

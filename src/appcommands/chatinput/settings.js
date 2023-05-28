@@ -20,6 +20,10 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 
+// TODO: Look into condensing all changes into a single method.
+// A majority of this command is nothing but copying and pasting
+// the same thing because I'm lazy as shit... oh well... ¯\_(ツ)_/¯
+
 module.exports = class CommandSettings extends SlashCommand {
     constructor (creator) {
         super(creator, {
@@ -271,6 +275,106 @@ module.exports = class CommandSettings extends SlashCommand {
                             required: true
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND_GROUP,
+                    name: 'global',
+                    description: "[Owner Only] Manages the bot's global settings.",
+                    options: [
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'current',
+                            description: 'Shows the bot\'s current global settings.'
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonempty',
+                            description: 'Toggles whether the bot should leave when the voice channel is empty for a period of time.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonfinish',
+                            description: 'Toggles whether the bot should leave when the end of the queue has been reached.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'leaveonstop',
+                            description: 'Toggles whether the bot should leave when the player is stopped.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'shownewsongonly',
+                            description: 'Toggles whether the Now Playing alerts are shown for new songs only.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'streamtype',
+                            description: 'Selects which audio encoder the bot should use during streams.',
+                            options: [
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'encoder',
+                                    description: 'The audio encoder to use.',
+                                    required: true,
+                                    choices: [
+                                        {
+                                            name: 'Opus (Better quality, uses more resources.)',
+                                            value: 'opus'
+                                        },
+                                        {
+                                            name: 'RAW (Better performance, uses less resources.)',
+                                            value: 'raw'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'emptycooldown',
+                            description: 'Sets how long the bots stays in an empty voice channel.',
+                            options: [
+                                {
+                                    type: CommandOptionType.NUMBER,
+                                    name: 'time',
+                                    description: 'The time the bot will stay in seconds.',
+                                    required: true
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         });
@@ -281,15 +385,24 @@ module.exports = class CommandSettings extends SlashCommand {
     async run (ctx) {
         const settings = this.creator.client.settings;
         const guild = this.client.guilds.cache.get(ctx.guildID);
-        const channel = guild.channels.cache.get(ctx.channelID);
-
-        if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
-            return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Server');
-        }
 
         await settings.ensure(ctx.guildID, this.client.defaultSettings);
+        await settings.ensure('global', this.client.defaultGlobalSettings);
 
-        // All Settings
+        // Global Settings
+        const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
+        const emptyCooldown = settings.get('global', 'emptyCooldown'); // Empty Cooldown
+        const leaveOnEmpty = settings.get('global', 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get('global', 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get('global', 'leaveOnStop'); // Leave on Stop
+        const streamType = settings.get('global', 'streamType'); // Audio Encoder
+
+        const encoderType = {
+            0: 'Opus',
+            1: 'RAW'
+        };
+
+        // Server Settings
         const prefix = settings.get(guild.id, 'prefix'); // Prefix
         const djRole = settings.get(guild.id, 'djRole'); // DJ Role
         const djMode = settings.get(guild.id, 'djMode'); // Toggle DJ Mode
@@ -309,154 +422,266 @@ module.exports = class CommandSettings extends SlashCommand {
         // All pornographic websites are blocked.
         const allowAgeRestricted = settings.get(guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
 
-        switch (ctx.subcommands[0]) {
-        case 'current': {
-            const embed = new EmbedBuilder()
-                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                .setAuthor({
-                    name: `${guild.name}`,
-                    iconURL: guild.iconURL({ dynamic: true })
-                })
-                .setTitle(':gear: Settings')
-                .setDescription(stripIndents`
-                **⁉ Prefix:** \`${prefix}\`
-                **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-                **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-                **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-                **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-                **📢 Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
-                **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-                **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-                **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-                **🖼 Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
-                **🔊 Default Volume:** ${defaultVolume}
-                **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
-                `)
-                .setTimestamp()
-                .setFooter({
-                    text: `ChadMusic v${version}`,
-                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                });
-
-            const blockedEmbed = new EmbedBuilder()
-                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                .setAuthor({
-                    name: `${guild.name}`,
-                    iconURL: guild.iconURL({ dynamic: true })
-                })
-                .setTitle('🎶❌ Blocked Songs')
-                .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-                .setTimestamp()
-                .setFooter({
-                    text: `ChadMusic v${version}`,
-                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                });
-
-            if (blockedPhrases.length === 0) {
-                blockedEmbed.setDescription(null);
-                blockedEmbed.addFields({
-                    name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
-                    value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
-                });
+        if (ctx.subcommands[0] === 'global') {
+            if (ctx.user.id !== this.client.ownerID) {
+                return this.client.ui.sendPrompt(ctx, 'OWNER_ONLY');
             }
 
-            return ctx.send({ embeds: [embed, blockedEmbed] });
-        }
-
-        case 'remove': {
-            await settings.set(ctx.guildID, this.client.defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
-            return this.client.ui.reply(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
-        }
-
-        case 'djrole': {
-            await settings.set(ctx.guildID, ctx.options.djrole.role, 'djRole');
-            return this.client.ui.reply(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
-        }
-
-        case 'djmode': {
-            await settings.set(ctx.guildID, ctx.options.djmode.toggle, 'djMode');
-            return this.client.ui.reply(ctx, 'ok', 'DJ Mode has been enabled.');
-        }
-
-        case 'maxtime': {
-            const time = toMilliseconds(ctx.options.maxtime.time);
-            if (isNaN(time)) return this.client.ui.reply(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
-            await settings.set(ctx.guildID, time, 'maxTime');
-            return this.client.ui.reply(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
-        }
-
-        case 'maxqueuelimit': {
-            await settings.set(ctx.guildID, ctx.options.maxqueuelimit.limit, 'maxQueueLimit');
-            return this.client.ui.reply(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
-        }
-
-        case 'allowfilters': {
-            await settings.set(ctx.guildID, ctx.options.allowfilters.toggle, 'allowFilters');
-            return this.client.ui.reply(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
-        }
-
-        case 'allowexplicit': {
-            await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
-            return this.client.ui.reply(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
-        }
-
-        case 'allowlinks': {
-            await settings.set(ctx.guildID, ctx.options.allowlinks.toggle, 'allowLinks');
-            return this.client.ui.reply(ctx, 'ok', `URLs can ${ctx.options.allowlinks.toggle ? 'now' : 'no longer'} be added to the queue.`);
-        }
-
-        case 'unlimitedvolume': {
-            await settings.set(ctx.guildID, ctx.options.unlimitedvolume.toggle, 'allowFreeVolume');
-            return this.client.ui.reply(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
-        }
-
-        case 'thumbnailsize': {
-            await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
-            return this.client.ui.reply(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
-        }
-
-        case 'defaultvolume': {
-            await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
-            return this.client.ui.reply(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
-        }
-
-        case 'allowsilent': {
-            await settings.set(ctx.guildID, ctx.options.allowsilent.toggle, 'allowSilent');
-            return this.client.ui.reply(ctx, 'ok', `Silent tracks have been **${ctx.options.allowsilent.toggle === true ? 'enabled' : 'disabled'}**.`);
-        }
-
-        case 'blocksong': {
             switch (ctx.subcommands[1]) {
-            case 'add': {
-                if (this.client.settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
-                    return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
+            case 'shownewsongonly': {
+                const toggle = ctx.options.global.shownewsongonly.toggle;
+
+                await settings.set('global', toggle, 'emitNewSongOnly');
+                this.client.player.options.emitNewSongOnly = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'Now Playing alerts will now only show for new songs.'
+                    : 'Now Playing alerts will now show for every song.'
+                );
+                break;
+            }
+
+            case 'emptycooldown': {
+                const time = ctx.options.global.emptycooldown.time;
+
+                await settings.set('global', time, 'emptyCooldown');
+                this.client.player.options.emptyCooldown = time;
+                this.client.ui.reply(ctx, 'ok', `Empty Cooldown has been set to \`${parseInt(time)}\` seconds.`);
+                break;
+            }
+
+            case 'leaveonempty': {
+                const toggle = ctx.options.global.leaveonempty.toggle;
+
+                await settings.set('global', toggle, 'leaveOnEmpty');
+                this.client.player.options.leaveOnEmpty = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
+                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
+                );
+                break;
+            }
+
+            case 'leaveonfinish': {
+                const toggle = ctx.options.global.leaveonfinish.toggle;
+
+                await settings.set('global', toggle, 'leaveOnFinish');
+                this.client.player.options.leaveOnFinish = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
+                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
+                );
+                break;
+            }
+
+            case 'leaveonstop': {
+                const toggle = ctx.options.global.leaveonstop.toggle;
+
+                await settings.set('global', toggle, 'leaveOnStop');
+                this.client.player.options.leaveOnStop = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the player is stopped.'
+                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
+                );
+                break;
+            }
+
+            case 'streamtype': {
+                const encoderType = {
+                    opus: 0,
+                    raw: 1
+                };
+
+                const encoder = ctx.options.global.streamtype.encoder;
+
+                this.client.player.options.streamType = encoderType[encoder];
+                this.client.ui.reply(ctx, 'ok', `Audio encoder has been set to **${encoder}**.`);
+                break;
+            }
+
+            default: { // current
+                const embed = new EmbedBuilder()
+                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                    .setAuthor({
+                        name: `ChadMusic v${version}`,
+                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                    })
+                    .setTitle('🌐 Global Settings')
+                    .setDescription(stripIndents`
+                        **Audio Encoder:** ${encoderType[streamType]}
+                        **Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                        **Leave on Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
+                        **Leave on Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
+                        **Leave on Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
+                        **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
+                        `
+                    )
+                    .setTimestamp();
+
+                return ctx.send({ embeds: [embed] });
+            }
+            }
+        } else {
+            if (!ctx.channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
+                return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Guild');
+            }
+
+            switch (ctx.subcommands[0]) {
+            case 'current': {
+                const embed = new EmbedBuilder()
+                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                    .setAuthor({
+                        name: `${guild.name}`,
+                        iconURL: guild.iconURL({ dynamic: true })
+                    })
+                    .setTitle(':gear: Settings')
+                    .addFields({
+                        name: '🎶 Player',
+                        value: stripIndents`
+                        **⁉️ Prefix:** \`${prefix}\`
+                        **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+                        **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+                        **🖼️ Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
+                        **🔊 Default Volume:** ${defaultVolume}
+                        **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                        `
+                    },
+                    {
+                        name: '🛡️ Moderation',
+                        value: stripIndents`
+                        **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+                        **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+                        **📢 Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
+                        **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+                        **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
+                        **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                        **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                        `
+                    })
+                    .setTimestamp()
+                    .setFooter({
+                        text: `ChadMusic v${version}`,
+                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                    });
+
+                const blockedEmbed = new EmbedBuilder()
+                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                    .setAuthor({
+                        name: `${guild.name}`,
+                        iconURL: guild.iconURL({ dynamic: true })
+                    })
+                    .setTitle(':notes::x: Blocked Songs')
+                    .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
+                    .setTimestamp()
+                    .setFooter({
+                        text: `ChadMusic v${version}`,
+                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                    });
+
+                if (blockedPhrases.length === 0) {
+                    blockedEmbed.setDescription(null);
+                    blockedEmbed.addFields({
+                        name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
+                        value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
+                    });
                 }
-                await this.client.settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
-                return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
+
+                return ctx.send({ embeds: [embed, blockedEmbed] });
             }
 
             case 'remove': {
-                if (!this.client.settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
-                    return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
+                await settings.set(ctx.guildID, this.client.defaultSettings[ctx.options.remove.setting], ctx.options.remove.setting);
+                return this.client.ui.reply(ctx, 'ok', `**${ctx.options.remove.setting}** has been reverted to the default setting.`);
+            }
+
+            case 'djrole': {
+                await settings.set(ctx.guildID, ctx.options.djrole.role, 'djRole');
+                return this.client.ui.reply(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
+            }
+
+            case 'djmode': {
+                await settings.set(ctx.guildID, ctx.options.djmode.toggle, 'djMode');
+                return this.client.ui.reply(ctx, 'ok', 'DJ Mode has been enabled.');
+            }
+
+            case 'maxtime': {
+                const time = toMilliseconds(ctx.options.maxtime.time);
+                if (isNaN(time)) return this.client.ui.reply(ctx, 'error', `\`${ctx.options.maxtime.time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
+                await settings.set(ctx.guildID, time, 'maxTime');
+                return this.client.ui.reply(ctx, 'ok', `Max Time has been set to \`${ctx.options.maxtime.time}\``);
+            }
+
+            case 'maxqueuelimit': {
+                await settings.set(ctx.guildID, ctx.options.maxqueuelimit.limit, 'maxQueueLimit');
+                return this.client.ui.reply(ctx, 'ok', `Max Queue Limits have been set to \`${ctx.options.maxqueuelimit.limit}\`.`);
+            }
+
+            case 'allowfilters': {
+                await settings.set(ctx.guildID, ctx.options.allowfilters.toggle, 'allowFilters');
+                return this.client.ui.reply(ctx, 'ok', `Filters have been ${ctx.options.allowfilters.toggle ? '**enabled**.' : '**disabled**. Only DJs will be able to apply filters.'}`);
+            }
+
+            case 'allowexplicit': {
+                await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
+                return this.client.ui.reply(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
+            }
+
+            case 'allowlinks': {
+                await settings.set(ctx.guildID, ctx.options.allowlinks.toggle, 'allowLinks');
+                return this.client.ui.reply(ctx, 'ok', `URLs can ${ctx.options.allowlinks.toggle ? 'now' : 'no longer'} be added to the queue.`);
+            }
+
+            case 'unlimitedvolume': {
+                await settings.set(ctx.guildID, ctx.options.unlimitedvolume.toggle, 'allowFreeVolume');
+                return this.client.ui.reply(ctx, 'ok', `Unlimited Volume has been ${ctx.options.unlimitedvolume.toggle ? '**enabled**.' : '**disabled**. Volume has been limited to 200%.'}`);
+            }
+
+            case 'thumbnailsize': {
+                await settings.set(ctx.guildID, ctx.options.thumbnailsize.size, 'thumbnailSize');
+                return this.client.ui.reply(ctx, 'ok', `Thumbnail size has been set to **${ctx.options.thumbnailsize.size}**.`);
+            }
+
+            case 'defaultvolume': {
+                await settings.set(ctx.guildID, ctx.options.defaultvolume.volume, 'defaultVolume');
+                return this.client.ui.reply(ctx, 'ok', `Default volume for the player has been set to **${ctx.options.defaultvolume.volume}%**.`);
+            }
+
+            case 'allowsilent': {
+                await settings.set(ctx.guildID, ctx.options.allowsilent.toggle, 'allowSilent');
+                return this.client.ui.reply(ctx, 'ok', `Silent tracks have been **${ctx.options.allowsilent.toggle === true ? 'enabled' : 'disabled'}**.`);
+            }
+
+            case 'blocksong': {
+                switch (ctx.subcommands[1]) {
+                case 'add': {
+                    if (settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
+                        return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.add.phrase}\` already exists in the list.`);
+                    }
+                    await settings.push(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases');
+                    return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.add.phrase}\` is now blocked on this server.`, null, 'Any phrases in the list will no longer be added to the player.');
                 }
-                await this.client.settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
-                return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
+
+                case 'remove': {
+                    if (!settings.includes(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases')) {
+                        return this.client.ui.reply(ctx, 'warn', `\`${ctx.options.blocksong.remove.phrase}\` doesn't exists in the list.`);
+                    }
+                    await settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
+                    return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
+                }
+                }
+                break;
+            }
+
+            case 'textchannel': {
+                await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
+                return this.client.ui.reply(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
+            }
+
+            // Message based commands only.
+            case 'prefix': {
+                await settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
+                return this.client.ui.reply(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
             }
             }
-            break;
-        }
-
-        case 'textchannel': {
-            await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
-            return this.client.ui.reply(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
-        }
-
-        // Message based commands only.
-        case 'prefix': {
-            await this.client.settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
-            return this.client.ui.reply(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
-        }
         }
     }
 };

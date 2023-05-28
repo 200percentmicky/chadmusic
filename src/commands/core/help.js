@@ -23,9 +23,9 @@ module.exports = class CommandHelp extends Command {
         super('help', {
             aliases: ['help'],
             description: {
-                text: 'You\'re looking at it! Displays info about available commands.',
+                text: 'Displays available commands and how to use them.',
                 usage: '[command]',
-                details: '`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires to operate.'
+                details: '`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires.'
             },
             category: '💻 Core',
             args: [
@@ -118,7 +118,7 @@ module.exports = class CommandHelp extends Command {
 
                 const commandFields = [];
 
-                if (command.ownerOnly) commandFields.push({ name: '🚫 Owner Only', value: 'This command is for the bot owner only.' });
+                if (command.ownerOnly) commandFields.push({ name: ':no_entry_sign: Owner Only', value: 'This command is for the bot owner only.' });
                 if (command.category === '🔞 NSFW') commandFields.push({ name: '🔞 NSFW Command', value: 'This command must be used in a NSFW channel.' });
                 if (command.category) {
                     commandFields.push({

@@ -17,7 +17,6 @@
 'use strict';
 
 const logger = require('./modules/winstonLogger');
-const buildNum = require('child_process').execSync('git rev-parse --short HEAD').toString().trim();
 
 // Say hello!
 const { version } = require('../package.json');
@@ -28,7 +27,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s (Build %s)', version, buildNum);
+logger.info('Bot Version: %s', version);
 logger.info('Loading libraries...');
 
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
@@ -39,12 +38,12 @@ const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
 const Enmap = require('enmap');
-const WaveUI = require('./modules/WaveUI');
-const WaveUtils = require('./modules/WaveUtils')
+const ChadUI = require('./modules/ChadUI');
+const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 
 // Let's boogie!
-class WaveBot extends AkairoClient {
+class ChadMusic extends AkairoClient {
     constructor () {
         super({
             ownerID: process.env.OWNER_ID
@@ -60,39 +59,11 @@ class WaveBot extends AkairoClient {
             ]
         });
 
-        // Build Number
-        this.buildNum = buildNum;
-
         // Calling packages that can be used throughout the client.
         this.logger = logger;
-        this.ui = WaveUI;
-        this.utils = WaveUtils;
+        this.ui = ChadUI;
+        this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
-
-        // Music Player.
-        this.player = new DisTube(this, {
-            plugins: [
-                new SpotifyPlugin({
-                    emitEventsAfterFetching: true,
-                    parallel: false
-                }),
-                new YtDlpPlugin({ update: true })
-            ],
-            emitNewSongOnly: process.env.EMIT_NEW_SONG_ONLY === 'true' || false,
-            leaveOnStop: process.env.LEAVE_ON_STOP === 'true' || false,
-            leaveOnEmpty: process.env.LEAVE_ON_EMPTY === 'true' || false,
-            leaveOnFinish: process.env.LEAVE_ON_FINISH === 'true' || false,
-            youtubeCookie: process.env.YOUTUBE_COOKIE,
-            ytdlOptions: {
-                quality: 'highestaudio',
-                filter: 'audioonly',
-                dlChunkSize: 25000,
-                highWaterMark: 1024,
-                IPv6Block: process.env.IPV6_BLOCK
-            },
-            nsfw: true // Being handled on a per guild basis, not client-wide.
-        });
-        this.vc = this.player.voices; // @discordjs/voice
 
         this.settings = new Enmap({ name: 'settings' });
         this.tags = new Enmap({ name: 'tags' });
@@ -115,6 +86,85 @@ class WaveBot extends AkairoClient {
             blockedPhrases: [],
             thumbnailSize: 'small'
         };
+
+        this.defaultGlobalSettings = {
+            emitNewSongOnly: true,
+            emptyCooldown: 60,
+            leaveOnStop: true,
+            leaveOnEmpty: true,
+            leaveOnFinish: true,
+            streamType: 0,
+            emojis: {
+                message: {
+                    ok: ':white_check_mark:',
+                    warn: ':warning:',
+                    err: ':x:',
+                    info: ':information_source:',
+                    question: ':question_mark:',
+                    no: ':no_entry_sign:',
+                    loading: ':watch:',
+                    cutie: ':notes:',
+                    music: ':musical_note:'
+                },
+                reaction: {
+                    ok: '✅',
+                    warn: ':warning:️',
+                    err: ':x:',
+                    info: ':information_source:',
+                    question: '❓',
+                    no: ':no_entry_sign:',
+                    loading: '⌚',
+                    cutie: '🎶',
+                    music: '🎵'
+                },
+                buttons: {
+                    first: '⏮',
+                    previous: '⬅',
+                    nest: '➡',
+                    last: '⏭️',
+                    jump: '↗',
+                    close: '✖'
+                }
+            },
+            colors: {
+                ok: 7844437,
+                warn: 16763981,
+                info: 37887,
+                err: 16711680,
+                question: 12020223,
+                no: 14495300,
+                music: 37887
+            }
+        };
+
+        this.settings.ensure('global', this.defaultGlobalSettings);
+
+        // Music Player.
+        this.player = new DisTube(this, {
+            plugins: [
+                new SpotifyPlugin({
+                    emitEventsAfterFetching: true,
+                    parallel: false
+                }),
+                new YtDlpPlugin({ update: true })
+            ],
+            emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
+            emptyCooldown: this.settings.get('global', 'emptyCooldown') ?? 60,
+            leaveOnStop: this.settings.get('global', 'leaveOnStop') ?? true,
+            leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
+            leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
+            streamType: this.settings.get('global', 'streamType') ?? 0,
+            youtubeCookie: process.env.YOUTUBE_COOKIE,
+            ytdlOptions: {
+                quality: 'highestaudio',
+                filter: 'audioonly',
+                dlChunkSize: 25000,
+                highWaterMark: 1024,
+                IPv6Block: process.env.IPV6_BLOCK
+            },
+            nsfw: true // Being handled on a per guild basis, not client-wide.
+        });
+        this.vc = this.player.voices; // @discordjs/voice
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {
@@ -175,7 +225,7 @@ class WaveBot extends AkairoClient {
 
         // Set custom emitters
         this.listeners.setEmitters({
-            process: process,
+            process,
             commandHandler: this.commands,
             player: this.player,
             creator: this.creator
@@ -199,4 +249,4 @@ class WaveBot extends AkairoClient {
     }
 }
 
-module.exports = WaveBot;
+module.exports = ChadMusic;

@@ -15,19 +15,18 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
 
-module.exports = class CommandAllowExplicit extends Command {
+module.exports = class CommandLeaveOnStop extends Command {
     constructor () {
-        super('allowexplicit', {
-            aliases: ['allowexplicit'],
+        super('leaveonstop', {
+            aliases: ['leaveonstop'],
             category: '⚙ Settings',
             description: {
-                text: 'Toggles the ability to allow age restricted content in the queue.',
+                text: 'Toggles whether the bot should leave when the player is stopped.',
                 usage: '<toggle:on/off>',
-                details: `\`<toggle:on/off>\` The toggle of the setting.\n${process.env.EMOJI_WARN} This setting only applies to videos on YouTube. All pornographic websites are blocked regardless if this setting is on or not.`
+                details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            userPermissions: [PermissionsBitField.Flags.ManageGuild],
+            ownerOnly: true,
             args: [
                 {
                     id: 'toggle',
@@ -38,18 +37,22 @@ module.exports = class CommandAllowExplicit extends Command {
     }
 
     async exec (message, args) {
-        if (!args[1]) return this.client.ui.usage(message, 'allowexplicit <toggle:on/off>');
+        if (!args.toggle) return this.client.ui.usage(message, 'leaveonstop <toggle:on/off>');
 
         const settings = this.client.settings;
-        switch (args.text) {
+        switch (args.toggle) {
+        case 'true':
         case 'on': {
-            await settings.set(message.guild.id, true, 'allowAgeRestricted');
-            this.client.ui.reply(message, 'ok', 'Age restricted content can now be added to the queue.');
+            await settings.set('global', true, 'leaveOnStop');
+            this.client.player.options.leaveOnStop = true;
+            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the player is stopped.');
             break;
         }
+        case 'false':
         case 'off': {
-            await settings.set(message.guild.id, false, 'allowAgeRestricted');
-            this.client.ui.reply(message, 'ok', 'Age restricted content can no longer be added to the queue.');
+            await settings.set('global', false, 'leaveOnStop');
+            this.client.player.options.leaveOnStop = false;
+            this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the player was stopped.');
             break;
         }
         default: {

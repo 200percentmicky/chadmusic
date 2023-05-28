@@ -65,7 +65,7 @@ module.exports = class CommandDisconnect extends Command {
                 this.client.player.stop(message);
             }
             this.client.vc.leave(message.guild);
-            return this.client.ui.custom(message, '📤', 0xDD2E44, `Left <#${vc.id}>`);
+            return this.client.ui.custom(message, ':outbox_tray:', 0xDD2E44, `Left <#${vc.id}>`);
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }
