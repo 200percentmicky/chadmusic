@@ -22,14 +22,6 @@ const { CommandContext } = require('slash-create');
 
 /* eslint-disable no-useless-escape */
 
-function pornPattern (url) {
-    // ! TODO: Come up with a better regex lol
-    // eslint-disable-next-line no-useless-escape
-    const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
-    const pornRegex = new RegExp(pornPattern);
-    return url.match(pornRegex);
-}
-
 module.exports = class CommandPlay extends Command {
     constructor () {
         super('play', {
