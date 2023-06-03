@@ -29,8 +29,8 @@ module.exports = class CommandPlay extends Command {
             category: '🎶 Music',
             description: {
                 text: 'Play\'s a song from a URL or search term.',
-                usage: '<url/search>',
-                details: '`<url/search>` The URL or search term to load.'
+                usage: '<url/search/attachment>',
+                details: '`<url/search>` The URL or search term to load. Also support audio and video attachments.'
             },
             channel: 'guild',
             clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
