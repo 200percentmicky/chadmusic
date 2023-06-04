@@ -142,7 +142,7 @@ module.exports = class CommandPlay extends Command {
                 textChannel: message.channel,
                 message: message instanceof Message ? message : undefined,
                 metadata: {
-                    ctx: message instanceof CommandContext ? message : undefined
+                    message
                 }
             });
             return message.react(process.env.EMOJI_MUSIC);
