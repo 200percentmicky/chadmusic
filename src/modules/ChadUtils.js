@@ -81,7 +81,8 @@ class ChadUtils {
      * @returns {boolean|undefined}
      */
     static hasExt (string) {
-        return this.#matchRegex(/\.[a-zA-Z0-9]+\$/gi, string);
+        const extPattern = /\.[a-zA-Z0-9]{1,5}$/i;
+        return this.#matchRegex(extPattern, string);
     }
 
     /**
