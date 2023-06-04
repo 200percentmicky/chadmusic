@@ -91,7 +91,9 @@ module.exports = class ListenerAddSong extends Listener {
                 song.duration = time;
                 song.formattedDuration = toColonNotation(time + '000');
                 song.codec = `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`;
-            }).catch(() => {});
+            }).catch(() => {
+                this.client.ui.reply(message, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
+            });
         }
 
         // Stupid fix to make sure that the queue doesn't break.
