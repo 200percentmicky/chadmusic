@@ -55,7 +55,7 @@ module.exports = class ListenerAddSong extends Listener {
                 // Using Math.floor() to round down.
                 // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    this.client.ui.reply(song.metadata?.message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
+                    this.client.ui.reply(message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                     return queue.songs.pop();
                 }
             }
@@ -82,7 +82,7 @@ module.exports = class ListenerAddSong extends Listener {
                 // probably used to measure how many lines the file has, so it's codec name
                 // will be checked instead.
                 if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
-                    this.client.ui.reply(song.metadata?.message, 'error', 'The attachment must be an audio or a video file.');
+                    this.client.ui.reply(message, 'error', 'The attachment must be an audio or a video file.');
                     return queue.songs.pop();
                 }
 
