@@ -22,18 +22,12 @@ async function nowPlayingMsg (queue, song) {
     const guild = channel.guild; // Guild
     const member = guild.members.cache?.get(queue.songs[queue.songs.length - 1]?.user.id); // GuildMember
     const vc = member.voice.channel ?? guild.members.me.voice.channel; // VoiceChannel
+    const message = song.metadata?.message || song.metadata?.ctx;
 
     if (queue.songs.length === 1) { // If someone started a new queue.
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted', true);
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
-
-        const userEmbed = new EmbedBuilder()
-            .setColor(process.env.COLOR_NO)
-            .setAuthor({
-                name: `${song.user.tag}`,
-                iconURL: song.user.avatarURL({ dynamic: true })
-            });
 
         // Check if this member is a DJ
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
@@ -41,8 +35,7 @@ async function nowPlayingMsg (queue, song) {
             if (!dj) {
                 if (song.age_restricted) {
                     channel.client.player.stop(guild);
-                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
-                    return channel.send({ embeds: [userEmbed] });
+                    return this.client.ui.reply(message, 'no', `**${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
                 }
             }
         }
@@ -53,8 +46,7 @@ async function nowPlayingMsg (queue, song) {
                 // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
                     channel.client.player.stop(guild);
-                    userEmbed.setDescription(`${process.env.EMOJI_NO} You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
-                    return channel.send({ embeds: [userEmbed] });
+                    return this.client.ui.reply(message, 'no', `You cannot add this song to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                 }
             }
         }
