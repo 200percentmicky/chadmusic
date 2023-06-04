@@ -33,24 +33,17 @@ module.exports = class ListenerAddSong extends Listener {
         const channel = queue.textChannel;
         const guild = channel.guild;
         const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
+        const message = song.metadata?.message || song.metadata?.ctx;
 
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
-        const userEmbed = new EmbedBuilder()
-            .setColor(process.env.COLOR_NO)
-            .setAuthor({
-                name: `${song.user.tag}`,
-                iconURL: song.user.avatarURL({ dynamic: true })
-            });
-
         if (!allowAgeRestricted) {
             if (!dj) {
                 if (song.age_restricted) {
-                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
-                    channel.send({ embeds: [userEmbed] });
+                    this.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
                     return queue.songs.pop();
                 }
             }
@@ -62,8 +55,7 @@ module.exports = class ListenerAddSong extends Listener {
                 // Using Math.floor() to round down.
                 // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    userEmbed.setDescription(`${process.env.EMOJI_NO} **${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
-                    channel.send({ embeds: [userEmbed] });
+                    this.client.ui.reply(song.metadata?.message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                     return queue.songs.pop();
                 }
             }
@@ -80,15 +72,27 @@ module.exports = class ListenerAddSong extends Listener {
         }
 
         // Check if ffprobe can find any any additional metadata if none is available.
-        await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
-            if (song.metadata?.isRadio) return;
+        if (this.client.utils.hasExt(song.url)) {
+            await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
+                if (song.metadata?.isRadio) return;
 
-            const time = Math.floor(info.streams[0].duration);
-            song.isFile = true;
-            song.duration = time;
-            song.formattedDuration = toColonNotation(time + '000');
-            song.codec = `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`;
-        }).catch(() => {});
+                // Ffmpeg parses images as videos with just one single frame. So, to check
+                // whether the file is a video or an audio file, the best way would be to
+                // check whether the file has a duration. Texts files do have a duration. It's
+                // probably used to measure how many lines the file has, so it's codec name
+                // will be checked instead.
+                if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
+                    this.client.ui.reply(song.metadata?.message, 'error', 'The attachment must be an audio or a video file.');
+                    return queue.songs.pop();
+                }
+
+                const time = Math.floor(info.streams[0].duration);
+                song.isFile = true;
+                song.duration = time;
+                song.formattedDuration = toColonNotation(time + '000');
+                song.codec = `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`;
+            }).catch(() => {});
+        }
 
         // Stupid fix to make sure that the queue doesn't break.
         // TODO: Fix toColonNotation in queue.js
