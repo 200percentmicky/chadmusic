@@ -240,7 +240,7 @@ class CommandPlay extends SlashCommand {
                         member: _member,
                         position: 1,
                         metadata: {
-                            ctx: ctx
+                            ctx
                         }
                     });
                     try {
@@ -257,7 +257,7 @@ class CommandPlay extends SlashCommand {
                     textChannel: channel,
                     member: _member,
                     metadata: {
-                        ctx: ctx,
+                        ctx,
                         isRadio: ctx.subcommands[0] === 'radio',
                         radioStation: station ?? undefined,
                         silent: ctx.subcommands[0] === 'silently'
