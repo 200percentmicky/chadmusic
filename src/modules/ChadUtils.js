@@ -76,6 +76,15 @@ class ChadUtils {
     }
 
     /**
+     * Checks whether the string contains a file extension.
+     * @param {string} string
+     * @returns {boolean|undefined}
+     */
+    static hasExt (string) {
+        return this.#matchRegex(/\.[a-zA-Z0-9]+\$/gi, string);
+    }
+
+    /**
      * Checks whether the URL provided leads to pornographic content.
      * @param {string} url The URL to parse.
      * @returns {boolean|undefined}
