@@ -73,8 +73,8 @@ module.exports = class ListenerAddSong extends Listener {
 
         // Check if ffprobe can find any any additional metadata if none is available.
         if (this.client.utils.hasExt(song.url)) {
-            await ffprobe(song.url, { path: ffprobeStatic.path }).then(info => {
-                if (song.metadata?.isRadio) return;
+            try {
+                const info = await ffprobe(song.url, { path: ffprobeStatic.path });
 
                 // Ffmpeg parses images as videos with just one single frame. So, to check
                 // whether the file is a video or an audio file, the best way would be to
@@ -83,7 +83,8 @@ module.exports = class ListenerAddSong extends Listener {
                 // will be checked instead.
                 if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
                     this.client.ui.reply(message, 'error', 'The attachment must be an audio or a video file.');
-                    return queue.songs.pop();
+                    if (queue.songs.length === 1) return this.client.player.stop(guild);
+                    else return queue.songs.pop();
                 }
 
                 const time = Math.floor(info.streams[0].duration);
@@ -91,9 +92,11 @@ module.exports = class ListenerAddSong extends Listener {
                 song.duration = time;
                 song.formattedDuration = toColonNotation(time + '000');
                 song.codec = `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`;
-            }).catch(() => {
+            } catch {
                 this.client.ui.reply(message, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
-            });
+                if (queue.songs.length === 1) return this.client.player.stop(guild);
+                else return queue.songs.pop();
+            }
         }
 
         // Stupid fix to make sure that the queue doesn't break.
