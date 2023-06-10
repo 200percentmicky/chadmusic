@@ -316,7 +316,7 @@ class CommandCore extends SlashCommand {
 
             if (!app.owner) await this.client.application.fetch();
 
-            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag} (${app.owner?.id})`;
+            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag.replace(/#0{1,1}$/, '')} (${app.owner?.id})`;
             // Had to fetch this for some reason...
             const botColor = await this.client.guilds.cache.get(ctx.guildID).members.me.displayColor ?? null;
             const aboutembed = new Discord.EmbedBuilder()
@@ -389,7 +389,7 @@ class CommandCore extends SlashCommand {
             const data = stripIndents`
             **ChadMusic - The Chad Music Bot!** Version ${require('../../../package.json').version}
                       Client: ${this.client.user.tag.replace(/#0{1,1}$/, '')} (ID: ${this.client.user.id})
-                       Owner: ${owner.tag} (ID: ${owner.id})
+                       Owner: ${owner.tag.replace(/#0{1,1}$/, '')} (ID: ${owner.id})
                      Node.js: ${process.version}
                   Discord.js: ${require('discord.js/package.json').version}
             Akairo Framework: ${require('discord-akairo/package.json').version}
