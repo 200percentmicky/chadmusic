@@ -68,7 +68,7 @@ module.exports = class CommandAbout extends Command {
             }, {
                 name: `${process.env.EMOJI_INFO} Stats`,
                 value: stripIndents`
-                **Client:** ${this.client.user.tag} (\`${this.client.user.id}\`)
+                **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
                 **Bot Version:** ${bot.version}
                 **Node.js:** ${process.version}
                 **Discord.js:** ${discord.version}

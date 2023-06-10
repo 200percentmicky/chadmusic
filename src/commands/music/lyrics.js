@@ -82,7 +82,7 @@ module.exports = class CommandLyrics extends Command {
                 .setDescription(`${songLyrics}`)
                 .setThumbnail(songSearch[0].image)
                 .setFooter({
-                    text: `${message.member.user.tag} • Powered by Genius API. (https://genius.com)`,
+                    text: `${message.member.user.tag.replace(/#0{1,1}$/, '')} • Powered by Genius API. (https://genius.com)`,
                     iconURL: message.member.user.avatarURL({ dynamic: true })
                 });
             return message.reply({ embeds: [embed] });

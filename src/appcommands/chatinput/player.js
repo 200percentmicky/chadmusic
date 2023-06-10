@@ -546,7 +546,7 @@ class CommandPlayer extends SlashCommand {
                     .setDescription(`${songLyrics}`)
                     .setThumbnail(songSearch[0].image)
                     .setFooter({
-                        text: `${ctx.member.user.tag} • Powered by Genius API. (https://genius.com)`,
+                        text: `${ctx.member.user.tag.replace(/#0{1,1}$/, '')} • Powered by Genius API. (https://genius.com)`,
                         iconURL: ctx.member.user.avatarURL({ dynamic: true })
                     });
                 return ctx.send({ embeds: [embed] });

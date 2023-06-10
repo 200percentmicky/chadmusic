@@ -43,7 +43,7 @@ module.exports = class ListenerAddList extends Listener {
             .setURL(playlist.url)
             .setThumbnail(playlist.thumbnail)
             .setFooter({
-                text: playlist.user.tag,
+                text: playlist.user.tag.replace(/#0{1,1}$/, ''),
                 iconURL: playlist.user.avatarURL({ dynamic: true })
             });
 

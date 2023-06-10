@@ -118,7 +118,7 @@ module.exports = class ListenerAddSong extends Listener {
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
             .setFooter({
-                text: song.user.tag,
+                text: song.user.tag.replace(/#0{1,1}$/, ''),
                 iconURL: song.user.avatarURL({ dynamic: true })
             });
 
