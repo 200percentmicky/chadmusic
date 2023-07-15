@@ -28,6 +28,6 @@ module.exports = class ListenerSIGINT extends Listener {
         this.client.logger.warn('SIGINT received!');
         this.client.logger.warn('Shutting down...');
         this.client.destroy();
-        process.exit(0);
+        process.exitCode = 0;
     }
 };
