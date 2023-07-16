@@ -1,8 +1,7 @@
 <h1 align="center">
     <img src="https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png" width=250>
 </h1>
-<h1 align="center" style="font-weight: bold; font-style: italic;">ChadMusic</h1>
-<h2 align="center" style="font-weight: bold; font-style: italic;">The Chad Music Bot</h2>
+<h1 align="center" style="font-weight: bold; font-style: italic;">ChadMusic - The Chad Music Bot</h1>
 
 ![GitHub](https://img.shields.io/github/license/200percentmicky/chadmusic)
 [![Discord](https://img.shields.io/discord/449606846697963531.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qQuJ9YQ)  
@@ -12,6 +11,11 @@
 [![forthebadge](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
 
 A cool universal audio player for your Discord server that's based on a [forked](https://github.com/200percentmicky/chadtube) build of **[DisTube.js](https://distube.js.org)**.
+
+
+**[Add my bot to your server to try it out!](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
+
+**[Documentation](https://200percentmicky.github.io/chadmusic)**
 
 # ✨ Features
 * Supports up to 700+ websites.
@@ -37,8 +41,6 @@ A cool universal audio player for your Discord server that's based on a [forked]
     - Also includes auto completion when searching for tracks.
 * ???
 * Profit!
-
-**[Add my bot to your server to try it out!](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=1005972566&scope=applications.commands%20bot)**
 
 # License
 ChadMusic is open source software. The software is licensed under GNU General Public License version 3 (GPL-v3). Read LICENSE for more information.
