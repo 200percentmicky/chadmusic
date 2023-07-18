@@ -1,4 +1,4 @@
-# Self-host Instructions
+# Self-hosting
 
 To run your own instance of ChadMusic, you will need the following installed on the system you plan to run the bot on:
 
@@ -6,8 +6,6 @@ To run your own instance of ChadMusic, you will need the following installed on 
 - npm v8.0.0 or greater.
 - git
 - ffmpeg
-
-## Installation
 
 ### Windows
 

@@ -4,13 +4,12 @@ These are all of the commands available to the bot, including their correspondin
 
 ## Core
 
-### `!about`
+### !about
 **Slash Command:** `/core about`
 
 Displays information about the bot.
 
-
-### `!eval <code>`
+### !eval `<code>`
 **Slash Command:** `/core owner eval`
 
 Executes Javascript code.
@@ -25,28 +24,28 @@ The following variables will always be available when running the command:
 - `prettyMs` - prettyMs
 - `colonNotation` - colon-notation
 - `commonTags` - common-tags
-- `Genius` - genius-lyrics`
+- `Genius` - genius-lyrics
 
 !> **Eval can be harmful!** The command is disabled by default. If you need to use this command, you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know what you're doing. If someone is telling you to enable it to have you run something, you're most likely being scammed!
 
 !> Bot owner only.
 
-### `!help [command]`
+### !help [command]
 Displays available commands and how to use them.
 
 `[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires.
 
-### `!license`
+### !license
 **Slash Command:** `/core license`
 
 View this program\'s license.
 
-### `!ping`
+### !ping
 **Slash Command:** `/core ping`
 
 Shows the bot\'s latency.
 
-### `!reload [reload_slash]`
+### !reload [reload_slash]
 **Slash Command:** `/core owner reload`
 
 Reloads commands.
@@ -55,7 +54,7 @@ Reloads commands.
 
 !> Bot owner only.
 
-### `!setgame [type] <status>`
+### !setgame [type] <status>
 Sets the bot's playing status.
 
 `[type]` The type of status to set. Default is `playing`.
@@ -64,7 +63,7 @@ Sets the bot's playing status.
 
 !> Bot owner only.
 
-### `!shutdown [reason]`
+### !shutdown [reason]
 **Slash Command:** `/core owner shutdown`
 
 Shuts down the bot.
@@ -77,14 +76,14 @@ Shuts down the bot.
 
 ?> The commands in this category will only be available to DJs if **Allow Filters** is off.
 
-### `!bassboost <gain>`
+### !bassboost <gain>
 **Slash Command:** `/filter bassboost`
 
 Boosts the bass of the player.
 
 `<gain>` The gain of the bass boost. Must be between `1-100` or `off`.
 
-### `!crusher <sample> [bits] [mode]`
+### !crusher <sample> [bits] [mode]
 **Slash Command:** `/filter crusher`
 
 Crushes the audio without changing the bit depth. Makes it sound more harsh and "digital".
@@ -95,14 +94,14 @@ Crushes the audio without changing the bit depth. Makes it sound more harsh and 
 
 `[mode]` Changes logarithmic mode to either linear (lin) or logarithmic (log). Default is `lin`.
 
-### `!crystalize <intensity>`
+### !crystalize <intensity>
 **Slash Command:** `/filter crystalize`
 
 Sharpens or softens the audio quality.
 
 `<intensity>` The intensity of the effect. Must be between `-10` to `10` or `off`.
 
-### `!customfilter <argument>`
+### !customfilter <argument>
 **Slash Command:** `/filter customfilter`
 
 `<argument>` The filter argument to provide to FFMPEG.
@@ -111,7 +110,7 @@ Sharpens or softens the audio quality.
 
 !> Bot owner only.
 
-### `/filter remove <filter>`
+### /filter remove <filter>
 
 ?> This command is only available as a slash command.
 
@@ -119,33 +118,33 @@ Remove some or all filters active on the player.
 
 `<filter>` The filter to remove from the player.
 
-### `!filteroff`
+### !filteroff
 **Slash Command:** `/filter remove filter:all`
 
 Removes all filters from the player.
 
-### `!pitch <rate>`
+### !pitch <rate>
 **Slash Command:** `/filter pitch`
 
 Changes the pitch of the playing track.
 
 `<rate>` The rate to change. Must be between `0.1-10` or `off`.
 
-### `!reverse [off]`
+### !reverse [off]
 **Slash Command:** `/filter reverse`
 
 Plays the track in reverse.
 
 `[off]` Turns off reverse if its active. Only accepts `off` as a value.
 
-### `!tempo <rate>`
+### !tempo <rate>
 **Slash Command:** `/filter tempo`
 
 Changes the tempo of the playing track.
 
 `<rate>` The rate to change. Must be between `0.1-10` or `off`.
 
-### `!tremolo <depth> [frequency]`
+### !tremolo <depth> [frequency]
 **Slash Command:** `/filter tremolo`
 
 Adds a tremolo effect to the player.
@@ -153,7 +152,7 @@ Adds a tremolo effect to the player.
 `<depth>` The depth of the tremolo. Must be between `0.1-1` or `off`.
 `[frequency]` The frequency of the tremolo. Minimum value is `0.1`.
 
-### `!vibrato <depth> [frequency]`
+### !vibrato <depth> [frequency]
 **Slash Command:** `/filter vibrato`
 
 Adds a vibrato effect to the player.
@@ -163,7 +162,7 @@ Adds a vibrato effect to the player.
 
 ## Music
 
-### `!bindchannel [channel]`
+### !bindchannel [channel]
 **Slash Command:** `/player bindchannel`
 
 Changes the player's currently binded text or voice channel to a different one.
@@ -172,21 +171,21 @@ Changes the player's currently binded text or voice channel to a different one.
 
 ?> Requires DJ permissions.
 
-### `!clearqueue`
+### !clearqueue
 **Slash Command:** `/queue clear`
 
 Clears the player's queue for this server.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!disconnect`
+### !disconnect
 **Slash Command:** `/player leave`
 
 Disconnects from the current voice channel.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!earrape`
+### !earrape
 **Slash Command:** `/player earrape`
 
 Changes the volume of the player to 69420%. The ratio that no man can withstand.
@@ -195,28 +194,28 @@ Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
 !> Hearing loss or damage to your equipment can occur if the player's volume is set above 200%!
 
-### `!forceskip`
+### !forceskip
 **Slash Command:** `/skip force`
 
 Force skips the currently playing song, bypassing votes.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!grab`
+### !grab
 **Slash Command:** `/player grab`
 
 Saves this song to your DMs.
 
 ?> This command is always available during DJ mode.
 
-### `!iheartradio <station>`
+### !iheartradio <station>
 **Slash Command:** `/play radio iheartradio`
 
 Play a iHeartRadio station.
 
 `<search>` The station to search for. The first result is queued.
 
-### `!lyrics [query]`
+### !lyrics [query]
 **Slash Command:** `/player lyrics`
 
 Retrieves lyrics from the playing track or from search query.
@@ -225,24 +224,24 @@ Retrieves lyrics from the playing track or from search query.
 
 ?> This command can be used without the player being active.
 
-### `!nowplaying`
+### !nowplaying
 **Slash Command:** `/player nowplaying`
 
 Shows the currently playing track.
 
-### `!pause`
+### !pause
 **Slash Command:** `/player pause`
 
 Pauses the player.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!play <url/search/attachment>`
+### !play <url/search/attachment>
 **Slash Commands:** `/play track` and `/play attachment`
 
 `<url/search/attachment>` The URL or search term to load. Also support audio and video attachments.
 
-### `!playnow <url/search/attachment>`
+### !playnow <url/search/attachment>
 **Slash Command:** `/play now`
 
 Plays a song regardless if there is anything currently playing.
@@ -251,13 +250,13 @@ Plays a song regardless if there is anything currently playing.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `/play silently <query>`
+### /play silently `<query>`
 
 ?> This command is only available as a slash command.
 
 `<query>` The track to silently play.
 
-### `!queue`
+### !queue
 **Slash Command:** `/queue now`
 
 View the queue for this server.
@@ -266,7 +265,7 @@ View the queue for this server.
 
 ?> Requires DJ permissions if showing all hidden tracks.
 
-### `!remove <queue_entry/start> [end]`
+### !remove <queue_entry/start> [end]
 **Slash Command:** `/queue remove`
 
 Removes an entry or multiple entries from the queue.
@@ -277,7 +276,7 @@ Removes an entry or multiple entries from the queue.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!repeat [mode]`
+### !repeat [mode]
 **Slash Command:** `/player repeat`
 
 Toggles repeat mode for the player.
@@ -286,28 +285,28 @@ Toggles repeat mode for the player.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!resume`
+### !resume
 **Slash Command:** `/player resume`
 
 Unpauses the player, resuming playback.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!reversequeue`
+### !reversequeue
 **Slash Command:** `/queue reverse`
 
 Reverses the order of the queue.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!search <query>`
+### !search <query>
 **Slash Command:** `/search`
 
 Searches for a track to play.
 
 `<query>` The query to search for.
 
-### `!seek <time>`
+### !seek <time>
 **Slash Command:** `/player seek`
 
 Sets the playing time of the track to a new position.
@@ -316,19 +315,19 @@ Sets the playing time of the track to a new position.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!shuffle`
+### !shuffle
 **Slash Command:** `/queue shuffle`
 
 Randomizes the entries in the queue.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!skip`
+### !skip
 **Slash Command:** `/skip track`
 
 Skips the currently playing song, or vote to skip the track if the voice channel has more than 3 people. The track will skip if the required number of votes has been reached.
 
-### `!skipto <queue_entry>`
+### !skipto <queue_entry>
 **Slash Command:** `/skip jump`
 
 Skips to the specified entry in the queue.
@@ -337,26 +336,26 @@ Skips to the specified entry in the queue.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!startover`
+### !startover
 **Slash Command:** `/player startover`
 
 Restarts the currently playing song.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!stop`
+### !stop
 **Slash Command:** `/player stop`
 
 Destroys the player.
 
 ?> Requires DJ permissions if 2 or more people are present.
 
-### `!summon`
+### !summon
 **Slash Command:** `/player join`
 
 Summons the bot to a voice channel.
 
-### `!volume [number]`
+### !volume [number]
 **Slash Commands:** `/player volume view` and `/player volume set`
 
 Changes the volume of the player.
