@@ -18,11 +18,12 @@ const { Command } = require('discord-akairo');
 const {
     EmbedBuilder,
     ActionRowBuilder,
-    SelectMenuBuilder,
+    StringSelectMenuBuilder,
     ButtonBuilder,
     PermissionsBitField,
     ButtonStyle,
-    Message
+    Message,
+    StringSelectMenuOptionBuilder
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
@@ -158,19 +159,21 @@ module.exports = class CommandSearch extends Command {
         const menuOptions = [];
         let i;
         for (i = 0; i < results.length; i++) {
-            const track = {
-                label: results[i].name,
-                description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
-                value: `${i}`,
-                emoji: {
-                    // eslint-disable-next-line no-useless-escape
+            const track = new StringSelectMenuOptionBuilder()
+                .setLabel(`${results[i].name.length > 100
+                    ? results[i].name.substring(0, 97) + '...'
+                    : results[i].name}
+                `)
+                .setDescription(`${results[i].formattedDuration} • ${results[i].uploader.name}`)
+                .setValue(`${i}`)
+                .setEmoji({
                     name: emojiNumber[i + 1]
-                }
-            };
+                });
+
             menuOptions.push(track);
         }
 
-        const menu = new SelectMenuBuilder()
+        const menu = new StringSelectMenuBuilder()
             .setCustomId('track_menu')
             .setPlaceholder('Pick a track!')
             .addOptions(menuOptions);
