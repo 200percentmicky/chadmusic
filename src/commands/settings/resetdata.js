@@ -45,13 +45,9 @@ module.exports = class CommandResetData extends Command {
 
         const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
 
-        const msg = await this.client.ui.reply(message, 'warn', 'You are about to revert the bot\'s settings for this server to defaults. Are you sure you want to do this?', 'Warning', null, [buttonRow]);
-
-        const filter = interaction => interaction.user.id === message.member.user.id;
+        const msg = await this.client.ui.reply(message, 'warn', 'You are about to revert the bot\'s settings for this server to the default settings. Are you sure you want to do this?', 'Warning', null, null, [buttonRow]);
 
         const collector = await msg.createMessageComponentCollector({
-            filter,
-            componentType: 'BUTTON',
             time: 30000
         });
 
@@ -71,18 +67,16 @@ module.exports = class CommandResetData extends Command {
                 await this.client.settings.delete(interaction.guild.id);
                 await this.client.settings.ensure(interaction.guild.id, this.client.defaultSettings);
                 collector.stop();
-                msg.delete();
                 return this.client.ui.reply(message, 'ok', 'The settings for this server have been cleared.');
             }
 
             if (interaction.customId === 'no_data') {
-                msg.delete();
                 collector.stop();
             }
         });
 
-        collector.on('end', () => {
-            return message.react(process.env.REACTION_OK);
+        collector.on('end', async () => {
+            await msg.delete();
         });
     }
 };
