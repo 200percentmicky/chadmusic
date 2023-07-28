@@ -28,6 +28,17 @@ git clone https://github.com/200percentmicky/chadmusic.git
 npm ci
 ```
 
+If an error occurs regarding yarn not being found, you'll need to install yarn on your system. Use npm to install yarn globally:
+
+```
+npm install -g yarn
+```
+
+Once you installed yarn, upgrade it to the latest version:
+```
+yarn set version stable
+```
+
 6. Create an application on [Discord's Developer Portal](https://discord.com/developers).
 
 7. Go to the bot section of your application, and copy the Token.
@@ -75,6 +86,17 @@ $ git clone https://github.com/200percentmicky/chadmusic.git
 4. In the bot's directory, run the following:
 ```
 $ npm ci
+```
+
+If an error occurs regarding yarn not being found, you'll need to install yarn on your system. Use npm to install yarn globally:
+
+```
+$ npm install -g yarn
+```
+
+Once you installed yarn, upgrade it to the latest version:
+```
+$ yarn set version stable
 ```
 
 !> Do not install the bot's dependencies while running as a root user.
