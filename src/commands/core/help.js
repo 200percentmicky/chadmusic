@@ -113,8 +113,7 @@ module.exports = class CommandHelp extends Command {
                         name: 'ChadMusic - The Chad Music Bot',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
-                    .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
-                    .setDescription(`**${command.description.text}**\n${command.description.details ?? ''}`)
+                    .setDescription(`\`\`\`\n${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\`\`\`\n**${command.description.text}**\n${command.description.details ?? ''}`)
                     .setTimestamp()
                     .setFooter({
                         text: '<Required> • [Optional]',
