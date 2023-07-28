@@ -160,8 +160,8 @@ module.exports = class CommandSearch extends Command {
         let i;
         for (i = 0; i < results.length; i++) {
             const track = new StringSelectMenuOptionBuilder()
-                .setLabel(`${results[i].name.length > 100
-                    ? results[i].name.substring(0, 97) + '...'
+                .setLabel(`${results[i].name.length > 95
+                    ? results[i].name.substring(0, 92) + '...'
                     : results[i].name}
                 `)
                 .setDescription(`${results[i].formattedDuration} • ${results[i].uploader.name}`)

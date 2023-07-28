@@ -150,8 +150,8 @@ class CommandSearch extends SlashCommand {
         let i;
         for (i = 0; i < results.length; i++) {
             const track = {
-                label: `${results[i].name.length > 100
-                    ? results[i].name.substring(0, 97) + '...'
+                label: `${results[i].name.length > 95
+                    ? results[i].name.substring(0, 92) + '...'
                     : results[i].name}
                 `,
                 description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
