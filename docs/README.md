@@ -1,5 +1,3 @@
-!> The documentation is a work-in-progress. Anything shown here currently represents the **develop** branch.
-
 <h1 align="center" style="font-weight: bold; font-style: italic;">
     <img src="https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png" width=250>
 </h1>

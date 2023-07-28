@@ -1,17 +1,16 @@
 # Self-hosting
-
-To run your own instance of ChadMusic, you will need the following installed on the system you plan to run the bot on:
+ChadMusic was designed to be self-hostable from the start. To run your own instance of ChadMusic, make sure you have the following installed on the system you plan to run the bot on:
 
 - Node.js v16.9.0 or greater
 - npm v8.0.0 or greater.
 - git
 - ffmpeg
 
+Once you have everything installed, you can proceed to the steps below to get ChadMusic running.
+
 ### Windows
 
-1. Download and install Node.js [here](https://nodejs.org).
-
-?> The latest LTS version is recommended for most cases.
+1. Download and install Node.js [here](https://nodejs.org). The latest LTS version is recommended for most cases.
 
 !> Make sure you include the additional build tools when installing Node.js. Many of the bot's dependencies require them. If for any reason they were not installed, you will need to install the Visual Studio Build Tools, specifically the **Desktop Development with C++ module**. You can install it from the Visual Studio installer [here](https://aka.ms/vs/17/release/vs_BuildTools.exe). You do not need to install Visual Studio itself, just the build tools.
 
@@ -35,9 +34,11 @@ npm ci
 
 !> Your bot's token is similar to a password. Do not share your bot's token anywhere!
 
-8. Fill out the `.env.example` file, and rename it to `.env`.
+8. Invite your bot to your server, or any server you have the **Manage Server** permission in.
 
-9. Start the bot by running either of the following:
+9. Fill out the `.env.example` file, and rename it to `.env`.
+
+10. Start the bot by running either of the following:
 ```
 npm run start
 ```
@@ -46,13 +47,11 @@ node index
 ```
 
 ### Linux or macOS
-?> **Linux Users:** This section assumes that you're running the bot on a Debian/Ubuntu based distribution or a Red Hat based distribution, such as Fedora. However, this will work with any distribution.
+**Linux Users:** This section assumes that you're running the bot on a Debian/Ubuntu based distribution or a Red Hat based distribution, such as Fedora. However, this will work with any distribution.
 
-?> **Mac Users:** You will need to install homebrew to install the build tools. You can get homebrew from [here](https://brew.sh/)
+**Mac Users:** You will need to install homebrew to install the build tools. You can get homebrew from [here](https://brew.sh/)
 
-1. Install Node.js using [nvm](https://github.com/nvm-sh/nvm)
-
-?> The latest LTS version is recommended in most cases. You can install the latest LTS version by running `nvm install --lts`
+1. Install Node.js using [nvm](https://github.com/nvm-sh/nvm). The latest LTS version is recommended in most cases. You can install the latest LTS version by running `nvm install --lts`
 
 2. Open a terminal and install the following packages:
 ```
@@ -75,8 +74,10 @@ $ git clone https://github.com/200percentmicky/chadmusic.git
 
 4. In the bot's directory, run the following:
 ```
-npm ci
+$ npm ci
 ```
+
+!> Do not install the bot's dependencies while running as a root user.
 
 5. Create an application on [Discord's Developer Portal](https://discord.com/developers).
 
@@ -84,12 +85,14 @@ npm ci
 
 !> Your bot's token is similar to a password. Do not share your bot's token anywhere!
 
-7. Fill out the `.env.example` file, and rename it to `.env`.
+7. Invite your bot to your server, or any server you have the **Manage Server** permission in.
 
-8. Start the bot by running either of the following:
+8. Fill out the `.env.example` file, and rename it to `.env`.
+
+9. Start the bot by running either of the following:
 ```
-npm run start
+$ npm run start
 ```
 ```
-node index
+$ node index
 ```
