@@ -217,8 +217,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     options: [{
                         type: CommandOptionType.CHANNEL,
                         name: 'channel',
-                        description: 'The text channel to use.',
-                        required: true
+                        description: 'The text channel to use.'
                     }]
                 },
                 {
@@ -672,8 +671,8 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'textchannel': {
-                await settings.set(ctx.guildID, ctx.options.textchannel.channel, 'textChannel');
-                return this.client.ui.reply(ctx, 'ok', `<#${ctx.options.textchannel.channel}> will be used for music commands.`);
+                await settings.set(ctx.guildID, ctx.options.textchannel.channel ?? null, 'textChannel');
+                return this.client.ui.reply(ctx, 'ok', `${`<#${ctx.options.textchannel.channel}>` ?? 'All text channels'}> will be used for music commands.`);
             }
 
             // Message based commands only.
