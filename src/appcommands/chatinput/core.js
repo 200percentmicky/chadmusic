@@ -260,7 +260,7 @@ class CommandCore extends SlashCommand {
                     this.client.logger.warn('Shutting down...');
                     this.client.creator.cleanRegisteredComponents();
                     this.client.destroy();
-                    process.exit(0);
+                    process.exitCode = 0;
                 }
             }
             }

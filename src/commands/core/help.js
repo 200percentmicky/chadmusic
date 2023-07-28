@@ -16,7 +16,7 @@
 
 /* eslint-disable no-var */
 const { Command } = require('discord-akairo');
-const { EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, ChannelType, PermissionsBitField, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = class CommandHelp extends Command {
     constructor () {
@@ -52,6 +52,11 @@ module.exports = class CommandHelp extends Command {
         } else {
             prefix = process.env.PREFIX;
         }
+
+        const docsButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setURL('https://200percentmicky.github.io/chadmusic')
+            .setLabel('Documentation');
 
         if (cmdName) {
             // The command has been found.
@@ -108,8 +113,7 @@ module.exports = class CommandHelp extends Command {
                         name: 'ChadMusic - The Chad Music Bot',
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
-                    .setTitle(`\`${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\``)
-                    .setDescription(`**${command.description.text}**\n${command.description.details ?? ''}`)
+                    .setDescription(`\`\`\`\n${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\`\`\`\n**${command.description.text}**\n${command.description.details ?? ''}`)
                     .setTimestamp()
                     .setFooter({
                         text: '<Required> • [Optional]',
@@ -182,6 +186,10 @@ module.exports = class CommandHelp extends Command {
             helpFields.push(field);
             helpEmbed.addFields(helpFields);
         });
-        return message.reply({ embeds: [helpEmbed] });
+
+        const docsActionRow = new ActionRowBuilder()
+            .addComponents([docsButton]);
+
+        return message.reply({ embeds: [helpEmbed], components: [docsActionRow] });
     }
 };
