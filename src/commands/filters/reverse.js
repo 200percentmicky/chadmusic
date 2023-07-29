@@ -14,11 +14,11 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
+const _ = require('lodash');
 
 module.exports = class CommandReverse extends Command {
     constructor () {
@@ -26,20 +26,10 @@ module.exports = class CommandReverse extends Command {
             aliases: ['reverse'],
             category: '📢 Filter',
             description: {
-                text: 'Plays the music in reverse.',
-                usage: '[off]',
-                details: stripIndents`
-                \`[off]\` Turns off reverse if its active.
-                `
+                text: 'Plays the track in reverse. Disables the filter if its already active.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
-            args: [
-                {
-                    id: 'toggle',
-                    match: 'text'
-                }
-            ]
+            clientPermissions: PermissionsBitField.Flags.EmbedLinks
         });
     }
 
@@ -70,7 +60,11 @@ module.exports = class CommandReverse extends Command {
 
         const currentVc = this.client.vc.get(vc);
         if (currentVc) {
-            if (args.toggle === 'OFF'.toLowerCase()) {
+            const inReverse = _.find(queue.filters.filters, (obj) => {
+                return obj.name === 'reverse';
+            });
+
+            if (inReverse) {
                 try {
                     await queue.filters.set('reverse', null);
                     pushFormatFilter(queue, 'Reverse', 'Off');

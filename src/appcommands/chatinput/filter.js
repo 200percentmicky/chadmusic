@@ -18,6 +18,7 @@ const { SlashCommand, CommandOptionType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
+const _ = require('lodash');
 
 class CommandFilter extends SlashCommand {
     constructor (creator) {
@@ -139,15 +140,7 @@ class CommandFilter extends SlashCommand {
             {
                 type: CommandOptionType.SUB_COMMAND,
                 name: 'reverse',
-                description: 'Plays the track in reverse.',
-                options: [
-                    {
-                        type: CommandOptionType.BOOLEAN,
-                        name: 'toggle',
-                        description: 'The toggle to enable or disable reverse.',
-                        required: true
-                    }
-                ]
+                description: 'Plays the track in reverse. Disables the filter if its already active.'
             },
             {
                 type: CommandOptionType.SUB_COMMAND,
@@ -367,17 +360,20 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'reverse': {
-                const reverse = ctx.options.reverse.toggle;
+                const inReverse = _.find(queue.filters.filters, (obj) => {
+                    return obj.name === 'reverse';
+                });
+
                 try {
-                    await queue.filters.set('reverse', reverse
+                    await queue.filters.set('reverse', !inReverse
                         ? 'areverse'
-                        : false
+                        : null
                     );
                 } catch {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
-                pushFormatFilter(queue, 'Reverse', reverse ? 'Enabled' : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Reverse** ${reverse
+                pushFormatFilter(queue, 'Reverse', !inReverse ? 'Enabled' : 'Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Reverse** ${!inReverse
                     ? 'On'
                     : 'Off'
                 }`);
