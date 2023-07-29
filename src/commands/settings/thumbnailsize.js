@@ -19,8 +19,8 @@ const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandImageSize extends Command {
     constructor () {
-        super('imagesize', {
-            aliases: ['imagesize', 'thumbnailsize'],
+        super('thumbnailsize', {
+            aliases: ['thumbnailsize'],
             category: '⚙ Settings',
             description: {
                 text: "Changes the track's thumbnail size of the \"Now Playing\" embeds.",
