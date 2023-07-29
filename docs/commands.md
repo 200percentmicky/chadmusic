@@ -18,7 +18,9 @@ Displays information about the bot.
 
 Executes Javascript code.
 
-`<code>` The code to execute.
+| Arguments | Type | Description          |
+| --------- | ---- | -------------------- |
+| `<code>`  | string | The code to execute. |
 
 The following variables will always be available when running the command:
 - `Discord` - discord.js
@@ -38,7 +40,9 @@ The following variables will always be available when running the command:
 
 Displays available commands and how to use them.
 
-`[command]` The command you want to know more about. Shows you how to use its syntax and what permissions it requires.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[command]` | string | The command you want to know more about. Shows you how to use its syntax and what permissions it requires. |
 
 ## !license | /core license
 
@@ -54,7 +58,9 @@ Shows the bot\'s latency.
 
 Reloads all of the bot's commands and listeners.
 
-`[reload_slash]` Whether to reload the application's slash commands. Either `true` or `false`. Default is `false`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[reload_slash]` | boolean | Whether to reload the application's slash commands. Either `true` or `false`. Default is `false`. |
 
 ## !setgame `[type] <status>`
 
@@ -64,9 +70,12 @@ Reloads all of the bot's commands and listeners.
 
 Sets the bot's playing status.
 
-`[type]` The type of status to set. Default is `playing`.
+Available types are `playing`, `watching`, `listening`, and `streaming`
 
-`<status>` The overall status for the bot to use.
+| Arguments  | Type | Description |
+| ---------- | ---- | ----------- |
+| `[type]`   | string | The type of status to set. Default is `playing`. |
+| `<status>` | string | The overall status for the bot to use. |
 
 ## !shutdown | /core owner shutdown `[reason]`
 
@@ -74,7 +83,9 @@ Sets the bot's playing status.
 
 Shuts down the bot.
 
-`[reason]` The reason for shutting down the bot.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[reason]` | string | The reason for shutting down the bot. |
 
 # Filters
 Commands to add or remove filters from the player.
@@ -85,29 +96,37 @@ Commands to add or remove filters from the player.
 
 Boosts the bass of the player.
 
-`<gain>` The gain of the bass boost. Must be between `1-100` or `off`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<gain>` | number | The gain of the bass boost. Must be between `1-100` or `off`. |
 
 ## !crusher | /filter crusher `<sample> [bits] [mode]`
 
 Crushes the audio without changing the bit depth. Makes it sound more harsh and "digital".
 
-`<sample>` The sample reduction. Must be between `1-250` or `off`.
-
-`[bits]` The bit reduction. Must be between 1-64. Default is `8`.
-
-`[mode]` Changes logarithmic mode to either linear (lin) or logarithmic (log). Default is `lin`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<sample>` | number | The sample reduction. Must be between `1-250` or `off`. |
+| `[bits]` | number | The bit reduction. Must be between 1-64. Default is `8`. |
+| `[mode]` | string | Changes logarithmic mode to either linear (lin) or logarithmic (log). Default is `lin`. |
 
 ## !crystalize | /filter crystalize `<intensity>`
 
 Sharpens or softens the audio quality.
 
-`<intensity>` The intensity of the effect. Must be between `-10` to `10` or `off`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<intensity>` | number | The intensity of the effect. Must be between `-10` to `10` or `off`. |
 
 ## !customfilter | !cf | /filter customfilter `<argument>`
 
 !> Bot owner only.
 
-`<argument>` The filter argument to provide to FFMPEG.
+Adds a custom FFMPEG filter to the player.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<argument>` | string | The filter argument to provide to FFMPEG. |
 
 !> If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
 
@@ -117,9 +136,11 @@ Sharpens or softens the audio quality.
 
 Remove some or all filters active on the player.
 
-`<filter>` The filter to remove from the player.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<filter>` | string | The filter to remove from the player. |
 
-## !filteroff | /filter remove filter:"all"
+## !filteroff | !foff | /filter remove filter:"all"
 
 Removes all filters from the player.
 
@@ -127,33 +148,39 @@ Removes all filters from the player.
 
 Changes the pitch of the playing track.
 
-`<rate>` The rate to change. Must be between `0.1-10` or `off`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<rate>` | float | The rate to change. Must be between `0.1-10` or `off`. |
 
-## !reverse | /filter reverse `[off]`
+## !reverse | /filter reverse
 
-Plays the track in reverse.
-
-`[off]` Turns off reverse if its active. Only accepts `off` as a value.
+Plays the track in reverse. Disables if reverse is already enabled.
 
 ## !tempo | /filter tempo `<rate>`
 
 Changes the tempo of the playing track.
 
-`<rate>` The rate to change. Must be between `0.1-10` or `off`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<rate>` | float | The rate to change. Must be between `0.1-10` or `off`. |
 
 ## !tremolo | /filter tremolo `<depth> [frequency]`
 
 Adds a tremolo effect to the player.
 
-`<depth>` The depth of the tremolo. Must be between `0.1-1` or `off`.
-`[frequency]` The frequency of the tremolo. Minimum value is `0.1`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<depth>` | float | The depth of the tremolo. Must be between `0.1-1` or `off`. |
+| `[frequency]` | float | The frequency of the tremolo. Minimum value is `0.1`. |
 
 ## !vibrato | /filter vibrato `<depth> [frequency]`
 
 Adds a vibrato effect to the player.
 
-`<depth>` The depth of the vibrato. Must be between `0.1-1` or `off`.
-`[frequency]` The frequency of the vibrato. Minimum value is `0.1`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<depth>` | float | The depth of the tremolo. Must be between `0.1-1` or `off`. |
+| `[frequency]` | float | The frequency of the tremolo. Minimum value is `0.1`. |
 
 # Music
 The main commands of the audio player.
@@ -164,7 +191,9 @@ The main commands of the audio player.
 
 Changes the player's currently binded text or voice channel to a different one.
 
-`[channel]` The new channel to bind the player to. If nothing was provided, binds to the channel that the command was used in.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[channel]` | Text/Voice Channel | The new channel to bind the player to. If nothing was provided, binds to the channel that the command was used in. |
 
 ## !clearqueue | !clear | /queue clear
 
@@ -202,7 +231,9 @@ Saves this song to your DMs.
 
 Play a iHeartRadio station.
 
-`<search>` The station to search for. The first result is queued.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<search>` | string | The station to search for. The first result is queued. |
 
 ## !lyrics | /player lyrics `[query]`
 
@@ -210,7 +241,9 @@ Play a iHeartRadio station.
 
 Retrieves lyrics from the playing track or from search query.
 
-`[query]` The search query to find lyrics. If nothing is provided, uses the currently playing track.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[query]` | string | The search query to find lyrics. If nothing is provided, uses the currently playing track. |
 
 ## !nowplaying | !np | /player nowplaying
 
@@ -226,7 +259,9 @@ Pauses the player.
 
 Adds a track to the queue from a URL, search query, or an attachment.
 
-`<url/search/attachment>` The URL, search query, or attachment to load. Only audio and video attachments are supported.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
 ## !playnow | !np | /play now `<url/search/attachment>`
 
@@ -234,7 +269,9 @@ Adds a track to the queue from a URL, search query, or an attachment.
 
 Adds a track to the queue and skips the currently playing track, if there was a track playing.
 
-`<url/search/attachment>` The URL, search query, or attachment to load. Only audio and video attachments are supported.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
 ## /play silently `<query>`
 
@@ -242,13 +279,17 @@ Adds a track to the queue and skips the currently playing track, if there was a 
 
 Plays a track silently. It will not be sent in chat, and will be hidden from others in the queue.
 
-`<query>` The track to silently play.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<query>` | string | The track to silently play. |
 
 ## !queue | !q | /queue now `[show_hidden]`
 
 View the queue for this server.
 
-`[show_hidden]` (Slash command only) Reveals silently added tracks. You can reveal your tracks, or show all hidden tracks.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[show_hidden]` | string | (Slash command only) Reveals silently added tracks. You can reveal your tracks, or show all hidden tracks. |
 
 ?> Requires DJ permissions if showing all hidden tracks.
 
@@ -258,9 +299,10 @@ View the queue for this server.
 
 Removes an entry or multiple entries from the queue.
 
-`<queue_entry/start>` The queue entry to remove from the queue, or the starting position.
-
-`[end]` The end position for removing multiple entries. Every entry from the starting to end position will be removed from the queue.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<queue_entry/start>` | number | The queue entry to remove from the queue, or the starting position. |
+| `[end]` | number | The end position for removing multiple entries. Every entry from the starting to end position will be removed from the queue. |
 
 ## !repeat | !loop | /player repeat `[mode]`
 
@@ -268,7 +310,9 @@ Removes an entry or multiple entries from the queue.
 
 Toggles repeat mode for the player.
 
-`[mode]` The mode to apply for repeat mode. Valid options are **off**, **song**, or **queue**. Default is **song**.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[mode]` | string | The mode to apply for repeat mode. Valid options are **off**, **song**, or **queue**. Default is **song**. |
 
 ## !resume | /player resume
 
@@ -286,7 +330,9 @@ Reverses the order of the queue.
 
 Searches for a track to play.
 
-`<query>` The query to search for.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<query>` | string | The query to search for. |
 
 ## !seek | /player seek `<time>`
 
@@ -294,7 +340,9 @@ Searches for a track to play.
 
 Sets the playing time of the track to a new position.
 
-`<time>` The time of the track to seek to in colon notation or in milliseconds.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<time>` | number or Notation | The time of the track to seek to in colon notation or in milliseconds. |
 
 ## !shuffle | /queue shuffle
 
@@ -312,7 +360,9 @@ Skips the currently playing song, or vote to skip the track if the voice channel
 
 Skips to the specified entry in the queue.
 
-`<queue_entry>` The number of the queue entry to skip to. Skips all other entries of the queue.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<queue_entry>` | number | The number of the queue entry to skip to. Skips all other entries of the queue. |
 
 ## !startover | !restart | /player startover
 
@@ -334,7 +384,9 @@ Summons the bot to a voice channel.
 
 Views or changes the volume of the player.
 
-`[number]` The percentage of the new volume to set. If nothing is provided, shows the current volume of the player. This argument is required when using `/player volume set`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[number]` | number | The percentage of the new volume to set. If nothing is provided, shows the current volume of the player. This argument is required when using `/player volume set`. |
 
 ?> If **Free Volume** is disabled, the maximum value allowed is 200%.
 
@@ -349,7 +401,9 @@ Commands to change the bot's settings.
 
 Toggles the ability to allow age restricted content in the queue.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 !> This setting only applies to tracks that are marked as explicit. All pornographic websites are blocked regardless if this setting is on or not.
 
@@ -357,35 +411,46 @@ Toggles the ability to allow age restricted content in the queue.
 
 Toggles the ability to allow members to apply filters to the player.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !allowlinks | /settings allowlinks `<toggle>`
 
 Toggles the ability to add songs to the queue from a URL.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !allowsilenttracks | /settings allowsilenttracks `<toggle>`
 
 Toggles the ability to silently add tracks to the queue.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !blocksong add/remove | /settings blocksong add/remove `<phrase>`
 
 Manages the server's list of blocked search phrases.
 
-**add:** Adds a phrase to the list.
+| Subcommand | Description |
+| ---------- | ----------- |
+| add | Adds a phrase to the list. |
+| remove | Removes a phrase from the list. |
 
-**remove:** Removes a phrase from the list.
-
-`<phrase>` The phrase to add or remove from the list.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<phrase>` | string | The phrase to add or remove from the list. |
 
 ## !defaultvolume | /settings defaultvolume `<volume>`
 
 Changes the bot's default volume when creating a player, or when disabling Earrape.
 
-`<volume>` The new default volume for the server. Must be between `1` to `200`. Default is `100`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<volume>` | number | The new default volume for the server. Must be between `1` to `200`. Default is `100`. |
 
 ## !djmode | /settings djmode `<toggle>`
 
@@ -393,7 +458,9 @@ Changes the bot's default volume when creating a player, or when disabling Earra
 
 Toggles DJ Mode for the server.
 
-`<toggle>` Either `on` or `off`. Default is `off`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `off`. |
 
 ## !emptycooldown | /settings global emptycooldown `<time>`
 
@@ -409,7 +476,9 @@ Sets how long the bots stays in an empty voice channel.
 
 Toggles the ability to change the volume past 200%.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !globalsettings | /settings global current
 
@@ -423,7 +492,9 @@ Shows the bot's current global settings.
 
 Toggles whether the bot should leave when the voice channel is empty for a period of time.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ?> When this is active, the bot will leave depending on how long **Empty Cooldown** is set.
 
@@ -433,7 +504,9 @@ Toggles whether the bot should leave when the voice channel is empty for a perio
 
 Toggles whether the bot should leave when the end of the queue has been reached.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !leaveonstop | /settings global leaveonstop `<toggle>`
 
@@ -441,19 +514,25 @@ Toggles whether the bot should leave when the end of the queue has been reached.
 
 Toggles whether the bot should leave when the player is stopped.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !maxtime | /settings maxtime `<duration>`
 
 Restrict members from adding tracks to the queue that exceed the duration set.
 
-`<duration>` The max duration of the track to limit. Members will be unable to add any tracks to the queue that go past this limit. Default is `0`. Set to `0` or `none` to disable.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<duration>` | Notation | The max duration of the track to limit. Members will be unable to add any tracks to the queue that go past this limit. Default is `0`. Set to `0` or `none` to disable. |
 
 ## !prefix | /settings prefix `[new_prefix]`
 
 Changes the bot's prefix for this server.
 
-`[new_prefix]` The new prefix you want to use. If none was provided, resets the prefix to defaults.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[new_prefix]` | string | The new prefix you want to use. If none was provided, resets the prefix to defaults. |
 
 ?> This setting will only affect message based commands, not slash commands. The default prefix defined in the bot's configuration in addition to the bot's mention will always be available.
 
@@ -471,19 +550,25 @@ Resets the bot's settings for the server to its default settings.
 
 Revert a setting to its default value.
 
-`<setting>` The setting you would like to revert.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<setting>` | string | The setting you would like to revert. |
 
 ## !setdj | /setting djrole `[role]`
 
 Sets the DJ role for the server.
 
-`[role]` The role you would like to set. Can be the name, the ID, or a mention of the role. If none was provided, removes the DJ role.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[role]` | Role | The role you would like to set. Can be the name, the ID, or a mention of the role. If none was provided, removes the DJ role. |
 
 ## !setqueuelimits | /settings setqueuelimts `<number>`
 
 Limits the number of entries that members can add to the queue.
 
-`<number>` The numbers of entries to limit for members.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<number>` | number | The numbers of entries to limit for members. |
 
 ## !settings | /settings current
 
@@ -495,7 +580,9 @@ Displays the bot's current settings for the server.
 
 Toggles whether the Now Playing alerts are shown for new songs only.
 
-`<toggle>` Either `on` or `off`. Default is `on`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ## !streamtype | /settings global streamtype `<encoder>`
 
@@ -503,18 +590,27 @@ Toggles whether the Now Playing alerts are shown for new songs only.
 
 Selects which audio encoder the bot should use during streams.
 
-`<encoder>` The audio encoder to use.
-* **opus** - Uses the Opus encoder. Better quality, uses more resources.
-* **raw** - Uses a RAW encoder. Better performance, uses less resources.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<encoder>` | string | The audio encoder to use.|
+
+| Encoder | Description |
+| ------- | ----------- |
+| opus | Uses the Opus encoder. Better quality, uses more resources. |
+| raw | Uses a RAW encoder. Better performance, uses less resources. |
 
 ## !textchannel | /settings textchannel `[channel]`
 
 Sets the text channel to use for music commands.
 
-`[channel]` The text channel to apply. Can be the channel's mention or the channel's ID. If none is provided, all channels will be available.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[channel]` | Text/Voice Channel | The text or voice channel to apply. Can be the channel's mention or the channel's ID. If none is provided, all channels will be available. |
 
-## !imagesize | !thumbnailsize | /settings thumbnailsize `<size>`
+## !thumbnailsize | /settings thumbnailsize `<size>`
 
 Changes the track's thumbnail size of the player's "Now Playing" embeds.
 
-`<string>` The size of the track's image. Either `small` or `large`. Default is `small`.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<size>` | string | The size of the track's image. Either `small` or `large`. Default is `small`. |
