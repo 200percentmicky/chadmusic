@@ -254,6 +254,7 @@ class ChadUI {
         const promptMessage = {
             DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
             NO_DJ: 'You must be a DJ or have the **Manage Channels** permission to use that.',
+            FEATURE_DISABLED: `You cannot use this command because **${extra}** is disabled on this server.`,
             FILTER_NOT_APPLIED: `**${extra}** is not applied to the player.`,
             FILTERS_NOT_ALLOWED: 'Filters can only be applied by DJs on this server.',
             FULL_CHANNEL: 'The voice channel is full.',
@@ -273,6 +274,7 @@ class ChadUI {
         const promptColor = {
             DJ_MODE: process.env.COLOR_NO,
             NO_DJ: process.env.COLOR_NO,
+            FEATURE_DISABLED: process.env.COLOR_NO,
             FILTER_NOT_APPLIED: process.env.COLOR_ERROR,
             FILTERS_NOT_ALLOWED: process.env.COLOR_NO,
             FULL_CHANNEL: process.env.COLOR_ERROR,
@@ -292,6 +294,7 @@ class ChadUI {
         const promptEmoji = {
             DJ_MODE: process.env.EMOJI_NO ?? ':no_entry_sign:',
             NO_DJ: process.env.EMOJI_NO ?? ':no_entry_sign:',
+            FEATURE_DISABLED: process.env.EMOJI_NO ?? ':no_entry_sign:',
             FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? ':x:',
             FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? ':no_entry_sign:',
             FULL_CHANNEL: process.env.EMOJI_ERROR ?? ':x:',
@@ -305,7 +308,7 @@ class ChadUI {
             MISSING_PERMISSIONS: process.envEMOJI_NO ?? ':no_entry_sign:',
             WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? ':no_entry_sign:',
             OWNER_ONLY: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            NSFW_ONLY: '🔞'
+            NSFW_ONLY: ':underage:'
         };
 
         if ((msg instanceof Message)) {
