@@ -66,7 +66,7 @@ class ChadMusic extends AkairoClient {
         this.extraUtils = require('bot-utils');
 
         this.settings = new Enmap({ name: 'settings' });
-        this.tags = new Enmap({ name: 'tags' });
+        this.playlists = new Enmap({ name: 'playlists' });
 
         this.depWarnMsg = new Keyv();
 
