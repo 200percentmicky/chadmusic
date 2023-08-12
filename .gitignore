@@ -1,5 +1,9 @@
 # Secret files. 🤫
 .env
+.vscode
+.vs
+.__pycache__
+.yarn
 
 # Auto-generated files and directories.
 data
