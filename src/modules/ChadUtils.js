@@ -55,6 +55,15 @@ class ChadUtils {
         return permission;
     }
 
+    static async runPrefixCommand (message, commandName, args) {
+        try {
+            const command = await message.channel.client.commands.findCommand(commandName);
+            return command.exec(message, args);
+        } catch {
+            throw new Error(`${commandName} is not a registered command.`);
+        }
+    }
+
     /**
      * Matches a regular expression with a string.
      * @param {RegExp} regex The regex to parse.
