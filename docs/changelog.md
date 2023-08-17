@@ -1,5 +1,14 @@
 # Changelog
 
+## 2023.4.6
+This is a maintenance release.
+
+* **Fixed:** Fixed `/skip force` from throwing `Unknown interaction` exception.
+* **Fixed:** `[p]play` no longer logs autocomplete not being implemented.
+* **Known issue:** Using `[p]search` may throw a `Invalid string length` exception. Use `/search` for the time being.
+
+**Full Changelog**: https://github.com/200percentmicky/chadmusic/compare/2023.4.5...2023.4.6
+
 ## 2023.4.5
 This is a maintenance release.
 
