@@ -43,6 +43,9 @@ module.exports = class CommandPlay extends Command {
         });
     }
 
+    // Just to remove the error. A function with the same name is called elsewhere.
+    async autocomplete () {}
+
     async exec (message, args) {
         if (message instanceof CommandContext) await message.defer();
 
