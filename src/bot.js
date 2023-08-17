@@ -185,7 +185,10 @@ class ChadMusic extends AkairoClient {
             },
             commandUtil: true,
             handleEdits: true,
-            allowMention: true
+            allowMention: true,
+            autoRegisterSlashCommands: false,
+            autoDefer: false,
+            execSlash: true
         });
 
         // Create Listener Handler
