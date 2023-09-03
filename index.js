@@ -17,6 +17,14 @@
 /* Index File */
 
 require('dotenv').config();
-const ChadMusic = require('./src/bot.js');
+const { ShardingManager } = require('discord.js');
+const logger = require('./src/modules/winstonLogger.js');
 
-new ChadMusic().login(process.env.TOKEN);
+const manager = new ShardingManager('./src/bot.js', {
+    token: process.env.TOKEN,
+    totalShards: parseInt(process.env.SHARDS) ?? 'auto'
+});
+
+manager.on('shardCreate', s => logger.info('Shard %s launched.', s.id));
+
+manager.spawn();

@@ -43,7 +43,7 @@ const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 
 // Let's boogie!
-class ChadMusic extends AkairoClient {
+new class ChadMusic extends AkairoClient {
     constructor () {
         super({
             ownerID: process.env.OWNER_ID
@@ -246,10 +246,7 @@ class ChadMusic extends AkairoClient {
         }
     }
 
-    // This is required to load the mongoose provider.
     async login (token) {
         return super.login(token);
     }
-}
-
-module.exports = ChadMusic;
+}().login(process.env.TOKEN); // It works lol
