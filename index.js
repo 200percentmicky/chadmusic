@@ -18,13 +18,21 @@
 
 require('dotenv').config();
 const { ShardingManager } = require('discord.js');
+const ChadMusic = require('./src/bot.js');
 const logger = require('./src/modules/winstonLogger.js');
 
-const manager = new ShardingManager('./src/bot.js', {
-    token: process.env.TOKEN,
-    totalShards: parseInt(process.env.SHARDS) ?? 'auto'
-});
+logger.info('Hello! Starting client...');
 
-manager.on('shardCreate', s => logger.info('Shard %s launched.', s.id));
+if (process.env.SHARDING) {
+    const manager = new ShardingManager('./src/bot.js', {
+        token: process.env.TOKEN,
+        totalShards: parseInt(process.env.SHARDS) ?? 'auto'
+    });
 
-manager.spawn();
+    manager.on('shardCreate', s => logger.info('Shard %s launched.', s.id));
+
+    manager.spawn();
+} else {
+    logger.info('Starting client with sharding disabled.');
+    new ChadMusic().login(process.env.TOKEN);
+}

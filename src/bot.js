@@ -43,7 +43,7 @@ const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 
 // Let's boogie!
-new class ChadMusic extends AkairoClient {
+class ChadMusic extends AkairoClient {
     constructor () {
         super({
             ownerID: process.env.OWNER_ID
@@ -249,4 +249,10 @@ new class ChadMusic extends AkairoClient {
     async login (token) {
         return super.login(token);
     }
-}().login(process.env.TOKEN); // It works lol
+}
+
+if (process.env.SHARDING) {
+    new ChadMusic().login(process.env.TOKEN);
+}
+
+module.exports = ChadMusic;
