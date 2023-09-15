@@ -28,7 +28,7 @@ Welcome to the documentation for **ChadMusic - The Chad Music Bot!** ChadMusic i
 * DJ commands to control the player.
     - Queue and track length limits.
     - Advanced queue management.
-        - Shuffle, reverse, move, and remove entries in the queue.
+        - Shuffle, reverse, and remove entries in the queue.
     - Blacklist search terms.
         - Prevents members from adding any bad songs to the player.
     - DJ mode.
