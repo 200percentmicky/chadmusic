@@ -21,7 +21,22 @@ const { ShardingManager } = require('discord.js');
 const ChadMusic = require('./src/bot.js');
 const logger = require('./src/modules/winstonLogger.js');
 
-logger.info('Hello! Starting client...');
+// Say hello!
+const { version } = require('./package.json');
+logger.info('   ________              ____  ___           _');
+logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
+logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
+logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
+logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
+logger.info('/////////////// The Chad Music Bot! ///////////////');
+logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
+logger.info('Bot Version: %s', version);
+logger.info('Loading libraries...');
+
+if (process.versions.node.split('.')[0] < 18) {
+    logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
+    process.exit(1);
+}
 
 if (process.env.SHARDING) {
     const manager = new ShardingManager('./src/bot.js', {
