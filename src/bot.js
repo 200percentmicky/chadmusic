@@ -17,19 +17,6 @@
 'use strict';
 
 const logger = require('./modules/winstonLogger');
-
-// Say hello!
-const { version } = require('../package.json');
-logger.info('   ________              ____  ___           _');
-logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
-logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
-logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
-logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
-logger.info('/////////////// The Chad Music Bot! ///////////////');
-logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s', version);
-logger.info('Loading libraries...');
-
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { ChannelType, GatewayIntentBits } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
