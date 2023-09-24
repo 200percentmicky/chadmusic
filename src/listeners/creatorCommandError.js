@@ -29,11 +29,6 @@ module.exports = class ListenerCreatorCommandError extends Listener {
         await ctx.defer();
         let guru = '**💢 Bruh Moment**\nSomething bad happened. Please report this to the developer.';
 
-        const guild = this.client.guilds.cache.get(ctx.guildID);
-        if (guild.channels.cache.get(process.env.BUG_CHANNEL)) {
-            guru += ' The owner of this application has also received an error report.\n';
-        }
-
         guru += `\`\`\`js\n${err.stack}\`\`\``;
 
         const urlGithub = new ButtonBuilder()
@@ -50,7 +45,7 @@ module.exports = class ListenerCreatorCommandError extends Listener {
             .addComponents([urlGithub, support]);
 
         await ctx.send({ content: `${guru}`, components: [actionRow] });
-        this.client.ui.recordError(this.client, command.commandName, ':x: Command Error', err.stack);
-        this.client.logger.error('[SlashCreator] Error in command "%s": %s', command.commandName, err.stack);
+        this.client.ui.recordError(this.client, command.commandName, ':x: Slash Command Error', err.stack);
+        this.client.logger.error('[SlashCreator] Error in slash command "%s": %s', command.commandName, err.stack);
     }
 };
