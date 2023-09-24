@@ -51,7 +51,7 @@ module.exports = class CommandEarrape extends Command {
 
         const allowFreeVolume = await this.client.settings.get(message.guild.id, 'allowFreeVolume', true);
         if (!allowFreeVolume) {
-            return this.client.ui.reply(message, 'no', 'This command cannot be used because **Unlimited Volume** is disabled.');
+            return this.client.ui.sendPrompt(message, 'FEATURE_DISABLED', 'Free Volume');
         }
 
         // This command should not be limited by the DJ Role. Must be a toggable setting.
