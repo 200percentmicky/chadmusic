@@ -209,7 +209,7 @@ module.exports = class CommandSearch extends Command {
                     ctx: message instanceof CommandContext ? message : undefined
                 }
             });
-            message.react(process.env.EMOJI_MUSIC);
+            message.react(process.env.REACTION_MUSIC);
             collector.stop();
         });
 

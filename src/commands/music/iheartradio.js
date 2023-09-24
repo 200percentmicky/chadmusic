@@ -125,7 +125,7 @@ module.exports = class CommandIHeartRadio extends Command {
                     radioStation: station
                 }
             });
-            return message.react(process.env.EMOJI_MUSIC);
+            return message.react(process.env.REACTION_MUSIC);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
