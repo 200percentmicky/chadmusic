@@ -264,7 +264,6 @@ class CommandPlay extends SlashCommand {
                     }
                 });
             }
-            return;
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
