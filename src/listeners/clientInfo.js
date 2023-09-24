@@ -25,6 +25,6 @@ module.exports = class ListenerInfo extends Listener {
     }
 
     async exec (info) {
-        this.client.logger.info(info);
+        this.client.logger.info('[Client] %s', info);
     }
 };
