@@ -60,7 +60,7 @@ module.exports = class CommandReload extends Command {
             await this.client.listeners.loadAll();
         } catch (err) {
             message.reply({ content: `:x: Error reloading modules: \`${err.message}\`` });
-            resultEmoji = ':x:';
+            resultEmoji = '❌';
         }
 
         // Application Commands
@@ -76,7 +76,7 @@ module.exports = class CommandReload extends Command {
                 });
             } catch (err) {
                 message.reply({ content: `:x: Error syncing slash commands: \`${err.message}\`\n` });
-                resultEmoji = ':x:';
+                resultEmoji = '❌';
             }
 
             await this.client.creator.commands.forEach(cmd => {
@@ -84,7 +84,7 @@ module.exports = class CommandReload extends Command {
                     cmd.reload();
                 } catch (err) {
                     message.reply({ content: `:x: Error reloading slash command \`${cmd.commandName}\`: \`${err.message}\`\n` });
-                    resultEmoji = ':x:';
+                    resultEmoji = '❌';
                 }
             });
         }
