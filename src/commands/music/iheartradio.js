@@ -15,7 +15,16 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField, Message } = require('discord.js');
+const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    PermissionsBitField,
+    Message,
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder
+} = require('discord.js');
 const iheart = require('iheart');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
@@ -28,7 +37,7 @@ module.exports = class CommandIHeartRadio extends Command {
             description: {
                 text: 'Play a iHeartRadio station.',
                 usage: '<search>',
-                details: '`<search>` The station to search for. The first result is queued.'
+                details: '`<search>` The station to search for.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
@@ -112,19 +121,98 @@ module.exports = class CommandIHeartRadio extends Command {
 
         try {
             const search = await iheart.search(text);
-            const station = search.stations[0];
-            const url = await iheart.streamURL(station.id);
+            const stations = search.stations;
 
-            await this.client.player.play(vc, url, {
-                member: message.member,
-                textChannel: message.channel,
-                message: message instanceof Message ? message : undefined,
-                metadata: {
-                    ctx: message instanceof CommandContext ? message : undefined,
-                    isRadio: true,
-                    radioStation: station
-                }
+            const emojiNumber = {
+                1: '1️⃣',
+                2: '2️⃣',
+                3: '3️⃣',
+                4: '4️⃣',
+                5: '5️⃣',
+                6: '6️⃣',
+                7: '7️⃣',
+                8: '8️⃣',
+                9: '9️⃣',
+                10: '🔟'
+            };
+
+            const resultsFormattedList = stations.map(x => `**${emojiNumber[stations.indexOf(x) + 1]}** **${x.name}**\n${x.frequency} ${x.band} ${x.callLetters} - ${x.city} ${x.state}`).join('\n\n');
+
+            const embed = new EmbedBuilder()
+                .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
+                .setAuthor({
+                    name: 'Which station do you wanna tune to?',
+                    iconURL: message.member.user.avatarURL({ dynamic: true })
+                })
+                .setDescription(`${resultsFormattedList}`)
+                .setFooter({
+                    text: 'Make your selection using the menu below.'
+                });
+
+            const menuOptions = [];
+            let i;
+            for (i = 0; i < stations.length; i++) {
+                const track = new StringSelectMenuOptionBuilder()
+                    .setLabel(`${stations[i].name.length > 95
+                        ? stations[i].name.substring(0, 92) + '...'
+                        : stations[i].name}
+                    `)
+                    .setDescription(`${stations[i].frequency} ${stations[i].band} ${stations[i].callLetters} - ${stations[i].city} ${stations[i].state}`)
+                    .setValue(`${i}`)
+                    .setEmoji({
+                        name: emojiNumber[i + 1]
+                    });
+
+                menuOptions.push(track);
+            }
+
+            const menu = new StringSelectMenuBuilder()
+                .setCustomId('track_menu')
+                .setPlaceholder('Pick a station!')
+                .addOptions(menuOptions);
+
+            const cancel = new ButtonBuilder()
+                .setCustomId('cancel_search')
+                .setStyle(ButtonStyle.Danger)
+                .setEmoji(process.env.CLOSE);
+
+            const trackMenu = new ActionRowBuilder()
+                .addComponents(menu);
+
+            const cancelButton = new ActionRowBuilder()
+                .addComponents(cancel);
+
+            const msg = await message.reply({ embeds: [embed], components: [trackMenu, cancelButton], allowedMentions: { repliedUser: false } });
+
+            const filter = (interaction) => interaction.user.id === message.member.user.id;
+            const collector = msg.createMessageComponentCollector({
+                filter,
+                time: 30 * 1000,
+                max: 1
             });
+
+            collector.on('collect', async interaction => {
+                if (interaction.customId === 'cancel_search') return collector.stop();
+                message.channel.sendTyping();
+                const url = await iheart.streamURL(stations[parseInt(interaction.values[0])].id);
+                await this.client.player.play(vc, url, {
+                    member: message.member,
+                    textChannel: message.channel,
+                    message: message instanceof Message ? message : undefined,
+                    metadata: {
+                        ctx: message instanceof CommandContext ? message : undefined,
+                        isRadio: true,
+                        radioStation: stations[parseInt(interaction.values[0])]
+                    }
+                });
+                message.react(process.env.REACTION_MUSIC);
+                collector.stop();
+            });
+
+            collector.on('end', () => {
+                msg.delete();
+            });
+
             return message.react(process.env.REACTION_MUSIC);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
