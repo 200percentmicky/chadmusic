@@ -57,13 +57,20 @@ module.exports = class CommandPlaylistClone extends Command {
         }
 
         try {
+            const newName = args.clone_name ?? `${args.name} - Copy`;
             if (!this.client.playlists.has(message.guild.id, args.name)) {
                 return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` does not exists.`);
             } else {
                 const original = this.client.playlists.get(message.guild.id, args.name);
-                await this.client.playlists.set(message.guild.id, original, args.clone ?? `${args.name} - Copy`);
+
+                if (this.client.playlists.has(message.guild.id, newName)) {
+                    return this.client.ui.reply(message, 'warn', `Playlist \`${args.name} - Copy\` already exists. Please choose a different name.`);
+                }
+
+                await this.client.playlists.set(message.guild.id, original, newName);
+                await this.client.playlists.set(message.guild.id, `${Math.floor(Date.now() / 1000)}`, `${newName}.date_created`);
             }
-            return this.client.ui.reply(message, 'ok', `Cloned playlist \`${args.name}\` into new playlist \`${args.clone ?? `${args.name} - Copy`}\`.`);
+            return this.client.ui.reply(message, 'ok', `Cloned playlist \`${args.name}\` into new playlist \`${newName}\`.`);
         } catch (err) {
             this.client.ui.reply(message, 'error', `Unable to clone the playlist \`${args.name}\`. ${err.message}`);
         }

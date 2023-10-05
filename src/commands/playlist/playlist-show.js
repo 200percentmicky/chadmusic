@@ -56,7 +56,6 @@ module.exports = class CommandPlaylistShow extends Command {
                 iconURL: message.guild.iconURL()
             })
             .setTitle(':page_with_curl: Playlists')
-            .setDescription(`${playlistMap}`)
             .addFields(playlistMap)
             .setFooter({
                 text: `${Object.entries(playlists).length} playlist(s)`

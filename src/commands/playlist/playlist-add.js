@@ -66,6 +66,7 @@ module.exports = class CommandPlaylistAdd extends Command {
             return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` does not exist.`);
         }
 
+        // TODO: Revert to adding one track instead of multiples.
         if (args.tracks ?? player) {
             try {
                 let dupes = 0;
