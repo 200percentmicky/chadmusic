@@ -94,7 +94,7 @@ class CommandQueue extends SlashCommand {
     async run (ctx) {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
-        const member = guild.members.cache.get(ctx.member.id);
+        const member = guild.members.cache.get(ctx.user.id);
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
         const djRole = this.client.settings.get(guild.id, 'djRole');
