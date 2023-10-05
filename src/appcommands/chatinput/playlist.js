@@ -104,10 +104,15 @@ class CommandPlaylist extends SlashCommand {
                             required: true
                         },
                         {
-                            type: CommandOptionType.STRING,
-                            name: 'tracks',
+                            type: CommandOptionType.NUMBER,
+                            name: 'start',
                             description: 'The track or multiple tracks to remove from the playlist.',
                             required: true
+                        },
+                        {
+                            type: CommandOptionType.NUMBER,
+                            name: 'end',
+                            description: 'The ending index to remove multiple tracks.'
                         }
                     ]
                 },
@@ -115,19 +120,6 @@ class CommandPlaylist extends SlashCommand {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'show',
                     description: 'Lists all playlists on the server.'
-                },
-                {
-                    type: CommandOptionType.SUB_COMMAND,
-                    name: 'url',
-                    description: 'Adds an existing online playlist from a URL.',
-                    options: [
-                        {
-                            type: CommandOptionType.STRING,
-                            name: 'url',
-                            description: 'The URL of the playlist to add.',
-                            required: true
-                        }
-                    ]
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
@@ -151,7 +143,7 @@ class CommandPlaylist extends SlashCommand {
     async run (ctx) {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
-        const member = await guild.members.fetch(ctx.member.id);
+        const member = await guild.members.fetch(ctx.user.id);
 
         if (!this.client.utils.isDJ(channel, member)) {
             return this.client.ui.sendPrompt(ctx, 'NO_DJ');
@@ -163,6 +155,7 @@ class CommandPlaylist extends SlashCommand {
 
         switch (ctx.subcommands[0]) {
         case 'add': {
+            // TODO: Revert to adding one track instead of multiples.
             const player = this.client.player.getQueue(guild);
 
             if (!this.client.playlists.has(guild.id, ctx.options.add.name)) {
@@ -175,11 +168,22 @@ class CommandPlaylist extends SlashCommand {
                     let dupesList = '';
 
                     // Might be resource intensive...
-                    for (const x of ctx.options.add.tracks ?? [player.songs[0].url]) {
-                        const track = await ytdl.getInfo(x.href?.replace(/,$/g) ?? x);
+                    for (const x of [ctx.options.add.tracks] ?? [player.songs[0].url]) {
+                        let track;
+                        try {
+                            track = await ytdl.getInfo(x.href?.replace(/,$/g) ?? x);
+                        } catch {
+                            for (const p of this.client.player.extractorPlugins) {
+                                if (p.validate(x.href?.replace(/,$/g) ?? x)) {
+                                    track = await p.resolve(x.href?.replace(/,$/g) ?? x, {
+                                        member
+                                    });
+                                }
+                            }
+                        }
                         const trackInfo = {
-                            title: track.videoDetails.title,
-                            url: track.videoDetails.video_url,
+                            title: track.videoDetails?.title ?? track.name,
+                            url: track.videoDetails?.video_url ?? track.url,
                             date_added: Math.floor(Date.now() / 1000)
                         };
 
@@ -187,7 +191,9 @@ class CommandPlaylist extends SlashCommand {
                             return this.client.ui.reply(ctx, 'warn', 'All tracks must be a URL.');
                         }
 
-                        const trackExists = _.find(this.client.playlists.get(guild.id, `${ctx.options.add.name}.tracks`), trackInfo);
+                        const trackExists = _.find(this.client.playlists.get(guild.id, `${ctx.options.add.name}.tracks`), (obj) => {
+                            return obj.url === trackInfo.url;
+                        });
 
                         if (trackExists) {
                             dupesList += `- **${trackInfo.title}**\n`;
@@ -198,7 +204,7 @@ class CommandPlaylist extends SlashCommand {
                     }
                     if (dupes) {
                         this.client.ui.reply(ctx, 'warn', `**${dupes}** ${dupes === 1 ? 'track' : 'tracks'} already exist in the playlist.\n${dupesList}`);
-                        if ((ctx.options.add.tracks?.length ?? [player.songs[0].url].length) - dupes === 0) break;
+                        if ((ctx.options.add.tracks?.length ?? [player.songs[0].url].length) - dupes === 0) return;
                     }
                     this.client.ui.reply(ctx, 'ok', `Added **${(ctx.options.add.tracks?.length ?? [player.songs[0].url].length)}** track(s) to the playlist \`${ctx.options.add.name}\`.`);
                 } catch (err) {
@@ -231,7 +237,7 @@ class CommandPlaylist extends SlashCommand {
             }
 
             const playlist = this.client.playlists.get(guild.id, `${ctx.options.view.name}.tracks`);
-            const trackList = playlist.map(x => `${playlist.indexOf(x) + 1}: [${x.title}](${x.url})`).join('\n');
+            const trackList = playlist.map(x => `${playlist.indexOf(x) + 1}: [${x.title}](${x.url}) (<t:${x.date_added}:f>)`).join('\n');
 
             if (!trackList) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.view.name}\` is empty.`);
@@ -272,48 +278,80 @@ class CommandPlaylist extends SlashCommand {
 
         case 'clone': {
             try {
+                const newName = ctx.options.clone.clone_name ?? `${ctx.options.clone.name} - Copy`;
                 if (!this.client.playlists.has(guild.id, ctx.options.clone.name)) {
                     return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.clone.name}\` does not exists.`);
                 } else {
                     const original = this.client.playlists.get(guild.id, ctx.options.clone.name);
-                    await this.client.playlists.set(guild.id, original, ctx.options.clone.clone_name ?? `${ctx.options.clone.name} - Copy`);
+
+                    if (this.client.playlists.has(guild.id, newName)) {
+                        return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.clone.name} - Copy\` already exists. Please choose a different name.`);
+                    }
+
+                    await this.client.playlists.set(guild.id, original, newName);
+                    await this.client.playlists.set(guild.id, `${Math.floor(Date.now() / 1000)}`, `${newName}.date_created`);
                 }
-                return this.client.ui.reply(ctx, 'ok', `Cloned playlist \`${ctx.options.clone.name}\` into new playlist \`${ctx.options.clone.clone_name ?? `${ctx.options.clone.name} - Copy`}\`.`);
+                return this.client.ui.reply(ctx, 'ok', `Cloned playlist \`${ctx.options.clone.name}\` into new playlist \`${newName}\`.`);
             } catch (err) {
-                this.client.ui.reply(ctx, 'error', `Unable to create the playlist \`${ctx.options.clone.name}\`. ${err.message}`);
+                this.client.ui.reply(ctx, 'error', `Unable to clone the playlist \`${ctx.options.clone.name}\`. ${err.message}`);
             }
 
             break;
         }
 
         case 'remove': {
-            if (!args.name) {
-                return this.client.ui.usage(ctx, 'playlist remove <name> <tracks...>');
+            if (!this.client.playlists.has(guild.id, ctx.options.remove.name)) {
+                return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.remove.name}\` does not exist.`);
             }
 
-            break;
-
-            // Work in progress... stay tuned!
             try {
-                if (this.client.playlists.has(guild.id, args.name)) {
-                    return this.client.ui.reply(ctx, 'warn', `Playlist \`${args.name}\` does not exist.`);
-                } else {
-                    await this.client.playlists.set(guild.id, [], args.name);
-                }
-                return this.client.ui.reply(ctx, 'ok', `Created new playlist \`${args.name}\`.`);
-            } catch (err) {
-                this.client.ui.reply(ctx, 'error', `Unable to create the playlist \`${args.name}\`. ${err.message}`);
-            }
+                // This is more or less a copy and paste of the remove command lol
+                const playlist = this.client.playlists.get(guild.id, ctx.options.remove.name);
 
+                if (ctx.options.remove.end) {
+                    const start = parseInt(ctx.options.remove.start);
+                    const end = parseInt(ctx.options.remove.end);
+
+                    if (isNaN(start)) return this.client.ui.reply(ctx, 'error', 'Starting index position must be a number.');
+                    if (isNaN(end)) return this.client.ui.reply(ctx, 'error', 'Ending index position must be a number.');
+
+                    const tracks = _.slice(playlist.tracks, start - 1, end);
+                    const changedList = _.pullAll(playlist.tracks, tracks);
+
+                    this.client.playlists.set(guild.id, changedList, `${ctx.options.remove.name}.tracks`);
+
+                    return this.client.ui.reply(ctx, 'ok', `**${tracks.length}** track(s) removed from \`${ctx.options.remove.name}\`.`);
+                } else {
+                    if (isNaN(ctx.options.remove.start)) return this.client.ui.reply(ctx, 'error', 'Track index must be a number.');
+
+                    const track = playlist.tracks[ctx.options.remove.start - 1];
+
+                    if (!_.find(playlist.tracks, track) || ctx.options.remove.start < 1 || ctx.options.remove.start > playlist.tracks.length) {
+                        return this.client.ui.reply(ctx, 'warn', 'That entry does not exist.');
+                    }
+
+                    const changedList = _.remove(playlist.tracks, (obj) => {
+                        return obj.url !== track?.url;
+                    });
+                    this.client.playlists.set(guild.id, changedList, `${ctx.options.remove.name}.tracks`);
+
+                    return this.client.ui.reply(ctx, 'ok', `Removed **${track?.title}** from \`${ctx.options.remove.name}\`.`);
+                }
+            } catch (err) {
+                this.client.ui.reply(ctx, 'error', `Unable to remove any tracks from the playlist \`${ctx.options.remove.name}\`. ${err.message}`);
+            }
             break;
         }
 
         case 'show': {
             const playlists = this.client.playlists.get(guild.id);
-            let playlistMap;
+            const playlistMap = [];
 
-            for (const [k, [v]] of Object.entries(playlists)) {
-                playlistMap += `**${k}**\n${v.map(x => `${x.tracks?.length ?? 0} track(s)\nCreator: <@!${x.user}>\nDate: <t:${x.date_created}:F>\n\n`)}`;
+            for (const [k, v] of Object.entries(playlists)) {
+                playlistMap.push({
+                    name: `${k}`,
+                    value: `${v.tracks?.length ?? 0} track(s)\nOwner: <@!${v.user}>\nDate created: <t:${v.date_created}:f>`
+                });
             }
 
             if (!playlistMap) {
@@ -321,19 +359,18 @@ class CommandPlaylist extends SlashCommand {
             }
 
             const embed = new EmbedBuilder()
-                .setColor(ctx.guild.members.me.displayColor !== 0 ? ctx.guild.members.me.displayColor : null)
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
-                    name: ctx.guild.name,
-                    iconURL: ctx.guild.iconURL()
+                    name: guild.name,
+                    iconURL: guild.iconURL()
                 })
                 .setTitle(':page_with_curl: Playlists')
-                .setDescription(`${playlistMap}`)
+                .addFields(playlistMap)
                 .setFooter({
-                    text: `${Object.keys(playlists).size} playlist(s)`
+                    text: `${Object.entries(playlists).length} playlist(s)`
                 });
 
-            ctx.channel.send({ embeds: [embed] });
-
+            ctx.send({ embeds: [embed] });
             break;
         }
         }
