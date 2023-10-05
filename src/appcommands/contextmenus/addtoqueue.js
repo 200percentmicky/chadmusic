@@ -118,7 +118,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 textChannel: channel,
                 member: _member,
                 metadata: {
-                    ctx: ctx
+                    ctx
                 }
             });
         } catch (err) {
