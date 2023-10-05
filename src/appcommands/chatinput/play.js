@@ -91,6 +91,20 @@ class CommandPlay extends SlashCommand {
                         required: true,
                         autocomplete: true
                     }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'playlist',
+                    description: 'Plays a custom playlist.',
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'name',
+                            description: 'The name of the playlist.',
+                            required: true,
+                            autocomplete: true
+                        }
+                    ]
                 }
             ]
         });
@@ -100,20 +114,39 @@ class CommandPlay extends SlashCommand {
 
     async autocomplete (ctx) {
         const query = ctx.options[ctx.subcommands[0]][ctx.focused];
-        if (hasURL(query)) return [];
-        AutoComplete(query, (err, queries) => {
-            if (err) {
-                this.client.logger.error('Unable to gather autocomplete data: %s', err);
+        if (ctx.subcommands[0] === 'playlist') {
+            try {
+                const playlists = await this.client.playlists.get(ctx.guildID);
+
+                const playlistMap = [];
+                for (const [k, v] of Object.entries(playlists)) {
+                    playlistMap.push({ name: k, value: v });
+                }
+
+                const filter = playlistMap.filter(x => x.name.startsWith(query));
+                return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track(s)`, value: `${x.name}` })));
+            } catch (err) {
+                if (err) {
+                    this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                }
                 return ctx.sendResults([]);
             }
-            return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
-        });
+        } else {
+            if (hasURL(query)) return [];
+            AutoComplete(query, (err, queries) => {
+                if (err) {
+                    this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                    return ctx.sendResults([]);
+                }
+                return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
+            });
+        }
     }
 
     async run (ctx) {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
-        const _member = await guild.members.fetch(ctx.member.id);
+        const _member = await guild.members.fetch(ctx.user.id);
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
@@ -246,6 +279,29 @@ class CommandPlay extends SlashCommand {
                     try {
                         await this.client.player.skip(guild);
                     } catch {}
+                } else {
+                    return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
+                }
+            } else if (ctx.subcommands[0] === 'playlist') {
+                if (vc.members.size <= 3 || dj) {
+                    const playlists = await this.client.playlists.get(ctx.guildID, ctx.options.playlist.name);
+                    const songs = playlists.tracks.map(x => x.url);
+
+                    const playlist = await this.client.player.createCustomPlaylist(songs, {
+                        member: _member,
+                        properties: { name: ctx.options.playlist.name }
+                    });
+
+                    await this.client.player.play(vc, playlist, {
+                        textChannel: channel,
+                        member: _member,
+                        metadata: {
+                            ctx,
+                            isRadio: ctx.subcommands[0] === 'radio',
+                            radioStation: station ?? undefined,
+                            silent: ctx.subcommands[0] === 'silently'
+                        }
+                    });
                 } else {
                     return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
                 }
