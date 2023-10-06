@@ -31,9 +31,9 @@ const ChadUI = require('./modules/ChadUI');
 const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 const fs = require('fs');
-const exec = require('child_process').exec;
+const { execSync } = require('child_process');
 
-const buildNumber = exec('git rev-parse --short HEAD');
+const buildNumber = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim();
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -133,6 +133,16 @@ class ChadMusic extends AkairoClient {
 
         this.settings.ensure('global', this.defaultGlobalSettings);
 
+        this.agent = () => {
+            try {
+                return ytdl.createProxyAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                });
+            } catch {
+                return undefined;
+            }
+        };
+
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
@@ -148,15 +158,13 @@ class ChadMusic extends AkairoClient {
             leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
             leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
             streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: JSON.parse(fs.readFileSync('../cookies.json')),
+            youtubeCookie: JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json'))),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
-                agent: ytdl.createProxyAgent(undefined, {
-                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                })
+                agent: this.agent
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
