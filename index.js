@@ -34,13 +34,13 @@ logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
 logger.info('Bot Version: %s (Build %s)', version, execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim());
 logger.info('Loading libraries...');
 
-if (process.env.YOUTUBE_COOKIE) {
-    logger.warn('YOUTUBE_COOKIE environment variable has been deprecated. Please switch to the new cookie format by following the instructions at https://distube.js.org/#/docs/DisTube/main/general/cookie. Paste the new cookie in the cookies.json file.');
-}
-
 if (process.versions.node.split('.')[0] < 18) {
     logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
     process.exit(1);
+}
+
+if (process.env.YOUTUBE_COOKIE) {
+    logger.warn('YOUTUBE_COOKIE environment variable has been deprecated. Please switch to the new cookie format by following the instructions at https://distube.js.org/#/docs/DisTube/main/general/cookie. Paste the new cookie in the cookies.json file.');
 }
 
 if (process.env.SHARDING) {
