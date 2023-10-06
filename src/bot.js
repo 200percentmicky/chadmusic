@@ -21,6 +21,8 @@ const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = requ
 const { ChannelType, GatewayIntentBits } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Keyv = require('keyv');
@@ -28,6 +30,7 @@ const Enmap = require('enmap');
 const ChadUI = require('./modules/ChadUI');
 const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
+const fs = require('fs');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -141,13 +144,15 @@ class ChadMusic extends AkairoClient {
             leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
             leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
             streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: process.env.YOUTUBE_COOKIE,
+            youtubeCookie: JSON.parse(fs.readFileSync('../cookies.json')),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
-                IPv6Block: process.env.IPV6_BLOCK
+                agent: ytdl.createProxyAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
