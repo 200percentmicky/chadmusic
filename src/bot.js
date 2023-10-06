@@ -31,6 +31,9 @@ const ChadUI = require('./modules/ChadUI');
 const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 const fs = require('fs');
+const exec = require('child_process').exec;
+
+const buildNumber = exec('git rev-parse --short HEAD');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -54,6 +57,7 @@ class ChadMusic extends AkairoClient {
         this.ui = ChadUI;
         this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
+        this.buildNumber = buildNumber;
 
         this.settings = new Enmap({ name: 'settings' });
         this.playlists = new Enmap({ name: 'playlists' });

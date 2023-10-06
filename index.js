@@ -20,6 +20,7 @@ require('dotenv').config();
 const { ShardingManager } = require('discord.js');
 const ChadMusic = require('./src/bot.js');
 const logger = require('./src/modules/winstonLogger.js');
+const exec = require('child_process').exec;
 
 // Say hello!
 const { version } = require('./package.json');
@@ -30,7 +31,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s', version);
+logger.info('Bot Version: %s (Build %s)', version, exec('git rev-parse --short HEAD'));
 logger.info('Loading libraries...');
 
 if (process.versions.node.split('.')[0] < 18) {
