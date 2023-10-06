@@ -143,6 +143,15 @@ class ChadMusic extends AkairoClient {
             }
         };
 
+        this.cookies = () => {
+            const cookies = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json')));
+            if (cookies.length === 0) {
+                return process.env.YOUTUBE_COOKIE;
+            } else {
+                return cookies;
+            }
+        };
+
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
@@ -158,13 +167,13 @@ class ChadMusic extends AkairoClient {
             leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
             leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
             streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json'))),
+            youtubeCookie: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
-                agent: this.agent
+                agent: this.agent()
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
