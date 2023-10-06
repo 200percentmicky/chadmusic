@@ -171,11 +171,11 @@ class CommandPlaylist extends SlashCommand {
                     for (const x of [ctx.options.add.tracks] ?? [player.songs[0].url]) {
                         let track;
                         try {
-                            track = await ytdl.getInfo(x.href?.replace(/,$/g) ?? x);
+                            track = await ytdl.getInfo(x);
                         } catch {
                             for (const p of this.client.player.extractorPlugins) {
-                                if (p.validate(x.href?.replace(/,$/g) ?? x)) {
-                                    track = await p.resolve(x.href?.replace(/,$/g) ?? x, {
+                                if (p.validate(x)) {
+                                    track = await p.resolve(x, {
                                         member
                                     });
                                 }
