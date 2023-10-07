@@ -8,9 +8,6 @@
     "build": "npm ci",
     "bot": "node index.js"
   },
-  "engines": {
-    "node": ">=16.9.0"
-  },
   "author": "200percentmicky",
   "license": "GPLv3",
   "dependencies": {
