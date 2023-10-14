@@ -1,3 +1,7 @@
+!!! warning "A work in progress!"
+
+    The documentation is currently referencing the **develop** branch of ChadMusic. If you're using the current stable release of the bot, then the documentation will still be useful to you.
+
 <h1 align="center" style="font-weight: bold; font-style: italic;">
     <img src="https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png" width=250>
 </h1>
@@ -19,9 +23,9 @@
 ![Deezer](https://img.shields.io/badge/Deezer-FEAA2D?style=for-the-badge&logo=deezer&logoColor=white)
 ![Apple Music](https://img.shields.io/badge/Apple_Music-9933CC?style=for-the-badge&logo=apple-music&logoColor=white)
 
-A universal audio playing Discord bot for your Discord server. It's built using a modified [fork](https://github.com/200percentmicky/chadtube) of **[DisTube.js](https://distube.js.org)**.
+Welcome to the documentation for **ChadMusic - The Chad Music Bot!**
 
-### **[Read the Documentation](https://200percentmicky.github.io/chadmusic)**
+ChadMusic is a universal audio playing Discord bot for your Discord server. It's built using a modified [fork](https://github.com/200percentmicky/chadtube) of **[DisTube.js](https://distube.js.org)**.
 
 ## Features
 
