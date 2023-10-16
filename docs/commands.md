@@ -204,7 +204,19 @@ Adds a vibrato effect to the player.
 | `[frequency]` | float | The frequency of the tremolo. Minimum value is `0.1`. |
 
 ## Player
-The main commands of the audio player. 
+The main commands of the audio player.
+
+### Message > Apps > Add to queue
+
+??? abstract "Message Command Only"
+
+    This command is only available as a **Message Command**. It must be executed from the **Apps** section in a message's right-click context menu.
+
+!!! warning
+
+    This command requires the **Message Content** privileged intent to work.
+
+Adds a track to the queue by using the message's content as a search query.
 
 ### !bindchannel | !bindto | /player bindchannel `[channel]`
 
