@@ -25,7 +25,6 @@ const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
-const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ChadUI = require('./modules/ChadUI');
 const ChadUtils = require('./modules/ChadUtils');
@@ -61,8 +60,6 @@ class ChadMusic extends AkairoClient {
 
         this.settings = new Enmap({ name: 'settings' });
         this.playlists = new Enmap({ name: 'playlists' });
-
-        this.depWarnMsg = new Keyv();
 
         this.defaultSettings = {
             prefix: process.env.PREFIX,
