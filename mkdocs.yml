@@ -34,7 +34,7 @@ nav:
   - Welcome: 'index.md'
   - Changelog: 'changelog.md'
   - Commands: 'commands.md'
-  - Installation:
+  - Setup:
     - 'Getting Started': 'installation/getting_started.md'
     - 'Installing Node.js': 'installation/install_node.md'
     - 'Installing git': 'installation/install_git.md'
