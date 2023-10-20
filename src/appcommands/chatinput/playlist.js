@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
 
@@ -287,6 +287,52 @@ class CommandPlaylist extends SlashCommand {
             } catch (err) {
                 this.client.ui.reply(ctx, 'error', `Unable to create the playlist \`${ctx.options.new.name}\`. ${err.message}`);
             }
+
+            break;
+        }
+
+        case 'purge': {
+            const yesButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Success)
+                .setLabel('Yes')
+                .setEmoji('✔')
+                .setCustomId('slash_yes_playlist_purge');
+
+            const noButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Danger)
+                .setLabel('No')
+                .setEmoji('✖')
+                .setCustomId('slash_no_playlist_purge');
+
+            const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
+
+            await this.client.ui.reply(ctx, 'warn', 'Are you sure you want to delete all playlists for this server? This action cannot be undone!', 'Deleting All Playlists', null, null, [buttonRow]);
+
+            ctx.registerComponent('slash_yes_playlist_purge', async (btnCtx) => {
+                if (ctx.user.id !== btnCtx.user.id) {
+                    await btnCtx.defer(true);
+                    return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.');
+                }
+
+                try {
+                    await this.client.playlists.delete(guild.id);
+                    btnCtx.acknowledge();
+                    btnCtx.delete();
+                    return this.client.ui.reply(ctx, 'ok', 'All playlists on the server have been deleted.');
+                } catch (err) {
+                    return this.client.ui.reply(ctx, 'error', `Unable to delete all playlists. ${err.message}`);
+                }
+            }, 300 * 1000);
+
+            ctx.registerComponent('slash_no_playlist_purge', async (btnCtx) => {
+                if (ctx.user.id !== btnCtx.user.id) {
+                    await btnCtx.defer(true);
+                    return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.');
+                }
+
+                btnCtx.acknowledge();
+                btnCtx.delete();
+            }, 300 * 1000);
 
             break;
         }
