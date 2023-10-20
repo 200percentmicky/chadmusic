@@ -39,8 +39,8 @@ module.exports = class CommandPlaylistAdd extends Command {
                     type: 'string'
                 },
                 {
-                    id: 'tracks',
-                    match: 'separate',
+                    id: 'track',
+                    match: 'rest',
                     type: 'url'
                 }
             ]
@@ -67,56 +67,46 @@ module.exports = class CommandPlaylistAdd extends Command {
         }
 
         // TODO: Revert to adding one track instead of multiples.
-        if (args.tracks ?? player) {
+        if (args.track ?? player) {
             try {
-                let dupes = 0;
-                let dupesList = '';
+                let track;
 
-                message.channel.sendTyping();
-
-                // Might be resource intensive...
-                for (const x of args.tracks ?? [player.songs[0].url]) {
-                    let track;
-                    try {
-                        track = await ytdl.getInfo(x.href?.replace(/,$/g) ?? x);
-                    } catch {
-                        for (const p of this.client.player.extractorPlugins) {
-                            if (p.validate(x.href?.replace(/,$/g) ?? x)) {
-                                track = await p.resolve(x.href?.replace(/,$/g) ?? x, {
-                                    member: message.member
-                                });
-                            }
+                try {
+                    track = await ytdl.getInfo(args.track.href ?? player.songs[0].url);
+                } catch {
+                    for (const p of this.client.player.extractorPlugins) {
+                        if (p.validate(args.track.href ?? player.songs[0].url)) {
+                            track = await p.resolve(args.track.href ?? player.songs[0].url, {
+                                member: message.member
+                            });
                         }
                     }
-                    const trackInfo = {
-                        title: track.videoDetails?.title ?? track.name,
-                        url: track.videoDetails?.video_url ?? track.url,
-                        date_added: Math.floor(Date.now() / 1000)
-                    };
-
-                    if (!this.client.utils.hasURL(x) || !track) {
-                        return this.client.ui.reply(message, 'warn', 'All tracks must be a URL.');
-                    }
-
-                    const trackExists = _.find(this.client.playlists.get(message.guild.id, `${args.name}.tracks`), (obj) => {
-                        return obj.url === trackInfo.url;
-                    });
-
-                    if (trackExists) {
-                        dupesList += `- **${trackInfo.title}**\n`;
-                        dupes += 1;
-                    } else {
-                        await this.client.playlists.push(message.guild.id, trackInfo, `${args.name}.tracks`, false);
-                    }
                 }
-                if (dupes) {
-                    this.client.ui.reply(message, 'warn', `**${dupes}** ${dupes === 1 ? 'track' : 'tracks'} already exist in the playlist.\n${dupesList}`);
-                    if ((args.tracks?.length ?? [player.songs[0].url].length) - dupes === 0) return;
+
+                const trackInfo = {
+                    title: track.videoDetails?.title ?? track.name,
+                    url: track.videoDetails?.video_url ?? track.url,
+                    date_added: Math.floor(Date.now() / 1000)
+                };
+
+                if (!this.client.utils.hasURL(args.track.href ?? player.songs[0].url) || !track) {
+                    return this.client.ui.reply(message, 'error', 'The track must be a URL.');
                 }
-                this.client.ui.reply(message, 'ok', `Added **${(args.tracks?.length ?? [player.songs[0].url].length)}** track(s) to the playlist \`${args.name}\`.`);
+
+                const trackExists = _.find(this.client.playlists.get(message.guild.id, `${args.name}.tracks`), (obj) => {
+                    return obj.url === trackInfo.url;
+                });
+
+                if (trackExists) {
+                    return this.client.ui.reply(message, 'warn', `**${trackInfo.title}** already exist in the playlist \`${args.name}\``);
+                } else {
+                    await this.client.playlists.push(message.guild.id, trackInfo, `${args.name}.tracks`, false);
+                }
+
+                this.client.ui.reply(message, 'ok', `Added **${trackInfo.title}** to the playlist \`${args.name}\`.`);
             } catch (err) {
                 console.log(err);
-                this.client.ui.reply(message, 'error', `Unable to add the tracks to playlist \`${args.name}\`. ${err.message}`);
+                this.client.ui.reply(message, 'error', `Unable to add the track to the playlist \`${args.name}\`. ${err.message}`);
             }
         }
     }

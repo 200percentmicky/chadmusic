@@ -34,12 +34,13 @@ class CommandPlaylist extends SlashCommand {
                             type: CommandOptionType.STRING,
                             name: 'name',
                             description: 'The name of the playlist to add tracks to.',
-                            required: true
+                            required: true,
+                            autocomplete: true
                         },
                         {
                             type: CommandOptionType.STRING,
-                            name: 'tracks',
-                            description: 'A track or a list of tracks to add to the playlist.'
+                            name: 'track',
+                            description: 'A track to add to the playlist.'
                         }
                     ]
                 },
@@ -52,7 +53,8 @@ class CommandPlaylist extends SlashCommand {
                             type: CommandOptionType.STRING,
                             name: 'name',
                             description: 'The name of the playlist to clone.',
-                            required: true
+                            required: true,
+                            autocomplete: true
                         },
                         {
                             type: CommandOptionType.STRING,
@@ -70,7 +72,8 @@ class CommandPlaylist extends SlashCommand {
                             type: CommandOptionType.STRING,
                             name: 'name',
                             description: 'The name of the playlist to delete.',
-                            required: true
+                            required: true,
+                            autocomplete: true
                         }
                     ]
                 },
@@ -101,7 +104,8 @@ class CommandPlaylist extends SlashCommand {
                             type: CommandOptionType.STRING,
                             name: 'name',
                             description: 'The name of the playlist to remove tracks.',
-                            required: true
+                            required: true,
+                            autocomplete: true
                         },
                         {
                             type: CommandOptionType.NUMBER,
@@ -130,7 +134,8 @@ class CommandPlaylist extends SlashCommand {
                             type: CommandOptionType.STRING,
                             name: 'name',
                             description: 'The name of the playlist to view.',
-                            required: true
+                            required: true,
+                            autocomplete: true
                         }
                     ]
                 }
@@ -138,6 +143,27 @@ class CommandPlaylist extends SlashCommand {
         });
 
         this.filePath = __filename;
+    }
+
+    async autocomplete (ctx) {
+        const query = ctx.options[ctx.subcommands[0]][ctx.focused];
+        try {
+            const playlists = await this.client.playlists.get(ctx.guildID);
+
+            const playlistMap = [];
+            for (const [k, v] of Object.entries(playlists)) {
+                playlistMap.push({ name: k, value: v });
+            }
+
+            const filter = playlistMap.filter(x => x.name.startsWith(query));
+            return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track(s)`, value: `${x.name}` })));
+        } catch (err) {
+            if (!this.client.playlists.has(ctx.guildID)) {} // eslint-disable-line no-empty, brace-style
+            else if (err) {
+                this.client.logger.error('Unable to gather autocomplete data: %s', err);
+            }
+            return ctx.sendResults([]);
+        }
     }
 
     async run (ctx) {
@@ -155,61 +181,50 @@ class CommandPlaylist extends SlashCommand {
 
         switch (ctx.subcommands[0]) {
         case 'add': {
-            // TODO: Revert to adding one track instead of multiples.
             const player = this.client.player.getQueue(guild);
 
             if (!this.client.playlists.has(guild.id, ctx.options.add.name)) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.add.name}\` does not exist.`);
             }
 
-            if (ctx.options.add.tracks ?? player) {
+            if (ctx.options.add.track ?? player) {
                 try {
-                    let dupes = 0;
-                    let dupesList = '';
-
-                    // Might be resource intensive...
-                    for (const x of [ctx.options.add.tracks] ?? [player.songs[0].url]) {
-                        let track;
-                        try {
-                            track = await ytdl.getInfo(x);
-                        } catch {
-                            for (const p of this.client.player.extractorPlugins) {
-                                if (p.validate(x)) {
-                                    track = await p.resolve(x, {
-                                        member
-                                    });
-                                }
+                    let track;
+                    try {
+                        track = await ytdl.getInfo(ctx.options.add.track ?? player.songs[0].url);
+                    } catch {
+                        for (const p of this.client.player.extractorPlugins) {
+                            if (p.validate(ctx.options.add.track ?? player)) {
+                                track = await p.resolve(ctx.options.add.track ?? player.songs[0].url, {
+                                    member
+                                });
                             }
                         }
-                        const trackInfo = {
-                            title: track.videoDetails?.title ?? track.name,
-                            url: track.videoDetails?.video_url ?? track.url,
-                            date_added: Math.floor(Date.now() / 1000)
-                        };
-
-                        if (!this.client.utils.hasURL(x) || !track) {
-                            return this.client.ui.reply(ctx, 'warn', 'All tracks must be a URL.');
-                        }
-
-                        const trackExists = _.find(this.client.playlists.get(guild.id, `${ctx.options.add.name}.tracks`), (obj) => {
-                            return obj.url === trackInfo.url;
-                        });
-
-                        if (trackExists) {
-                            dupesList += `- **${trackInfo.title}**\n`;
-                            dupes += 1;
-                        } else {
-                            await this.client.playlists.push(guild.id, trackInfo, `${ctx.options.add.name}.tracks`, false);
-                        }
                     }
-                    if (dupes) {
-                        this.client.ui.reply(ctx, 'warn', `**${dupes}** ${dupes === 1 ? 'track' : 'tracks'} already exist in the playlist.\n${dupesList}`);
-                        if ((ctx.options.add.tracks?.length ?? [player.songs[0].url].length) - dupes === 0) return;
+                    const trackInfo = {
+                        title: track.videoDetails?.title ?? track.name,
+                        url: track.videoDetails?.video_url ?? track.url,
+                        date_added: Math.floor(Date.now() / 1000)
+                    };
+
+                    if (!this.client.utils.hasURL(ctx.options.add.track ?? player.songs[0].url) || !track) {
+                        return this.client.ui.reply(ctx, 'error', 'The track must be a URL.');
                     }
-                    this.client.ui.reply(ctx, 'ok', `Added **${(ctx.options.add.tracks?.length ?? [player.songs[0].url].length)}** track(s) to the playlist \`${ctx.options.add.name}\`.`);
+
+                    const trackExists = _.find(this.client.playlists.get(guild.id, `${ctx.options.add.name}.tracks`), (obj) => {
+                        return obj.url === trackInfo.url;
+                    });
+
+                    if (trackExists) {
+                        return this.client.ui.reply(ctx, 'warn', `**${trackInfo.title}** already exist in the playlist \`${ctx.options.add.name}\``);
+                    } else {
+                        await this.client.playlists.push(guild.id, trackInfo, `${ctx.options.add.name}.tracks`, false);
+                    }
+
+                    this.client.ui.reply(ctx, 'ok', `Added **${trackInfo.title}** to the playlist \`${ctx.options.add.name}\`.`);
                 } catch (err) {
                     console.log(err);
-                    this.client.ui.reply(ctx, 'error', `Unable to add the tracks to playlist \`${ctx.options.add.name}\`. ${err.message}`);
+                    this.client.ui.reply(ctx, 'error', `Unable to add the track to the playlist \`${ctx.options.add.name}\`. ${err.message}`);
                 }
             }
 
@@ -258,7 +273,7 @@ class CommandPlaylist extends SlashCommand {
         case 'new': {
             try {
                 const playlistData = {
-                    user: ctx.member.user.id,
+                    user: member.user.id,
                     date_created: Math.floor(Date.now() / 1000),
                     tracks: []
                 };
