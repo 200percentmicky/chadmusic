@@ -21,7 +21,7 @@ const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
         super(creator, {
-            name: 'Add To Queue',
+            name: 'Add to queue',
             type: ApplicationCommandType.MESSAGE
         });
 
