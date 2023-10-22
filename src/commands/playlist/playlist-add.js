@@ -20,6 +20,8 @@ const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
 const { PermissionFlagsBits } = require('discord.js');
 
+/* eslint-disable no-useless-escape */
+
 module.exports = class CommandPlaylistAdd extends Command {
     constructor () {
         super('playlist-add', {
@@ -80,11 +82,11 @@ module.exports = class CommandPlaylistAdd extends Command {
                 let track;
 
                 try {
-                    track = await ytdl.getInfo(args.track ?? player.songs[0].url);
+                    track = await ytdl.getInfo(args.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url);
                 } catch {
                     for (const p of this.client.player.extractorPlugins) {
-                        if (p.validate(args.track ?? player.songs[0].url)) {
-                            track = await p.resolve(args.track ?? player.songs[0].url, {
+                        if (p.validate(args.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url)) {
+                            track = await p.resolve(args.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url, {
                                 member: message.member
                             });
                         }
@@ -97,7 +99,7 @@ module.exports = class CommandPlaylistAdd extends Command {
                     date_added: Math.floor(Date.now() / 1000)
                 };
 
-                if (!this.client.utils.hasURL(args.track ?? player.songs[0].url) || !track) {
+                if (!this.client.utils.hasURL(args.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url) || !track) {
                     return this.client.ui.reply(message, 'error', 'The track must be a URL.');
                 }
 
