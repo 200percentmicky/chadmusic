@@ -55,7 +55,7 @@ module.exports = class CommandPlaylistView extends Command {
         }
 
         const playlist = this.client.playlists.get(message.guild.id, `${args.name}.tracks`);
-        const trackList = playlist.map(x => `${playlist.indexOf(x) + 1}: [${x.title}](${x.url}) (<t:${x.date_added}:f>)`).join('\n');
+        const trackList = playlist.map(x => `**${playlist.indexOf(x) + 1}:** [${x.title}](${x.url}) (<t:${x.date_added}:f>)`).join('\n\n');
 
         if (!trackList) {
             return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` is empty.`);

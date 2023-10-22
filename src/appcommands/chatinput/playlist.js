@@ -264,7 +264,7 @@ class CommandPlaylist extends SlashCommand {
             }
 
             const playlist = this.client.playlists.get(guild.id, `${ctx.options.view.name}.tracks`);
-            const trackList = playlist.map(x => `${playlist.indexOf(x) + 1}: [${x.title}](${x.url}) (<t:${x.date_added}:f>)`).join('\n');
+            const trackList = playlist.map(x => `**${playlist.indexOf(x) + 1}:** [${x.title}](${x.url}) (<t:${x.date_added}:f>)`).join('\n\n');
 
             if (!trackList) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.view.name}\` is empty.`);
