@@ -231,6 +231,8 @@ class CommandPlaylist extends SlashCommand {
                     console.log(err);
                     this.client.ui.reply(ctx, 'error', `Unable to add the track to the playlist \`${ctx.options.add.name}\`. ${err.message}`);
                 }
+            } else if (!player && !ctx.options.add.name) {
+                return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
             }
 
             break;
