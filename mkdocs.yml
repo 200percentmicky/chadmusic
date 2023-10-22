@@ -3,17 +3,33 @@ site_name: ChadMusic
 theme:
   name: material
   favicon: assets/deejaytreefiddy.ico
-  logo: assets/deejaytreefiddy.ico
+  logo: assets/deejaytreefiddy.png
+  icon:
+    repo: fontawesome/brands/github
   palette:
-    primary: blue
-    accent: blue
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Lights on! Click to toggle.
+    - scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Lights off... Click to toggle.
+
   features:
     - content.tooltips
+    - content.code.copy
     - navigation.sections
     - navigation.top
     - navigation.prune
+    - navigation.path
     - navigation.indexes
     - navigation.footer
+    - toc.integrate
 
 markdown_extensions:
   - admonition
@@ -35,13 +51,13 @@ nav:
   - Changelog: 'changelog.md'
   - Commands: 'commands.md'
   - Setup:
-    - 'Getting Started': 'installation/getting_started.md'
-    - 'Installing Node.js': 'installation/install_node.md'
-    - 'Installing git': 'installation/install_git.md'
-    - 'Downloading FFmpeg': 'installation/install_ffmpeg.md'
-    - 'Creating your bot': 'installation/creating_app.md'
-    - 'Cloning the bot': 'installation/cloning_the_bot.md'
-    - 'Installing Dependencies': 'installation/install_packages.md'
-    - 'Configuring the bot': 'installation/configuration.md'
-    - 'Customizing the bot': 'installation/customization.md'
-    - 'Starting the bot': 'installation/starting_the_bot.md'
+    - 'Getting Started': 'setup/getting_started.md'
+    - 'Installing Node.js': 'setup/install_node.md'
+    - 'Installing git': 'setup/install_git.md'
+    - 'Downloading FFmpeg': 'setup/install_ffmpeg.md'
+    - 'Creating your bot': 'setup/creating_app.md'
+    - 'Cloning the bot': 'setup/cloning_the_bot.md'
+    - 'Installing Dependencies': 'setup/install_packages.md'
+    - 'Configuring the bot': 'setup/configuration.md'
+    - 'Customizing the bot': 'setup/customization.md'
+    - 'Starting the bot': 'setup/starting_the_bot.md'
