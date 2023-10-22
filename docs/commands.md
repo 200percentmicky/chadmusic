@@ -1,6 +1,17 @@
 # Commands
 
-These are all of the commands available to the bot, including their corresponding slash commands. Arguments surrounded by `<>` are required, while arguments surrounded in `[]` are optional. All commands shown are formatted as `!prefix | /slash command <arguments>`.
+These are all of the commands available to the bot, including their aliases and corresponding slash commands.
+
+!!! tip "Legend"
+
+    * Arguments surrounded in `<>` are required.
+    * Arguments surrounded in `[]` are optional. 
+    * Argument surrounded in quotation marks (e.g. <"name">) must use quotation mark! This only applies to prefix commands, not slash commands
+
+!!! note "Reminder"
+
+    All commands shown are formatted as `!prefix | !alias | /slash command <arguments>`.
+
 
 ## Core
 Commands related to core functionality of the bot.
@@ -73,7 +84,6 @@ Reloads all of the bot's commands and listeners.
 
     This command is only available as a prefix command.
 
-
 ??? failure "Bot owner only."
 
     This command is restricted to the owner of the application.
@@ -102,7 +112,7 @@ Shuts down the bot.
 ## Filters
 Commands to add or remove filters from the player.
 
-!!! note
+!!! info
 
     The commands in this category will only be available to DJs if **Allow Filters** is off.
 
@@ -153,7 +163,6 @@ Adds a custom FFMPEG filter to the player.
 ??? abstract "Slash command only."
 
     This command is only available as a slash command.
-
 
 Remove some or all filters active on the player.
 
@@ -208,9 +217,9 @@ The main commands of the audio player.
 
 ### Message > Apps > Add to queue
 
-??? abstract "Message Command Only"
+??? abstract "Message Command only"
 
-    This command is only available as a **Message Command**. It must be executed from the **Apps** section in a message's right-click context menu.
+    This command is only available as a **Message Command** and must be executed from the **Apps** section in a target message's right-click context menu. [Learn More](https://discord.com/developers/docs/interactions/application-commands#message-commands)
 
 !!! warning
 
@@ -220,7 +229,7 @@ Adds a track to the queue by using the message's content as a search query.
 
 ### !bindchannel | !bindto | /player bindchannel `[channel]`
 
-!!! note
+!!! info
 
     This command is only available to DJs.
 
@@ -232,7 +241,7 @@ Changes the player's currently binded text or voice channel to a different one.
 
 ### !clearqueue | !clear | /queue clear
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -240,7 +249,7 @@ Clears the player's queue for this server.
 
 ### !disconnect | !leave | /player leave
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -250,7 +259,7 @@ Disconnects from the current voice channel.
 
 Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
-!!! note
+!!! info
 
     This command is only usable while **Free Volume** is enabled.
 
@@ -260,7 +269,7 @@ Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
 ### !forceskip | !fs | /skip force
 
-??? note "DJ only."
+??? info "DJ only."
 
     This command is only available to DJs.
 
@@ -268,7 +277,7 @@ Force skips the currently playing song, bypassing votes.
 
 ### !grab | !yoink | /player grab
 
-!!! note
+!!! info
 
     This command is always available, even when DJ mode active.
 
@@ -284,7 +293,7 @@ Play a iHeartRadio station.
 
 ### !lyrics | /player lyrics `[query]`
 
-!!! note
+!!! info
 
     This command can be used without the player being active.
 
@@ -300,7 +309,7 @@ Shows the currently playing track.
 
 ### !pause | /player pause
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -316,7 +325,7 @@ Adds a track to the queue from a URL, search query, or an attachment.
 
 ### !playnow | !np | /play now `<url/search/attachment>`
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -332,7 +341,7 @@ Adds a track to the queue and skips the currently playing track, if there was a 
 
     This command is only available as a slash command.
 
-!!! note
+!!! info
 
     This command is only available to DJs if **Allow Silent Tracks** is off.
 
@@ -350,13 +359,13 @@ View the queue for this server.
 | --------- | ---- | ----------- |
 | `[show_hidden]` | string | (Slash command only) Reveals silently added tracks. You can reveal your tracks, or show all hidden tracks. |
 
-!!! note "Showing all tracks."
+!!! info "Showing all tracks."
 
     This argument to view all hidden tracks can only be used by DJs.
 
 ### !remove | /queue remove `<queue_entry/start> [end]`
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -369,7 +378,7 @@ Removes an entry or multiple entries from the queue.
 
 ### !repeat | !loop | /player repeat `[mode]`
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -381,7 +390,7 @@ Toggles repeat mode for the player.
 
 ### !resume | /player resume
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -389,7 +398,7 @@ Unpauses the player, resuming playback.
 
 ### !reversequeue | !rq | /queue reverse
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -405,7 +414,7 @@ Searches for a track to play.
 
 ### !seek | /player seek `<time>`
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -417,7 +426,7 @@ Sets the playing time of the track to a new position.
 
 ### !shuffle | /queue shuffle
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -429,7 +438,7 @@ Skips the currently playing song, or vote to skip the track if the voice channel
 
 ### !skipto | !jump | /skip jump `<queue_entry>`
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -441,7 +450,7 @@ Skips to the specified entry in the queue.
 
 ### !startover | !restart | /player startover
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -449,7 +458,7 @@ Restarts the currently playing song.
 
 ### !stop | /player stop
 
-??? note "DJs only if not alone."
+??? info "DJs only if not alone."
 
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
@@ -467,13 +476,92 @@ Views or changes the volume of the player.
 | --------- | ---- | ----------- |
 | `[number]` | number | The percentage of the new volume to set. If nothing is provided, shows the current volume of the player. This argument is required when using `/player volume set`. |
 
-!!! note
+!!! info
 
     If **Free Volume** is disabled, the maximum value allowed is 200%.
 
 !!! danger
 
     Hearing loss or damage to your equipment can occur if the player's volume is set above 200%!
+
+## Playlists
+Commands used to manage playlists on a server. All commands in this category require DJ permissions.
+
+### !playlist-add | !pladd | /playlist add `<"name">` `[track]`
+
+!!! info
+
+    To add tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
+
+Adds a track to a playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to add tracks to. |
+| `[track]` | URL | A track to add to the playlist. If nothing was provided and a player is currently playing a track, adds the currently playing track to the playlist. |
+
+### !playlist-clone | !plclone | /playlist clone `<"name">` `["clone_name"]`
+
+Creates a playlist by cloning an existing one.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to clone |
+| `[clone_name]` | string | The name to give to the cloned playlist. If nothing was provided, affixes "- Copy" to the original name. |
+
+### !playlist-delete | !pldelete | /playlist delete `<name>`
+
+!!! info
+
+    To delete a playlist, you must be the user that created the playlist, unless you have the **Administrator** permission.
+
+Deletes a playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to delete.
+
+### !playlist-new | !plnew | /playlist new `<name>`
+
+Creates a new playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name to give to the new playlist. |
+
+### !playlist-purge | !plpurge | /playlist purge
+
+??? failure "Administrators only."
+
+    This command is only available to server admimistrators.
+
+Deletes all playlists on the server.
+
+### !playlist-remove | !plremove | /playlist remove `<"name">` `<index_or_start>` `[end]`
+
+!!! info
+
+    To remove tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
+
+Removes a track or multiple tracks from a playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to remove tracks. |
+| `<index_or_start>` | number | The track or the starting position to remove multiple tracks from the playlist. |
+| `[end]` | number | The ending position to remove multiple tracks. |
+
+### !playlist-show | !plshow | /playlist show
+
+Lists all playlists on the server.
+
+### !playlist-view | !plview | /playlist view `<name>`
+
+List all tracks in a playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to view.
 
 ## Settings
 Commands to change the bot's settings. All commands in this category require the **Manage Server** permission unless otherwise specified.
@@ -490,7 +578,7 @@ Toggles the ability to allow age restricted content in the queue.
 
     This setting only applies to tracks that are marked as explicit. All pornographic websites are blocked regardless if this setting is on or not.
 
-!!! note "Regarding tracks from YouTube."
+!!! info "Regarding tracks from YouTube."
 
     If a cookie wasn't provided in `cookies.json`, you'll still be able to use this command. Please note that the player won't be able to play any track that's marked explicit without a valid cookie that allows access to age restricted content.
 
@@ -541,7 +629,7 @@ Changes the bot's default volume when creating a player, or when disabling Earra
 
 ### !djmode | /settings djmode `<toggle>`
 
-!!! note
+!!! info
     
     DJs can use this command.
 
@@ -561,7 +649,7 @@ Sets how long the bots stays in an empty voice channel.
 
 `<time>` The time the bot will stay in seconds.
 
-!!! note
+!!! info
 
     This settings only works if **Leave on Empty** is on.
 
@@ -593,7 +681,7 @@ Toggles whether the bot should leave when the voice channel is empty for a perio
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-!!! note
+!!! info
 
     When this is active, the bot will leave depending on how long **Empty Cooldown** is set.
 
@@ -637,7 +725,7 @@ Changes the bot's prefix for this server.
 | --------- | ---- | ----------- |
 | `[new_prefix]` | string | The new prefix you want to use. If none was provided, resets the prefix to defaults. |
 
-!!! note
+!!! info
 
     This setting will only affect message based commands, not slash commands. The default prefix defined in the bot's configuration in addition to the bot's mention will always be available.
 
