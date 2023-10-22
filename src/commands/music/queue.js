@@ -96,7 +96,7 @@ module.exports = class CommandQueue extends Command {
 
         /* Map the array. */
         const queueMap = songs.length > 0
-            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n')
+            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n')
             : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
 
         /* Making the embed. */
@@ -194,7 +194,7 @@ module.exports = class CommandQueue extends Command {
                 const paginateArray = queuePage;
 
                 /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n');
+                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n');
 
                 /* Need to make sure all buttons are available */
                 nextPage.setDisabled(false);
