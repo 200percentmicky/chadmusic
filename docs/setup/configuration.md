@@ -14,9 +14,14 @@ Below are all the variables that are used in case you want to make your own `.en
 Your bot's token.
 
 ### PREFIX
+
+!!! failure "This field is deprecated."
+
+    This field has been deprecated in 2023.5.0 in favor of using slash commands and may be removed in a future release.
+
 The default prefix for your bot to respond to. Does not apply to slash commands.
 
-!!! note
+!!! info
 
     If no prefix is provided, then your bot's mention will be used as a prefix instead.
 
@@ -41,7 +46,7 @@ Your application's public key. This is needed for slash commands to sync to Disc
 
 ### SHARDING
 
-!!! note
+!!! info
 
     Sharding the bot isn't necessary until your bot reaches 2500 guilds.
 
@@ -49,7 +54,7 @@ Enables sharding the bot. This should only be used for large bots that are in ov
 
 ### SHARDS
 
-!!! note
+!!! info
 
     SHARDING must be set to true for this variable to work.
 
@@ -61,16 +66,14 @@ The number of shards to use. This splits the bot into multiple processes to ease
 
 !!! failure "This field is deprecated."
 
-    This field has been deprecated in 2023.5.0 and will be removed in the future. Please follow the guide below to migrate to the new cookie system.
-
-    [Using cookies](https://distube.js.org/#/docs/DisTube/main/general/cookie){ .md-button }
+    This field has been deprecated in favor of the new cookie system intrduced in 2023.5.0 and will be removed in the future. Please read the [**Adding Cookies**](#adding-cookies) section below for more information.
 
 The cookie to use from YouTube. This is optional but recommended to use. To learn how to get a cookie header, you can look at the example from [here](https://github.com/fent/node-ytdl-core/blob/997efdd5dd9063363f6ef668bb364e83970756e7/example/cookies.js#L6-L12). It tells you how to get the cookie header. Once you have what you need, paste the entire content in this variable.
 
 ### IPV6_BLOCK
 A IPv6 range block address for IP rotation. If you have a IPv6 range, you can use it in this field. This will alleviate the need for a cookie. If you do not know how to use this field, or you don't have an active IPv6 range added to your host, you can leave this field empty and provide a cookie instead.
 
-!!! note
+!!! info
 
     An address with a prefix size of `/64` is recommended, and is usually the most common address assigned by many hosting providers.
 
@@ -104,3 +107,10 @@ Enables debug logging. Useful for reporting bugs.
 
 ### DELETE_INVALID_COMMANDS
 Deletes any slash commands that are no longer valid to the bot. Do not use this variable if you have multiple programs controlling one bot account.
+
+## Adding Cookies
+Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. ALso, with the new cookie system, you're not just limited to one cookie. THe new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
+
+[Using cookies](https://distube.js.org/#/docs/DisTube/main/general/cookie){ .md-button }
+
+By completing the guide for the new cookie system, you should now have the generated cookie, or multiple cookies if you have more than one. You will need to add them all to the `cookies.json` file located within the root directory of your bot.
