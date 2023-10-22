@@ -18,6 +18,7 @@ const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
+const { PermissionFlagsBits } = require('discord.js');
 
 module.exports = class CommandPlaylistAdd extends Command {
     constructor () {
@@ -25,10 +26,10 @@ module.exports = class CommandPlaylistAdd extends Command {
             aliases: ['playlist-add', 'pladd'],
             description: {
                 text: 'Adds a track to an existing playlist.',
-                usage: '<playlist> <"name"> <tracks...>',
+                usage: '<"name"> <track>',
                 details: stripIndents`
                 \`<"name">\` The name of the playlist. Use quotations if the name contains spaces.
-                \`<tracks...>\` The track(s) to add to the playlist. The track(s) to add must be a URL.
+                \`[track]\` The track to add to the playlist. The track to add must be a URL. If nothing was provided and a player is active, adds the currently playing track.
                 `
             },
             category: '📜 Playlists',
@@ -41,7 +42,7 @@ module.exports = class CommandPlaylistAdd extends Command {
                 {
                     id: 'track',
                     match: 'rest',
-                    type: 'url'
+                    type: 'string'
                 }
             ]
         });
@@ -59,24 +60,31 @@ module.exports = class CommandPlaylistAdd extends Command {
         if (!args.name) {
             // eslint-disable-next-line no-empty, brace-style
             if (player) {}
-            else return this.client.ui.usage(message, 'playlist add <name> <track>');
+            else return this.client.ui.usage(message, 'playlist-add <"name"> <track>');
         }
 
         if (!this.client.playlists.has(message.guild.id, args.name)) {
             return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` does not exist.`);
         }
 
+        if (this.client.playlists.get(message.guild.id, args.name).user !== message.member.user.id) {
+            if (message.channel.permissionsFor(message.member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+            else return this.client.ui.reply(message, 'no', `\`${args.name}\` is not your playlist.`);
+        }
+
         // TODO: Revert to adding one track instead of multiples.
         if (args.track ?? player) {
+            message.channel.sendTyping();
+
             try {
                 let track;
 
                 try {
-                    track = await ytdl.getInfo(args.track.href ?? player.songs[0].url);
+                    track = await ytdl.getInfo(args.track ?? player.songs[0].url);
                 } catch {
                     for (const p of this.client.player.extractorPlugins) {
-                        if (p.validate(args.track.href ?? player.songs[0].url)) {
-                            track = await p.resolve(args.track.href ?? player.songs[0].url, {
+                        if (p.validate(args.track ?? player.songs[0].url)) {
+                            track = await p.resolve(args.track ?? player.songs[0].url, {
                                 member: message.member
                             });
                         }
@@ -89,7 +97,7 @@ module.exports = class CommandPlaylistAdd extends Command {
                     date_added: Math.floor(Date.now() / 1000)
                 };
 
-                if (!this.client.utils.hasURL(args.track.href ?? player.songs[0].url) || !track) {
+                if (!this.client.utils.hasURL(args.track ?? player.songs[0].url) || !track) {
                     return this.client.ui.reply(message, 'error', 'The track must be a URL.');
                 }
 
@@ -108,6 +116,8 @@ module.exports = class CommandPlaylistAdd extends Command {
                 console.log(err);
                 this.client.ui.reply(message, 'error', `Unable to add the track to the playlist \`${args.name}\`. ${err.message}`);
             }
+        } else if (!args.track && !player) {
+            return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         }
     }
 };

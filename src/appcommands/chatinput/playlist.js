@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
 
@@ -109,14 +109,14 @@ class CommandPlaylist extends SlashCommand {
                         },
                         {
                             type: CommandOptionType.NUMBER,
-                            name: 'start',
-                            description: 'The track or multiple tracks to remove from the playlist.',
+                            name: 'index_or_start',
+                            description: 'The track or the starting position to remove multiple tracks from the playlist.',
                             required: true
                         },
                         {
                             type: CommandOptionType.NUMBER,
                             name: 'end',
-                            description: 'The ending index to remove multiple tracks.'
+                            description: 'The ending position to remove multiple tracks.'
                         }
                     ]
                 },
@@ -156,7 +156,7 @@ class CommandPlaylist extends SlashCommand {
             }
 
             const filter = playlistMap.filter(x => x.name.startsWith(query));
-            return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track(s)`, value: `${x.name}` })));
+            return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track${x.value.tracks?.length === 1 ? '' : 's'}`, value: `${x.name}` })));
         } catch (err) {
             if (!this.client.playlists.has(ctx.guildID)) {} // eslint-disable-line no-empty, brace-style
             else if (err) {
@@ -185,6 +185,11 @@ class CommandPlaylist extends SlashCommand {
 
             if (!this.client.playlists.has(guild.id, ctx.options.add.name)) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.add.name}\` does not exist.`);
+            }
+
+            if (this.client.playlists.get(guild.id, ctx.options.add.name).user !== member.user.id) {
+                if (channel.permissionsFor(member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.add.name}\` is not your playlist.`);
             }
 
             if (ctx.options.add.track ?? player) {
@@ -234,6 +239,11 @@ class CommandPlaylist extends SlashCommand {
         case 'delete': {
             if (!this.client.playlists.has(guild.id, ctx.options.delete.name)) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.delete.name}\` does not exist.`);
+            }
+
+            if (this.client.playlists.get(guild.id, ctx.options.add.name).user !== member.user.id) {
+                if (channel.permissionsFor(member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.add.name}\` is not your playlist.`);
             }
 
             try {
@@ -350,6 +360,7 @@ class CommandPlaylist extends SlashCommand {
                     }
 
                     await this.client.playlists.set(guild.id, original, newName);
+                    await this.client.playlists.set(guild.id, member.user.id, `${newName}.user`);
                     await this.client.playlists.set(guild.id, `${Math.floor(Date.now() / 1000)}`, `${newName}.date_created`);
                 }
                 return this.client.ui.reply(ctx, 'ok', `Cloned playlist \`${ctx.options.clone.name}\` into new playlist \`${newName}\`.`);
@@ -363,6 +374,11 @@ class CommandPlaylist extends SlashCommand {
         case 'remove': {
             if (!this.client.playlists.has(guild.id, ctx.options.remove.name)) {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.remove.name}\` does not exist.`);
+            }
+
+            if (this.client.playlists.get(guild.id, ctx.options.add.name).user !== member.user.id) {
+                if (channel.permissionsFor(member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.add.name}\` is not your playlist.`);
             }
 
             try {
@@ -381,7 +397,7 @@ class CommandPlaylist extends SlashCommand {
 
                     this.client.playlists.set(guild.id, changedList, `${ctx.options.remove.name}.tracks`);
 
-                    return this.client.ui.reply(ctx, 'ok', `**${tracks.length}** track(s) removed from \`${ctx.options.remove.name}\`.`);
+                    return this.client.ui.reply(ctx, 'ok', `**${tracks.length}** track${tracks.length === 1 ? '' : 's'} removed from \`${ctx.options.remove.name}\`.`);
                 } else {
                     if (isNaN(ctx.options.remove.start)) return this.client.ui.reply(ctx, 'error', 'Track index must be a number.');
 
@@ -411,12 +427,8 @@ class CommandPlaylist extends SlashCommand {
             for (const [k, v] of Object.entries(playlists)) {
                 playlistMap.push({
                     name: `${k}`,
-                    value: `${v.tracks?.length ?? 0} track(s)\nOwner: <@!${v.user}>\nDate created: <t:${v.date_created}:f>`
+                    value: `${v.tracks?.length ?? 0} track${v.tracks?.length === 1 ? '' : 's'} - <@!${v.user}> (<t:${v.date_created}:f>)`
                 });
-            }
-
-            if (!playlistMap) {
-                return this.client.ui.reply(ctx, 'warn', 'There are no playlists on this server.');
             }
 
             const embed = new EmbedBuilder()
@@ -426,9 +438,9 @@ class CommandPlaylist extends SlashCommand {
                     iconURL: guild.iconURL()
                 })
                 .setTitle(':page_with_curl: Playlists')
-                .addFields(playlistMap)
+                .setDescription(`${playlistMap.length > 0 ? `${playlistMap.map(x => `${x.name} - ${x.value}`)}` : `${process.env.EMOJI_WARN} There are no playlists on this server. Create a new playlist by running \`/playlist new <name>\`.`}`)
                 .setFooter({
-                    text: `${Object.entries(playlists).length} playlist(s)`
+                    text: `${Object.entries(playlists).length} playlist${Object.entries(playlists).length === 1 ? '' : 's'}`
                 });
 
             ctx.send({ embeds: [embed] });

@@ -47,7 +47,7 @@ module.exports = class CommandPlaylistNew extends Command {
         await this.client.playlists.ensure(message.guild.id, {});
 
         if (!args.name) {
-            return this.client.ui.usage(message, 'playlist new <name>');
+            return this.client.ui.usage(message, 'playlist-new <name>');
         }
 
         try {

@@ -47,7 +47,7 @@ module.exports = class CommandPlaylistView extends Command {
         await this.client.playlists.ensure(message.guild.id, {});
 
         if (!args.name) {
-            return this.client.ui.usage(message, 'playlistview <name>');
+            return this.client.ui.usage(message, 'playlist-view <name>');
         }
 
         if (!this.client.playlists.has(message.guild.id, args.name)) {

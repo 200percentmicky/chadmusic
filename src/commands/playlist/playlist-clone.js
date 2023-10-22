@@ -53,7 +53,7 @@ module.exports = class CommandPlaylistClone extends Command {
         await this.client.playlists.ensure(message.guild.id, {});
 
         if (!args.name) {
-            return this.client.ui.usage(message, 'playlistclone <"name"> ["clone_name"]');
+            return this.client.ui.usage(message, 'playlist-clone <"name"> ["clone_name"]');
         }
 
         try {
@@ -68,6 +68,7 @@ module.exports = class CommandPlaylistClone extends Command {
                 }
 
                 await this.client.playlists.set(message.guild.id, original, newName);
+                await this.client.playlists.set(message.guild.id, message.member.user.id, `${newName}.user`);
                 await this.client.playlists.set(message.guild.id, `${Math.floor(Date.now() / 1000)}`, `${newName}.date_created`);
             }
             return this.client.ui.reply(message, 'ok', `Cloned playlist \`${args.name}\` into new playlist \`${newName}\`.`);

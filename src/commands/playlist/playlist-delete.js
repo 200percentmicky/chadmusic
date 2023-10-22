@@ -16,6 +16,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { PermissionFlagsBits } = require('discord.js');
 
 module.exports = class CommandPlaylistDelete extends Command {
     constructor () {
@@ -47,11 +48,16 @@ module.exports = class CommandPlaylistDelete extends Command {
         await this.client.playlists.ensure(message.guild.id, {});
 
         if (!args.name) {
-            return this.client.ui.usage(message, 'playlist delete <name>');
+            return this.client.ui.usage(message, 'playlist-delete <name>');
         }
 
         if (!this.client.playlists.has(message.guild.id, args.name)) {
             return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` does not exist.`);
+        }
+
+        if (this.client.playlists.get(message.guild.id, args.name).user !== message.member.user.id) {
+            if (message.channel.permissionsFor(message.member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+            else return this.client.ui.reply(message, 'no', `\`${args.name}\` is not your playlist.`);
         }
 
         try {

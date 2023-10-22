@@ -41,12 +41,12 @@ module.exports = class CommandPlaylistShow extends Command {
         for (const [k, v] of Object.entries(playlists)) {
             playlistMap.push({
                 name: `${k}`,
-                value: `${v.tracks?.length ?? 0} track(s)\nOwner: <@!${v.user}>\nDate created: <t:${v.date_created}:f>`
+                value: `${v.tracks?.length ?? 0} track${v.tracks?.length === 1 ? '' : 's'} - <@!${v.user}> (<t:${v.date_created}:f>)`
             });
         }
 
         if (!playlistMap) {
-            return this.client.ui.reply(message, 'warn', 'There are no playlists on this server.');
+            return this.client.ui.reply(message, 'warn', '');
         }
 
         const embed = new EmbedBuilder()
@@ -56,9 +56,9 @@ module.exports = class CommandPlaylistShow extends Command {
                 iconURL: message.guild.iconURL()
             })
             .setTitle(':page_with_curl: Playlists')
-            .addFields(playlistMap)
+            .setDescription(`${playlistMap.length > 0 ? `${playlistMap.map(x => `${x.name} - ${x.value}`)}` : `${process.env.EMOJI_WARN} There are no playlists on this server. Create a new playlist by running \`${process.env.PREFIX}playlist-new <name>\`.`}`)
             .setFooter({
-                text: `${Object.entries(playlists).length} playlist(s)`
+                text: `${Object.entries(playlists).length} playlist${Object.entries(playlists).length === 1 ? '' : 's'}`
             });
 
         return message.channel.send({ embeds: [embed] });

@@ -17,6 +17,7 @@
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 const _ = require('lodash');
+const { PermissionFlagsBits } = require('discord.js');
 
 module.exports = class CommandPlaylistRemove extends Command {
     constructor () {
@@ -61,6 +62,15 @@ module.exports = class CommandPlaylistRemove extends Command {
             return this.client.ui.reply(message, 'warn', `Playlist \`${args.name}\` does not exist.`);
         }
 
+        if (this.client.playlists.get(message.guild.id, args.name).user !== message.member.user.id) {
+            if (message.channel.permissionsFor(message.member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
+            else return this.client.ui.reply(message, 'no', `\`${args.name}\` is not your playlist.`);
+        }
+
+        if (!args.name) {
+            return this.client.ui.usage(message, 'playlist-remove <"name"> <index_or_start> [end]');
+        }
+
         try {
             // This is more or less a copy and paste of the remove command lol
             message.channel.sendTyping();
@@ -78,7 +88,7 @@ module.exports = class CommandPlaylistRemove extends Command {
 
                 this.client.playlists.set(message.guild.id, changedList, `${args.name}.tracks`);
 
-                return this.client.ui.reply(message, 'ok', `**${tracks.length}** track(s) removed from \`${args.name}\`.`);
+                return this.client.ui.reply(message, 'ok', `**${tracks.length}** track${tracks.length === 1 ? '' : 's'} removed from \`${args.name}\`.`);
             } else {
                 if (isNaN(args.start)) return this.client.ui.reply(message, 'error', 'Track index must be a number.');
 

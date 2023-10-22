@@ -124,7 +124,7 @@ class CommandPlay extends SlashCommand {
                 }
 
                 const filter = playlistMap.filter(x => x.name.startsWith(query));
-                return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track(s)`, value: `${x.name}` })));
+                return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track${x.value.tracks?.length === 1 ? '' : 's'}`, value: `${x.name}` })));
             } catch (err) {
                 if (err) {
                     this.client.logger.error('Unable to gather autocomplete data: %s', err);
