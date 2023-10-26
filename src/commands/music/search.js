@@ -128,7 +128,16 @@ module.exports = class CommandSearch extends Command {
             }
         }
 
-        const results = await this.client.player.search(args.query);
+        let results;
+        try {
+            results = await this.client.player.search(args.query);
+        } catch (err) {
+            if (err.name === 'DisTubeError [NO_RESULT]') {
+                return this.client.ui.reply(message, 'error', `No results found for ${args.query}`);
+            } else {
+                return this.client.ui.reply(message, 'error', `An error occured while searching for tracks.\n\`\`\`js\n${err}\`\`\``);
+            }
+        }
 
         const emojiNumber = {
             1: '1️⃣',
