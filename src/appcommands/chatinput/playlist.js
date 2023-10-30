@@ -197,11 +197,11 @@ class CommandPlaylist extends SlashCommand {
                 try {
                     let track;
                     try {
-                        track = await ytdl.getInfo(ctx.options.add.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url);
+                        track = await ytdl.getInfo(ctx.options.add.track ?? player.songs[0].url);
                     } catch {
                         for (const p of this.client.player.extractorPlugins) {
-                            if (p.validate(ctx.options.add.track.replace(/(^\<+|\>+$)/g, '') ?? player)) {
-                                track = await p.resolve(ctx.options.add.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url, {
+                            if (p.validate(ctx.options.add.track ?? player)) {
+                                track = await p.resolve(ctx.options.add.track ?? player.songs[0].url, {
                                     member
                                 });
                             }
@@ -213,7 +213,7 @@ class CommandPlaylist extends SlashCommand {
                         date_added: Math.floor(Date.now() / 1000)
                     };
 
-                    if (!this.client.utils.hasURL(ctx.options.add.track.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url) || !track) {
+                    if (!this.client.utils.hasURL(ctx.options.add.track ?? player.songs[0].url) || !track) {
                         return this.client.ui.reply(ctx, 'error', 'The track must be a URL.');
                     }
 
