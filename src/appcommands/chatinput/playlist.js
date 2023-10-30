@@ -379,9 +379,9 @@ class CommandPlaylist extends SlashCommand {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.remove.name}\` does not exist.`);
             }
 
-            if (this.client.playlists.get(guild.id, ctx.options.add.name).user !== member.user.id) {
+            if (this.client.playlists.get(guild.id, ctx.options.remove.name).user !== member.user.id) {
                 if (channel.permissionsFor(member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
-                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.add.name}\` is not your playlist.`);
+                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.remove.name}\` is not your playlist.`);
             }
 
             try {
@@ -389,7 +389,7 @@ class CommandPlaylist extends SlashCommand {
                 const playlist = this.client.playlists.get(guild.id, ctx.options.remove.name);
 
                 if (ctx.options.remove.end) {
-                    const start = parseInt(ctx.options.remove.start);
+                    const start = parseInt(ctx.options.remove.index_or_start);
                     const end = parseInt(ctx.options.remove.end);
 
                     if (isNaN(start)) return this.client.ui.reply(ctx, 'error', 'Starting index position must be a number.');
@@ -402,11 +402,11 @@ class CommandPlaylist extends SlashCommand {
 
                     return this.client.ui.reply(ctx, 'ok', `**${tracks.length}** track${tracks.length === 1 ? '' : 's'} removed from \`${ctx.options.remove.name}\`.`);
                 } else {
-                    if (isNaN(ctx.options.remove.start)) return this.client.ui.reply(ctx, 'error', 'Track index must be a number.');
+                    if (isNaN(ctx.options.remove.index_or_start)) return this.client.ui.reply(ctx, 'error', 'Track index must be a number.');
 
-                    const track = playlist.tracks[ctx.options.remove.start - 1];
+                    const track = playlist.tracks[ctx.options.remove.index_or_start - 1];
 
-                    if (!_.find(playlist.tracks, track) || ctx.options.remove.start < 1 || ctx.options.remove.start > playlist.tracks.length) {
+                    if (!_.find(playlist.tracks, track) || ctx.options.remove.index_or_start < 1 || ctx.options.remove.index_or_start > playlist.tracks.length) {
                         return this.client.ui.reply(ctx, 'warn', 'That entry does not exist.');
                     }
 
