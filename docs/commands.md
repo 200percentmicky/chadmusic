@@ -331,6 +331,22 @@ Adds a track to the queue and skips the currently playing track, if there was a 
 | --------- | ---- | ----------- |
 | `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
+### /play playlist `<name>`
+
+??? info "Slash command only."
+
+    This command is only available as a slash command.
+
+Plays a custom playlist.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<name>` | string | The name of the playlist to play. |
+
+!!! tip
+
+    This command is only used to play custom made playlists in a server. To play online playlists, use `/play track` or `!play` instead.
+
 ### /play silently `<query>`
 
 ??? info "Slash command only."
