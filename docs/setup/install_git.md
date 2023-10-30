@@ -1,5 +1,5 @@
 # Installing git
-You will need to install `git` to download and update the bot overtime.
+The perferred way of downloading ChadMusic is by cloning the bot's repository to a directory anywhere on your system. By cloning the bot, you'll be able to update the bot when any new updates become available. For this case, you will need to install `git` to the system you'll be running the bot on.
 
 ## Windows
 You can download the latest version of `git` below.

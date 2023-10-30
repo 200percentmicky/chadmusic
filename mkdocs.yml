@@ -29,7 +29,6 @@ theme:
     - navigation.path
     - navigation.indexes
     - navigation.footer
-    - toc.integrate
 
 markdown_extensions:
   - admonition
@@ -47,7 +46,7 @@ repo_name: 200percentmicky/chadmusic
 repo_url: https://github.com/200percentmicky/chadmusic
 
 nav:
-  - Welcome: 'index.md'
+  - Home: 'index.md'
   - Changelog: 'changelog.md'
   - Commands: 'commands.md'
   - Setup:

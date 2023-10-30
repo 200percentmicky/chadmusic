@@ -1,7 +1,7 @@
 # Getting Started
 To host your own instance of ChadMusic, please follow the instructions section-by-section to get your own copy of the bot up and running.
 
-!!! note "For Linux users"
+!!! info "For Linux users"
 
     This guide assumes that you plan to host the bot on a Debian/Ubuntu based distribution or Fedora. The bot will work on any ditribution of your choosing. If you plan to use a different distribution, replace certain commands with the ones that your distribution uses.
 

@@ -2,13 +2,13 @@
 
 These are all of the commands available to the bot, including their aliases and corresponding slash commands.
 
-!!! tip "Legend"
+!!! quote "Legend"
 
     * Arguments surrounded in `<>` are required.
     * Arguments surrounded in `[]` are optional. 
     * Argument surrounded in quotation marks (e.g. <"name">) must use quotation mark! This only applies to prefix commands, not slash commands
 
-!!! note "Reminder"
+!!! note
 
     All commands shown are formatted as `!prefix | !alias | /slash command <arguments>`.
 
@@ -48,7 +48,7 @@ The following variables will always be available when running the command:
 
 ### !help `[command]`
 
-??? abstract "Prefix command only."
+??? info "Prefix command only."
 
     This command is only available as a prefix command.
 
@@ -80,7 +80,7 @@ Reloads all of the bot's commands and listeners.
 
 ### !setgame `[type] <status>`
 
-??? abstract "Prefix command only."
+??? info "Prefix command only."
 
     This command is only available as a prefix command.
 
@@ -110,11 +110,7 @@ Shuts down the bot.
 | `[reason]` | string | The reason for shutting down the bot. |
 
 ## Filters
-Commands to add or remove filters from the player.
-
-!!! info
-
-    The commands in this category will only be available to DJs if **Allow Filters** is off.
+Commands to add or remove filters from the player. The commands in this category will only be available to DJs if **Allow Filters** is off.
 
 ### !bassboost | !bass | /filter bassboost `<gain>`
 
@@ -160,7 +156,7 @@ Adds a custom FFMPEG filter to the player.
 
 ### /filter remove `<filter>`
 
-??? abstract "Slash command only."
+??? info "Slash command only."
 
     This command is only available as a slash command.
 
@@ -217,7 +213,7 @@ The main commands of the audio player.
 
 ### Message > Apps > Add to queue
 
-??? abstract "Message Command only"
+??? info "Message Command only"
 
     This command is only available as a **Message Command** and must be executed from the **Apps** section in a target message's right-click context menu. [Learn More](https://discord.com/developers/docs/interactions/application-commands#message-commands)
 
@@ -337,7 +333,7 @@ Adds a track to the queue and skips the currently playing track, if there was a 
 
 ### /play silently `<query>`
 
-??? abstract "Slash command only."
+??? info "Slash command only."
 
     This command is only available as a slash command.
 
@@ -580,7 +576,7 @@ Toggles the ability to allow age restricted content in the queue.
 
 !!! info "Regarding tracks from YouTube."
 
-    If a cookie wasn't provided in `cookies.json`, you'll still be able to use this command. Please note that the player won't be able to play any track that's marked explicit without a valid cookie that allows access to age restricted content.
+    If a cookie wasn't provided in `cookies.json`, you'll still be able to use this command. The player won't be able to play any track that's marked explicit without a valid cookie that allows access to age restricted content.
 
 ### !allowfilters | /settings allowfilters `<toggle>`
 
@@ -731,7 +727,7 @@ Changes the bot's prefix for this server.
 
 ### !resetdata
 
-??? abstract "Prefix command only."
+??? info "Prefix command only."
 
     This command is only available as a prefix command.
 
@@ -744,7 +740,7 @@ Resets the bot's settings for the server to its default settings.
 
 ### /settings remove `<setting>`
 
-??? abstract "Slash command only."
+??? info "Slash command only."
 
     This command is only available as a slash command.
 
