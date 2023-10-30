@@ -69,7 +69,7 @@ class ChadMusic extends AkairoClient {
             maxQueueLimit: null,
             allowFilters: true,
             allowAgeRestricted: true,
-            allowFreeVolume: true,
+            allowFreeVolume: false,
             allowLinks: true,
             allowSilent: true,
             defaultVolume: 100,
