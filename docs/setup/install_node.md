@@ -1,8 +1,5 @@
 # Installing Node.js
-The bot uses Node.js for it's runtime. The bot was written to work with the latest LTS version of Node.js, but the latest up to date version is also supported.
-
-!!! warning
-    Please note that the bot requires at least Node.js 18 or up. Any version below that is not supported, including Node.js 16 which is has reached end-of-life.
+The bot uses Node.js for it's runtime. The bot was written to work with the latest LTS version of Node.js, but the latest up to date version is also supported. Please note that the bot requires at least Node.js 18 or up. Any version below that is not supported, including Node.js 16 which is has reached end-of-life.
 
 ## Windows
 You can download the latest Node.js binaries below.

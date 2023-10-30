@@ -1,5 +1,5 @@
 # Downloading FFmpeg
-For the bot to encode the incoming audio packets, you will need to install FFmpeg to your system.
+ChadMusic uses FFmpeg to encode incoming audio data. FFmpeg is also used to apply filters to an active player. FFmpeg must be installed for the bot to play any audio.
 
 ## Windows
 You can download the latest builds of FFmpeg for Windows below.

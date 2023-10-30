@@ -23,9 +23,7 @@
 ![Deezer](https://img.shields.io/badge/Deezer-FEAA2D?style=for-the-badge&logo=deezer&logoColor=white)
 ![Apple Music](https://img.shields.io/badge/Apple_Music-9933CC?style=for-the-badge&logo=apple-music&logoColor=white)
 
-Welcome to the documentation for **ChadMusic - The Chad Music Bot!**
-
-ChadMusic is a universal audio playing Discord bot for your Discord server. It's built using a modified [fork](https://github.com/200percentmicky/chadtube) of **[DisTube.js](https://distube.js.org)**.
+Welcome to the official documentation for **ChadMusic - The Chad Music Bot!** ChadMusic is a versitile open-source audio playing Discord bot built on top of a modified [fork](https://github.com/200percentmicky/chadtube) of **[DisTube.js](https://distube.js.org)**. The bot is easy to use and easily self-hostable. 
 
 ## Features
 

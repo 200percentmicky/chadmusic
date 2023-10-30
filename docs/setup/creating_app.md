@@ -49,4 +49,4 @@ Finally, copy the link and open the link into a new tab to invite the bot to you
 
     ![](../assets/app_message_intent.png)
 
-    Understand that ChadMusic wasn't really designed for huge public bots in mind, but nothing is stopping you from using it on large public bots. Once your application reaches 100 servers, you won't be able to use this intent and your request for the message intent will most likey be denied.
+    Understand that ChadMusic wasn't really designed for huge public bots in mind, but nothing is stopping you from using it on large public bots. Once your application reaches 100 servers, you won't be able to use this intent and your request for the message intent will most likely be denied.

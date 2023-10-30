@@ -83,6 +83,12 @@ Enables youtube-dl. Set to `true` to allow the bot to use any website supported 
 ### UPDATE_YOUTUBE_DL
 Allows the bot to download the most recent build of youtube-dl on boot. Defaults to `true`. Do not use this variable if you utilize a custom build.
 
+### SPOTIFY_EMIT_EVENTS_AFTER_FETCHING
+For Spotify playlists, this field dictates whether the bot should run player events after fetching all songs in a playlist or not. This field is disabled, or `false` by default. Set to `true` to enable this field.
+
+### SOPTIFY_PARALLEL
+For Spotify, this field dictates whether the bot should search for all tracks in parallel or not. This field is enabled by default. If searching in parallel, the bot will search for all tracks at the same time. If this field is disabled, then all tracks will be searched one link at a time.
+
 ### GENIUS_TOKEN
 The token to access Genius API for song lyrics. If this variable is unused, scraping will be used instead.
 
@@ -109,7 +115,7 @@ Enables debug logging. Useful for reporting bugs.
 Deletes any slash commands that are no longer valid to the bot. Do not use this variable if you have multiple programs controlling one bot account.
 
 ## Adding Cookies
-Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. ALso, with the new cookie system, you're not just limited to one cookie. THe new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
+Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. ALso, with the new cookie system, you're not just limited to one cookie. The new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
 
 [Using cookies](https://distube.js.org/#/docs/DisTube/main/general/cookie){ .md-button }
 
