@@ -86,7 +86,7 @@ Allows the bot to download the most recent build of youtube-dl on boot. Defaults
 ### SPOTIFY_EMIT_EVENTS_AFTER_FETCHING
 For Spotify playlists, this field dictates whether the bot should run player events after fetching all songs in a playlist or not. This field is disabled, or `false` by default. Set to `true` to enable this field.
 
-### SOPTIFY_PARALLEL
+### SPOTIFY_PARALLEL
 For Spotify, this field dictates whether the bot should search for all tracks in parallel or not. This field is enabled by default. If searching in parallel, the bot will search for all tracks at the same time. If this field is disabled, then all tracks will be searched one link at a time.
 
 ### GENIUS_TOKEN
