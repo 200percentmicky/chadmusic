@@ -153,8 +153,8 @@ class ChadMusic extends AkairoClient {
         this.player = new DisTube(this, {
             plugins: [
                 new SpotifyPlugin({
-                    emitEventsAfterFetching: process.env.SPOTIFY_EMIT_EVENTS_AFTER_FETCHING ?? false,
-                    parallel: process.env.SPOTIFY_PARALLEL ?? true
+                    emitEventsAfterFetching: process.env.SPOTIFY_EMIT_EVENTS_AFTER_FETCHING === 'false' ?? false,
+                    parallel: process.env.SPOTIFY_PARALLEL === 'true' ?? true
                 }),
                 new YtDlpPlugin({ update: true })
             ],
