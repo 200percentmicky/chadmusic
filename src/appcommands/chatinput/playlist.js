@@ -244,9 +244,9 @@ class CommandPlaylist extends SlashCommand {
                 return this.client.ui.reply(ctx, 'warn', `Playlist \`${ctx.options.delete.name}\` does not exist.`);
             }
 
-            if (this.client.playlists.get(guild.id, ctx.options.add.name).user !== member.user.id) {
+            if (this.client.playlists.get(guild.id, ctx.options.delete.name).user !== member.user.id) {
                 if (channel.permissionsFor(member.user.id).has(PermissionFlagsBits.Administrator)) {} // eslint-disable-line no-empty, brace-style
-                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.add.name}\` is not your playlist.`);
+                else return this.client.ui.reply(ctx, 'no', `\`${ctx.options.delete.name}\` is not your playlist.`);
             }
 
             try {
