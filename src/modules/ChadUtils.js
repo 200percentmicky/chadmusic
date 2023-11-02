@@ -14,8 +14,10 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// eslint-disable-next-line no-unused-vars
-const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField } = require('discord.js');
+/* eslint-disable no-unused-vars */
+const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message } = require('discord.js');
+const { CommandContext } = require('slash-create');
+/* eslint-enable no-unused-vars */
 
 /**
  * A set of custom utilities for the bot to use.
@@ -53,6 +55,24 @@ class ChadUtils {
             member.user.id === process.env.OWNER_ID;
 
         return permission;
+    }
+
+    /**
+     * Attempts to execute a standard prefix command.
+     *
+     * @param {Message|CommandContext} message The message object or an instance of `CommandContext`.
+     * @param {string} commandName The name of the command.
+     * @param {Object} args Arguments to pass to the command.
+     * @returns The execution of the prefix command.
+     * @throws Command not found.
+     */
+    static async runPrefixCommand (message, commandName, args) {
+        try {
+            const command = await message.channel.client.commands.findCommand(commandName);
+            return command.exec(message, args);
+        } catch {
+            throw new Error(`Command ${commandName} not found.`);
+        }
     }
 
     /**

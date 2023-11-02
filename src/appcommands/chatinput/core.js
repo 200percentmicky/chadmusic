@@ -345,7 +345,7 @@ class CommandCore extends SlashCommand {
                     name: `${process.env.EMOJI_INFO} Stats`,
                     value: stripIndents`
                     **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
-                    **Bot Version:** ${bot.version}
+                    **Bot Version:** ${bot.version} (Build: ${this.client.buildNumber})
                     **Node.js:** ${process.version}
                     **Discord.js:** ${discord.version}
                     **slash-create:** ${sc.version}
@@ -380,16 +380,19 @@ class CommandCore extends SlashCommand {
 
         case 'debug': {
             await ctx.defer(true);
-            const cpu = await si.cpu();
             const osSi = await si.osInfo();
             const memory = await si.mem();
             const user = os.userInfo();
-            const owner = await this.client.application.fetch();
+            app = this.client.application;
+            if (!app.owner) await this.client.application.fetch();
+            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag.replace(/#0{1,1}$/, '')} (${app.owner?.id})`;
 
             const data = stripIndents`
-            **ChadMusic - The Chad Music Bot!** Version ${require('../../../package.json').version}
+            **ChadMusic - The Chad Music Bot!**
+            Bot version ${require('../../../package.json').version}
+            
                       Client: ${this.client.user.tag.replace(/#0{1,1}$/, '')} (ID: ${this.client.user.id})
-                       Owner: ${owner.tag.replace(/#0{1,1}$/, '')} (ID: ${owner.id})
+                       Owner: ${owner}
                      Node.js: ${process.version}
                   Discord.js: ${require('discord.js/package.json').version}
             Akairo Framework: ${require('discord-akairo/package.json').version}
@@ -399,8 +402,8 @@ class CommandCore extends SlashCommand {
                       Uptime: ${prettyMs(this.client.uptime, { verbose: true })}
         
             __**System**__
-                      CPU: ${cpu.manufacturer} ${cpu.brand} (${cpu.physicalCores} Cores / ${cpu.cores} Threads)
-                CPU Speed: ${cpu.speed} GHz.
+                      CPU: ${os.cpus()[0].model}
+                CPU Speed: ${os.cpus()[0].speed} MHz.
              Memory Total: ${prettyBytes(memory.total)}
               Memory Used: ${prettyBytes(memory.used)}
               Memory Free: ${prettyBytes(memory.free)}

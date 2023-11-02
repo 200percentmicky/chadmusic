@@ -173,7 +173,7 @@ class CommandPlayer extends SlashCommand {
         const client = this.creator.client;
         const guild = client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
-        const _member = await guild.members.fetch(ctx.member.id);
+        const _member = await guild.members.fetch(ctx.user.id);
 
         const djMode = client.settings.get(ctx.guildID, 'djMode');
         const djRole = client.settings.get(ctx.guildID, 'djRole');

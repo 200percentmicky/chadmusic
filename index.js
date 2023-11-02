@@ -17,6 +17,42 @@
 /* Index File */
 
 require('dotenv').config();
+const { ShardingManager } = require('discord.js');
 const ChadMusic = require('./src/bot.js');
+const logger = require('./src/modules/winstonLogger.js');
+const { execSync } = require('child_process');
 
-new ChadMusic().login(process.env.TOKEN);
+// Say hello!
+const { version } = require('./package.json');
+logger.info('   ________              ____  ___           _');
+logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
+logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
+logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
+logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
+logger.info('/////////////// The Chad Music Bot! ///////////////');
+logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
+logger.info('Bot Version: %s (Build %s)', version, execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim());
+logger.info('Loading libraries...');
+
+if (process.versions.node.split('.')[0] < 18) {
+    logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
+    process.exit(1);
+}
+
+if (process.env.YOUTUBE_COOKIE) {
+    logger.warn('YOUTUBE_COOKIE environment variable has been deprecated. Please switch to the new cookie format by following the instructions at https://distube.js.org/#/docs/DisTube/main/general/cookie. Paste the new cookie in the cookies.json file.');
+}
+
+if (process.env.SHARDING) {
+    const manager = new ShardingManager('./src/bot.js', {
+        token: process.env.TOKEN,
+        totalShards: parseInt(process.env.SHARDS) ?? 'auto'
+    });
+
+    manager.on('shardCreate', s => logger.info('Shard %s launched.', s.id));
+
+    manager.spawn();
+} else {
+    logger.info('Starting client with sharding disabled.');
+    new ChadMusic().login(process.env.TOKEN);
+}

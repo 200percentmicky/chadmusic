@@ -21,7 +21,7 @@ const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
         super(creator, {
-            name: 'Add To Queue',
+            name: 'Add to queue',
             type: ApplicationCommandType.MESSAGE
         });
 
@@ -31,7 +31,7 @@ class ContextMenuAddToQueue extends SlashCommand {
     async run (ctx) {
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
-        const _member = await guild.members.fetch(ctx.member.id);
+        const _member = await guild.members.fetch(ctx.user.id);
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
         const djRole = this.client.settings.get(ctx.guildID, 'djRole');
@@ -118,7 +118,7 @@ class ContextMenuAddToQueue extends SlashCommand {
                 textChannel: channel,
                 member: _member,
                 metadata: {
-                    ctx: ctx
+                    ctx
                 }
             });
         } catch (err) {
