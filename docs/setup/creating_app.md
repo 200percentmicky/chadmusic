@@ -12,7 +12,7 @@ Give the app a name, click on the checkmark, and click create.
 
 ![](../assets/app_name.png)
 
-:two: After creating your application, navigate to the Bot section of your application, and click **Reset Token**.
+After creating your application, navigate to the Bot section of your application, and click **Reset Token**.
 
 ![](../assets/app_bot_tab.png)
 ![](../assets/app_reset_token.png)
@@ -25,9 +25,7 @@ Give the app a name, click on the checkmark, and click create.
 
     Your bot's token is like a password. Never share your token with anyone or anywhere!
 
-:three: Go to the OAuth section of your application and generate your bot's invite link.
-
-Go to the URL Generator to create your bot's invite link.
+Go to the OAuth section of your application and generate your bot's invite link, and then to the URL Generator to create your bot's invite link.
 
 ![](../assets/app_oauth_tab.png)
 

@@ -3,6 +3,9 @@ site_name: ChadMusic
 theme:
   name: material
   favicon: assets/deejaytreefiddy.ico
+  font: 
+    text: PT Sans
+    code: Overpass Mono
   logo: assets/deejaytreefiddy.png
   icon:
     repo: fontawesome/brands/github
