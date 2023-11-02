@@ -17,30 +17,22 @@
 'use strict';
 
 const logger = require('./modules/winstonLogger');
-
-// Say hello!
-const { version } = require('../package.json');
-logger.info('   ________              ____  ___           _');
-logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
-logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
-logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
-logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
-logger.info('/////////////// The Chad Music Bot! ///////////////');
-logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s', version);
-logger.info('Loading libraries...');
-
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { ChannelType, GatewayIntentBits } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
-const Keyv = require('keyv');
 const Enmap = require('enmap');
 const ChadUI = require('./modules/ChadUI');
 const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
+const fs = require('fs');
+const { execSync } = require('child_process');
+
+const buildNumber = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim();
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -64,11 +56,10 @@ class ChadMusic extends AkairoClient {
         this.ui = ChadUI;
         this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
+        this.buildNumber = buildNumber;
 
         this.settings = new Enmap({ name: 'settings' });
-        this.tags = new Enmap({ name: 'tags' });
-
-        this.depWarnMsg = new Keyv();
+        this.playlists = new Enmap({ name: 'playlists' });
 
         this.defaultSettings = {
             prefix: process.env.PREFIX,
@@ -78,7 +69,7 @@ class ChadMusic extends AkairoClient {
             maxQueueLimit: null,
             allowFilters: true,
             allowAgeRestricted: true,
-            allowFreeVolume: true,
+            allowFreeVolume: false,
             allowLinks: true,
             allowSilent: true,
             defaultVolume: 100,
@@ -139,12 +130,31 @@ class ChadMusic extends AkairoClient {
 
         this.settings.ensure('global', this.defaultGlobalSettings);
 
+        this.agent = () => {
+            try {
+                return ytdl.createProxyAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                });
+            } catch {
+                return undefined;
+            }
+        };
+
+        this.cookies = () => {
+            const cookies = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json')));
+            if (cookies.length === 0) {
+                return process.env.YOUTUBE_COOKIE;
+            } else {
+                return cookies;
+            }
+        };
+
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
                 new SpotifyPlugin({
-                    emitEventsAfterFetching: true,
-                    parallel: false
+                    emitEventsAfterFetching: process.env.SPOTIFY_EMIT_EVENTS_AFTER_FETCHING === 'false' ?? false,
+                    parallel: process.env.SPOTIFY_PARALLEL === 'true' ?? true
                 }),
                 new YtDlpPlugin({ update: true })
             ],
@@ -154,13 +164,13 @@ class ChadMusic extends AkairoClient {
             leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
             leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
             streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: process.env.YOUTUBE_COOKIE,
+            youtubeCookie: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
-                IPv6Block: process.env.IPV6_BLOCK
+                agent: this.agent()
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
@@ -246,10 +256,13 @@ class ChadMusic extends AkairoClient {
         }
     }
 
-    // This is required to load the mongoose provider.
     async login (token) {
         return super.login(token);
     }
+}
+
+if (process.env.SHARDING) {
+    new ChadMusic().login(process.env.TOKEN);
 }
 
 module.exports = ChadMusic;

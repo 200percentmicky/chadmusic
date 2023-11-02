@@ -1,0 +1,35 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  deploy-18:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Installing Yarn
+        run: npm i -g yarn
+      - name: Updating Yarn
+        run: yarn set version stable
+      - name: Installing Dependencies
+        run: npm ci
+      - run: npm run build --if-present
+  deploy-20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Installing Yarn
+        run: npm i -g yarn
+      - name: Updating Yarn
+        run: yarn set version stable
+      - name: Installing Dependencies
+        run: npm ci
+      - run: npm run build --if-present

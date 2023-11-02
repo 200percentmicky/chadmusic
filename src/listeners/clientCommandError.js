@@ -28,10 +28,6 @@ module.exports = class ListenerClientCommandError extends Listener {
     async exec (error, message, command) {
         let guru = '💢 **Bruh Moment**\nSomething bad happened. Please report this to the developer.';
 
-        if (process.env.BUG_CHANNEL) {
-            guru += ' The owner of this application has also received a full error report.\n';
-        }
-
         guru += `\`\`\`js\n${error.stack}\`\`\``;
 
         const urlGithub = new ButtonBuilder()

@@ -37,9 +37,9 @@ module.exports = class ListenerCreatorCommandRun extends Listener {
         }
 
         Object.assign(ctx, {
-            guild: guild,
-            channel: channel,
-            member: member
+            guild,
+            channel,
+            member
         });
 
         this.client.settings.ensure(ctx.guildID, this.client.defaultSettings);

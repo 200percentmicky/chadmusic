@@ -26,7 +26,8 @@ module.exports = class ListenerProcessUnhandledException extends Listener {
 
     async exec (error) {
         this.client.logger.error('[process] [FATAL] %s', error.stack);
-        this.client.logger.error('A fatal exception occurred in the process. Shutting down...');
+        this.client.logger.error('ChadMusic has crashed!! Please report this to the developer.');
+        this.client.logger.error('Shutting down...');
         process.exit(1);
     }
 };

@@ -118,7 +118,16 @@ class CommandSearch extends SlashCommand {
 
         await ctx.defer();
 
-        const results = await this.client.player.search(ctx.options.query);
+        let results;
+        try {
+            results = await this.client.player.search(ctx.options.query);
+        } catch (err) {
+            if (err.name === 'DisTubeError [NO_RESULT]') {
+                return this.client.ui.reply(ctx, 'error', `No results found for ${ctx.options.query}`);
+            } else {
+                return this.client.ui.reply(ctx, 'error', `An error occured while searching for tracks.\n\`\`\`js\n${err}\`\`\``);
+            }
+        }
 
         const emojiNumber = {
             1: '1️⃣',

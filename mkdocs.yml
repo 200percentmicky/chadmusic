@@ -1,0 +1,65 @@
+site_name: ChadMusic
+
+theme:
+  name: material
+  favicon: assets/deejaytreefiddy.ico
+  font: 
+    text: PT Sans
+    code: Overpass Mono
+  logo: assets/deejaytreefiddy.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Lights on! Click to toggle.
+    - scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Lights off... Click to toggle.
+
+  features:
+    - content.tooltips
+    - content.code.copy
+    - navigation.sections
+    - navigation.top
+    - navigation.prune
+    - navigation.path
+    - navigation.indexes
+    - navigation.footer
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - abbr
+  - attr_list
+  - md_in_html
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+repo_name: 200percentmicky/chadmusic
+repo_url: https://github.com/200percentmicky/chadmusic
+
+nav:
+  - Home: 'index.md'
+  - Changelog: 'changelog.md'
+  - Commands: 'commands.md'
+  - Setup:
+    - 'Getting Started': 'setup/getting_started.md'
+    - 'Installing Node.js': 'setup/install_node.md'
+    - 'Installing git': 'setup/install_git.md'
+    - 'Downloading FFmpeg': 'setup/install_ffmpeg.md'
+    - 'Creating your bot': 'setup/creating_app.md'
+    - 'Cloning the bot': 'setup/cloning_the_bot.md'
+    - 'Installing Dependencies': 'setup/install_packages.md'
+    - 'Configuring the bot': 'setup/configuration.md'
+    - 'Customizing the bot': 'setup/customization.md'
+    - 'Starting the bot': 'setup/starting_the_bot.md'
