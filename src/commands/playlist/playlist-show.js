@@ -56,7 +56,7 @@ module.exports = class CommandPlaylistShow extends Command {
                 iconURL: message.guild.iconURL()
             })
             .setTitle(':page_with_curl: Playlists')
-            .setDescription(`${playlistMap.length > 0 ? `${playlistMap.map(x => `${x.name} - ${x.value}`)}` : `${process.env.EMOJI_WARN} There are no playlists on this server. Create a new playlist by running \`${process.env.PREFIX}playlist-new <name>\`.`}`)
+            .setDescription(`${playlistMap.length > 0 ? `${playlistMap.map(x => `* **${x.name}** - ${x.value}`).join('\n')}` : `${process.env.EMOJI_WARN} There are no playlists on this server. Run \`${process.env.PREFIX}playlist-new <name>\` to create one.`}`)
             .setFooter({
                 text: `${Object.entries(playlists).length} playlist${Object.entries(playlists).length === 1 ? '' : 's'}`
             });
