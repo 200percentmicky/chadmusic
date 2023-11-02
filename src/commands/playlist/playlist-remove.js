@@ -90,11 +90,12 @@ module.exports = class CommandPlaylistRemove extends Command {
 
                 return this.client.ui.reply(message, 'ok', `**${tracks.length}** track${tracks.length === 1 ? '' : 's'} removed from \`${args.name}\`.`);
             } else {
-                if (isNaN(args.start)) return this.client.ui.reply(message, 'error', 'Track index must be a number.');
+                const start = parseInt(args.start);
+                if (isNaN(start)) return this.client.ui.reply(message, 'error', 'Track index must be a number.');
 
-                const track = playlist.tracks[args.start - 1];
+                const track = playlist.tracks[start - 1];
 
-                if (!_.find(playlist.tracks, track) || args.start < 1 || args.start > playlist.tracks.length) {
+                if (!_.find(playlist.tracks, track) || start < 1 || start > playlist.tracks.length) {
                     return this.client.ui.reply(message, 'warn', 'That entry does not exist.');
                 }
 
