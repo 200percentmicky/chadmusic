@@ -1,5 +1,53 @@
 # Changelog
 
+## 2023.5.0
+This release adds support for playlists, sharding support, changes how cookies are managed, and improves IPv6 rotation support.
+
+!!! danger "Breaking Changes"
+
+    * Node.js 18 is now required since Node.js 16 has reached end-of-life.
+    * The reactions in `[p]iheartradio`, `[p]play`, and `[p]search` had their variables switched from `EMOJI_MUSIC` to `REACTION_MUSIC`.
+    
+!!! warning "Deprecated Features"
+
+    * The `YOUTUBE_COOKIES` environment variable has been deprecated in favor of the new cookies system. You may still use this variable, but its use may be removed in a future release.
+    * Classic prefix commands have been deprecated (despite fixing current commands and creating new ones for this release) to focus on improvements to slash commands. They will not be removed anytime soon and the `PREFIX` variable can still be applied if you wish to use them, but no more commands will be made after this release.
+
+* **Added:** Support for creating and managing playlists.
+* **Added:** New commands.
+    * `[p]playlist-add` | `/playlist add`
+    * `[p]playlist-clone` | `/playlist clone`
+    * `[p]playlist-delete` | `/playlist delete`
+    * `[p]playlist-new` | `/playlist new`
+    * `[p]playlist-purge` | `/playlist purge`
+    * `[p]playlist-remove` | `/playlist remove`
+    * `[p]playlist-show` | `/playlist show`
+    * `[p]playlist-view` | `/playlist view`
+    * `/play playlist`
+* **Added:** Support to shard the bot.
+* **Added:** New environment variables.
+    * `SHARDING`
+    * `SHARDS`
+    * `SPOTIFY_EMIT_EVENTS_AFTER_FETCHING`
+    * `SPOTIFY_PARALLELL`
+* **Added:** New file: `cookies.json`
+* **Added:** The build number to the version string.
+* **Changed:** `[p]iheartradio` and `/play radio iheartradio` now provides search results for stations, instead of playing the first result.
+* **Changed:** Implemented a new cookies system.
+* **Changed:** Implemented improved IPv6 Rotation support.
+* **Changed:** Increased spacing in `[p]queue` and `/queue now`.
+* **Changed:** `[p]search` and `/search` no longer throws an exception when no results were found.
+* **Changed:** Options for fetching content from Spotify are now configurable.
+* **Changed:** `allowFreeVolume` is now `false` by default.
+* **Changed:** Minor changes to the logs.
+* **Changed:** Miscellaneous code cleanup.
+* **Changed:** Updated packages. The bot is now using Discord.js v14.13.0 and slash-create v5.13.0.
+* **Fixed:** `/core debug` is now fully functional and no longer errors out.
+* **Fixed:** `[p]reload` uses the proper emojis for reactions.
+* **Removed:** Old unused JSON files.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2023.4.6...2023.5.0)
+
 ## 2023.4.6
 This is a maintenance release.
 

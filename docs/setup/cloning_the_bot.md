@@ -19,5 +19,5 @@ $ git checkout develop
 
 !!! warning
 
-    It's not recommended to use the `develop` branch in production. There is a high chance that bugs will be present in this build.
+    It's not recommended to use the `develop` branch in production as bugs may be present.
 
