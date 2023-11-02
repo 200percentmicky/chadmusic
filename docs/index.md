@@ -1,7 +1,3 @@
-!!! warning "A work in progress!"
-
-    The documentation is currently referencing the **develop** branch of ChadMusic. If you're using the current stable release of the bot, then the documentation will still be useful to you.
-
 <h1 align="center" style="font-weight: bold; font-style: italic;">
     <img src="https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png" width=250>
 </h1>
