@@ -5,6 +5,9 @@
 .__pycache__
 .yarn
 
+# Cookies
+cookies.json
+
 # Auto-generated files and directories.
 data
 info
