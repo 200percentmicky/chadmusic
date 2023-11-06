@@ -1,5 +1,12 @@
 # Changelog
 
+## 2023.5.1
+This is a maintenance release.
+
+**Fixed:** Fixed an issue in `[p]playlist-add` where the track's URL wasn't being provided correctly.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2023.5.0...2023.5.1)
+
 ## 2023.5.0
 This release adds support for playlists, sharding support, changes how cookies are managed, and improves IPv6 rotation support.
 
