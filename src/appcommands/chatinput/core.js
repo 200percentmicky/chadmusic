@@ -287,8 +287,13 @@ class CommandCore extends SlashCommand {
                 .setURL('https://discord.com/invite/qQuJ9YQ')
                 .setLabel('Support Server');
 
+            const docsButton = new Discord.ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://200percentmicky.github.io/chadmusic')
+                .setLabel('Documentation');
+
             const actionRow = new Discord.ActionRowBuilder()
-                .addComponents([urlGithub, support]);
+                .addComponents([urlGithub, support, docsButton]);
 
             return ctx.send({
                 content: stripIndents`
@@ -372,8 +377,13 @@ class CommandCore extends SlashCommand {
                 .setURL('https://discord.com/invite/qQuJ9YQ')
                 .setLabel('Support Server');
 
+            const docsButton = new Discord.ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://200percentmicky.github.io/chadmusic')
+                .setLabel('Documentation');
+
             const actionRow = new Discord.ActionRowBuilder()
-                .addComponents([urlGithub, support]);
+                .addComponents([urlGithub, support, docsButton]);
 
             return ctx.send({ embeds: [aboutembed], components: [actionRow] });
         }
