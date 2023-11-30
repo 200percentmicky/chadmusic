@@ -15,10 +15,6 @@ Your bot's token.
 
 ### PREFIX
 
-!!! failure "This field is deprecated."
-
-    This field has been deprecated in 2023.5.0 in favor of using slash commands and may be removed in a future release.
-
 The default prefix for your bot to respond to. Does not apply to slash commands.
 
 !!! info
@@ -34,7 +30,7 @@ Your user ID. This is the unique ID that is attached to your Discord account and
 
     For the bot to function, this field must be used.
 
-Your application's user ID. This is needed for slash commands to sync to Discord.
+Your application's user ID. This is needed to sync any slash commands on your bot to Discord.
 
 ### PUBLIC_KEY
 
@@ -42,7 +38,7 @@ Your application's user ID. This is needed for slash commands to sync to Discord
 
     For the bot to function, this field must be used.
 
-Your application's public key. This is needed for slash commands to sync to Discord. Your bot's public key and can be fetched from your app's developer page.
+Your application's public key. This is also needed to sync any slash commands on your bot to Discord. Your bot's public key and can be fetched from your app's developer page.
 
 ### SHARDING
 

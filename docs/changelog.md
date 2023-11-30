@@ -1,5 +1,12 @@
 # Changelog
 
+## 2023.5.2
+This is a maintenance release.
+
+This release reinstates the support for classic prefix commands and removes the deprecation warning regarding it.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2023.5.1...2023.5.2)
+
 ## 2023.5.1
 This is a maintenance release.
 
@@ -18,7 +25,7 @@ This release adds support for playlists, sharding support, changes how cookies a
 !!! warning "Deprecated Features"
 
     * The `YOUTUBE_COOKIES` environment variable has been deprecated in favor of the new cookies system. You may still use this variable, but its use may be removed in a future release.
-    * Classic prefix commands have been deprecated (despite fixing current commands and creating new ones for this release) to focus on improvements to slash commands. ~~They will not be removed anytime soon and~~ the `PREFIX` variable can still be applied if you wish to use them, but no more commands will be made after this release.
+    * Classic prefix commands have been deprecated (despite fixing current commands and creating new ones for this release) to focus on improvements to slash commands. They will not be removed anytime soon and the `PREFIX` variable can still be applied if you wish to use them, but no more commands will be made after this release.
 
 * **Added:** Support for creating and managing playlists.
 * **Added:** New commands.
