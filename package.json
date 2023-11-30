@@ -21,7 +21,7 @@
     "chalk": "^4.1.1",
     "colon-notation": "^1.2.1",
     "common-tags": "^1.8.0",
-    "discord-akairo": "npm:@tanzanite/discord-akairo@^10.1.0",
+    "discord-akairo": "github:200percentmicky/discord-akairo",
     "discord-player": "^6.6.6",
     "discord.js": "^14.13.0",
     "distube": "github:200percentmicky/chadtube",
