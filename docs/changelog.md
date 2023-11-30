@@ -3,7 +3,10 @@
 ## 2023.5.2
 This is a maintenance release.
 
-This release reinstates the support for classic prefix commands and removes the deprecation warning regarding it.
+This release mainly reinstates the support for classic prefix commands and removes the deprecation warning regarding it.
+
+* **Added:** Link to documentation in `[p]about`, `[p]license`, `/core about`, and `/core license`.
+* **Removed:** Deprecation message regarding classic prefix commands.
 
 [**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2023.5.1...2023.5.2)
 
