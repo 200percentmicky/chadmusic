@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const Keyv = require('keyv');
 
 module.exports = class ListenerClientCommandStarted extends Listener {
     constructor () {
@@ -23,16 +22,9 @@ module.exports = class ListenerClientCommandStarted extends Listener {
             emitter: 'commandHandler',
             event: 'commandStarted'
         });
-
-        this.prefixDepWarning = new Keyv();
     }
 
     async exec (message, command, args) {
         this.client.settings.ensure(message.guild.id, this.client.defaultSettings);
-
-        if (!await this.prefixDepWarning.get(message.guild.id)) {
-            this.client.ui.reply(message, 'warn', 'Classic prefix commands have been deprecated. Please use slash commands instead.');
-            await this.prefixDepWarning.set(message.guild.id, true, 12 * 60 * 60 * 1000);
-        } else {} // eslint-disable-line no-empty, brace-style
     }
 };
