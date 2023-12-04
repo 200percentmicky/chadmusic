@@ -81,7 +81,7 @@ module.exports = class CommandPulsator extends Command {
                 const frequency = parseFloat(args.frequency);
 
                 if (frequency < 0.01 || frequency > 100 || isNaN(frequency)) {
-                    return this.client.ui.reply(message, 'error', 'Frequency must be between **0.01** to **100**, or **"off"**.');
+                    return this.client.ui.reply(message, 'error', 'Frequency must be between **0.01** to **100** or **"off"**.');
                 }
 
                 await queue.filters.set('pulsator', `apulsator=hz=${frequency}`);
