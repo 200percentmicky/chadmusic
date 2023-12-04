@@ -297,6 +297,8 @@ class CommandCore extends SlashCommand {
 
             return ctx.send({
                 content: stripIndents`
+                This application is running an instance of **[ChadMusic - The Chad Music Bot!](https://github.com/200percentmicky/chadmusic)**
+                
                 ChadMusic is licensed under the GNU General Public License version 3.
     
                 This program is free software: you can redistribute it and/or modify
