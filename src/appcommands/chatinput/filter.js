@@ -87,7 +87,7 @@ class CommandFilter extends SlashCommand {
                 name: 'bass',
                 description: 'Boosts the bass of the player.',
                 options: [{
-                    type: CommandOptionType.INTEGER,
+                    type: CommandOptionType.NUMBER,
                     name: 'db',
                     description: 'Adjust the bass in decibels. 0 to disable.',
                     min_value: 0,
@@ -101,7 +101,7 @@ class CommandFilter extends SlashCommand {
                 description: 'Adds a tremolo effect to the player.',
                 options: [
                     {
-                        type: CommandOptionType.INTEGER,
+                        type: CommandOptionType.NUMBER,
                         name: 'frequency',
                         description: 'The frequency of the tremolo effect. 0 to disable Tremolo.',
                         min_value: 0,
@@ -122,7 +122,7 @@ class CommandFilter extends SlashCommand {
                 description: 'Adds a vibrato effect to the player.',
                 options: [
                     {
-                        type: CommandOptionType.INTEGER,
+                        type: CommandOptionType.NUMBER,
                         name: 'frequency',
                         description: 'The frequency of the vibrato effect. 0 to disable Vibrato.',
                         min_value: 0,
@@ -210,7 +210,7 @@ class CommandFilter extends SlashCommand {
                 name: 'crystalize',
                 description: 'Sharpens or softens the audio quality.',
                 options: [{
-                    type: CommandOptionType.INTEGER,
+                    type: CommandOptionType.NUMBER,
                     name: 'intensity',
                     description: 'The intensity of the audio quality. 0 to disable.',
                     min_value: -10,
@@ -224,7 +224,7 @@ class CommandFilter extends SlashCommand {
                 description: 'Adds a pulsating effect to the audio.',
                 options: [
                     {
-                        type: CommandOptionType.INTEGER,
+                        type: CommandOptionType.NUMBER,
                         name: 'frequency',
                         description: 'The frequency of the effect in Hz. 0 to disable.',
                         min_value: 0,
