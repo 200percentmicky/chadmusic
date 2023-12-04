@@ -48,8 +48,10 @@ module.exports = class LicenseCommand extends Command {
         const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support, docsButton]);
 
-        return message.reply({
+        const license = {
             content: stripIndents`
+            This application is running an instance of **[ChadMusic - The Chad Music Bot!](https://github.com/200percentmicky/chadmusic)**
+
             ChadMusic is licensed under the GNU General Public License version 3.
 
             This program is free software: you can redistribute it and/or modify
@@ -66,6 +68,13 @@ module.exports = class LicenseCommand extends Command {
             along with this program.  If not, see <https://www.gnu.org/licenses/>.
             `,
             components: [actionRow]
-        });
+        };
+
+        try {
+            await message.member.user.send(license);
+            return message.react(process.env.REACTION_MUSIC);
+        } catch {
+            return message.reply(license);
+        }
     }
 };
