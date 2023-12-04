@@ -26,8 +26,8 @@ module.exports = class CommandBassBoost extends Command {
             category: '📢 Filter',
             description: {
                 text: 'Boosts the bass of the player.',
-                usage: '<gain:1-100/off>',
-                details: '`<gain:1-100/off> The gain of the bass boost. Must be between 1-100 or off.'
+                usage: '<gain:0.01-100/off>',
+                details: '`<gain:0.01-100/off> The gain of the bass boost. Must be between 0.01-100 or off.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
@@ -80,8 +80,8 @@ module.exports = class CommandBassBoost extends Command {
             } else {
                 const gain = parseFloat(args.gain);
 
-                if (gain < 1 || gain > 100 || isNaN(gain)) {
-                    return this.client.ui.reply(message, 'error', 'Bass gain must be between **1** to **100**, or **"off"**.');
+                if (gain < 0.01 || gain > 100 || isNaN(gain)) {
+                    return this.client.ui.reply(message, 'error', 'Gain must be between **0.01** to **100** or **"off"**.');
                 }
 
                 await queue.filters.set('bassboost', `bass=g=${gain}`);
