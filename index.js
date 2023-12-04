@@ -22,6 +22,11 @@ const ChadMusic = require('./src/bot.js');
 const logger = require('./src/modules/winstonLogger.js');
 const { execSync } = require('child_process');
 
+if (process.versions.node.split('.')[0] < 18) {
+    logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
+    process.exit(1);
+}
+
 // Say hello!
 const { version } = require('./package.json');
 logger.info('   ________              ____  ___           _');
@@ -33,11 +38,6 @@ logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
 logger.info('Bot Version: %s (Build %s)', version, execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim());
 logger.info('Loading libraries...');
-
-if (process.versions.node.split('.')[0] < 18) {
-    logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
-    process.exit(1);
-}
 
 if (process.env.YOUTUBE_COOKIE) {
     logger.warn('YOUTUBE_COOKIE environment variable has been deprecated. Please switch to the new cookie format by following the instructions at https://distube.js.org/#/docs/DisTube/main/general/cookie. Paste the new cookie in the cookies.json file.');
@@ -54,5 +54,11 @@ if (process.env.SHARDING) {
     manager.spawn();
 } else {
     logger.info('Starting client with sharding disabled.');
-    new ChadMusic().login(process.env.TOKEN);
+
+    try {
+        new ChadMusic().login(process.env.TOKEN);
+    } catch (err) {
+        logger.error('ChadMusic failed to start! :(\n%s', err);
+        process.exit(1);
+    }
 }

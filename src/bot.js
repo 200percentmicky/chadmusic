@@ -257,12 +257,22 @@ class ChadMusic extends AkairoClient {
     }
 
     async login (token) {
-        return super.login(token);
+        try {
+            return await super.login(token);
+        } catch {
+            logger.error('An invalid token was provided. Please provide your bot\'s token in the TOKEN environment variable. Learn more: https://200percentmicky.github.io/chadmusic/setup/configuration');
+            process.exit(1);
+        }
     }
 }
 
 if (process.env.SHARDING) {
-    new ChadMusic().login(process.env.TOKEN);
+    try {
+        new ChadMusic().login(process.env.TOKEN);
+    } catch (err) {
+        logger.error('ChadMusic failed to start! :(\n%s', err);
+        process.exit(1);
+    }
 }
 
 module.exports = ChadMusic;
