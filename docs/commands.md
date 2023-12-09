@@ -118,7 +118,7 @@ Boosts the bass of the player.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
-| `<gain>` | number | The gain of the bass boost. Must be between `1-100` or `off`. |
+| `<gain>` | float | The gain of the bass boost. Must be between `0.01-100` or `off`. |
 
 ### !crusher | /filter crusher `<sample> [bits] [mode]`
 
@@ -136,7 +136,7 @@ Sharpens or softens the audio quality.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
-| `<intensity>` | number | The intensity of the effect. Must be between `-10` to `10` or `off`. |
+| `<intensity>` | float | The intensity of the effect. Must be between `-10` to `10` or `off`. |
 
 ### !customfilter | !cf | /filter customfilter `<argument>`
 
@@ -177,6 +177,14 @@ Changes the pitch of the playing track.
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<rate>` | float | The rate to change. Must be between `0.1-10` or `off`. |
+
+### !pulsator | /filter pulsator `<frequency>`
+
+Adds a pulsating effect to the audio.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<frequency>` | float | The frequency of the effect in Hz. Must be between 0.01-100 or off. |
 
 ### !reverse | /filter reverse
 
