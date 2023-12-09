@@ -271,71 +271,27 @@ class ChadUI {
             NSFW_ONLY: 'This command must be used in NSFW channels.'
         };
 
-        const promptColor = {
-            DJ_MODE: process.env.COLOR_NO,
-            NO_DJ: process.env.COLOR_NO,
-            FEATURE_DISABLED: process.env.COLOR_NO,
-            FILTER_NOT_APPLIED: process.env.COLOR_ERROR,
-            FILTERS_NOT_ALLOWED: process.env.COLOR_NO,
-            FULL_CHANNEL: process.env.COLOR_ERROR,
-            NOT_ALONE: process.env.COLOR_NO,
-            NOT_PLAYING: process.env.COLOR_WARN,
-            NOT_IN_VC: process.env.COLOR_ERROR,
-            ALREADY_SUMMONED_ELSEWHERE: process.env.COLOR_ERROR,
-            MISSING_CONNECT: process.env.COLOR_NO,
-            MISSING_SPEAK: process.env.COLOR_NO,
-            MISSING_CLIENT_PERMISSIONS: process.env.COLOR_WARN,
-            MISSING_PERMISSIONS: process.env.COLOR_NO,
-            WRONG_TEXT_CHANNEL_MUSIC: process.env.COLOR_NO,
-            OWNER_ONLY: process.env.COLOR_NO,
-            NSFW_ONLY: process.env.COLOR_NO
+        const promptType = {
+            DJ_MODE: 'no',
+            NO_DJ: 'no',
+            FEATURE_DISABLED: 'no',
+            FILTER_NOT_APPLIED: 'error',
+            FILTERS_NOT_ALLOWED: 'no',
+            FULL_CHANNEL: 'error',
+            NOT_ALONE: 'no',
+            NOT_PLAYING: 'warn',
+            NOT_IN_VC: 'error',
+            ALREADY_SUMMONED_ELSEWHERE: 'error',
+            MISSING_CONNECT: 'no',
+            MISSING_SPEAK: 'no',
+            MISSING_CLIENT_PERMISSIONS: 'warn',
+            MISSING_PERMISSIONS: 'no',
+            WRONG_TEXT_CHANNEL_MUSIC: 'no',
+            OWNER_ONLY: 'no',
+            NSFW_ONLY: 'no'
         };
 
-        const promptEmoji = {
-            DJ_MODE: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            NO_DJ: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            FEATURE_DISABLED: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            FILTER_NOT_APPLIED: process.env.EMOJI_ERROR ?? ':x:',
-            FILTERS_NOT_ALLOWED: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            FULL_CHANNEL: process.env.EMOJI_ERROR ?? ':x:',
-            NOT_ALONE: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            NOT_PLAYING: process.env.EMOJI_WARN ?? ':warning:',
-            NOT_IN_VC: process.env.EMOJI_ERROR ?? ':x:',
-            ALREADY_SUMMONED_ELSEWHERE: process.env.EMOJI_ERROR ?? ':x:',
-            MISSING_CONNECT: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            MISSING_SPEAK: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            MISSING_CLIENT_PERMISSIONS: process.env.EMOJI_WARN ?? ':warning:',
-            MISSING_PERMISSIONS: process.envEMOJI_NO ?? ':no_entry_sign:',
-            WRONG_TEXT_CHANNEL_MUSIC: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            OWNER_ONLY: process.env.EMOJI_NO ?? ':no_entry_sign:',
-            NSFW_ONLY: ':underage:'
-        };
-
-        if ((msg instanceof Message)) {
-            /* No embed */
-            // If the bot doesn't have permission to embed links, then a standard formatted message will be created.
-            const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
-            if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
-                return msg.reply({
-                    embeds: [embed]
-                });
-            } else {
-                if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
-                    return msg.reply({
-                        content: stringUI(promptEmoji[prompt], null, promptMessage[prompt])
-                    });
-                } else {
-                    return msg.reply({
-                        embeds: [embed]
-                    });
-                }
-            }
-        } else { // Slash commands.
-            const embed = embedUI(promptColor[prompt], promptEmoji[prompt], null, promptMessage[prompt], null);
-            return msg.send({
-                embeds: [embed]
-            });
-        }
+        return this.reply(msg, promptType[prompt], promptMessage[prompt]);
     }
 
     /**
