@@ -25,6 +25,6 @@ module.exports = class ListenerProcessUnhandledRejection extends Listener {
     }
 
     async exec (error) {
-        this.client.logger.error(`[process] Unhandled Rejection: ${error.stack}`);
+        this.client.logger.error(`[process] Unhandled Rejection:\n${error.stack}`);
     }
 };

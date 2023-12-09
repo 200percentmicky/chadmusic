@@ -25,6 +25,6 @@ module.exports = class ListenerProcessWarning extends Listener {
     }
 
     async exec (warning) {
-        this.client.logger.warn('[process] %s: %s', warning.name, warning.message);
+        this.client.logger.warn(`[process] ${warning.name}: ${warning.message}`);
     }
 };

@@ -160,7 +160,7 @@ class CommandPlaylist extends SlashCommand {
         } catch (err) {
             if (!this.client.playlists.has(ctx.guildID)) {} // eslint-disable-line no-empty, brace-style
             else if (err) {
-                this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                this.client.logger.error(`Unable to gather autocomplete data.\n${err.stack}`);
             }
             return ctx.sendResults([]);
         }

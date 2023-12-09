@@ -16,7 +16,7 @@
 
 'use strict';
 
-const logger = require('./modules/winstonLogger');
+const logger = require('./modules/ChadLogger.js');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { ChannelType, GatewayIntentBits } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
@@ -270,7 +270,7 @@ if (process.env.SHARDING) {
     try {
         new ChadMusic().login(process.env.TOKEN);
     } catch (err) {
-        logger.error('ChadMusic failed to start! :(\n%s', err);
+        logger.error(`ChadMusic failed to start! :(\n${err.stack}`);
         process.exit(1);
     }
 }

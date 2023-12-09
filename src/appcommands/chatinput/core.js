@@ -27,7 +27,6 @@ const si = require('systeminformation');
 // Importing libraries for eval use.
 const Discord = require('discord.js');
 const _ = require('lodash');
-const __ = require('underscore');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
@@ -183,7 +182,7 @@ class CommandCore extends SlashCommand {
                                     await ctx.send(`${process.env.EMOJI_ERROR} Unable to generate file. Check the logs or the console for the output.`, { components: [closeEval] });
                                 }
                             } finally {
-                                this.client.logger.info('✅ Took %s ms. to complete.\n%s', end, clean(evaled));
+                                this.client.logger.info(`✅ Took ${end} ms. to complete.\n${clean(evaled)}`);
                             }
                         } else {
                             await ctx.send({ embeds: [embed], components: [closeEval] });
@@ -256,7 +255,7 @@ class CommandCore extends SlashCommand {
                     if (errChannel) await errChannel.send({ content: `${process.env.EMOJI_WARN} **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
                 } catch {
                 } finally {
-                    this.client.logger.info('[Shutdown] %s', restartReport);
+                    this.client.logger.info(`[Shutdown] ${restartReport}`);
                     this.client.logger.warn('Shutting down...');
                     this.client.creator.cleanRegisteredComponents();
                     this.client.destroy();

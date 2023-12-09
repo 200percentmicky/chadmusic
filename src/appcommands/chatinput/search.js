@@ -161,8 +161,8 @@ class CommandSearch extends SlashCommand {
             const track = {
                 label: `${results[i].name.length > 95
                     ? results[i].name.substring(0, 92) + '...'
-                    : results[i].name}
-                `,
+                    : results[i].name
+                }`,
                 description: `${results[i].formattedDuration} • ${results[i].uploader.name}`,
                 value: `${i}`,
                 emoji: {

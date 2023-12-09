@@ -20,6 +20,9 @@ const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const ffprobe = require('ffprobe');
+const ffprobeStatic = require('ffprobe-static');
+const { toColonNotation } = require('colon-notation');
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {
@@ -127,7 +130,7 @@ class CommandPlay extends SlashCommand {
                 return ctx.sendResults(filter.map(x => ({ name: `${x.name} - ${x.value.tracks?.length} track${x.value.tracks?.length === 1 ? '' : 's'}`, value: `${x.name}` })));
             } catch (err) {
                 if (err) {
-                    this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                    this.client.logger.error(`Unable to gather autocomplete data.\n${err.stack}`);
                 }
                 return ctx.sendResults([]);
             }
@@ -135,7 +138,7 @@ class CommandPlay extends SlashCommand {
             if (hasURL(query)) return [];
             AutoComplete(query, (err, queries) => {
                 if (err) {
-                    this.client.logger.error('Unable to gather autocomplete data: %s', err);
+                    this.client.logger.error(`Unable to gather autocomplete data.\n${err.stack}`);
                     return ctx.sendResults([]);
                 }
                 return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
@@ -252,7 +255,38 @@ class CommandPlay extends SlashCommand {
         try {
             let requested = ctx.options.track?.query;
             let station;
-            if (ctx.subcommands[0] === 'attachment') requested = ctx.attachments.first().url;
+            let fileMetadata;
+            let isFile = false;
+
+            if (ctx.subcommands[0] === 'attachment') {
+                requested = ctx.attachments.first().url;
+
+                // Check if ffprobe can find any any additional metadata to add.
+                try {
+                    const info = await ffprobe(requested, { path: ffprobeStatic.path });
+
+                    // Ffmpeg parses images as videos with just one single frame. So, to check
+                    // whether the file is a video or an audio file, the best way would be to
+                    // check whether the file has a duration. Texts files do have a duration. It's
+                    // probably used to measure how many lines the file has, so it's codec name
+                    // will be checked instead.
+                    if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
+                        return this.client.ui.reply(ctx, 'error', 'The attachment must be an audio or a video file.');
+                    }
+
+                    const time = Math.floor(info.streams[0].duration);
+
+                    isFile = true;
+                    fileMetadata = {
+                        duration: time,
+                        formattedDuration: toColonNotation(time + '000'),
+                        codec: `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`
+                    };
+                } catch {
+                    return this.client.ui.reply(ctx, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
+                }
+            }
+
             if (ctx.subcommands[0] === 'radio') {
                 switch (ctx.subcommands[1]) {
                 case 'iheartradio': {
@@ -314,6 +348,8 @@ class CommandPlay extends SlashCommand {
                     member: _member,
                     metadata: {
                         ctx,
+                        isFile,
+                        fileMetadata,
                         isRadio: ctx.subcommands[0] === 'radio',
                         radioStation: station ?? undefined,
                         silent: ctx.subcommands[0] === 'silently'
@@ -321,7 +357,7 @@ class CommandPlay extends SlashCommand {
                 });
             }
         } catch (err) {
-            this.client.logger.error(err.stack); // Just in case.
+            this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
             return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
         }
     }

@@ -14,20 +14,17 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { Listener } = require('discord-akairo');
+const { Logger } = require('tslog');
+const { appendFileSync } = require('node:fs');
 
-module.exports = class ListenerProcessUnhandledException extends Listener {
-    constructor () {
-        super('unhandledException', {
-            emitter: 'process',
-            event: 'unhandledException'
-        });
-    }
+// Winston Logger
+const logger = new Logger({
+    type: 'pretty',
+    minLevel: 0
+});
 
-    async exec (error) {
-        this.client.logger.fatal(`[process] [FATAL]\n${error.stack}`);
-        this.client.logger.error('ChadMusic has crashed!! Please report this to the developer.');
-        this.client.logger.error('Shutting down...');
-        process.exit(1);
-    }
-};
+logger.attachTransport((logObj) => {
+    appendFileSync('console.log', `${logObj._meta.date} ${logObj._meta.logLevelName}   ${logObj._meta.path.fileNameWithLine}   ${logObj['0']}\n`);
+});
+
+module.exports = logger;

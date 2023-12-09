@@ -307,7 +307,7 @@ class ChadUI {
         const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
         if (!errorChannel) return;
 
-        return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error}\`\`\`` });
+        return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error.stack}\`\`\`` });
     }
 }
 

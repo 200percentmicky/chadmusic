@@ -19,11 +19,11 @@
 require('dotenv').config();
 const { ShardingManager } = require('discord.js');
 const ChadMusic = require('./src/bot.js');
-const logger = require('./src/modules/winstonLogger.js');
+const logger = require('./src/modules/ChadLogger.js');
 const { execSync } = require('child_process');
 
 if (process.versions.node.split('.')[0] < 18) {
-    logger.error('ChadMusic requires Node.js 18 or later. You currently have %s installed. Please update your Node.js installation.', process.versions.node);
+    logger.error(`ChadMusic requires Node.js 18 or later. You currently have ${process.versions.node} installed. Please update your Node.js installation.`);
     process.exit(1);
 }
 
@@ -36,7 +36,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
-logger.info('Bot Version: %s (Build %s)', version, execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim());
+logger.info(`Bot Version: ${version} (Build ${execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim()})`);
 logger.info('Loading libraries...');
 
 if (process.env.YOUTUBE_COOKIE) {
@@ -49,7 +49,7 @@ if (process.env.SHARDING) {
         totalShards: parseInt(process.env.SHARDS) ?? 'auto'
     });
 
-    manager.on('shardCreate', s => logger.info('Shard %s launched.', s.id));
+    manager.on('shardCreate', s => logger.info(`Shard ${s.id} launched.`));
 
     manager.spawn();
 } else {
@@ -58,7 +58,7 @@ if (process.env.SHARDING) {
     try {
         new ChadMusic().login(process.env.TOKEN);
     } catch (err) {
-        logger.error('ChadMusic failed to start! :(\n%s', err);
+        logger.error(`ChadMusic failed to start! :(\n${err.stack}`);
         process.exit(1);
     }
 }

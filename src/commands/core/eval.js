@@ -19,7 +19,6 @@ const { Command } = require('discord-akairo');
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
 const _ = require('lodash');
-const __ = require('underscore');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
@@ -38,7 +37,6 @@ module.exports = class CommandEval extends Command {
         **Loaded Packages:**
         \`Discord\` - discord.js
         \`_\` - lodash
-        \`__\` - underscore
         \`prettyBytes\` - pretty-bytes
         \`prettyMs\` - prettyMs
         \`colonNotation\` - colon-notation
@@ -113,7 +111,7 @@ module.exports = class CommandEval extends Command {
                     } catch {
                         return message.reply(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
                     } finally {
-                        this.client.logger.info('Took %s ms. to complete.\n%s', end, clean(evaled));
+                        this.client.logger.info(`Took ${end} ms. to complete.\n${clean(evaled)}`);
                     }
                 } else {
                     return message.reply({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });

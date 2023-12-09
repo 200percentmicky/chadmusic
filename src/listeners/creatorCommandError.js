@@ -46,6 +46,6 @@ module.exports = class ListenerCreatorCommandError extends Listener {
 
         await ctx.send({ content: `${guru}`, components: [actionRow] });
         this.client.ui.recordError(this.client, command.commandName, ':x: Slash Command Error', err.stack);
-        this.client.logger.error('[SlashCreator] Error in slash command "%s": %s', command.commandName, err.stack);
+        this.client.logger.error(`[SlashCreator] Error in slash command "${command.commandName}"\n${err.stack}`);
     }
 };
