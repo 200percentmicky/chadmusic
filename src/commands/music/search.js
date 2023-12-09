@@ -171,8 +171,8 @@ module.exports = class CommandSearch extends Command {
             const track = new StringSelectMenuOptionBuilder()
                 .setLabel(`${results[i].name.length > 95
                     ? results[i].name.substring(0, 92) + '...'
-                    : results[i].name}
-                `)
+                    : results[i].name
+                }`)
                 .setDescription(`${results[i].formattedDuration} • ${results[i].uploader.name}`)
                 .setValue(`${i}`)
                 .setEmoji({
