@@ -210,7 +210,12 @@ class CommandPlayer extends SlashCommand {
             if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
 
             let progressBar;
-            if (!song.isLive) progressBar = splitBar(total, current, 17)[0];
+            try {
+                if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
+            } catch {
+                progressBar = 'N/A';
+            }
+
             const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
             let embed = new EmbedBuilder()
                 .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)

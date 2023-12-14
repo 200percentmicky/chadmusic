@@ -65,7 +65,12 @@ module.exports = class CommandNowPlaying extends Command {
         if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
 
         let progressBar;
-        if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
+        try {
+            if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
+        } catch {
+            progressBar = 'N/A';
+        }
+
         const duration = song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
         let embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
