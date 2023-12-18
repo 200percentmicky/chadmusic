@@ -14,7 +14,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { SlashCommand, ComponentType, CommandOptionType, TextInputStyle } = require('slash-create');
+const { SlashCommand, ComponentType, CommandOptionType, TextInputStyle, ChannelType } = require('slash-create');
 const {
     ButtonBuilder,
     ActionRowBuilder,
@@ -25,6 +25,7 @@ const {
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const CMError = require('../../modules/CMError');
 
 class CommandQueue extends SlashCommand {
     constructor (creator) {
@@ -92,6 +93,10 @@ class CommandQueue extends SlashCommand {
     }
 
     async run (ctx) {
+        if (ctx.channel.type === ChannelType.DM) {
+            throw new CMError('NO_DMS_ALLOWED');
+        }
+
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
         const member = guild.members.cache.get(ctx.user.id);

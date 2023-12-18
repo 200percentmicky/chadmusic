@@ -15,10 +15,11 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { stripIndents } = require('common-tags');
-const { SlashCommand, CommandOptionType } = require('slash-create');
-const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
+const CMError = require('../../modules/CMError');
 
 // TODO: Look into condensing all changes into a single method.
 // A majority of this command is nothing but copying and pasting
@@ -382,6 +383,10 @@ module.exports = class CommandSettings extends SlashCommand {
     }
 
     async run (ctx) {
+        if (ctx.channel.type === ChannelType.DM) {
+            throw new CMError('NO_DMS_ALLOWED');
+        }
+
         const settings = this.creator.client.settings;
         const guild = this.client.guilds.cache.get(ctx.guildID);
 
@@ -593,8 +598,48 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'djrole': {
-                await settings.set(ctx.guildID, ctx.options.djrole.role, 'djRole');
-                return this.client.ui.reply(ctx, 'ok', `<@&${ctx.options.djrole.role}> has been set as the DJ role.`);
+                await ctx.defer();
+
+                const role = await guild.roles.fetch(ctx.options.djrole.role);
+
+                const setDjRole = async (role) => {
+                    await this.client.settings.set(guild.id, role.id, 'djRole');
+                    return this.client.ui.reply(ctx, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
+                };
+
+                if (role.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+                    const yesButton = new ButtonBuilder()
+                        .setStyle(ButtonStyle.Success)
+                        .setLabel('Yes')
+                        .setEmoji('✔')
+                        .setCustomId('yes_dj_role');
+
+                    const noButton = new ButtonBuilder()
+                        .setStyle(ButtonStyle.Danger)
+                        .setLabel('No')
+                        .setEmoji('✖')
+                        .setCustomId('no_dj_role');
+
+                    const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
+
+                    await this.client.ui.reply(ctx, 'info', 'The role you\'re setting as the DJ role is already rocognized as a DJ role. This is because the role has the **Manage Channels** permission. Do you still want to set this role as the DJ role?', null, null, null, [buttonRow]);
+
+                    ctx.registerComponent('yes_dj_role', async (btnCtx) => {
+                        if (ctx.user.id !== btnCtx.user.id) return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.', null, null, true);
+                        await setDjRole(role);
+
+                        btnCtx.acknowledge();
+                        btnCtx.delete();
+                    }, 300 * 1000);
+
+                    ctx.registerComponent('no_dj_role', async (btnCtx) => {
+                        if (ctx.user.id !== btnCtx.user.id) return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.', null, null, true);
+
+                        btnCtx.acknowledge();
+                        btnCtx.delete();
+                    }, 300 * 1000);
+                }
+                break;
             }
 
             case 'djmode': {

@@ -14,11 +14,12 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 const _ = require('lodash');
+const CMError = require('../../modules/CMError');
 
 class CommandFilter extends SlashCommand {
     constructor (creator) {
@@ -250,6 +251,10 @@ class CommandFilter extends SlashCommand {
     }
 
     async run (ctx) {
+        if (ctx.channel.type === ChannelType.DM) {
+            throw new CMError('NO_DMS_ALLOWED');
+        }
+
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
         const member = guild.members.cache.get(ctx.user.id);
