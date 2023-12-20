@@ -27,25 +27,33 @@ module.exports = class ListenerCreatorCommandError extends Listener {
 
     async exec (command, err, ctx) {
         await ctx.defer();
-        let guru = '**💢 Bruh Moment**\nSomething bad happened. Please report this to the developer.';
 
-        guru += `\`\`\`js\n${err.stack}\`\`\``;
+        switch (err.type) {
+        case 'NO_DMS_ALLOWED': {
+            return this.client.ui.reply(ctx, 'no', 'This command cannot be used in Direct Messages.');
+        }
+        default: {
+            let guru = '**💢 Bruh Moment**\nSomething bad happened. Please report this to the developer.';
 
-        const urlGithub = new ButtonBuilder()
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://github.com/200percentmicky/chadmusic')
-            .setLabel('GitHub');
+            guru += `\`\`\`js\n${err.stack}\`\`\``;
 
-        const support = new ButtonBuilder()
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://discord.com/invite/qQuJ9YQ')
-            .setLabel('Support Server');
+            const urlGithub = new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://github.com/200percentmicky/chadmusic')
+                .setLabel('GitHub');
 
-        const actionRow = new ActionRowBuilder()
-            .addComponents([urlGithub, support]);
+            const support = new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://discord.com/invite/qQuJ9YQ')
+                .setLabel('Support Server');
 
-        await ctx.send({ content: `${guru}`, components: [actionRow] });
-        this.client.ui.recordError(this.client, command.commandName, ':x: Slash Command Error', err.stack);
-        this.client.logger.error(`[SlashCreator] Error in slash command "${command.commandName}"\n${err.stack}`);
+            const actionRow = new ActionRowBuilder()
+                .addComponents([urlGithub, support]);
+
+            await ctx.send({ content: `${guru}`, components: [actionRow] });
+            this.client.ui.recordError(this.client, command.commandName, ':x: Slash Command Error', err.stack);
+            this.client.logger.error(`[SlashCreator] Error in slash command "${command.commandName}"\n${err.stack}`);
+        }
+        }
     }
 };
