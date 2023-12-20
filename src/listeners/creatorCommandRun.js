@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { ChannelType } = require('discord.js');
 
 module.exports = class ListenerCreatorCommandRun extends Listener {
     constructor () {
@@ -25,23 +26,14 @@ module.exports = class ListenerCreatorCommandRun extends Listener {
     }
 
     async exec (command, promise, ctx) {
-        // Adding guild, channel, and member info from Discord.js into CommandContext.
-        const guild = this.client.guilds.cache.get(ctx.guildID);
-
-        let channel;
-        let member;
-
-        if (guild.available) {
-            channel = guild.channels.cache.get(ctx.channelID);
-            member = guild.members.cache.get(ctx.user.id);
+        try {
+            this.client.settings.ensure(ctx.guildID, this.client.defaultSettings);
+        } catch (err) {
+            if (ctx.channel.type === ChannelType.DM) {
+                this.client.logger.warn(`Command executed in direct message. Ignoring exception...\n${err.stack}`);
+            } else {
+                this.client.logger.error(`Cannot attach objects or ensure default settings for Guild ID ${ctx.guildID}.\n${err.stack}`);
+            }
         }
-
-        Object.assign(ctx, {
-            guild,
-            channel,
-            member
-        });
-
-        this.client.settings.ensure(ctx.guildID, this.client.defaultSettings);
     }
 };
