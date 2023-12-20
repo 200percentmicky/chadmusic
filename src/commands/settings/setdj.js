@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandSetDJ extends Command {
     constructor () {
@@ -39,17 +39,63 @@ module.exports = class CommandSetDJ extends Command {
     }
 
     async exec (message, args) {
-        const role = message.mentions.roles.first() ||
-            message.guild.roles.cache.get(args.role) ||
-            message.guild.roles.cache.find(val => val.name === args.role);
-
         if (!args.role) {
             await this.client.settings.delete(message.guild.id, 'djRole');
             return this.client.ui.reply(message, 'ok', 'The DJ role has been removed.');
         }
-        if (!role) return this.client.ui.reply(message, 'error', `\`${args.role}\` is not a valid role.`);
 
-        await this.client.settings.set(message.guild.id, role.id, 'djRole');
-        return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
+        const role = message.mentions.roles.first() ||
+            message.guild.roles.cache.get(args.role) ||
+            message.guild.roles.cache.find(val => val.name === args.role);
+
+        const setDjRole = async (role) => {
+            if (!role) return this.client.ui.reply(message, 'error', `\`${role}\` is not a valid role.`);
+
+            await this.client.settings.set(message.guild.id, role.id, 'djRole');
+            return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
+        };
+
+        if (role.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+            const yesButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Success)
+                .setLabel('Yes')
+                .setEmoji('✔')
+                .setCustomId('yes_dj_role');
+
+            const noButton = new ButtonBuilder()
+                .setStyle(ButtonStyle.Danger)
+                .setLabel('No')
+                .setEmoji('✖')
+                .setCustomId('no_dj_role');
+
+            const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
+
+            const msg = await this.client.ui.reply(message, 'info', 'The role you\'re setting as the DJ role is already rocognized as a DJ role. This is because the role has the **Manage Channels** permission. Do you still want to set this role as the DJ role?', null, null, null, [buttonRow]);
+
+            const collector = await msg.createMessageComponentCollector({
+                time: 30000
+            });
+
+            collector.on('collect', async interaction => {
+                if (interaction.user.id !== message.member.user.id) {
+                    return this.client.ui.reply(interaction, 'no', 'That component can only be used by the user that ran this command.');
+                }
+
+                if (interaction.customId === 'yes_dj_role') {
+                    collector.stop();
+                    await setDjRole(role);
+                }
+
+                if (interaction.customId === 'no_dj_role') {
+                    collector.stop();
+                }
+            });
+
+            collector.on('end', async () => {
+                await msg.delete();
+            });
+        } else {
+            return setDjRole(role);
+        }
     }
 };
