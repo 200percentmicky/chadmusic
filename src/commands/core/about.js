@@ -49,7 +49,7 @@ module.exports = class CommandAbout extends Command {
                 name: 'ChadMusic - The Chad Music Bot',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
-            .setDescription('Cool open-source music bot.')
+            .setDescription('Self-hostable music bot for chaotic social network. ')
             .addFields({
                 name: '🎶 Features',
                 value: stripIndents`
