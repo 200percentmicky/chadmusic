@@ -26,13 +26,17 @@ module.exports = class ListenerMentionPrefix extends Listener {
     }
 
     async exec (message) {
-        if (message.content === `<@${this.client.user.id}>`) {
-            const prefix = this.client.settings.get(message.guild?.id, 'prefix') ?? process.env.PREFIX;
-            const canChange = message.channel.permissionsFor(message.member?.user?.id).has(PermissionsBitField.Flags.ManageGuild)
-                ? ' You can change this using `prefix` or `/settings prefix`'
-                : '';
+        try {
+            if (message.content === `<@${this.client.user.id}>`) {
+                const prefix = this.client.settings.get(message.guild?.id, 'prefix') ?? process.env.PREFIX;
+                const canChange = message.channel.permissionsFor(message.member?.user?.id).has(PermissionsBitField.Flags.ManageGuild)
+                    ? ' You can change this using `prefix` or `/settings prefix`'
+                    : '';
 
-            return message.reply(`${process.env.EMOJI_MUSIC} My prefix in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
+                return message.reply(`${process.env.EMOJI_MUSIC} My prefix in **${message.guild.name}** is \`${prefix}\`.${canChange} You can also use the applications's Slash Commands, or use the bot's mention as a prefix.`);
+            }
+        } catch (err) {
+            this.client.logger.warn(`Ignoring exception...\n${err.stack}`);
         }
     }
 };

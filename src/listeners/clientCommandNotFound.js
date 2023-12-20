@@ -25,9 +25,13 @@ module.exports = class ListenerClientCommandNotFound extends Listener {
     }
 
     async exec (message) {
-        const prefix = this.client.settings.get(message.guild.id, 'prefix') ?? process.env.PREFIX;
-        if (message.content.startsWith(prefix)) {
-            this.client.logger.warn(`[Client] Command "${message.content.replace(prefix, '')}" not found.`);
+        try {
+            const prefix = this.client.settings.get(message.guild.id, 'prefix') ?? process.env.PREFIX;
+            if (message.content.startsWith(prefix)) {
+                this.client.logger.warn(`[Client] Command "${message.content.replace(prefix, '')}" not found.`);
+            }
+        } catch (err) {
+            this.client.logger.warn(`Ignoring exception...\n${err.stack}`);
         }
     }
 };

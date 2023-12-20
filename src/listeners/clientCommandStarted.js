@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { ChannelType } = require('discord.js');
 
 module.exports = class ListenerClientCommandStarted extends Listener {
     constructor () {
@@ -25,6 +26,14 @@ module.exports = class ListenerClientCommandStarted extends Listener {
     }
 
     async exec (message, command, args) {
-        this.client.settings.ensure(message.guild.id, this.client.defaultSettings);
+        try {
+            this.client.settings.ensure(message.guild.id, this.client.defaultSettings);
+        } catch (err) {
+            if (message.channel.type === ChannelType.DM) {
+                this.client.logger.warn(`Command executed in direct message. Ignoring exception...\n${err.stack}`);
+            } else {
+                this.client.logger.error(`Cannot ensure default settings for Guild ID ${message.guild.id}.\n${err.stack}`);
+            }
+        }
     }
 };
