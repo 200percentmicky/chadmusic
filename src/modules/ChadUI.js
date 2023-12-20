@@ -127,7 +127,17 @@ class ChadUI {
             });
         } else {
             const client = msg.channel.client;
-            const emojiPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
+
+            let emojiPerms;
+            let embedPerms;
+            try {
+                emojiPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.UseExternalEmojis);
+                embedPerms = msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.EmbedLinks);
+            } catch {
+                emojiPerms = true;
+                embedPerms = true;
+            }
+
             embedEmoji = {
                 ok: emojiPerms ? process.env.EMOJI_OK : ':white_check_mark:',
                 warn: emojiPerms ? process.env.EMOJI_WARN : ':warning:',
@@ -136,16 +146,7 @@ class ChadUI {
                 no: emojiPerms ? process.env.EMOJI_NO : ':no_entry_sign:'
             };
 
-            if (msg.channel.type === ChannelType.DM) { /* DMs will always have embed links. */
-                return msg.reply({
-                    embeds: [embed],
-                    components: buttons || [],
-                    ephemeral: ephemeral ?? false,
-                    allowedMentions: {
-                        repliedUser: mention ?? false
-                    }
-                });
-            } else if (!msg.channel.permissionsFor(client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
+            if (!embedPerms) {
                 return msg.reply({
                     content: stringUI(embedEmoji[type], title || null, description || null),
                     components: buttons || [],
@@ -211,16 +212,14 @@ class ChadUI {
                 ephemeral: ephemeral ?? false
             });
         } else {
-            if (msg.channel.type === ChannelType.DM) {
-                return msg.reply({
-                    embeds: [embed],
-                    components: buttons || [],
-                    ephemeral: ephemeral ?? false,
-                    allowedMentions: {
-                        repliedUser: mention ?? false
-                    }
-                });
-            } else if (!msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks)) {
+            let embedPerms;
+            try {
+                embedPerms = msg.channel.permissionsFor(msg.channel.client.user.id).has(PermissionsBitField.Flags.EmbedLinks);
+            } catch {
+                embedPerms = true;
+            }
+
+            if (!embedPerms) {
                 return msg.reply({
                     content: stringUI(emoji || null, title || null, description || null),
                     components: buttons || [],
