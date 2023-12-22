@@ -18,7 +18,7 @@
 
 const logger = require('./modules/ChadLogger.js');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { ChannelType, GatewayIntentBits } = require('discord.js');
+const { ChannelType, GatewayIntentBits, Partials } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
 const ytdl = require('@distube/ytdl-core');
@@ -47,7 +47,14 @@ class ChadMusic extends AkairoClient {
                 GatewayIntentBits.Guilds,
                 GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.GuildVoiceStates,
-                GatewayIntentBits.MessageContent
+                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.DirectMessageReactions
+            ],
+            partials: [
+                Partials.Channel,
+                Partials.Message,
+                Partials.User
             ]
         });
 
