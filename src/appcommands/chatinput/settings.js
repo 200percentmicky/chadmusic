@@ -639,6 +639,8 @@ module.exports = class CommandSettings extends SlashCommand {
                         btnCtx.acknowledge();
                         btnCtx.delete();
                     }, 300 * 1000);
+                } else {
+                    await setDjRole(role);
                 }
                 break;
             }
