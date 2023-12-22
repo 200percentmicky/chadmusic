@@ -389,6 +389,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
         const settings = this.creator.client.settings;
         const guild = this.client.guilds.cache.get(ctx.guildID);
+        const channel = await guild.channels.fetch(ctx.channelID);
 
         await settings.ensure(ctx.guildID, this.client.defaultSettings);
         await settings.ensure('global', this.client.defaultGlobalSettings);
@@ -525,7 +526,7 @@ module.exports = class CommandSettings extends SlashCommand {
             }
             }
         } else {
-            if (!ctx.channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
+            if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
                 return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Guild');
             }
 
@@ -622,7 +623,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
                     const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
 
-                    await this.client.ui.reply(ctx, 'info', 'The role you\'re setting as the DJ role is already rocognized as a DJ role. This is because the role has the **Manage Channels** permission. Do you still want to set this role as the DJ role?', null, null, null, [buttonRow]);
+                    await this.client.ui.reply(ctx, 'info', 'The role you\'re setting as the DJ role is already recognized as a DJ role on this server. This is because the role has the **Manage Channels** permission which automatically grants DJ permissions for members with this role. There is no need to set this role as the DJ role. Do you want to set it anyway?', null, null, null, [buttonRow]);
 
                     ctx.registerComponent('yes_dj_role', async (btnCtx) => {
                         if (ctx.user.id !== btnCtx.user.id) return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.', null, null, true);
