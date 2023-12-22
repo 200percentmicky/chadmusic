@@ -20,7 +20,7 @@ const { appendFileSync } = require('node:fs');
 // Winston Logger
 const logger = new Logger({
     type: 'pretty',
-    minLevel: 0
+    minLevel: process.env.DEBUG_LOGGING ? 0 : 3
 });
 
 logger.attachTransport((logObj) => {
