@@ -623,7 +623,19 @@ module.exports = class CommandSettings extends SlashCommand {
 
                     const buttonRow = new ActionRowBuilder().addComponents(yesButton, noButton);
 
-                    await this.client.ui.reply(ctx, 'info', 'The role you\'re setting as the DJ role is already recognized as a DJ role on this server. This is because the role has the **Manage Channels** permission which automatically grants DJ permissions for members with this role. There is no need to set this role as the DJ role. Do you want to set it anyway?', null, null, null, [buttonRow]);
+                    await this.client.ui.reply(
+                        ctx,
+                        'info',
+                        stripIndents`
+                        The role you\'re setting as the DJ role is already recognized as a DJ role
+                        on this server. This is because the role has the **Manage Channels** permission
+                        which automatically grants DJ permissions for members with this role. There is
+                        no need to set this role as the DJ role, but do you want to set it anyway?`,
+                        null,
+                        null,
+                        null,
+                        [buttonRow]
+                    );
 
                     ctx.registerComponent('yes_dj_role', async (btnCtx) => {
                         if (ctx.user.id !== btnCtx.user.id) return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.', null, null, true);
@@ -631,14 +643,14 @@ module.exports = class CommandSettings extends SlashCommand {
 
                         btnCtx.acknowledge();
                         btnCtx.delete();
-                    }, 300 * 1000);
+                    }, 60 * 1000);
 
                     ctx.registerComponent('no_dj_role', async (btnCtx) => {
                         if (ctx.user.id !== btnCtx.user.id) return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.', null, null, true);
 
                         btnCtx.acknowledge();
                         btnCtx.delete();
-                    }, 300 * 1000);
+                    }, 60 * 1000);
                 } else {
                     await setDjRole(role);
                 }
