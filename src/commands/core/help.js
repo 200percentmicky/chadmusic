@@ -173,8 +173,8 @@ module.exports = class CommandHelp extends Command {
                 text: `To learn more about a command, use ${prefix}help [command]`
             });
 
+        const helpFields = [];
         this.handler.categories.forEach((value, key) => {
-            const helpFields = [];
             const field = {
                 name: key,
                 value: ''
@@ -184,8 +184,16 @@ module.exports = class CommandHelp extends Command {
             });
             field.value = `${field.value}`;
             helpFields.push(field);
-            helpEmbed.addFields(helpFields);
         });
+
+        const creatorCommands = this.client.creator.commands.map(x => `\`${x.type === 1 ? '/' : ''}${x.commandName}\``);
+
+        helpFields.push({
+            name: 'Slash Commands',
+            value: `The following slash commands are available to use.\n${creatorCommands.join(' ')}`
+        });
+
+        helpEmbed.addFields(helpFields);
 
         const docsActionRow = new ActionRowBuilder()
             .addComponents([docsButton]);
