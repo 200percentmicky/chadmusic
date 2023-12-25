@@ -281,7 +281,7 @@ if (process.env.SHARDING) {
     try {
         new ChadMusic().login(process.env.TOKEN);
     } catch (err) {
-        logger.error(`ChadMusic failed to start! :(\n${err.stack}`);
+        logger.fatal(`ChadMusic failed to start! :(\n${err.stack}`);
         process.exit(1);
     }
 }
