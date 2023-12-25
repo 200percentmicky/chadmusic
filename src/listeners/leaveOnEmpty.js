@@ -28,18 +28,21 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
     }
 
     async exec (oldState, newState) {
-        const activeTimeout = this.timeoutIds.get(newState.guild.id);
+        const activeTimeout = await this.timeoutIds.get(newState.guild.id);
+        const clearTimeoutData = () => {
+            if (!this.timeoutIds.has(newState.guild.id)) return;
+            try {
+                clearTimeout(activeTimeout);
+            } catch {}
+            this.client.logger.debug(`Timeout data for Guild ID ${newState.guild.id} has been cleared.`);
+            this.timeoutIds.delete(newState.guild.id);
+        };
 
         const queue = this.client.player.getQueue(newState.guild);
         if (!queue) {
             // If no queue, better to delete timeout data just in case...
             try {
-                if (!this.timeoutIds.has(newState.guild.id)) return;
-                try {
-                    clearTimeout(activeTimeout);
-                } catch {}
-                this.timeoutIds.delete(newState.guild.id);
-                return this.client.logger.debug(`Timeout data for Guild ID ${newState.guild.id} has been cleared.`);
+                clearTimeoutData();
             } catch {
                 return;
             }
@@ -48,12 +51,7 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
         if (newState.member.id === this.client.user.id) {
             // If it's the client leaving or even joining, clear timeout data.
             try {
-                if (!this.timeoutIds.has(newState.guild.id)) return;
-                try {
-                    clearTimeout(activeTimeout);
-                } catch {}
-                this.timeoutIds.delete(newState.guild.id);
-                return this.client.logger.debug(`Timeout data for Guild ID ${newState.guild.id} has been cleared.`);
+                clearTimeoutData();
             } catch {
                 return;
             }
