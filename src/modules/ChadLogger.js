@@ -15,7 +15,12 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Logger } = require('tslog');
-const { appendFileSync } = require('node:fs');
+const { createStream } = require('rotating-file-stream');
+
+const stream = createStream('console.log', {
+    size: '10M',
+    compress: 'gzip'
+});
 
 // Winston Logger
 const logger = new Logger({
@@ -24,7 +29,7 @@ const logger = new Logger({
 });
 
 logger.attachTransport((logObj) => {
-    appendFileSync('console.log', `${logObj._meta.date} ${logObj._meta.logLevelName}   ${logObj._meta.path.fileNameWithLine}   ${logObj['0']}\n`);
+    stream.write(`${logObj._meta.date} ${logObj._meta.logLevelName}   ${logObj._meta.path.fileNameWithLine}   ${logObj['0']}\n`);
 });
 
 module.exports = logger;
