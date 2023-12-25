@@ -26,11 +26,16 @@ module.exports = class ListenerInitQueue extends Listener {
 
     async exec (queue) {
         const guild = queue.textChannel.guild;
-        const volume = this.client.settings.get(guild.id, 'defaultVolume', 100);
+        const settings = this.client.settings.get(guild.id);
 
         queue.autoplay = false;
-        queue.volume = parseInt(volume);
+        queue.volume = parseInt(settings.defaultVolume);
+        queue.leaveOnStop = settings.leaveOnStop;
+        queue.leaveOnFinish = settings.leaveOnFinish;
+        queue.leaveOnEmpty = true; // settings.leaveOnEmpty
+        queue.emptyCooldown = parseInt(settings.emptyCooldown);
         queue.votes = []; // Initialize an empty array for casting votes.
         queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
+        queue.peeStoredInBalls = true; // lol
     }
 };

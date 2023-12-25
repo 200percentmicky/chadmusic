@@ -46,7 +46,7 @@ module.exports = class CommandEmptyCooldown extends Command {
 
         if (isNaN(args.time)) return this.client.ui.reply(message, 'error', 'The value must be a number.');
 
-        await this.client.settings.set('global', parseInt(args.time), 'emptyCooldown');
+        await this.client.settings.set(message.guild.id, parseInt(args.time), 'emptyCooldown');
         this.client.player.options.emptyCooldown = parseInt(args.time);
         return this.client.ui.reply(message, 'ok', `Empty Cooldown has been set to \`${parseInt(args.time)}\` seconds.`);
     }

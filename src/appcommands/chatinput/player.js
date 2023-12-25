@@ -632,6 +632,7 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (vc.members.size <= 2 || dj) {
+                queue.hasStopped = true;
                 this.client.player.stop(guild);
                 return this.client.ui.custom(ctx, ':stop_button:', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
             } else {

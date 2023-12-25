@@ -54,6 +54,8 @@ module.exports = class CommandStop extends Command {
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
+            const queue = this.client.player.getQueue(message.guild);
+            queue.hasStopped = true;
             this.client.player.stop(message);
             return this.client.ui.custom(message, ':stop_button:', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {

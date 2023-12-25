@@ -43,14 +43,14 @@ module.exports = class CommandLeaveOnEmpty extends Command {
         switch (args.toggle) {
         case 'true':
         case 'on': {
-            await settings.set('global', true, 'leaveOnEmpty');
+            await settings.set(message.guild.id, true, 'leaveOnEmpty');
             this.client.player.options.leaveOnEmpty = true;
             this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the channel is empty for a period of time. See **Empty Cooldown** for how long I\'ll stay when the channel is empty.');
             break;
         }
         case 'false':
         case 'off': {
-            await settings.set('global', false, 'leaveOnEmpty');
+            await settings.set(message.guild.id, false, 'leaveOnEmpty');
             this.client.player.options.leaveOnEmpty = false;
             this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the channel is empty.');
             break;

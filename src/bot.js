@@ -82,7 +82,11 @@ class ChadMusic extends AkairoClient {
             defaultVolume: 100,
             textChannel: null,
             blockedPhrases: [],
-            thumbnailSize: 'small'
+            thumbnailSize: 'small',
+            emptyCooldown: 60,
+            leaveOnStop: true,
+            leaveOnEmpty: true,
+            leaveOnFinish: true
         };
 
         this.defaultGlobalSettings = {
@@ -167,9 +171,9 @@ class ChadMusic extends AkairoClient {
             ],
             emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
             emptyCooldown: this.settings.get('global', 'emptyCooldown') ?? 60,
-            leaveOnStop: this.settings.get('global', 'leaveOnStop') ?? true,
-            leaveOnEmpty: this.settings.get('global', 'leaveOnEmpty') ?? true,
-            leaveOnFinish: this.settings.get('global', 'leaveOnFinish') ?? true,
+            leaveOnStop: false, // this.settings.get('global', 'leaveOnStop') ?? true,
+            leaveOnEmpty: false, // this.settings.get('global', 'leaveOnEmpty') ?? true,
+            leaveOnFinish: false, // this.settings.get('global', 'leaveOnFinish') ?? true,
             streamType: this.settings.get('global', 'streamType') ?? 0,
             youtubeCookie: this.cookies(),
             ytdlOptions: {

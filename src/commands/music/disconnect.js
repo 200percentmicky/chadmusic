@@ -61,7 +61,8 @@ module.exports = class CommandDisconnect extends Command {
         }
 
         if (vc.members.size <= 2 || dj) {
-            if (this.client.player.getQueue(message)) {
+            const queue = this.client.player.getQueue(message);
+            if (queue) {
                 this.client.player.stop(message);
             }
             this.client.vc.leave(message.guild);

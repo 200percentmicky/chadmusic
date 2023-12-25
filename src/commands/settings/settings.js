@@ -52,6 +52,10 @@ module.exports = class CommandSettings extends Command {
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
+        const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty');
+        const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish');
+        const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop');
+        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown');
         // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -74,6 +78,10 @@ module.exports = class CommandSettings extends Command {
                 **🖼️ Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                 **🔊 Default Volume:** ${defaultVolume}
                 **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
+                **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
+                **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
+                **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
                 `
             },
             {
