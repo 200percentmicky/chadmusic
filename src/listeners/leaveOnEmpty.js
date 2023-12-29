@@ -38,7 +38,7 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
             this.timeoutIds.delete(newState.guild.id);
         };
 
-        const queue = this.client.player.getQueue(newState.guild);
+        const queue = await this.client.player.getQueue(newState.guild);
         if (!queue) {
             // If no queue, better to delete timeout data just in case...
             try {
@@ -57,8 +57,8 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
             }
         }
 
-        if (queue.leaveOnEmpty) {
-            const emptyCooldown = this.client.settings.get(newState.guild.id, 'emptyCooldown');
+        if (queue && queue.leaveOnEmpty === true) {
+            const emptyCooldown = queue.emptyCooldown;
 
             if (!newState.channel) {
                 const leaveOnEmptyTimeout = setTimeout(() => {
