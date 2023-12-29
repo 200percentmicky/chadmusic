@@ -26,6 +26,7 @@ const si = require('systeminformation');
 
 // Importing libraries for eval use.
 const Discord = require('discord.js');
+const DiscordAPI = require('discord-api-types');
 const _ = require('lodash');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
@@ -116,6 +117,16 @@ class CommandCore extends SlashCommand {
             app = await this.client.application.fetch();
             if (app.owner?.id !== ctx.user.id) return ctx.send(`${process.env.EMOJI_NO} Only the owner of this application can use this command.`);
         }
+
+        const guild = this.client.guilds.cache.get(ctx.guildID);
+        const channel = guild.channels.cache.get(ctx.channelID);
+        const member = guild.members.cache.get(ctx.user.id);
+
+        const player = this.client.player;
+        let queue;
+        try {
+            queue = player.getQueue(guild);
+        } catch {}
 
         switch (ctx.subcommands[0]) {
         case 'owner': {

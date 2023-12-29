@@ -18,6 +18,7 @@ const { Command } = require('discord-akairo');
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
+const DiscordAPI = require('discord-api-types');
 const _ = require('lodash');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
@@ -34,8 +35,12 @@ module.exports = class CommandEval extends Command {
                 text: 'Executes Javascript code.',
                 usage: '<code>',
                 details: commonTags.stripIndents`
-        **Loaded Packages:**
+        **Loaded Variables:**
         \`Discord\` - discord.js
+        \`DiscordAPI\` - discord-api-types
+        \`player\` - Active player in the server, if any.
+        \`queue\` - Queue of active player, if any.
+        \`message\` - Message object
         \`_\` - lodash
         \`prettyBytes\` - pretty-bytes
         \`prettyMs\` - prettyMs
@@ -64,6 +69,13 @@ module.exports = class CommandEval extends Command {
                 to enable it to have you run something, you're most likely being scammed.
             `);
         }
+
+        const player = this.client.player;
+        let queue;
+        try {
+            queue = player.getQueue(message.guild);
+        } catch {}
+        /* eslint-enable no-unused-vars */
 
         const t1 = process.hrtime();
         const clean = text => {
