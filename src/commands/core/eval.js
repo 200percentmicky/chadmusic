@@ -36,7 +36,6 @@ module.exports = class CommandEval extends Command {
                 details: commonTags.stripIndents`
         **Loaded Variables:**
         \`Discord\` - discord.js
-        \`DiscordAPI\` - discord-api-types
         \`player\` - Active player in the server, if any.
         \`queue\` - Queue of active player, if any.
         \`message\` - Message object
