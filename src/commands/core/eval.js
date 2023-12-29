@@ -18,7 +18,6 @@ const { Command } = require('discord-akairo');
 
 /* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
-const DiscordAPI = require('discord-api-types');
 const _ = require('lodash');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');

@@ -26,7 +26,6 @@ const si = require('systeminformation');
 
 // Importing libraries for eval use.
 const Discord = require('discord.js');
-const DiscordAPI = require('discord-api-types');
 const _ = require('lodash');
 const prettyBytes = require('pretty-bytes');
 const prettyMs = require('pretty-ms');
