@@ -22,6 +22,7 @@
     "colon-notation": "^1.2.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "github:200percentmicky/discord-akairo",
+    "discord-api-types": "^0.37.67",
     "discord.js": "^14.13.0",
     "distube": "github:200percentmicky/chadtube",
     "dotenv": "^8.6.0",
