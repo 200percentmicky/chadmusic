@@ -40,18 +40,19 @@ module.exports = class CommandLeaveOnFinish extends Command {
         if (!args.toggle) return this.client.ui.usage(message, 'leaveonfinish <toggle:on/off>');
 
         const settings = this.client.settings;
+        const queue = await this.client.player.getQueue(message.guild);
         switch (args.toggle) {
         case 'true':
         case 'on': {
             await settings.set(message.guild.id, true, 'leaveOnFinish');
-            this.client.player.options.leaveOnFinish = true;
+            if (queue) queue.leaveOnFinish = true;
             this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the end of the queue is reached.');
             break;
         }
         case 'false':
         case 'off': {
             await settings.set(message.guild.id, false, 'leaveOnFinish');
-            this.client.player.options.leaveOnFinish = false;
+            if (queue) queue.leaveOnFinish = false;
             this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the queue is finished.');
             break;
         }
