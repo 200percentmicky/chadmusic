@@ -32,7 +32,7 @@
     "flatted": "^3.2.9",
     "genius-lyrics": "^4.4.2",
     "human-interval": "^2.0.1",
-    "iheart": "^3.1.1",
+    "iheart": "github:200percentmicky/iheart",
     "keyv": "^4.0.3",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.21",
