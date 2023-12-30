@@ -475,6 +475,8 @@ class CommandPlayer extends SlashCommand {
             if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
+            if (queue.songs[0].isLive) return this.client.ui.reply(ctx, 'error', 'This command cannot be used during live broadcasts.');
+
             if (vc.members.size <= 2 || dj) {
                 try {
                     const time = toMilliseconds(ctx.options.seek.time);
@@ -492,6 +494,8 @@ class CommandPlayer extends SlashCommand {
             const currentVc = this.client.vc.get(vc);
             if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
+
+            if (queue.songs[0].isLive) return this.client.ui.reply(ctx, 'error', 'This command cannot be used during live broadcasts.');
 
             if (vc.members.size <= 2 || dj) {
                 this.client.player.seek(guild, 0);
