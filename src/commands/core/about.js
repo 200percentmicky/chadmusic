@@ -20,7 +20,6 @@ const { stripIndents } = require('common-tags');
 const prettyms = require('pretty-ms');
 
 // Mainly for version info...
-const bot = require('../../../package.json');
 const sc = require('../../../node_modules/slash-create/package.json');
 const akairo = require('../../../node_modules/discord-akairo/package.json');
 const discord = require('../../../node_modules/discord.js/package.json');
@@ -69,7 +68,7 @@ module.exports = class CommandAbout extends Command {
                 name: `${process.env.EMOJI_INFO} Stats`,
                 value: stripIndents`
                 **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
-                **Bot Version:** ${bot.version} (Build ${this.client.buildNumber})
+                **Bot Version:** ${this.client.version}
                 **Node.js:** ${process.version}
                 **Discord.js:** ${discord.version}
                 **slash-create:** ${sc.version}

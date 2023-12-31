@@ -31,6 +31,7 @@ const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 const fs = require('fs');
 const { execSync } = require('child_process');
+const { version } = require('../package.json');
 
 const buildNumber = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim();
 
@@ -64,6 +65,9 @@ class ChadMusic extends AkairoClient {
         this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
         this.buildNumber = buildNumber;
+
+        // Bot version.
+        this.version = `${version} (Build ${this.buildNumber})`;
 
         this.settings = new Enmap({ name: 'settings' });
         this.playlists = new Enmap({ name: 'playlists' });

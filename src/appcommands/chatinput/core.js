@@ -361,7 +361,7 @@ class CommandCore extends SlashCommand {
                     name: `${process.env.EMOJI_INFO} Stats`,
                     value: stripIndents`
                     **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
-                    **Bot Version:** ${bot.version} (Build: ${this.client.buildNumber})
+                    **Bot Version:** ${this.client.version}
                     **Node.js:** ${process.version}
                     **Discord.js:** ${discord.version}
                     **slash-create:** ${sc.version}
@@ -410,7 +410,7 @@ class CommandCore extends SlashCommand {
 
             const data = stripIndents`
             **ChadMusic - The Chad Music Bot!**
-            Bot version ${require('../../../package.json').version}
+            Bot version ${this.client.version}
             
                       Client: ${this.client.user.tag.replace(/#0{1,1}$/, '')} (ID: ${this.client.user.id})
                        Owner: ${owner}
