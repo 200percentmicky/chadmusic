@@ -111,9 +111,11 @@ module.exports = class CommandPlayNow extends Command {
             else message.channel.sendTyping();
 
             try {
-                this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
-                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                });
+                this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                    ? ytdl.createAgent(undefined, {
+                        localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                    })
+                    : undefined;
 
                 // eslint-disable-next-line no-useless-escape
                 await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {

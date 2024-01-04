@@ -260,9 +260,11 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
-            this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
-                localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-            });
+            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                ? ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
+                : undefined;
 
             let requested = ctx.options.track?.query;
             let station;

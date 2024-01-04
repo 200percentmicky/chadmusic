@@ -142,9 +142,11 @@ module.exports = class CommandPlay extends Command {
         }
 
         try {
-            this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
-                localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-            });
+            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                ? ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
+                : undefined;
 
             await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
                 member: message.member,

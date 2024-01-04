@@ -115,9 +115,11 @@ class ContextMenuAddToQueue extends SlashCommand {
 
             if (!requested) return this.client.ui.reply(ctx, 'error', 'Cannot add to the queue because the message doesn\'t contain any content to search for.');
 
-            this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
-                localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-            });
+            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                ? ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
+                : undefined;
 
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {

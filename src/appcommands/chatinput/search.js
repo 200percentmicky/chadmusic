@@ -219,15 +219,17 @@ class CommandSearch extends SlashCommand {
                 }
 
                 try {
-                    this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
-                        localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                    });
+                    this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                        ? ytdl.createAgent(undefined, {
+                            localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                        })
+                        : undefined;
 
                     await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
-                        member: member,
+                        member,
                         textChannel: channel,
                         metadata: {
-                            ctx: ctx
+                            ctx
                         }
                     });
                 } catch (err) {
