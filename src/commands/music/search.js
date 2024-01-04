@@ -25,6 +25,8 @@ const {
     Message,
     StringSelectMenuOptionBuilder
 } = require('discord.js');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
@@ -210,16 +212,26 @@ module.exports = class CommandSearch extends Command {
         collector.on('collect', async interaction => {
             if (interaction.customId === 'cancel_search') return collector.stop();
             message.channel.sendTyping();
-            await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
-                member: message.member,
-                textChannel: message.channel,
-                message: message instanceof Message ? message : undefined,
-                metadata: {
-                    ctx: message instanceof CommandContext ? message : undefined
-                }
-            });
-            message.react(process.env.REACTION_MUSIC);
-            collector.stop();
+
+            try {
+                this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                });
+
+                await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
+                    member: message.member,
+                    textChannel: message.channel,
+                    message: message instanceof Message ? message : undefined,
+                    metadata: {
+                        ctx: message instanceof CommandContext ? message : undefined
+                    }
+                });
+            } catch (err) {
+                return this.client.ui.reply(message, 'error', err, 'Player Error');
+            } finally {
+                message.react(process.env.REACTION_MUSIC);
+                collector.stop();
+            }
         });
 
         collector.on('end', () => {

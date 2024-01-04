@@ -21,8 +21,6 @@ const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = requ
 const { ChannelType, GatewayIntentBits, Partials } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
-const ytdl = require('@distube/ytdl-core');
-const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Enmap = require('enmap');
@@ -145,16 +143,6 @@ class ChadMusic extends AkairoClient {
 
         this.settings.ensure('global', this.defaultGlobalSettings);
 
-        this.agent = () => {
-            try {
-                return ytdl.createProxyAgent(undefined, {
-                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                });
-            } catch {
-                return undefined;
-            }
-        };
-
         this.cookies = () => {
             const cookies = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json')));
             if (cookies.length === 0) {
@@ -184,8 +172,7 @@ class ChadMusic extends AkairoClient {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
-                highWaterMark: 1024,
-                agent: this.agent()
+                highWaterMark: 1024
             },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });

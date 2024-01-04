@@ -26,6 +26,8 @@ const {
     StringSelectMenuOptionBuilder
 } = require('discord.js');
 const iheart = require('iheart');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
@@ -195,18 +197,28 @@ module.exports = class CommandIHeartRadio extends Command {
                 if (interaction.customId === 'cancel_search') return collector.stop();
                 message.channel.sendTyping();
                 const url = await iheart.streamURL(stations[parseInt(interaction.values[0])].id);
-                await this.client.player.play(vc, url, {
-                    member: message.member,
-                    textChannel: message.channel,
-                    message: message instanceof Message ? message : undefined,
-                    metadata: {
-                        ctx: message instanceof CommandContext ? message : undefined,
-                        isRadio: true,
-                        radioStation: stations[parseInt(interaction.values[0])]
-                    }
-                });
-                message.react(process.env.REACTION_MUSIC);
-                collector.stop();
+
+                try {
+                    this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                        localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                    });
+
+                    await this.client.player.play(vc, url, {
+                        member: message.member,
+                        textChannel: message.channel,
+                        message: message instanceof Message ? message : undefined,
+                        metadata: {
+                            ctx: message instanceof CommandContext ? message : undefined,
+                            isRadio: true,
+                            radioStation: stations[parseInt(interaction.values[0])]
+                        }
+                    });
+                } catch (err) {
+                    return this.client.ui.reply(message, 'error', err, 'Player Error');
+                } finally {
+                    message.react(process.env.REACTION_MUSIC);
+                    collector.stop();
+                }
             });
 
             collector.on('end', () => {
@@ -216,7 +228,7 @@ module.exports = class CommandIHeartRadio extends Command {
             return message.react(process.env.REACTION_MUSIC);
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+            return this.client.ui.reply(message, 'error', err, 'Player Error');
         }
     }
 };

@@ -16,6 +16,8 @@
 
 const { Command } = require('discord-akairo');
 const { Message, PermissionsBitField } = require('discord.js');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
@@ -108,18 +110,26 @@ module.exports = class CommandPlayNow extends Command {
             if (message instanceof CommandContext) {} // eslint-disable-line no-empty, brace-style
             else message.channel.sendTyping();
 
-            // eslint-disable-next-line no-useless-escape
-            await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
-                member: message.member,
-                textChannel: message.channel,
-                message: message instanceof Message ? message : undefined,
-                skip: true,
-                metadata: {
-                    ctx: message instanceof CommandContext ? message : undefined
-                }
-            });
-            await this.client.player.skip(message);
-            message.react(process.env.REACTION_OK);
+            try {
+                this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                });
+
+                // eslint-disable-next-line no-useless-escape
+                await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
+                    member: message.member,
+                    textChannel: message.channel,
+                    message: message instanceof Message ? message : undefined,
+                    skip: true,
+                    metadata: {
+                        ctx: message instanceof CommandContext ? message : undefined
+                    }
+                });
+                await this.client.player.skip(message);
+                message.react(process.env.REACTION_OK);
+            } catch (err) {
+                return this.client.ui.reply(message, 'error', err, 'Player Error');
+            }
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }

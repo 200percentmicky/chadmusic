@@ -59,11 +59,11 @@ module.exports = class ListenerPlayerError extends Listener {
             }
         }
 
-        embed.setDescription(`${formattedError}\n\`\`\`js\n${error.name}: ${error.message}\`\`\``);
+        embed.setDescription(`${formattedError}\n${error}`);
 
         channel.send(linkPerms
             ? { embeds: [embed] }
-            : { content: `${process.env.EMOJI_ERROR} **Player Error**\n${formattedError}\`\`\`js\n${error.name}: ${error.message}\`\`\`` }
+            : { content: `${process.env.EMOJI_ERROR} **Player Error**\n${formattedError}\n${error}` }
         );
 
     /*

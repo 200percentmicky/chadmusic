@@ -16,6 +16,8 @@
 
 const { Command } = require('discord-akairo');
 const { PermissionsBitField, Message } = require('discord.js');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { hasURL } = require('../../modules/hasURL');
 const { CommandContext } = require('slash-create');
@@ -140,6 +142,10 @@ module.exports = class CommandPlay extends Command {
         }
 
         try {
+            this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+            });
+
             await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
@@ -151,7 +157,7 @@ module.exports = class CommandPlay extends Command {
             return message.react(process.env.REACTION_MUSIC);
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
-            return this.client.ui.reply(message, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+            return this.client.ui.reply(message, 'error', err, 'Player Error');
         }
     }
 };

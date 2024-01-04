@@ -19,6 +19,8 @@ const {
     EmbedBuilder,
     PermissionsBitField
 } = require('discord.js');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const CMError = require('../../modules/CMError');
 
@@ -216,14 +218,23 @@ class CommandSearch extends SlashCommand {
                     });
                 }
 
-                await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
-                    member: member,
-                    textChannel: channel,
-                    metadata: {
-                        ctx: ctx
-                    }
-                });
-                return ctx.delete();
+                try {
+                    this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                        localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                    });
+
+                    await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
+                        member: member,
+                        textChannel: channel,
+                        metadata: {
+                            ctx: ctx
+                        }
+                    });
+                } catch (err) {
+                    return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+                } finally {
+                    ctx.delete();
+                }
             },
             30 * 1000
         );

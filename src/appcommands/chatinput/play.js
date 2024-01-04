@@ -22,6 +22,8 @@ const { hasURL } = require('../../modules/hasURL');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { toColonNotation } = require('colon-notation');
 const CMError = require('../../modules/CMError');
 
@@ -258,6 +260,10 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
+            this.client.player.options.ytdlOptions.agent = ytdl.createAgent(undefined, {
+                localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+            });
+
             let requested = ctx.options.track?.query;
             let station;
             let fileMetadata;
@@ -363,7 +369,7 @@ class CommandPlay extends SlashCommand {
             }
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
-            return this.client.ui.reply(ctx, 'error', `An unknown error occured:\n\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', err, 'Player Error');
         }
     }
 }
