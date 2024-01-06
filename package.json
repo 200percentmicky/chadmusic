@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm ci",
-    "bot": "node index.js"
+    "bot": "node index.js",
+    "update": "git checkout -f main && git pull && npm run build",
+    "update:dev": "git checkout -f develop && git pull && npm run build"
   },
   "author": "200percentmicky",
   "license": "GPLv3",
