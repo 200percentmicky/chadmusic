@@ -277,6 +277,58 @@ module.exports = class CommandSettings extends SlashCommand {
                     ]
                 },
                 {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'leaveonempty',
+                    description: 'Toggles whether the bot should leave when the voice channel is empty for a period of time.',
+                    options: [
+                        {
+                            type: CommandOptionType.BOOLEAN,
+                            name: 'toggle',
+                            description: 'Enables or disables the feature.',
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'leaveonfinish',
+                    description: 'Toggles whether the bot should leave when the end of the queue has been reached.',
+                    options: [
+                        {
+                            type: CommandOptionType.BOOLEAN,
+                            name: 'toggle',
+                            description: 'Enables or disables the feature.',
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'leaveonstop',
+                    description: 'Toggles whether the bot should leave when the player is stopped.',
+                    options: [
+                        {
+                            type: CommandOptionType.BOOLEAN,
+                            name: 'toggle',
+                            description: 'Enables or disables the feature.',
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'emptycooldown',
+                    description: 'Sets how long the bots stays in an empty voice channel.',
+                    options: [
+                        {
+                            type: CommandOptionType.NUMBER,
+                            name: 'time',
+                            description: 'The time the bot will stay in seconds.',
+                            required: true
+                        }
+                    ]
+                },
+                {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'global',
                     description: "[Owner Only] Manages the bot's global settings.",
@@ -285,45 +337,6 @@ module.exports = class CommandSettings extends SlashCommand {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'current',
                             description: 'Shows the bot\'s current global settings.'
-                        },
-                        {
-                            type: CommandOptionType.SUB_COMMAND,
-                            name: 'leaveonempty',
-                            description: 'Toggles whether the bot should leave when the voice channel is empty for a period of time.',
-                            options: [
-                                {
-                                    type: CommandOptionType.BOOLEAN,
-                                    name: 'toggle',
-                                    description: 'Enables or disables the feature.',
-                                    required: true
-                                }
-                            ]
-                        },
-                        {
-                            type: CommandOptionType.SUB_COMMAND,
-                            name: 'leaveonfinish',
-                            description: 'Toggles whether the bot should leave when the end of the queue has been reached.',
-                            options: [
-                                {
-                                    type: CommandOptionType.BOOLEAN,
-                                    name: 'toggle',
-                                    description: 'Enables or disables the feature.',
-                                    required: true
-                                }
-                            ]
-                        },
-                        {
-                            type: CommandOptionType.SUB_COMMAND,
-                            name: 'leaveonstop',
-                            description: 'Toggles whether the bot should leave when the player is stopped.',
-                            options: [
-                                {
-                                    type: CommandOptionType.BOOLEAN,
-                                    name: 'toggle',
-                                    description: 'Enables or disables the feature.',
-                                    required: true
-                                }
-                            ]
                         },
                         {
                             type: CommandOptionType.SUB_COMMAND,
@@ -360,19 +373,6 @@ module.exports = class CommandSettings extends SlashCommand {
                                     ]
                                 }
                             ]
-                        },
-                        {
-                            type: CommandOptionType.SUB_COMMAND,
-                            name: 'emptycooldown',
-                            description: 'Sets how long the bots stays in an empty voice channel.',
-                            options: [
-                                {
-                                    type: CommandOptionType.NUMBER,
-                                    name: 'time',
-                                    description: 'The time the bot will stay in seconds.',
-                                    required: true
-                                }
-                            ]
                         }
                     ]
                 }
@@ -390,16 +390,13 @@ module.exports = class CommandSettings extends SlashCommand {
         const settings = this.creator.client.settings;
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
+        const member = await guild.members.fetch(ctx.user.id);
 
         await settings.ensure(ctx.guildID, this.client.defaultSettings);
         await settings.ensure('global', this.client.defaultGlobalSettings);
 
         // Global Settings
         const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
-        const emptyCooldown = settings.get('global', 'emptyCooldown'); // Empty Cooldown
-        const leaveOnEmpty = settings.get('global', 'leaveOnEmpty'); // Leave on Empty
-        const leaveOnFinish = settings.get('global', 'leaveOnFinish'); // Leave on Finish
-        const leaveOnStop = settings.get('global', 'leaveOnStop'); // Leave on Stop
         const streamType = settings.get('global', 'streamType'); // Audio Encoder
 
         const encoderType = {
@@ -421,6 +418,10 @@ module.exports = class CommandSettings extends SlashCommand {
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
+        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty');
+        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish');
+        const leaveOnStop = settings.get(guild.id, 'leaveOnStop');
+        const emptyCooldown = settings.get(guild.id, 'emptyCooldown');
         // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
 
         // ! This setting only affects videos from YouTube.
@@ -441,51 +442,6 @@ module.exports = class CommandSettings extends SlashCommand {
                 this.client.ui.reply(ctx, 'ok', toggle === true
                     ? 'Now Playing alerts will now only show for new songs.'
                     : 'Now Playing alerts will now show for every song.'
-                );
-                break;
-            }
-
-            case 'emptycooldown': {
-                const time = ctx.options.global.emptycooldown.time;
-
-                await settings.set('global', time, 'emptyCooldown');
-                this.client.player.options.emptyCooldown = time;
-                this.client.ui.reply(ctx, 'ok', `Empty Cooldown has been set to \`${parseInt(time)}\` seconds.`);
-                break;
-            }
-
-            case 'leaveonempty': {
-                const toggle = ctx.options.global.leaveonempty.toggle;
-
-                await settings.set('global', toggle, 'leaveOnEmpty');
-                this.client.player.options.leaveOnEmpty = toggle;
-                this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
-                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
-                );
-                break;
-            }
-
-            case 'leaveonfinish': {
-                const toggle = ctx.options.global.leaveonfinish.toggle;
-
-                await settings.set('global', toggle, 'leaveOnFinish');
-                this.client.player.options.leaveOnFinish = toggle;
-                this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
-                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
-                );
-                break;
-            }
-
-            case 'leaveonstop': {
-                const toggle = ctx.options.global.leaveonstop.toggle;
-
-                await settings.set('global', toggle, 'leaveOnStop');
-                this.client.player.options.leaveOnStop = toggle;
-                this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the player is stopped.'
-                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
                 );
                 break;
             }
@@ -513,10 +469,6 @@ module.exports = class CommandSettings extends SlashCommand {
                     .setTitle('🌐 Global Settings')
                     .setDescription(stripIndents`
                         **Audio Encoder:** ${encoderType[streamType]}
-                        **Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
-                        **Leave on Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
-                        **Leave on Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
-                        **Leave on Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                         **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
                         `
                     )
@@ -527,8 +479,14 @@ module.exports = class CommandSettings extends SlashCommand {
             }
         } else {
             if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
-                return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Guild');
+                const djRole = this.client.settings.get(ctx.guildID, 'djRole');
+                const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+
+                if (dj && ctx.subcommands[0] === 'djmode') {} // eslint-disable-line no-empty, brace-style
+                else return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Guild');
             }
+
+            const queue = this.client.player.getQueue(guild);
 
             switch (ctx.subcommands[0]) {
             case 'current': {
@@ -548,6 +506,10 @@ module.exports = class CommandSettings extends SlashCommand {
                         **🖼️ Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                         **🔊 Default Volume:** ${defaultVolume}
                         **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                        **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
+                        **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
+                        **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
+                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds        
                         `
                     },
                     {
@@ -739,6 +701,51 @@ module.exports = class CommandSettings extends SlashCommand {
             case 'prefix': {
                 await settings.set(guild.id, ctx.options.prefix.newprefix, 'prefix');
                 return this.client.ui.reply(ctx, 'ok', `The prefix has been set to \`${ctx.options.prefix.newprefix}\``);
+            }
+
+            case 'emptycooldown': {
+                const time = ctx.options.emptycooldown.time;
+
+                await settings.set(guild.id, time, 'emptyCooldown');
+                if (queue) queue.emptyCooldown = time;
+                this.client.ui.reply(ctx, 'ok', `Empty Cooldown has been set to \`${parseInt(time)}\` seconds.`);
+                break;
+            }
+
+            case 'leaveonempty': {
+                const toggle = ctx.options.leaveonempty.toggle;
+
+                await settings.set(guild.id, toggle, 'leaveOnEmpty');
+                if (queue) queue.leaveOnEmpty = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
+                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
+                );
+                break;
+            }
+
+            case 'leaveonfinish': {
+                const toggle = ctx.options.leaveonfinish.toggle;
+
+                await settings.set(guild.id, toggle, 'leaveOnFinish');
+                if (queue) queue.leaveOnFinish = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
+                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
+                );
+                break;
+            }
+
+            case 'leaveonstop': {
+                const toggle = ctx.options.leaveonstop.toggle;
+
+                await settings.set(guild.id, toggle, 'leaveOnStop');
+                if (queue) queue.leaveOnStop = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now leave the voice channel when the player is stopped.'
+                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
+                );
+                break;
             }
             }
         }
