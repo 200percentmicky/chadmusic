@@ -132,7 +132,7 @@ module.exports = class CommandHelp extends Command {
                     });
                 }
                 // if (command.description.details) commandEmbed.addField('Details', `\`\`\`js\n${command.description.details}\`\`\``);
-                if (command.aliases.length > 1) commandFields.push({ name: 'Aliases', value: `${command.aliases.join('\n')}`, inline: true });
+                if (command.aliases.length > 1) commandFields.push({ name: 'Aliases', value: `${command.aliases.filter(c => c !== command.id).join('\n')}`, inline: true });
 
                 // This gonna be a bruh moment.
                 // It do be Yandere Simulator lol
