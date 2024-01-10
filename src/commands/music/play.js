@@ -30,7 +30,7 @@ module.exports = class CommandPlay extends Command {
             aliases: ['play', 'p'],
             category: '🎶 Music',
             description: {
-                text: 'Play\'s a song from a URL or search term.',
+                text: 'Plays a song from a URL or search term.',
                 usage: '<url/search/attachment>',
                 details: '`<url/search>` The URL or search term to load. Also support audio and video attachments.'
             },
