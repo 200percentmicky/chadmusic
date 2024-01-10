@@ -27,7 +27,7 @@ module.exports = class CommandPulsator extends Command {
             description: {
                 text: 'Adds a pulsating effect to the audio.',
                 usage: '<frequency:0.01-100/off>',
-                details: '`<frequency:0.01-100/off> The frequency of the effect in Hz. Must be between 0.01-100 or off.'
+                details: '`<frequency:0.01-100/off>` The frequency of the effect in Hz. Must be between 0.01-100 or off.'
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
