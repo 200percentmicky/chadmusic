@@ -77,7 +77,7 @@ module.exports = class CommandHelp extends Command {
                     '16384': 'Embed Links',
                     '2': 'Kick Members',
                     '16': 'Manage Channels',
-                    '1073741824': 'Manage Emojis and Stickers',
+                    '1073741824': 'Manage Server Expressions',
                     '8589934592': 'Manage Events',
                     '32': 'Manage Server',
                     '8192': 'Manage Messages',
@@ -95,15 +95,19 @@ module.exports = class CommandHelp extends Command {
                     '2048': 'Send Messages',
                     '274877906944': 'Send Messages in Threads',
                     '4096': 'Send Text-To-Speech Messages',
+                    '70368744177664': 'Send Voice Messages',
                     '2097152': 'Speak',
                     '512': 'Stream',
                     '2147483648': 'Use Application Commands',
                     '549755813888': 'Use Embedded Activities',
                     '262144': 'Use External Emojis',
+                    '35184372088832': 'Use External Sounds',
                     '137438953472': 'Use External Stickers',
+                    '4398046511104': 'Use Soundboard',
                     '33554432': 'Use Voice Activity Detection',
                     '128': 'View Audit Log',
                     '1024': 'View Channel',
+                    '2199023255552': 'View Creator Monetization Analytics',
                     '524288': 'View Guild Insights'
                 };
 

@@ -26,61 +26,64 @@ module.exports = class CommandMissingPermissions extends Listener {
 
     async exec (message, command, type, missing) {
         /* eslint-disable quote-props */
-        // Just so you know, they're being converted to BigInt.
+
         const permissionsBits = {
-            '64': 'Add Reactions',
-            '8': 'Administrator',
-            '32768': 'Attach Files',
-            '4': 'Ban Members',
-            '67108864': 'Change Nickname',
-            '1048576': 'Connect',
-            '1': 'Create Instant Invite',
-            '68719476736': 'Create Private Threads',
-            '34359738368': 'Create Public Threads',
-            '8388608': 'Deafen Members',
-            '16384': 'Embed Links',
-            '2': 'Kick Members',
-            '16': 'Manage Channels',
-            '1073741824': 'Manage Emojis and Stickers',
-            '8589934592': 'Manage Events',
-            '32': 'Manage Server',
-            '8192': 'Manage Messages',
-            '134217728': 'Manage Nicknames',
-            '268435456': 'Manage Roles',
-            '17179869184': 'Manage Threads',
-            '536870912': 'Manage Webhooks',
-            '131072': 'Mention Everyone, Here, and All Roles',
-            '1099511627776': 'Moderate Members',
-            '16777216': 'Move Members',
-            '4194304': 'Mute Members',
-            '256': 'Priority Speaker',
-            '65536': 'Read Message History',
-            '4294967296': 'Request to Speak',
-            '2048': 'Send Messages',
-            '274877906944': 'Send Messages in Threads',
-            '4096': 'Send Text-To-Speech Messages',
-            '2097152': 'Speak',
-            '512': 'Stream',
-            '2147483648': 'Use Application Commands',
-            '549755813888': 'Use Embedded Activities',
-            '262144': 'Use External Emojis',
-            '137438953472': 'Use External Stickers',
-            '33554432': 'Use Voice Activity Detection',
-            '128': 'View Audit Log',
-            '1024': 'View Channel',
-            '524288': 'View Guild Insights'
+            AddReactions: 'Add Reactions',
+            Administrator: 'Administrator',
+            AttachFiles: 'Attach Files',
+            BanMembers: 'Ban Members',
+            ChangeNickname: 'Change Nickname',
+            Connect: 'Connect',
+            CreateInstantInvite: 'Create Instant Invite',
+            CreatePrivateThreads: 'Create Private Threads',
+            CreatePublicThreads: 'Create Public Threads',
+            DeafenMembers: 'Deafen Members',
+            EmbedLinks: 'Embed Links',
+            KickMembers: 'Kick Members',
+            ManageChannels: 'Manage Channels',
+            ManageGuildExpressions: 'Manage Server Expressions', // This is most likely changed.
+            ManageEvents: 'Manage Events',
+            ManageGuild: 'Manage Server',
+            ManageMessages: 'Manage Messages',
+            ManageNicknames: 'Manage Nicknames',
+            ManageRoles: 'Manage Roles',
+            ManageThreads: 'Manage Threads',
+            ManageWebhooks: 'Manage Webhooks',
+            MentionEveryone: 'Mention Everyone, Here, and All Roles',
+            ModerateMembers: 'Timeout Members',
+            MoveMembers: 'Move Members',
+            MuteMembers: 'Mute Members',
+            PrioritySpeaker: 'Priority Speaker',
+            ReadMessageHistory: 'Read Message History',
+            RequestToSpeak: 'Request to Speak',
+            SendMessages: 'Send Messages',
+            SendMessagesInThreads: 'Send Messages in Threads',
+            SendTTSMessages: 'Send Text-To-Speech Messages',
+            SendVoiceMessages: 'Send Voice Messages',
+            Speak: 'Speak',
+            Stream: 'Stream',
+            UseApplicationCommands: 'Use Application Commands',
+            UseEmbeddedActivities: 'Use Embedded Activities',
+            UseExternalEmojis: 'Use External Emojis',
+            UseExternalSounds: 'Use External Sounds',
+            UseExternalStickers: 'Use External Stickers',
+            UseSoundboard: 'Use Soundboard',
+            UseVad: 'Use Voice Activity Detection',
+            ViewAuditLog: 'View Audit Log',
+            ViewChannels: 'View Channel',
+            ViewCreatorMonetizationAnalytics: 'View Creator Monetization Analytics', // ! Might not be a valid guild permission.
+            ViewGuildInsights: 'View Guild Insights'
         };
 
-        const clientPerms = await missing.map(missing => permissionsBits[missing]).join(', ');
-        const userPerms = await missing.map(missing => permissionsBits[missing]).join(', ');
+        const formattedPerms = await missing.map(p => permissionsBits[p]).join(', ');
 
         if (type === 'client') {
-            return this.client.ui.reply(message, 'warn', `I require the **${clientPerms}** permission(s) to execute that command.`);
+            return this.client.ui.reply(message, 'warn', `I'm missing the following permission(s) to execute that command: **${formattedPerms}**`);
         }
 
         if (type === 'user') {
-            if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.reply(message, 'no', 'Only server administrators can use that command.');
-            else return this.client.ui.reply(message, 'no', `You need the **${userPerms}** permission(s) to use that command.`);
+            if (command.userPermissions === 'ADMINISTRATOR') return this.client.ui.reply(message, 'no', 'Administrators only.');
+            else return this.client.ui.reply(message, 'no', `You're missing the following permission(s) to use that command: **${formattedPerms}**`);
         }
     }
 };
