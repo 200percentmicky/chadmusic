@@ -68,7 +68,7 @@ module.exports = class CommandSeek extends Command {
             } catch {
                 this.client.ui.reply(message, 'error', 'Track time must be in colon notation or in milliseconds. Example: `4:30`');
             }
-            return message.react(process.env.REACTION_OK);
+            return message.react(process.env.REACTION_OK).catch(() => {});
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');
         }

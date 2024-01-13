@@ -83,7 +83,7 @@ module.exports = class CommandGrab extends Command {
                 await message.defer(true);
                 return this.client.ui.reply(message, 'ok', 'Saved! Check your DMs. 📩');
             } else {
-                return message.react(process.env.REACTION_OK);
+                return message.react(process.env.REACTION_OK).catch(() => {});
             }
         } catch {
             return this.client.ui.reply(message, 'error', 'Cannot save this song because you\'re currently not accepting Direct Messages.');

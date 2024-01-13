@@ -89,6 +89,6 @@ module.exports = class CommandReload extends Command {
             });
         }
 
-        return message.react(resultEmoji);
+        return message.react(resultEmoji).catch(() => {});
     }
 };

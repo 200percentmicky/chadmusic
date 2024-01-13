@@ -156,7 +156,7 @@ module.exports = class CommandPlay extends Command {
                     message
                 }
             });
-            return message.react(process.env.REACTION_MUSIC);
+            return message.react(process.env.REACTION_MUSIC).catch(() => {});
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
             return this.client.ui.reply(message, 'error', err, 'Player Error');

@@ -218,7 +218,7 @@ module.exports = class CommandIHeartRadio extends Command {
                 } catch (err) {
                     return this.client.ui.reply(message, 'error', err, 'Player Error');
                 } finally {
-                    message.react(process.env.REACTION_MUSIC);
+                    message.react(process.env.REACTION_MUSIC).catch(() => {});
                     collector.stop();
                 }
             });
@@ -227,7 +227,7 @@ module.exports = class CommandIHeartRadio extends Command {
                 msg.delete();
             });
 
-            return message.react(process.env.REACTION_MUSIC);
+            return message.react(process.env.REACTION_MUSIC).catch(() => {});
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
             return this.client.ui.reply(message, 'error', err, 'Player Error');

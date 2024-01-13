@@ -72,7 +72,7 @@ module.exports = class LicenseCommand extends Command {
 
         try {
             await message.member.user.send(license);
-            return message.react(process.env.REACTION_MUSIC);
+            return message.react(process.env.REACTION_MUSIC).catch(() => {});
         } catch {
             return message.reply(license);
         }

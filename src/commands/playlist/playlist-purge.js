@@ -74,7 +74,7 @@ module.exports = class CommandPlaylistPurge extends Command {
 
             if (interaction.customId === 'no_playlist_purge') {
                 await collector.stop();
-                return message.react(process.env.REACTION_OK ?? '✅');
+                return message.react(process.env.REACTION_OK ?? '✅').catch(() => {});
             }
         });
 

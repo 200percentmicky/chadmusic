@@ -305,7 +305,7 @@ module.exports = class CommandQueue extends Command {
                 await interaction.deferUpdate();
                 await interaction.message.delete();
                 collector.stop();
-                return message.react(process.env.REACTION_OK);
+                return message.react(process.env.REACTION_OK).catch(() => {});
             }
         });
 

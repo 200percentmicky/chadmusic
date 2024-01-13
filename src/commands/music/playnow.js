@@ -128,7 +128,7 @@ module.exports = class CommandPlayNow extends Command {
                     }
                 });
                 await this.client.player.skip(message);
-                message.react(process.env.REACTION_OK);
+                message.react(process.env.REACTION_OK).catch(() => {});
             } catch (err) {
                 return this.client.ui.reply(message, 'error', err, 'Player Error');
             }
