@@ -69,7 +69,7 @@ module.exports = class CommandMove extends Command {
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        if (!args.start) return this.client.ui.usage(message, 'move <track/start> [end] [position]');
+        if (!args.track) return this.client.ui.usage(message, 'move <track/start> [end] [position]');
 
         const queue = this.client.player.getQueue(message.guild);
 
