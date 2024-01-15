@@ -61,44 +61,59 @@ async function nowPlayingMsg (queue, song) {
     const songNow = new EmbedBuilder()
         .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
         .setAuthor({
-            name: `Now playing in ${vc.name}`,
+            name: `Now playing in ${guild.name}`,
             iconURL: guild.iconURL({ dynamic: true })
         });
 
     const songNowFields = [];
 
+    songNowFields.push({
+        name: ':loud_sound: Voice Channel',
+        value: `<#${vc.id}>`,
+        inline: true
+    });
+
     if (song.age_restricted) {
         songNowFields.push({
             name: ':underage: Explicit',
-            value: 'This track is **Age Restricted**'
+            value: 'This track is **Age Restricted**',
+            inline: true
         }); // Only for YouTube so far...
     }
 
     if (song.isFile) {
         songNowFields.push({
             name: '📎 File',
-            value: `${song.codec}`
+            value: `${song.codec}`,
+            inline: true
         });
     }
 
     if (author.name) {
         songNowFields.push({
             name: ':arrow_upper_right: Uploader',
-            value: `[${author.name}](${author.url})` || 'N/A'
+            value: `[${author.name}](${author.url})` || 'N/A',
+            inline: true
         });
     }
 
-    if (song.station) songNowFields.push({ name: ':tv: Station', value: `${song.station}` });
-
-    songNowFields.push({
-        name: ':raising_hand: Requested by',
-        value: `${song.user}`,
-        inline: true
-    });
+    if (song.station) {
+        songNowFields.push({
+            name: ':tv: Station',
+            value: `${song.station}`,
+            inline: true
+        });
+    }
 
     songNowFields.push({
         name: ':hourglass: Duration',
         value: `${song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : song.duration > 0 ? song.formattedDuration : 'N/A'}`,
+        inline: true
+    });
+
+    songNowFields.push({
+        name: ':raising_hand: Requested by',
+        value: `${song.user}`,
         inline: true
     });
 

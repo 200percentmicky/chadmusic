@@ -75,7 +75,7 @@ module.exports = class CommandNowPlaying extends Command {
         let embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: `Currently playing in ${currentVc.channel.name}`,
+                name: `Currently playing in ${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setDescription(`${duration}`)
@@ -97,25 +97,49 @@ module.exports = class CommandNowPlaying extends Command {
 
         let embedFields = [];
 
+        embedFields.push({
+            name: ':loud_sound: Voice Channel',
+            value: `<#${currentVc.channel.id}>`,
+            inline: true
+        });
+
         if (song.age_restricted) {
-            embedFields.push({ name: ':underage: Explicit', value: 'This track is **Age Restricted**' });
+            embedFields.push({
+                name: ':underage: Explicit',
+                value: 'This track is **Age Restricted**',
+                inline: true
+            });
         }
 
         if (song.isFile) {
             embedFields.push({
                 name: '📎 File',
-                value: `${song.codec}`
+                value: `${song.codec}`,
+                inline: true
             });
         }
 
-        if (author.name) embedFields.push({ name: ':arrow_upper_right: Uploader', value: `[${author.name}](${author.url})` });
-        if (song.station) embedFields.push({ name: ':tv: Station', value: `${song.station}` });
+        if (author.name) {
+            embedFields.push({
+                name: ':arrow_upper_right: Uploader',
+                value: `[${author.name}](${author.url})`,
+                inline: true
+            });
+        }
 
-        if (song.metadata?.silent && song.user.id !== message.member.user.id) {
+        if (song.station) {
+            embedFields.push({
+                name: ':tv: Station',
+                value: `${song.station}`,
+                inline: true
+            });
+        }
+
+        if (song.metadata?.silent && song.user.id !== message.member.user.id && !song.revealed) {
             embed = new EmbedBuilder()
                 .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                 .setAuthor({
-                    name: `Currently playing in ${currentVc.channel.name}`,
+                    name: `Currently playing in ${message.guild.name}`,
                     iconURL: message.guild.iconURL({ dynamic: true })
                 });
 
@@ -127,13 +151,18 @@ module.exports = class CommandNowPlaying extends Command {
         } else if (song.metadata?.silent) {
             embedFields.push({
                 name: '🔇 Silent',
-                value: 'This track is hidden.'
+                value: 'This track is hidden.',
+                inline: true
             });
         }
 
         if (queue.paused) {
             const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
-            embedFields.push({ name: '⏸ Paused', value: `Type '${prefix}resume' to resume playback.` });
+            embedFields.push({
+                name: '⏸ Paused',
+                value: `Type '${prefix}resume' to resume playback.`,
+                inline: true
+            });
         }
 
         const volumeEmoji = () => {
@@ -148,20 +177,21 @@ module.exports = class CommandNowPlaying extends Command {
         };
 
         embedFields.push({
-            name: ':raising_hand: Requested by',
-            value: `${song.user}`,
-            inline: true
-        });
-
-        embedFields.push({
             name: `${volumeEmoji()} Volume`,
             value: `${queue.volume}%`,
             inline: true
         });
 
         embedFields.push({
+            name: ':raising_hand: Requested by',
+            value: `${song.user}`,
+            inline: true
+        });
+
+        embedFields.push({
             name: '📢 Filters',
-            value: `${queue.filters.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`
+            value: `${queue.filters.filters.length > 0 ? `${queue.formattedFilters.map(x => `**${x.name}:** ${x.value}`).join('\n')}` : 'None'}`,
+            inline: true
         });
 
         embed
