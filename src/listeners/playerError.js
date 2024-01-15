@@ -42,7 +42,7 @@ module.exports = class ListenerPlayerError extends Listener {
             'Error [VOICE_CONNECTION_TIMEOUT]': 'The connection was not established within 15 seconds.'
         };
 
-        let formattedError = 'An unknown error occured.';
+        let formattedError;
         const embed = new EmbedBuilder()
             .setColor(process.env.COLOR_ERROR)
             .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
