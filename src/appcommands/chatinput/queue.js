@@ -225,8 +225,10 @@ class CommandQueue extends SlashCommand {
 
         case 'move': {
             if (vc.members.size <= 2 || dj) {
+                await ctx.defer();
+
                 const track = parseInt(ctx.options.move.track);
-                const position = parseInt(ctx.options.move.position);
+                const position = parseInt(ctx.options.move.position ?? 1);
 
                 if (track < 1 || track > queue.songs.length) {
                     return this.client.ui.reply(ctx, 'error', `Track position must be between tracks 1 or ${queue.songs.length - 1}.`);
