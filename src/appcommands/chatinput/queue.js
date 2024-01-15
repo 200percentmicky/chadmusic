@@ -85,6 +85,24 @@ class CommandQueue extends SlashCommand {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'clear',
                     description: "Clears the player's queue on this server."
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'move',
+                    description: 'Moves a track in the queue to a new position.',
+                    options: [
+                        {
+                            type: CommandOptionType.INTEGER,
+                            name: 'track',
+                            description: 'The track to move.',
+                            required: true
+                        },
+                        {
+                            type: CommandOptionType.INTEGER,
+                            name: 'position',
+                            description: 'The new position in the queue. If omitted, moves the selection to the first position in the queue.'
+                        }
+                    ]
                 }
             ]
         });
@@ -203,6 +221,32 @@ class CommandQueue extends SlashCommand {
             }
 
             break;
+        }
+
+        case 'move': {
+            if (vc.members.size <= 2 || dj) {
+                const track = parseInt(ctx.options.move.track);
+                const position = parseInt(ctx.options.move.position);
+
+                if (track < 1 || track > queue.songs.length) {
+                    return this.client.ui.reply(ctx, 'error', `Track position must be between tracks 1 or ${queue.songs.length - 1}.`);
+                }
+
+                if (position < 1 || position > queue.songs.length) {
+                    return this.client.ui.reply(ctx, 'error', `New track position must be between tracks 1 or ${queue.songs.length - 1}.`);
+                }
+
+                if (isNaN(track)) return this.client.ui.reply(ctx, 'error', 'Starting position must be a number.');
+                if (isNaN(position)) return this.client.ui.reply(ctx, 'error', 'New track position must be a number.');
+
+                const song = queue.songs[track];
+                queue.songs.splice(track, 1);
+                queue.songs.splice(position ?? 1, 0, song);
+
+                return this.client.ui.reply(ctx, 'ok', `Moved **${song.name}** to position \`${position || 1}\`.`);
+            } else {
+                return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
+            }
         }
 
         default: { // current
