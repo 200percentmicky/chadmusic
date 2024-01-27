@@ -75,7 +75,7 @@ module.exports = class CommandNowPlaying extends Command {
         let embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: `Currently playing in ${message.guild.name}`,
+                name: 'Currently playing',
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
             .setDescription(`${duration}`)
@@ -139,7 +139,7 @@ module.exports = class CommandNowPlaying extends Command {
             embed = new EmbedBuilder()
                 .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                 .setAuthor({
-                    name: `Currently playing in ${message.guild.name}`,
+                    name: 'Currently playing',
                     iconURL: message.guild.iconURL({ dynamic: true })
                 });
 

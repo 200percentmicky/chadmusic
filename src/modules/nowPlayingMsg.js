@@ -61,7 +61,7 @@ async function nowPlayingMsg (queue, song) {
     const songNow = new EmbedBuilder()
         .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
         .setAuthor({
-            name: `Now playing in ${guild.name}`,
+            name: 'Now playing',
             iconURL: guild.iconURL({ dynamic: true })
         });
 

@@ -225,7 +225,7 @@ class CommandPlayer extends SlashCommand {
             let embed = new EmbedBuilder()
                 .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .setAuthor({
-                    name: `Currently playing in ${guild.name}`,
+                    name: 'Currently playing',
                     iconURL: guild.iconURL({ dynamic: true })
                 })
                 .setDescription(`${duration}`)
@@ -289,7 +289,7 @@ class CommandPlayer extends SlashCommand {
                 embed = new EmbedBuilder()
                     .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                     .setAuthor({
-                        name: `Currently playing in ${guild.name}`,
+                        name: 'Currently playing',
                         iconURL: guild.iconURL({ dynamic: true })
                     });
 
