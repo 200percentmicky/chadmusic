@@ -34,10 +34,6 @@ Your application's user ID. This is needed to sync any slash commands on your bo
 
 ### PUBLIC_KEY
 
-??? warning "This field is required."
-
-    For the bot to function, this field must be used.
-
 Your application's public key. This is also needed to sync any slash commands on your bot to Discord. Your bot's public key and can be fetched from your app's developer page.
 
 ### SHARDING
@@ -111,7 +107,7 @@ Enables debug logging. Useful for reporting bugs.
 Deletes any slash commands that are no longer valid to the bot. Do not use this variable if you have multiple programs controlling one bot account.
 
 ## Adding Cookies
-Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. ALso, with the new cookie system, you're not just limited to one cookie. The new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
+Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. Also, with the new cookie system, you're not just limited to one cookie. The new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
 
 [Using cookies](https://distube.js.org/#/docs/DisTube/main/general/cookie){ .md-button }
 

@@ -1,5 +1,56 @@
 # Changelog
 
+## 2024.1.0
+First and foremost, Happy New Year to everyone! I hope everyone had a great holiday season. To welcome 2024, this release marks the beginning of the 2024 builds of ChadMusic.
+
+This release contains a lot of internal changes including overhauling the bot's console log. This release also fixes some lingering issues as well as adding and changing additional features.
+
+!!! warning "Changes to slash commands."
+
+    This release contains changes to slash commands. It's recommended to change DELETE_INVALID_COMMANDS to `true` in the environment variables before starting the bot.
+
+* **Added:** [Internal] Added CMError class.
+* **Added:** [Internal] Added partials and intents for Direct Messages.
+* **Added:** [Internal] Error handling when starting the bot. If the bot crashes on startup, it's now logged as `FATAL`.
+* **Added:** New commands.
+    * `[p]pulsator` is now a prefix command.
+    * `[p]move` | `/queue move`
+* **Added:** List of available slash commands to `[p]help`.
+* **Added:** A comformation prompt to `[p]setdj` and `/settings djrole` when adding a role that already has DJ permissions.
+* **Added:** [Internal] Two new scripts to `package.json`. Run these scripts by using `npm run`.
+    * `update` updates the bot to the `main` (stable) branch.
+    * `update:dev` updates the bot to the `develop` branch.
+* **Added:** [Internal] New packages.
+* **Added:** Voice Channel field to Now Playing embeds.
+* **Changed:** [Internal] Updated permission bits.
+* **Changed:** `[p]iheartradio` and `/play radio iheartradio` will now provide search results instead of playing the first station.
+* **Changed:** `emptycooldown`, `leaveonempty`, `leaveonfinish`, and `leaveonstop` are now configurable per-server. Because of this, the following commands were changed:
+    * `[p]emptycooldown`, `[p]eaveonempty`, `[p]leaveonfinish`, and `[p]leaveonstop` now requires the **Manage Server** permission to use.
+    * [Breaking] Changed slash command names.
+        * `/settings global emptycooldown` -> `/settings emptycooldown`
+        * `/settings global leaveonempty` -> `/settings leaveonempty`
+        * `/settings global leaveonfinish` -> `/settings leaveonfinish`
+        * `/settings global leaveonstop` -> `/settings leaveonstop`
+* **Changed:** [Interal] Overhauled logging to use `tslog`.
+* **Changed:** Prevent slash commands from executing in Direct Messages. (except for `/core`)
+* **Changed:** `[p]license` will default to sending a direct message to the user.
+    * If direct messages are not being accepted, it will send it to the channel instead.
+* **Changed:** Prevent `[p]seek` and `/player seek` from bein g used during live streams.
+* **Changed:** Prompts in `[p]startover` and `/player startover` to acknowledge live streams.
+* **Fixed:** `[p]nowplaying` and `/player nowplaying` throwing an exception whenever a track's duration isn't provided.
+* **Fixed:** The bot not responding in Direct Messages.
+* **Fixed:** `[p]search` throwing a `Invalid string length` exception.
+    * This was suppose to be fixed in 2023.4.3, but failed since it still provided a string that broke the menu.
+    * After testing, this is now fully resolved.
+* **Fixed:** IPv6 Rotation not being properly applied. It's now being applied every time a track is added to the queue.
+* **Fixed:** `[p]help` showing the command's name in a list of aliases for a command.
+* **Fixed:** `/settings djmode` not allowing DJs without the **Manage Server** permission to use the command.
+* **Fixed:** Missing permissions message returning an empty string.
+* **Fixed:** Reactions throwing an exception if the bot was missing the **Add Reactions** permission.
+* **Removed:** Unused packages, including `underscore`.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2023.5.2...2024.1.0)
+
 ## 2023.5.2
 This is a maintenance release.
 

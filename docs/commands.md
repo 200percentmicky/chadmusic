@@ -307,6 +307,15 @@ Retrieves lyrics from the playing track or from search query.
 | --------- | ---- | ----------- |
 | `[query]` | string | The search query to find lyrics. If nothing is provided, uses the currently playing track. |
 
+### !move | /queue move `<track>` `[position]`
+
+Moves a track in the queue to a new position.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<track>` | number | The track to move |
+| `[position]` | number | The new position in the queue. If omitted, moves the selection to the first position in the queue. |
+
 ### !nowplaying | !np | /player nowplaying
 
 Shows the currently playing track.
@@ -475,6 +484,10 @@ Skips to the specified entry in the queue.
     This command can only be used by DJs if there are more than 2 people in the voice channel.
 
 Restarts the currently playing song.
+
+!!! tip
+    
+    If the currently playing track is a live stream, the stream will refresh instead.
 
 ### !stop | /player stop
 
@@ -659,15 +672,13 @@ Toggles DJ Mode for the server.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `off`. |
 
-### !emptycooldown | /settings global emptycooldown `<time>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+### !emptycooldown | /settings emptycooldown `<time>`
 
 Sets how long the bots stays in an empty voice channel.
 
-`<time>` The time the bot will stay in seconds.
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<time>` | number | The time the bot will stay in seconds. |
 
 !!! info
 
@@ -689,11 +700,7 @@ Toggles the ability to change the volume past 200%.
 
 Shows the bot's current global settings.
 
-### !leaveonempty | /settings global leaveonempty `<toggle>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+### !leaveonempty | /settings leaveonempty `<toggle>`
 
 Toggles whether the bot should leave when the voice channel is empty for a period of time.
 
@@ -705,11 +712,7 @@ Toggles whether the bot should leave when the voice channel is empty for a perio
 
     When this is active, the bot will leave depending on how long **Empty Cooldown** is set.
 
-### !leaveonfinish | /settings global leaveonfinish `<toggle>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+### !leaveonfinish | /settings leaveonfinish `<toggle>`
 
 Toggles whether the bot should leave when the end of the queue has been reached.
 
@@ -717,11 +720,7 @@ Toggles whether the bot should leave when the end of the queue has been reached.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !leaveonstop | /settings global leaveonstop `<toggle>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+### !leaveonstop | /settings leaveonstop `<toggle>`
 
 Toggles whether the bot should leave when the player is stopped.
 
@@ -754,7 +753,6 @@ Changes the bot's prefix for this server.
 ??? info "Prefix command only."
 
     This command is only available as a prefix command.
-
 
 ??? failure "Administrators only."
 
