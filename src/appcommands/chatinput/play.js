@@ -15,7 +15,15 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
-const { PermissionsBitField } = require('discord.js');
+const {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    PermissionsBitField,
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder
+} = require('discord.js');
 const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../modules/hasURL');
@@ -267,7 +275,7 @@ class CommandPlay extends SlashCommand {
                 : undefined;
 
             let requested = ctx.options.track?.query;
-            let station;
+            let stations;
             let fileMetadata;
             let isFile = false;
 
@@ -298,19 +306,121 @@ class CommandPlay extends SlashCommand {
                 } catch {
                     return this.client.ui.reply(ctx, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
                 }
-            }
-
-            if (ctx.subcommands[0] === 'radio') {
+            } else if (ctx.subcommands[0] === 'radio') {
                 switch (ctx.subcommands[1]) {
                 case 'iheartradio': {
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
-                    station = search.stations[0];
-                    requested = await iheart.streamURL(station.id);
-                }
-                }
-            }
+                    stations = search.stations;
 
-            if (ctx.subcommands[0] === 'now') {
+                    const emojiNumber = {
+                        1: '1️⃣',
+                        2: '2️⃣',
+                        3: '3️⃣',
+                        4: '4️⃣',
+                        5: '5️⃣',
+                        6: '6️⃣',
+                        7: '7️⃣',
+                        8: '8️⃣',
+                        9: '9️⃣',
+                        10: '🔟'
+                    };
+
+                    const resultsFormattedList = stations.map(x => `**${emojiNumber[stations.indexOf(x) + 1]}** **${x.name}**\n${x.frequency} ${x.band} ${x.callLetters} - ${x.city} ${x.state}`).join('\n\n');
+
+                    const embed = new EmbedBuilder()
+                        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                        .setAuthor({
+                            name: 'Which station do you wanna tune to?',
+                            iconURL: _member.user.avatarURL({ dynamic: true })
+                        })
+                        .setDescription(`${resultsFormattedList}`)
+                        .setFooter({
+                            text: 'Make your selection using the menu below.'
+                        });
+
+                    const menuOptions = [];
+                    let i;
+                    for (i = 0; i < stations.length; i++) {
+                        const track = new StringSelectMenuOptionBuilder()
+                            .setLabel(`${stations[i].name.length > 95
+                                ? stations[i].name.substring(0, 92) + '...'
+                                : stations[i].name}
+                            `)
+                            .setDescription(`${stations[i].frequency} ${stations[i].band} ${stations[i].callLetters} - ${stations[i].city} ${stations[i].state}`)
+                            .setValue(`${i}`)
+                            .setEmoji({
+                                name: emojiNumber[i + 1]
+                            });
+
+                        menuOptions.push(track);
+                    }
+
+                    const menu = new StringSelectMenuBuilder()
+                        .setCustomId('track_menu')
+                        .setPlaceholder('Pick a station!')
+                        .addOptions(menuOptions);
+
+                    const cancel = new ButtonBuilder()
+                        .setCustomId('cancel_search')
+                        .setStyle(ButtonStyle.Danger)
+                        .setEmoji(process.env.CLOSE);
+
+                    const trackMenu = new ActionRowBuilder()
+                        .addComponents(menu);
+
+                    const cancelButton = new ActionRowBuilder()
+                        .addComponents(cancel);
+
+                    await ctx.send({ embeds: [embed], components: [trackMenu, cancelButton] });
+
+                    ctx.registerComponent(
+                        'track_menu',
+                        async (selCtx) => {
+                            if (ctx.user.id !== selCtx.user.id) {
+                                await selCtx.defer(true);
+                                return this.client.ui.reply(selCtx, 'no', 'That component can only be used by the user that ran this command.');
+                            }
+
+                            try {
+                                channel.sendTyping();
+                                requested = await iheart.streamURL(stations[parseInt(selCtx.values[0])].id);
+                                selCtx.acknowledge();
+
+                                await this.client.player.play(vc, requested, {
+                                    textChannel: channel,
+                                    member: _member,
+                                    metadata: {
+                                        ctx,
+                                        isRadio: ctx.subcommands[0] === 'radio',
+                                        radioStation: stations[parseInt(selCtx.values[0])],
+                                        silent: ctx.subcommands[0] === 'silently'
+                                    }
+                                });
+                            } catch (err) {
+                                return this.client.ui.reply(selCtx, 'error', err, 'Player Error');
+                            } finally {
+                                ctx.delete();
+                            }
+                        },
+                        30 * 1000
+                    );
+
+                    ctx.registerComponent(
+                        'cancel_search',
+                        async (btnCtx) => {
+                            if (ctx.user.id !== btnCtx.user.id) {
+                                await btnCtx.defer(true);
+                                return this.client.ui.reply(btnCtx, 'no', 'That component can only be used by the user that ran this command.');
+                            }
+
+                            btnCtx.acknowledge();
+                            btnCtx.delete();
+                        },
+                        30 * 1000
+                    );
+                }
+                }
+            } else if (ctx.subcommands[0] === 'now') {
                 if (vc.members.size <= 3 || dj) {
                     requested = ctx.options.now.query;
 
@@ -345,7 +455,7 @@ class CommandPlay extends SlashCommand {
                         metadata: {
                             ctx,
                             isRadio: ctx.subcommands[0] === 'radio',
-                            radioStation: station ?? undefined,
+                            radioStation: stations ?? undefined,
                             silent: ctx.subcommands[0] === 'silently'
                         }
                     });
@@ -364,7 +474,7 @@ class CommandPlay extends SlashCommand {
                         isFile,
                         fileMetadata,
                         isRadio: ctx.subcommands[0] === 'radio',
-                        radioStation: station ?? undefined,
+                        radioStation: stations ?? undefined,
                         silent: ctx.subcommands[0] === 'silently'
                     }
                 });
