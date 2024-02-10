@@ -75,7 +75,7 @@ module.exports = class CommandMove extends Command {
 
         if (vc.members.size <= 2 || dj) {
             const track = parseInt(args.track);
-            const position = parseInt(args.position);
+            const position = parseInt(args.position || 1);
 
             if (track < 1 || track > queue.songs.length) {
                 return this.client.ui.reply(message, 'error', `Track position must be between tracks 1 or ${queue.songs.length - 1}.`);
