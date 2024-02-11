@@ -35,7 +35,13 @@ This release contains a lot of internal changes including overhauling the bot's 
 * **Changed:** Prevent slash commands from executing in Direct Messages. (except for `/core`)
 * **Changed:** `[p]license` will default to sending a direct message to the user.
     * If direct messages are not being accepted, it will send it to the channel instead.
-* **Changed:** Prevent `[p]seek` and `/player seek` from being used during live streams.
+* **Changed:** Prevented the following commands from being used during live broadcasts.
+    * `[p]seek`
+    * `[p]reverse`
+    * `[p]tempo`
+    * `/player seek`
+    * `/filter reverse`
+    * `/filter tempo`  
 * **Changed:** Prompts in `[p]startover` and `/player startover` to acknowledge live streams.
 * **Fixed:** `[p]nowplaying` and `/player nowplaying` throwing an exception whenever a track's duration isn't provided.
 * **Fixed:** The bot not responding in Direct Messages.
