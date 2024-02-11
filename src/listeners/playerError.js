@@ -1,5 +1,5 @@
 /// ChadMusic - The Chad Music Bot
-/// Copyright (C) 2023  Micky D. | @200percentmicky | Micky-kun#3836
+/// Copyright (C) 2024  Micky | 200percentmicky
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
