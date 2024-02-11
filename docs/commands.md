@@ -35,12 +35,16 @@ Executes Javascript code.
 The following variables will always be available when running the command:
 
 * `Discord` - discord.js
+* `player` - Active player in the server, if any.
+* `queue` - Queue of active player, if any.
+* `message` - Message object
 * `_` - lodash
 * `prettyBytes` - pretty-bytes
 * `prettyMs` - prettyMs
 * `colonNotation` - colon-notation
 * `commonTags` - common-tags
 * `Genius` - genius-lyrics
+
 
 !!! danger "Eval can be harmful!"
 
