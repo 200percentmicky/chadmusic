@@ -365,6 +365,10 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'reverse': {
+                if (queue.songs[0].isLive) {
+                    return this.client.ui.reply(message, 'no', 'This command is not available during live broadcasts.')
+                }
+        
                 const inReverse = _.find(queue.filters.filters, (obj) => {
                     return obj.name === 'reverse';
                 });
@@ -385,6 +389,10 @@ class CommandFilter extends SlashCommand {
             }
 
             case 'tempo': {
+                if (queue.songs[0].isLive) {
+                    return this.client.ui.reply(message, 'no', 'This command is not available during live broadcasts.')
+                }
+        
                 const rate = ctx.options.tempo.rate;
                 try {
                     await queue.filters.set('tempo', rate !== 0 ? `rubberband=tempo=${rate}` : false);
