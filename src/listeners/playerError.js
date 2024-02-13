@@ -59,7 +59,7 @@ module.exports = class ListenerPlayerError extends Listener {
             }
         }
 
-        embed.setDescription(`${formattedError}\n${error}`);
+        embed.setDescription(`${formattedError ? `${formattedError}\n` : ''}${error}`);
 
         channel.send(linkPerms
             ? { embeds: [embed] }
