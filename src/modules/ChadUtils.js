@@ -66,9 +66,9 @@ class ChadUtils {
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
      * @param {string} status The new status to set.
      */
-    static async setVcStatus(channel, status) {
+    static async setVcStatus(vc, status) {
         try {
-            await channel.client.rest.put(`/channels/${channel.id}/voice-status`, {
+            await channel.client.rest.put(`/channels/${vc.id}/voice-status`, {
                 body: {
                     status
                 }
