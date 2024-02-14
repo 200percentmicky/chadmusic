@@ -18,7 +18,7 @@
 
 const logger = require('./modules/ChadLogger.js');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { ChannelType, GatewayIntentBits, Partials } = require('discord.js');
+const { ChannelType, GatewayIntentBits, Partials, REST } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
 const { SpotifyPlugin } = require('@distube/spotify');
@@ -63,6 +63,7 @@ class ChadMusic extends AkairoClient {
         this.utils = ChadUtils;
         this.extraUtils = require('bot-utils');
         this.buildNumber = buildNumber;
+        this.rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
         // Bot version.
         this.version = `${version} (Build ${this.buildNumber})`;

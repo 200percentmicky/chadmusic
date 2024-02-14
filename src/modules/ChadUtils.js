@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /* eslint-disable no-unused-vars */
-const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message } = require('discord.js');
+const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel } = require('discord.js');
 const { CommandContext } = require('slash-create');
 /* eslint-enable no-unused-vars */
 
@@ -55,6 +55,28 @@ class ChadUtils {
             member.user.id === process.env.OWNER_ID;
 
         return permission;
+    }
+
+    /**
+     * Sets the status for the connected voice channel.
+     * 
+     * ⚠ **Experimental:** Uses an undocumented endpoint in Discord's API
+     * and might change in the future.
+     * 
+     * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
+     * @param {string} status The new status to set.
+     */
+    static async setVcStatus(channel, status) {
+        try {
+            await channel.client.rest.put(`/channels/${channel.id}/voice-status`, {
+                body: {
+                    status
+                }
+            });
+            return;
+        } catch {
+            this.client.logger.error(`Failed to set voice channel status.\n${err.stack}`)
+        }
     }
 
     /**
