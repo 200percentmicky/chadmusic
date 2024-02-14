@@ -68,14 +68,14 @@ class ChadUtils {
      */
     static async setVcStatus(vc, status) {
         try {
-            await channel.client.rest.put(`/channels/${vc.id}/voice-status`, {
+            await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
                 body: {
                     status
                 }
             });
             return;
         } catch {
-            this.client.logger.error(`Failed to set voice channel status.\n${err.stack}`)
+            vc.client.logger.error(`Failed to set voice channel status.\n${err.stack}`);
         }
     }
 
