@@ -325,7 +325,7 @@ class CommandPlayer extends SlashCommand {
                 };
                 if (volume >= 250) return ':loud_sound::sob::ok_hand:';
                 return volumeIcon[Math.round(volume / 50) * 50];
-                };
+            };
 
             nowPlayingFields.push({
                 name: `${volumeEmoji()} Volume`,
