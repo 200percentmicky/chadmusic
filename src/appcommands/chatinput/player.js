@@ -317,13 +317,15 @@ class CommandPlayer extends SlashCommand {
             const volumeEmoji = () => {
                 const volume = queue.volume;
                 const volumeIcon = {
-                    50: '🔈',
-                    100: '🔉',
-                    150: '🔊'
+                    0: ':mute:',
+                    50: ':sound:',
+                    100: ':loud_sound:',
+                    150: ':loud_sound::zap:',
+                    200: ':loud_sound::zap::anger:'
                 };
-                if (volume >= 175) return '🔊😭👌';
+                if (volume >= 250) return ':loud_sound::sob::ok_hand:';
                 return volumeIcon[Math.round(volume / 50) * 50];
-            };
+                };
 
             nowPlayingFields.push({
                 name: `${volumeEmoji()} Volume`,
@@ -434,11 +436,13 @@ class CommandPlayer extends SlashCommand {
             if (ctx.subcommands[1] === 'view') {
                 const volumeEmoji = () => {
                     const volumeIcon = {
-                        50: '🔈',
-                        100: '🔉',
-                        150: '🔊'
+                        0: ':mute:',
+                        50: ':sound:',
+                        100: ':loud_sound:',
+                        150: ':loud_sound::zap:',
+                        200: ':loud_sound::zap::anger:'
                     };
-                    if (volume >= 175) return '🔊😭👌';
+                    if (volume >= 250) return ':loud_sound::sob::ok_hand:';
                     return volumeIcon[Math.round(volume / 50) * 50];
                 };
                 return this.client.ui.custom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
