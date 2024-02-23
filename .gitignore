@@ -4,6 +4,7 @@
 .vs
 .__pycache__
 .yarn
+.yarnrc.yml
 
 # Cookies
 cookies.json
