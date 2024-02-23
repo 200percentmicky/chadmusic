@@ -63,5 +63,9 @@
     "eslint-plugin-promise": "^6.1.1",
     "semistandard": "^16.0.1",
     "standard": "^17.0.0"
+  },
+  "overrides": {
+    "@distube/ytsr": "$@distube/ytsr",
+    "undici": "^6.6.0"
   }
 }
