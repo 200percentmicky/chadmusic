@@ -259,6 +259,10 @@ class ChadMusic extends AkairoClient {
         }
     }
 
+    /**
+     * Logs the client into Discord.
+     * @param {string} token Your bot's token.
+     */
     async login (token) {
         try {
             return await super.login(token);
@@ -266,6 +270,16 @@ class ChadMusic extends AkairoClient {
             logger.error('An invalid token was provided. Please provide your bot\'s token in the TOKEN environment variable. Learn more: https://200percentmicky.github.io/chadmusic/setup/configuration');
             process.exit(1);
         }
+    }
+
+    /**
+     * Logs the client off Discord and destorys the client.
+     */
+    async die () {
+        logger.warn('Shutting down...');
+        this.creator.cleanRegisteredComponents();
+        this.destroy();
+        process.exitCode = 0;
     }
 }
 
