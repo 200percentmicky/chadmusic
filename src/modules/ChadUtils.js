@@ -64,7 +64,7 @@ class ChadUtils {
      * and might change in the future.
      * 
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
-     * @param {string} status The new status to set.
+     * @param {string|null} status The new status to set.
      */
     static async setVcStatus(vc, status) {
         try {
@@ -74,7 +74,7 @@ class ChadUtils {
                 }
             });
             return;
-        } catch {
+        } catch (err) {
             vc.client.logger.error(`Failed to set voice channel status.\n${err.stack}`);
         }
     }
