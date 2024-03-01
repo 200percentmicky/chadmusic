@@ -17,6 +17,7 @@
 /* eslint-disable no-unused-vars */
 const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel } = require('discord.js');
 const { CommandContext } = require('slash-create');
+const CMError = require('./CMError.js');
 /* eslint-enable no-unused-vars */
 
 /**
@@ -67,6 +68,9 @@ class ChadUtils {
      * @param {string|null} status The new status to set.
      */
     static async setVcStatus(vc, status) {
+        const trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
+        if (trackVcStatus !== true) throw new CMError('FEATURE_DISABLED', '"trackVcStatus" is disabled in this guild.');
+
         try {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
                 body: {
