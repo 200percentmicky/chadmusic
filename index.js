@@ -35,7 +35,7 @@ logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
 logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
-logger.info('Created by Micky D. | @200percentmicky | Micky-kun#3836');
+logger.info('Created by Micky | @200percentmicky');
 logger.info(`Bot Version: ${version} (Build ${execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim()})`);
 logger.info('Loading libraries...');
 
