@@ -84,6 +84,7 @@ class ChadMusic extends AkairoClient {
             allowSilent: true,
             defaultVolume: 100,
             textChannel: null,
+            trackVcStatus: true,
             blockedPhrases: [],
             thumbnailSize: 'small',
             emptyCooldown: 60,
