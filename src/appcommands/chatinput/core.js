@@ -255,7 +255,6 @@ class CommandCore extends SlashCommand {
 
             case 'shutdown': {
                 await ctx.send(`${process.env.EMOJI_WARN} Shutting down...`);
-                this.client.logger.warn('Cleaning up before shutting down...');
 
                 let restartReport = ctx.options.owner.shutdown.reason;
                 if (!restartReport) restartReport = 'No reason. See ya! 👋';
@@ -267,9 +266,7 @@ class CommandCore extends SlashCommand {
                 } finally {
                     this.client.logger.info(`[Shutdown] ${restartReport}`);
                     this.client.logger.warn('Shutting down...');
-                    this.client.creator.cleanRegisteredComponents();
-                    this.client.destroy();
-                    process.exitCode = 0;
+                    this.client.die();
                 }
             }
             }
