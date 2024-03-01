@@ -69,7 +69,7 @@ class ChadUtils {
      */
     static async setVcStatus(vc, status) {
         const trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
-        if (trackVcStatus !== true) throw new CMError('FEATURE_DISABLED', '"trackVcStatus" is disabled in this guild.');
+        if (trackVcStatus !== true) throw new CMError('FEATURE_DISABLED', null, '"trackVcStatus" is disabled in this guild.');
 
         try {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
@@ -97,7 +97,7 @@ class ChadUtils {
             const command = await message.channel.client.commands.findCommand(commandName);
             return command.exec(message, args);
         } catch {
-            throw new Error(`Command ${commandName} not found.`);
+            throw new CMError('COMMAND_NOT_FOUND', null, `Command ${commandName} not found.`);
         }
     }
 
