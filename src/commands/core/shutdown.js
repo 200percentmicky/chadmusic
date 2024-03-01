@@ -26,22 +26,27 @@ module.exports = class CommandShutdown extends Command {
                 text: 'Shuts down the bot.',
                 usage: '[reason]',
                 details: '`[reason]` The reason for shutting down the bot.'
-            }
+            },
+            args: [
+                {
+                    id: 'reason',
+                    match: 'rest'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-        let restartReport = args.slice(1).join(' ');
+    async exec (message, args) {
+        let restartReport = args.reason;
         if (!restartReport) restartReport = 'No reason. See ya! 👋';
-        this.client.logger.warn('Cleaning up before shutting down...');
-        const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
+
         await message.reply(':warning: Shutting down...');
+
+        const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
         await errChannel.send({ content: `:warning: **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
+
         this.client.logger.info(`[Shutdown] ${restartReport}`);
         this.client.logger.warn('Shutting down...');
-        this.client.creator.cleanRegisteredComponents();
-        this.client.destroy();
-        process.exitCode = 0;
+        this.client.die();
     }
 };
