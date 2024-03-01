@@ -25,9 +25,6 @@ module.exports = class ListenerSIGINT extends Listener {
     }
 
     async exec () {
-        this.client.logger.warn('SIGINT received!');
-        this.client.logger.warn('Shutting down...');
-        this.client.destroy();
-        process.exitCode = 0;
+        this.client.die();
     }
 };
