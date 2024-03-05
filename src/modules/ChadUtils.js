@@ -68,10 +68,8 @@ class ChadUtils {
      * @param {string|null} status The new status to set.
      */
     static async setVcStatus(vc, status) {
-        let trackVcStatus;
-        try {
-            trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
-        } catch {}
+        const trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
+        if (trackVcStatus !== true) throw new CMError('FEATURE_DISABLED', null, '"trackVcStatus" is disabled in this guild.');
 
         try {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
