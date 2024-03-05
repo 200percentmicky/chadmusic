@@ -70,6 +70,7 @@ module.exports = class CommandForceSkip extends Command {
 
         if (vc.members.size <= 2) {
             if (!this.client.player.getQueue(message).songs[1]) {
+                await channel.client.utils.setVcStatus(vc, null);
                 this.client.player.stop(message);
                 return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
             }

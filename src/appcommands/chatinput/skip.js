@@ -91,6 +91,7 @@ class CommandSkip extends SlashCommand {
         case 'force': {
             if (dj || vc.members.size <= 2) {
                 if (!queue.songs[1]) {
+                    await channel.client.utils.setVcStatus(vc, null);
                     this.client.player.stop(guild);
                     return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                 }
@@ -134,6 +135,7 @@ class CommandSkip extends SlashCommand {
                 if (neededVotes) {
                     queue.votes = [];
                     if (!queue.songs[1]) {
+                        await channel.client.utils.setVcStatus(vc, null);
                         this.client.player.stop(guild);
                         return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                     }
@@ -153,6 +155,7 @@ class CommandSkip extends SlashCommand {
             } else {
                 queue.votes = [];
                 if (!queue.songs[1]) {
+                    await channel.client.utils.setVcStatus(vc, null);
                     this.client.player.stop(guild);
                     return this.client.ui.custom(ctx, ':checkered_flag:', process.env.COLOR_INFO, 'Reached the end of the queue.');
                 }

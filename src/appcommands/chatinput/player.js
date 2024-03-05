@@ -390,6 +390,7 @@ class CommandPlayer extends SlashCommand {
 
             if (vc.members.size <= 2 || dj) {
                 if (queue) {
+                    await channel.client.utils.setVcStatus(vc, null);
                     this.client.player.stop(guild);
                 }
                 this.client.vc.leave(guild);
@@ -654,6 +655,7 @@ class CommandPlayer extends SlashCommand {
 
             if (vc.members.size <= 2 || dj) {
                 queue.hasStopped = true;
+                await channel.client.utils.setVcStatus(vc, null);
                 this.client.player.stop(guild);
                 return this.client.ui.custom(ctx, ':stop_button:', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
             } else {
