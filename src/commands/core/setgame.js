@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
+const { ActivityType } = require('discord.js')
 
 module.exports = class CommandSetGame extends Command {
     constructor () {
@@ -26,32 +27,45 @@ module.exports = class CommandSetGame extends Command {
                 details: '`[type]` The type of status to set.\n`<status>` The overall status for the bot to use.'
             },
             category: '💻 Core',
-            ownerOnly: true
+            ownerOnly: true,
+            args: [
+                {
+                    id: 'type',
+                    type: [
+                        'competing',
+                        'custom',
+                        'listening',
+                        'playing',
+                        'watching'
+                    ],
+                    default: 'custom'
+                },
+                {
+                    id: 'status',
+                    match: 'restContent'
+                }
+            ]
         });
     }
 
-    async exec (message) {
-        const args = message.content.split(/ +/g);
-
+    async exec (message, args) {
         const statusType = {
-            watching: 'WATCHING',
-            listening: 'LISTENING',
-            streaming: 'STREAMING'
+            competing: ActivityType.Competing,
+            custom: ActivityType.Custom,
+            listening: ActivityType.Listening,
+            playing: ActivityType.Playing,
+            watching: ActivityType.Watching
         };
 
-        const setStatus = async (status, type) => {
+        const setStatus = async (status, type, url) => {
             try {
-                await this.client.user.setActivity(status, { type: type });
+                await this.client.user.setActivity(status, { type, url });
                 return message.react('✅').catch(() => {});
             } catch (err) {
-                message.reply({ content: `:x: Unable to set status: \`${err.message}\`` });
+                message.reply({ content: `:x: Failed to set status: \`${err.message}\`` });
             }
         };
 
-        if (statusType[args[1]]) {
-            return setStatus(args.slice(2).join(' '), statusType[args[1]]);
-        } else {
-            return setStatus(args.slice(1).join(' '), 'PLAYING');
-        }
+        return setStatus(args.type === 'custom' ? message.content.split(/ +/g).slice(1).join(' ') : args.status, statusType[args.type]);
     }
 };
