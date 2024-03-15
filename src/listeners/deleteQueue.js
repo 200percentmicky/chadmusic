@@ -16,15 +16,17 @@
 
 const { Listener } = require('discord-akairo');
 
-module.exports = class ListenerLeaveOnFinishOrStop extends Listener {
+module.exports = class ListenerDeleteQueue extends Listener {
     constructor () {
-        super('leaveOnFinishOrStop', {
+        super('deleteQueue', {
             emitter: 'player',
             event: 'deleteQueue'
         });
     }
 
     async exec (queue) {
+        await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
+
         if (queue.hasStopped) {
             if (queue.leaveOnStop) {
                 this.client.vc.leave(queue.textChannel.guild);
