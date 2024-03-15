@@ -58,10 +58,6 @@ module.exports = class CommandGlobalSettings extends Command {
             .setTitle(':globe_with_meridians: Global Settings')
             .setDescription(stripIndents`
                 **Audio Encoder:** ${encoderType[streamType]}
-                **Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
-                **Leave on Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
-                **Leave on Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
-                **Leave on Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
                 `
             )
