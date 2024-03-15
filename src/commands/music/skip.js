@@ -76,7 +76,6 @@ module.exports = class CommandSkip extends Command {
             if (neededVotes) {
                 queue.votes = [];
                 if (!queue.songs[1]) {
-                    await channel.client.utils.setVcStatus(vc, null);
                     this.client.player.stop(message.guild);
                     return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
                 }
@@ -97,7 +96,6 @@ module.exports = class CommandSkip extends Command {
         } else {
             queue.votes = [];
             if (!queue.songs[1]) {
-                await channel.client.utils.setVcStatus(vc, null);
                 this.client.player.stop(message.guild);
                 return this.client.ui.custom(message, ':checkered_flag:', process.env.COLOR_INFO, "Reached the end of the queue.");
             }

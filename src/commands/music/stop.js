@@ -56,7 +56,6 @@ module.exports = class CommandStop extends Command {
         if (vc.members.size <= 2 || dj) {
             const queue = this.client.player.getQueue(message.guild);
             queue.hasStopped = true;
-            await channel.client.utils.setVcStatus(vc, null);
             this.client.player.stop(message);
             return this.client.ui.custom(message, ':stop_button:', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
         } else {
