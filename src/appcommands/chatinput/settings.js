@@ -466,7 +466,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         name: `ChadMusic v${version}`,
                         iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                     })
-                    .setTitle('🌐 Global Settings')
+                    .setTitle(':globe_with_meridians: Global Settings')
                     .setDescription(stripIndents`
                         **Audio Encoder:** ${encoderType[streamType]}
                         **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
@@ -498,14 +498,14 @@ module.exports = class CommandSettings extends SlashCommand {
                     })
                     .setTitle(':gear: Settings')
                     .addFields({
-                        name: '🎶 Player',
+                        name: ':notes: Player',
                         value: stripIndents`
-                        **⁉️ Prefix:** \`${prefix}\`
-                        **🔖 DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-                        **🎤 DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-                        **🖼️ Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
-                        **🔊 Default Volume:** ${defaultVolume}
-                        **#️⃣ Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                        **:interrobang: Prefix:** \`${prefix}\`
+                        **:bookmark: DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+                        **:microhphone: DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+                        **:photo_frame: Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
+                        **:loud_sound: Default Volume:** ${defaultVolume}
+                        **:hash: Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
                         **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
                         **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                         **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
@@ -513,15 +513,15 @@ module.exports = class CommandSettings extends SlashCommand {
                         `
                     },
                     {
-                        name: '🛡️ Moderation',
+                        name: ':shield: Moderation',
                         value: stripIndents`
-                        **⏲ Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-                        **🔢 Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-                        **📢 Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
-                        **😂 Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-                        **🔗 Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                        **🔞 Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
-                        **🤫 Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                        **:timer: Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+                        **:1234: Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+                        **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
+                        **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+                        **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
+                        **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                        **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                         `
                     })
                     .setTimestamp()

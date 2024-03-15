@@ -86,7 +86,7 @@ module.exports = class CommandSkip extends Command {
                 const prefix = this.client.settings.get(message.guild.id, 'prefix', process.env.PREFIX);
                 const embed = new EmbedBuilder()
                     .setColor(process.env.COLOR_INFO)
-                    .setDescription('⏭ Skipping?')
+                    .setDescription(':track_next: Skipping?')
                     .setFooter({
                         text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? ` Yo DJ, you can force skip the track by using '${prefix}forceskip'.` : ''}`,
                         icon_url: message.member.user.avatarURL({ dynamic: true })

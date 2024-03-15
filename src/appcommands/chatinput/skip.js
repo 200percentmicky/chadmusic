@@ -143,7 +143,7 @@ class CommandSkip extends SlashCommand {
                 } else {
                     const embed = new EmbedBuilder()
                         .setColor(process.env.COLOR_INFO)
-                        .setDescription('⏭ Skipping?')
+                        .setDescription(':track_next: Skipping?')
                         .setFooter({
                             text: `${votesLeft} more vote${votesLeft === 1 ? '' : 's'} needed to skip.${dj ? " Yo DJ, you can force skip the track by using '/skip force'." : ''}`,
                             icon_url: member.user.avatarURL({ dynamic: true })

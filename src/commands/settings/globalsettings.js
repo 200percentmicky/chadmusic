@@ -55,7 +55,7 @@ module.exports = class CommandGlobalSettings extends Command {
                 name: `ChadMusic v${version}`,
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             })
-            .setTitle('🌐 Global Settings')
+            .setTitle(':globe_with_meridians: Global Settings')
             .setDescription(stripIndents`
                 **Audio Encoder:** ${encoderType[streamType]}
                 **Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
