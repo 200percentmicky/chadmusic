@@ -50,12 +50,16 @@ module.exports = class CommandSetBanner extends Command {
         const image = await fetch(imageUrl);
         const buffer = Buffer.from(await image.arrayBuffer()).toString('base64');
         
-        await this.client.rest.patch(`/users/@me`, {
-                body: {
-                    banner: imageUrl ? `data:image/${imageFormat};base64,` + buffer : null
+        try {
+            await this.client.rest.patch(`/users/@me`, {
+                    body: {
+                        banner: imageUrl ? `data:image/${imageFormat};base64,` + buffer : null
+                    }
                 }
-            }
-        );
-        return message.react('✅');
+            );
+            return message.react('✅');
+        } catch (err) {
+            return message.reply({ content: `:x: An error occured in the response: \`${err}\``})
+        }
     }
 };
