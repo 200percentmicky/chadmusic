@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { ActivityType } = require('discord.js')
+const { ActivityType } = require('discord.js');
 
 module.exports = class CommandSetGame extends Command {
     constructor () {
@@ -24,7 +24,7 @@ module.exports = class CommandSetGame extends Command {
             description: {
                 text: "Sets the bot's playing status.",
                 usage: '[type] <status>',
-                details: '`[type]` The type of status to set.\n`<status>` The overall status for the bot to use.'
+                details: '`[type]` The type of status to use.\n`<status>` The status for the bot to use.'
             },
             category: '💻 Core',
             ownerOnly: true,
