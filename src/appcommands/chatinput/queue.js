@@ -368,7 +368,7 @@ class CommandQueue extends SlashCommand {
             const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
 
             /* Finally send the embed of the queue. */
-            await ctx.send({ embeds: [queueEmbed], components: components });
+            await ctx.send({ embeds: [queueEmbed], components });
 
             // TODO: Look into combining the collector into a single function.
 
@@ -414,7 +414,7 @@ class CommandQueue extends SlashCommand {
                     iconURL: member.user.avatarURL({ dynamic: true })
                 });
 
-                await interaction.editParent({ embeds: [queueEmbed], components: components });
+                await interaction.editParent({ embeds: [queueEmbed], components });
             };
 
             const youDidntClickThat = { // lol

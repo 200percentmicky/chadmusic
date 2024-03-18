@@ -654,7 +654,6 @@ class CommandPlayer extends SlashCommand {
 
             if (vc.members.size <= 2 || dj) {
                 queue.hasStopped = true;
-                
                 this.client.player.stop(guild);
                 return this.client.ui.custom(ctx, ':stop_button:', process.env.COLOR_INFO, 'Stopped the player and cleared the queue.');
             } else {

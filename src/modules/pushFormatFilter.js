@@ -51,9 +51,9 @@ function pushFormatFilter (queue, name, value) {
         _.remove(formatFilterArray, (x) => {
             return x.name === name;
         });
-        return formatFilterArray.push({ name: name, value: value });
+        return formatFilterArray.push({ name, value });
     } else {
-        return formatFilterArray.push({ name: name, value: value });
+        return formatFilterArray.push({ name, value });
     }
 }
 

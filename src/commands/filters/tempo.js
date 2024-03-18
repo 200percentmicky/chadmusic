@@ -63,7 +63,7 @@ module.exports = class CommandTempo extends Command {
         if (!queue) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         if (queue.songs[0].isLive) {
-            return this.client.ui.reply(message, 'no', 'This command is not available during live broadcasts.')
+            return this.client.ui.reply(message, 'no', 'This command is not available during live broadcasts.');
         }
 
         const currentVc = this.client.vc.get(vc);

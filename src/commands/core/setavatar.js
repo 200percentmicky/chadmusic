@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { ActivityType } = require('discord.js')
 
 module.exports = class CommandSetAvatar extends Command {
     constructor () {
@@ -38,20 +37,19 @@ module.exports = class CommandSetAvatar extends Command {
     }
 
     async exec (message, args) {
-        const imageUrl = args.image ?? message.attachments?.first()?.url
+        const imageUrl = args.image ?? message.attachments?.first()?.url;
 
-        let imageFormat;
         try {
-            imageFormat = imageUrl.match(/(gif|jpg|png)/g)[0]
+            imageUrl.match(/(gif|jpg|png)/g);
         } catch {
-            return this.client.ui.reply(message, 'error', `:x: Supported image formats are GIF, JPEG, or PNG.`);
+            return this.client.ui.reply(message, 'error', ':x: Supported image formats are GIF, JPEG, or PNG.');
         }
 
         try {
             await this.client.user.setAvatar(imageUrl ?? null);
             return message.react('✅');
         } catch (err) {
-            return message.reply({ content: `:x: An error occured in the response: \`${err}\``})
+            return message.reply({ content: `:x: An error occured in the response: \`${err}\`` });
         }
     }
 };

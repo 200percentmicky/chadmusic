@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { ActivityType } = require('discord.js')
 
 module.exports = class CommandSetBanner extends Command {
     constructor () {
@@ -38,28 +37,28 @@ module.exports = class CommandSetBanner extends Command {
     }
 
     async exec (message, args) {
-        const imageUrl = args.image ?? message.attachments?.first()?.url
+        const imageUrl = args.image ?? message.attachments?.first()?.url;
 
         let imageFormat;
         try {
-            imageFormat = imageUrl.match(/(gif|jpg|png)/g)[0]
+            imageFormat = imageUrl.match(/(gif|jpg|png)/g)[0];
         } catch {
-            return this.client.ui.reply(message, 'error', `:x: Supported image formats are GIF, JPEG, or PNG.`);
+            return this.client.ui.reply(message, 'error', ':x: Supported image formats are GIF, JPEG, or PNG.');
         }
 
         const image = await fetch(imageUrl);
         const buffer = Buffer.from(await image.arrayBuffer()).toString('base64');
-        
+
         try {
-            await this.client.rest.patch(`/users/@me`, {
-                    body: {
-                        banner: imageUrl ? `data:image/${imageFormat};base64,` + buffer : null
-                    }
+            await this.client.rest.patch('/users/@me', {
+                body: {
+                    banner: imageUrl ? `data:image/${imageFormat};base64,` + buffer : null
                 }
+            }
             );
             return message.react('✅');
         } catch (err) {
-            return message.reply({ content: `:x: An error occured in the response: \`${err}\``})
+            return message.reply({ content: `:x: An error occured in the response: \`${err}\`` });
         }
     }
 };

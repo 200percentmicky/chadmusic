@@ -60,14 +60,14 @@ class ChadUtils {
 
     /**
      * Sets the status for the connected voice channel.
-     * 
+     *
      * ⚠ **Experimental:** Uses an undocumented endpoint in Discord's API
      * and might change in the future.
-     * 
+     *
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
      * @param {string|null} status The new status to set.
      */
-    static async setVcStatus(vc, status) {
+    static async setVcStatus (vc, status) {
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
         const trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
         if (trackVcStatus !== true) return;
@@ -78,7 +78,6 @@ class ChadUtils {
                     status
                 }
             });
-            return;
         } catch (err) {
             vc.client.logger.error(`Failed to set voice channel status.\n${err.stack}`);
         }

@@ -168,7 +168,7 @@ module.exports = class CommandQueue extends Command {
         const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
 
         /* Finally send the embed of the queue. */
-        const msg = await message.reply({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+        const msg = await message.reply({ embeds: [queueEmbed], components, allowedMentions: { repliedUser: false } });
 
         /* Button Collector */
         const collector = await msg.createMessageComponentCollector({
@@ -231,7 +231,7 @@ module.exports = class CommandQueue extends Command {
                     iconURL: message.member.user.avatarURL({ dynamic: true })
                 });
 
-                await interaction.update({ embeds: [queueEmbed], components: components, allowedMentions: { repliedUser: false } });
+                await interaction.update({ embeds: [queueEmbed], components, allowedMentions: { repliedUser: false } });
             };
 
             // First Page Button
