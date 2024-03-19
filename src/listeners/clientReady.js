@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const path = require('path');
 
 module.exports = class SurferReady extends Listener {
     constructor () {
@@ -25,6 +26,16 @@ module.exports = class SurferReady extends Listener {
     }
 
     async exec () {
+        // Register commands in the "commands" directory.
+        this.client.logger.info('Registering app commands...');
+        await this.client.creator.registerCommandsIn(path.join(__dirname, '..', 'appcommands'));
+        await this.client.creator.syncCommands({ // Sync all commands with Discord.
+            deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
+            skipGuildErrors: true,
+            syncGuilds: true,
+            syncPermissions: true
+        });
+
         this.client.logger.info(`Logged in as ${this.client.user.tag.replace(/#0{1,1}$/, '')} (${this.client.user.id})`);
         this.client.logger.info('[Ready!<3♪] Let\'s party!!');
     }

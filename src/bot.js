@@ -231,15 +231,6 @@ class ChadMusic extends AkairoClient {
             )
         );
 
-        // Register commands in the "commands" directory.
-        this.creator.registerCommandsIn(path.join(__dirname, 'appcommands'));
-        this.creator.syncCommands({ // Sync all commands with Discord.
-            deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
-            skipGuildErrors: true,
-            syncGuilds: true,
-            syncPermissions: true
-        });
-
         // Set custom emitters
         this.listeners.setEmitters({
             process,
