@@ -274,43 +274,76 @@ class CommandPlay extends SlashCommand {
                 })
                 : undefined;
 
-            let requested = ctx.options.track?.query;
-            let stations;
+            let radioStation;
             let fileMetadata;
             let isFile = false;
 
-            if (ctx.subcommands[0] === 'attachment') {
-                requested = ctx.attachments.first().url;
+            const boogie = async (requested) => {
+                /* eslint-disable-next-line no-useless-escape */
+                await this.client.player.play(vc, requested, {
+                    textChannel: channel,
+                    member: _member,
+                    position: ctx.subcommands[0] === 'now' ? 1 : 0,
+                    metadata: {
+                        ctx,
+                        isFile,
+                        fileMetadata,
+                        isRadio: ctx.subcommands[0] === 'radio',
+                        radioStation: radioStation ?? undefined,
+                        silent: ctx.subcommands[0] === 'silently'
+                    }
+                });
+
+                if (ctx.subcommands[0] === 'now') {
+                    try {
+                        await this.client.player.skip(guild);
+                    } catch {}
+                }
+            };
+
+            switch (ctx.subcommands[0]) {
+            case 'track': {
+                await boogie(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''));
+                break;
+            }
+
+            case 'attachment': {
+                const file = ctx.attachments.first().url;
 
                 // Check if ffprobe can find any any additional metadata to add.
-                try {
-                    const info = await ffprobe(requested, { path: ffprobeStatic.path });
+                ffprobe(file, { path: ffprobeStatic.path })
+                    .then(info => {
+                        // Ffmpeg parses images as videos with just one single frame. So, to check
+                        // whether the file is a video or an audio file, the best way would be to
+                        // check whether the file has a duration. Texts files do have a duration. It's
+                        // probably used to measure how many lines the file has, so it's codec name
+                        // will be checked instead.
+                        if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
+                            return this.client.ui.reply(ctx, 'error', 'The attachment must be an audio or a video file.');
+                        }
 
-                    // Ffmpeg parses images as videos with just one single frame. So, to check
-                    // whether the file is a video or an audio file, the best way would be to
-                    // check whether the file has a duration. Texts files do have a duration. It's
-                    // probably used to measure how many lines the file has, so it's codec name
-                    // will be checked instead.
-                    if (!info.streams[0].duration || info.streams[0].codec_name === 'ansi') {
-                        return this.client.ui.reply(ctx, 'error', 'The attachment must be an audio or a video file.');
-                    }
+                        const time = Math.floor(info.streams[0].duration);
 
-                    const time = Math.floor(info.streams[0].duration);
+                        isFile = true;
+                        fileMetadata = {
+                            duration: time,
+                            formattedDuration: toColonNotation(time + '000'),
+                            codec: `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`
+                        };
+                    })
+                    .catch(() => {
+                        return this.client.ui.reply(ctx, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
+                    });
 
-                    isFile = true;
-                    fileMetadata = {
-                        duration: time,
-                        formattedDuration: toColonNotation(time + '000'),
-                        codec: `${info.streams[0].codec_long_name} (\`${info.streams[0].codec_name}\`)`
-                    };
-                } catch {
-                    return this.client.ui.reply(ctx, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
-                }
-            } else if (ctx.subcommands[0] === 'radio') {
+                await boogie(file);
+                break;
+            }
+
+            case 'radio': {
                 switch (ctx.subcommands[1]) {
                 case 'iheartradio': {
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
-                    stations = search.stations;
+                    const stations = search.stations;
 
                     const emojiNumber = {
                         1: '1️⃣',
@@ -383,19 +416,10 @@ class CommandPlay extends SlashCommand {
 
                             try {
                                 channel.sendTyping();
-                                requested = await iheart.streamURL(stations[parseInt(selCtx.values[0])].id);
+                                const selected = await iheart.streamURL(stations[parseInt(selCtx.values[0])].id);
+                                radioStation = stations[parseInt(selCtx.values[0])];
                                 selCtx.acknowledge();
-
-                                await this.client.player.play(vc, requested, {
-                                    textChannel: channel,
-                                    member: _member,
-                                    metadata: {
-                                        ctx,
-                                        isRadio: ctx.subcommands[0] === 'radio',
-                                        radioStation: stations[parseInt(selCtx.values[0])],
-                                        silent: ctx.subcommands[0] === 'silently'
-                                    }
-                                });
+                                await boogie(selected);
                             } catch (err) {
                                 return this.client.ui.reply(selCtx, 'error', err, 'Player Error');
                             } finally {
@@ -420,26 +444,19 @@ class CommandPlay extends SlashCommand {
                     );
                 }
                 }
-            } else if (ctx.subcommands[0] === 'now') {
-                if (vc.members.size <= 3 || dj) {
-                    requested = ctx.options.now.query;
+                break;
+            }
 
-                    /* eslint-disable-next-line no-useless-escape */
-                    await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
-                        textChannel: channel,
-                        member: _member,
-                        position: 1,
-                        metadata: {
-                            ctx
-                        }
-                    });
-                    try {
-                        await this.client.player.skip(guild);
-                    } catch {}
+            case 'now': {
+                if (vc.members.size <= 3 || dj) {
+                    await boogie(ctx.options.now.query.replace(/(^\\<+|\\>+$)/g, ''));
                 } else {
                     return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
                 }
-            } else if (ctx.subcommands[0] === 'playlist') {
+                break;
+            }
+
+            case 'playlist': {
                 if (vc.members.size <= 3 || dj) {
                     const playlists = await this.client.playlists.get(ctx.guildID, ctx.options.playlist.name);
                     const songs = playlists.tracks.map(x => x.url);
@@ -449,35 +466,17 @@ class CommandPlay extends SlashCommand {
                         properties: { name: ctx.options.playlist.name }
                     });
 
-                    await this.client.player.play(vc, playlist, {
-                        textChannel: channel,
-                        member: _member,
-                        metadata: {
-                            ctx,
-                            isRadio: ctx.subcommands[0] === 'radio',
-                            radioStation: stations ?? undefined,
-                            silent: ctx.subcommands[0] === 'silently'
-                        }
-                    });
+                    await boogie(playlist);
                 } else {
                     return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
                 }
-            } else {
-                if (ctx.subcommands[0] === 'silently') requested = ctx.options.silently.query;
+                break;
+            }
 
-                /* eslint-disable-next-line no-useless-escape */
-                await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
-                    textChannel: channel,
-                    member: _member,
-                    metadata: {
-                        ctx,
-                        isFile,
-                        fileMetadata,
-                        isRadio: ctx.subcommands[0] === 'radio',
-                        radioStation: stations ?? undefined,
-                        silent: ctx.subcommands[0] === 'silently'
-                    }
-                });
+            case 'silently': {
+                await boogie(ctx.options.silently?.query.replace(/(^\\<+|\\>+$)/g, ''));
+                break;
+            }
             }
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
