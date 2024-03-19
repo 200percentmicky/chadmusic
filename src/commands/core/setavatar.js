@@ -23,7 +23,7 @@ module.exports = class CommandSetAvatar extends Command {
             description: {
                 text: "Changes the bot's avatar.",
                 usage: '[attachment]',
-                details: '`[attachment]` The attachment to use for the avatar, or the URL of an image. Supports GIF, JPEG, or PNG formats. If none is provided, removes the banner.'
+                details: '`[attachment]` The attachment to use for the avatar, or the URL of an image. Supports GIF, JPEG, or PNG formats. If none is provided, removes the avatar.'
             },
             category: '💻 Core',
             ownerOnly: true,
