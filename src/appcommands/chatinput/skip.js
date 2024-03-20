@@ -126,10 +126,17 @@ class CommandSkip extends SlashCommand {
 
         default: { // track
             if (vc.members.size >= 4) {
-                const vcSize = Math.floor(vc.members.size / 2);
+                const memberSize = vc.members.size;
+                const botSize = vc.members.filter(x => x.user.bot).size;
+                const votingPercent = this.client.settings.get(guild.id, 'votingPercent') ?? 0.5;
+                const vcSize = Math.floor((memberSize - botSize) * votingPercent);
                 const neededVotes = queue.votes.length >= vcSize;
                 const votesLeft = Math.floor(vcSize - queue.votes.length);
-                if (queue.votes.includes(member.user.id)) return this.client.ui.reply(ctx, 'warn', 'You already voted to skip.');
+
+                if (queue.votes.includes(member.user.id)) {
+                    return this.client.ui.reply(ctx, 'warn', 'You already voted to skip.');
+                }
+
                 queue.votes.push(member.user.id);
                 if (neededVotes) {
                     queue.votes = [];
