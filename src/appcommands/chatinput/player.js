@@ -16,11 +16,11 @@
 
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
-const { splitBar } = require('string-progressbar');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const Genius = require('genius-lyrics');
 const CMError = require('../../modules/CMError');
+const CMPlayerWindow = require('../../modules/CMPlayerWindow');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -210,39 +210,18 @@ class CommandPlayer extends SlashCommand {
             const total = song.duration;
             const current = queue.currentTime;
             const author = song.uploader;
-
-            let songTitle = song.name;
-            if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
-
-            let progressBar;
-            try {
-                if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
-            } catch {
-                progressBar = 'N/A';
-            }
-
-            const duration = song.isLive ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-            let embed = new EmbedBuilder()
-                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                .setAuthor({
-                    name: 'Currently playing',
-                    iconURL: guild.iconURL({ dynamic: true })
-                })
-                .setDescription(`${duration}`)
-                .setTitle(`${songTitle}`)
-                .setURL(song.url);
-
             const thumbnailSize = await this.client.settings.get(guild.id, 'thumbnailSize');
 
-            switch (thumbnailSize) {
-            case 'small': {
-                embed.setThumbnail(song.thumbnail);
-                break;
-            }
-            case 'large': {
-                embed.setImage(song.thumbnail);
-                break;
-            }
+            let window = new CMPlayerWindow()
+                .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                .windowTitle('Currently playing', guild.iconURL({ dynamic: true }))
+                .trackTitle(`[${song.name}](${song.url})`)
+                .trackImage(thumbnailSize, song.thumbnail);
+
+            if (song.isLive || song.metadata?.isRadio) {
+                window.isLive();
+            } else {
+                window.timeBar(queue, total, current, 17);
             }
 
             let nowPlayingFields = [];
@@ -286,12 +265,9 @@ class CommandPlayer extends SlashCommand {
             }
 
             if (song.metadata?.silent && song.user.id !== _member.user.id) {
-                embed = new EmbedBuilder()
-                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                    .setAuthor({
-                        name: 'Currently playing',
-                        iconURL: guild.iconURL({ dynamic: true })
-                    });
+                window = new CMPlayerWindow()
+                    .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                    .windowTitle('Currently playing', guild.iconURL({ dynamic: true }));
 
                 nowPlayingFields = [];
                 nowPlayingFields.push({
@@ -344,11 +320,11 @@ class CommandPlayer extends SlashCommand {
                 inline: true
             });
 
-            embed
+            window
                 .addFields(nowPlayingFields)
-                .setTimestamp();
+                .timestamp();
 
-            return ctx.send({ embeds: [embed] });
+            return ctx.send({ embeds: [window._embed] });
         }
 
         case 'join': {

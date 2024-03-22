@@ -15,11 +15,12 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const prettyms = require('pretty-ms');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
+const CMPlayerWindow = require('../modules/CMPlayerWindow');
 
 module.exports = class ListenerAddSong extends Listener {
     constructor () {
@@ -103,36 +104,26 @@ module.exports = class ListenerAddSong extends Listener {
         // TODO: Fix toColonNotation in queue.js
         if (song.isLive) song.duration = 1;
 
-        let songTitle = song.name;
-        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
-
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
-        const embed = new EmbedBuilder()
-            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-            .setAuthor({
-                name: `Added to queue - ${member.voice.channel.name}`,
-                iconURL: guild.iconURL({ dynamic: true })
-            })
-            .setTitle(`${songTitle}`)
-            .setURL(song.url)
-            .setThumbnail(song.thumbnail)
-            .setFooter({
-                text: song.user.tag.replace(/#0{1,1}$/, ''),
-                iconURL: song.user.avatarURL({ dynamic: true })
-            });
+        const window = new CMPlayerWindow()
+            .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+            .windowTitle(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+            .trackTitle(`[${song.name}](${song.url})`)
+            .trackImage('small', song.thumbnail)
+            .setFooter(song.user.tag.replace(/#0{1,1}$/, ''), song.user.avatarURL({ dynamic: true }));
 
         if (song.metadata?.silent) {
-            embed.setAuthor({
+            window.setAuthor({
                 name: `Added silently to the queue - ${member.voice.channel.name}`,
                 iconURL: guild.iconURL({ dynamic: true })
             });
         }
 
         try {
-            song.metadata?.ctx.send({ embeds: [embed] });
+            song.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
-            channel.send({ embeds: [embed] });
+            channel.send({ embeds: [window._embed] });
         }
     }
 };

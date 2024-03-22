@@ -15,9 +15,9 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { EmbedBuilder, PermissionsBitField } = require('discord.js');
-const { splitBar } = require('string-progressbar');
+const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const CMPlayerWindow = require('../../modules/CMPlayerWindow');
 
 module.exports = class CommandNowPlaying extends Command {
     constructor () {
@@ -61,38 +61,18 @@ module.exports = class CommandNowPlaying extends Command {
         const current = queue.currentTime;
         const author = song.uploader;
 
-        let songTitle = song.name;
-        if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
-
-        let progressBar;
-        try {
-            if (!song.isLive || !song.metadata?.isRadio || total > 0) progressBar = splitBar(total, current, 17)[0];
-        } catch {
-            progressBar = 'N/A';
-        }
-
-        const duration = song.isLive || song.metadata?.isRadio ? '🔴 **Live**' : `${queue.formattedCurrentTime} [${progressBar}] ${song.formattedDuration}`;
-        let embed = new EmbedBuilder()
-            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-            .setAuthor({
-                name: 'Currently playing',
-                iconURL: message.guild.iconURL({ dynamic: true })
-            })
-            .setDescription(`${duration}`)
-            .setTitle(`${songTitle}`)
-            .setURL(song.url);
-
         const thumbnailSize = await this.client.settings.get(message.guild.id, 'thumbnailSize');
 
-        switch (thumbnailSize) {
-        case 'small': {
-            embed.setThumbnail(song.thumbnail);
-            break;
-        }
-        case 'large': {
-            embed.setImage(song.thumbnail);
-            break;
-        }
+        let window = new CMPlayerWindow()
+            .color(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
+            .windowTitle('Currently playing', message.guild.iconURL({ dynamic: true }))
+            .trackTitle(`[${song.name}](${song.url})`)
+            .trackImage(thumbnailSize, song.thumbnail);
+
+        if (song.isLive || song.metadata?.isRadio) {
+            window.isLive();
+        } else {
+            window.timeBar(queue, total, current, 17);
         }
 
         let embedFields = [];
@@ -136,12 +116,9 @@ module.exports = class CommandNowPlaying extends Command {
         }
 
         if (song.metadata?.silent && song.user.id !== message.member.user.id && !song.revealed) {
-            embed = new EmbedBuilder()
-                .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-                .setAuthor({
-                    name: 'Currently playing',
-                    iconURL: message.guild.iconURL({ dynamic: true })
-                });
+            window = new CMPlayerWindow()
+                .color(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
+                .windowTitle('Currently playing', message.guild.iconURL({ dynamic: true }));
 
             embedFields = [];
             embedFields.push({
@@ -196,10 +173,10 @@ module.exports = class CommandNowPlaying extends Command {
             inline: true
         });
 
-        embed
+        window
             .addFields(embedFields)
-            .setTimestamp();
+            .timestamp();
 
-        return message.reply({ embeds: [embed] });
+        return message.reply({ embeds: [window._embed] });
     }
 };

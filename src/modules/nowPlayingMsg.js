@@ -14,8 +14,9 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 const prettyms = require('pretty-ms');
+const CMPlayerWindow = require('./CMPlayerWindow');
 
 async function nowPlayingMsg (queue, song) {
     const channel = queue.textChannel; // TextChannel
@@ -57,13 +58,13 @@ async function nowPlayingMsg (queue, song) {
     if (song.isLive) song.duration = 1;
 
     const author = song.uploader; // Video Uploader
+    const thumbnailSize = await channel.client.settings.get(guild.id, 'thumbnailSize');
 
-    const songNow = new EmbedBuilder()
-        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-        .setAuthor({
-            name: 'Now playing',
-            iconURL: guild.iconURL({ dynamic: true })
-        });
+    const window = new CMPlayerWindow()
+        .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+        .windowTitle('Now playing', guild.iconURL({ dynamic: true }))
+        .trackTitle(`[${song.name}](${song.url})`)
+        .trackImage(thumbnailSize, song.thumbnail);
 
     const songNowFields = [];
 
@@ -117,42 +118,24 @@ async function nowPlayingMsg (queue, song) {
         inline: true
     });
 
-    let songTitle = song.name;
-    if (songTitle.length > 256) songTitle = song.name.substring(0, 252) + '...';
-
-    songNow
+    window
         .addFields(songNowFields)
-        .setTitle(`${songTitle}`)
-        .setURL(song.url)
-        .setTimestamp();
-
-    const thumbnailSize = await channel.client.settings.get(guild.id, 'thumbnailSize');
-
-    switch (thumbnailSize) {
-    case 'small': {
-        songNow.setThumbnail(song.thumbnail);
-        break;
-    }
-    case 'large': {
-        songNow.setImage(song.thumbnail);
-        break;
-    }
-    }
+        .timestamp();
 
     try {
         if (channel.id !== song.metadata?.ctx.channelID) {
-            await channel.send({ embeds: [songNow] });
+            await channel.send({ embeds: [window._embed] });
         } else {
             if (song.metadata?.silent) {
                 if (queue.songs.length === 1) {
                     // Again, only if someone started a new queue, but with a silent track.
-                    return await song.metadata?.ctx.send({ embeds: [songNow] });
+                    return await song.metadata?.ctx.send({ embeds: [window._embed] });
                 } else return;
             }
-            await song.metadata?.ctx.send({ embeds: [songNow] });
+            await song.metadata?.ctx.send({ embeds: [window._embed] });
         }
     } catch {
-        channel.send({ embeds: [songNow] });
+        channel.send({ embeds: [window._embed] });
     }
 
     await channel.client.utils.setVcStatus(vc, `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.username})`);

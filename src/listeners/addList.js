@@ -15,7 +15,8 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
+const CMPlayerWindow = require('../modules/CMPlayerWindow');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
@@ -30,22 +31,12 @@ module.exports = class ListenerAddList extends Listener {
         const guild = channel.guild;
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
 
-        let playlistTitle = playlist.name;
-        if (playlistTitle.length > 256) playlistTitle = playlist.name.substring(0, 252) + '...';
-
-        const embed = new EmbedBuilder()
-            .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-            .setAuthor({
-                name: `Playlist added to queue - ${member.voice.channel.name}`,
-                iconURL: guild.iconURL({ dynamic: true })
-            })
-            .setTitle(`${playlistTitle}`)
-            .setURL(playlist.url)
-            .setThumbnail(playlist.thumbnail)
-            .setFooter({
-                text: playlist.user.tag.replace(/#0{1,1}$/, ''),
-                iconURL: playlist.user.avatarURL({ dynamic: true })
-            });
+        const window = new CMPlayerWindow()
+            .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+            .windowTitle(`Playlist added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+            .trackTitle(`[${playlist.name}](${playlist.url})`)
+            .trackImage('small', playlist.thumbnail)
+            .setFooter(playlist.user.tag.replace(/#0{1,1}$/, ''), playlist.user.avatarURL({ dynamic: true }));
 
         const embedFields = [];
 
@@ -71,20 +62,20 @@ module.exports = class ListenerAddList extends Listener {
                     name: ':warning: Not everything was added!',
                     value: `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** were added to the queue.`
                 });
-                embed.addFields(embedFields);
-                return channel.send({ embeds: [embed] });
+                window.addFields(embedFields);
+                return channel.send({ embeds: [window._embed] });
             }
         } else {
             embedFields.push({
                 name: '🔢 Number of entries',
                 value: `${playlist.songs.length}`
             });
-            embed.addFields(embedFields);
+            window.addFields(embedFields);
 
             try {
-                playlist.metadata?.ctx.send({ embeds: [embed] });
+                playlist.metadata?.ctx.send({ embeds: [window._embed] });
             } catch {
-                channel.send({ embeds: [embed] });
+                channel.send({ embeds: [window._embed] });
             }
         }
     }
