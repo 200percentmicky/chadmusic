@@ -58,7 +58,7 @@ module.exports = class CommandSeek extends Command {
         if (!queue || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        if (queue.songs[0].isLive) return this.client.ui.reply(message, 'error', 'This command cannot be used during live broadcasts.');
+        if (queue.songs[0].isLive) return this.client.ui.reply(message, 'no', 'This command cannot be used during live broadcasts.');
 
         if (vc.members.size <= 2 || dj) {
             if (!args[1]) return this.client.ui.usage(message, 'seek <time>');

@@ -494,7 +494,7 @@ class CommandPlayer extends SlashCommand {
             if (!queue || !currentVc) return this.client.ui.sendPrompt(ctx, 'NOT_PLAYING');
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
-            if (queue.songs[0].isLive) return this.client.ui.reply(ctx, 'error', 'This command cannot be used during live broadcasts.');
+            if (queue.songs[0].isLive) return this.client.ui.reply(ctx, 'no', 'This command cannot be used during live broadcasts.');
 
             if (vc.members.size <= 2 || dj) {
                 try {
