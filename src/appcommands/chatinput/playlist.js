@@ -279,7 +279,7 @@ class CommandPlaylist extends SlashCommand {
             await this.client.ui.custom(
                 ctx,
                 ':page_with_curl:',
-                ctx.guild.members.me.displayColor !== 0 ? ctx.guild.members.me.displayColor : null,
+                guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null,
                 trackList,
                 `${ctx.options.view.name}`,
                 `${playlist.length} ${playlist.length === 1 ? 'track' : 'tracks'}`
