@@ -186,7 +186,7 @@ class CommandSearch extends SlashCommand {
                 {
                     type: ComponentType.ACTION_ROW,
                     components: [{
-                        type: ComponentType.SELECT,
+                        type: ComponentType.STRING_SELECT,
                         custom_id: 'track_menu',
                         placeholder: 'Pick a track!',
                         options: menuOptions
