@@ -156,7 +156,7 @@ module.exports = class CommandNowPlaying extends Command {
         };
 
         embedFields.push({
-            name: `${volumeEmoji()} Volume`,
+            name: `${this.client.ui.volumeEmoji(queue)} Volume`,
             value: `${queue.volume}%`,
             inline: true
         });

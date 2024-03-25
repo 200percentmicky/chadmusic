@@ -290,21 +290,8 @@ class CommandPlayer extends SlashCommand {
                 });
             }
 
-            const volumeEmoji = () => {
-                const volume = queue.volume;
-                const volumeIcon = {
-                    0: ':mute:',
-                    50: ':sound:',
-                    100: ':loud_sound:',
-                    150: ':loud_sound::zap:',
-                    200: ':loud_sound::zap::anger:'
-                };
-                if (volume >= 250) return ':loud_sound::sob::ok_hand:';
-                return volumeIcon[Math.round(volume / 50) * 50];
-            };
-
             nowPlayingFields.push({
-                name: `${volumeEmoji()} Volume`,
+                name: `${this.client.ui.volumeEmoji(queue)} Volume`,
                 value: `${queue.volume}%`,
                 inline: true
             });
@@ -410,18 +397,7 @@ class CommandPlayer extends SlashCommand {
 
             const volume = queue.volume;
             if (ctx.subcommands[1] === 'view') {
-                const volumeEmoji = () => {
-                    const volumeIcon = {
-                        0: ':mute:',
-                        50: ':sound:',
-                        100: ':loud_sound:',
-                        150: ':loud_sound::zap:',
-                        200: ':loud_sound::zap::anger:'
-                    };
-                    if (volume >= 250) return ':loud_sound::sob::ok_hand:';
-                    return volumeIcon[Math.round(volume / 50) * 50];
-                };
-                return this.client.ui.custom(ctx, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
+                return this.client.ui.custom(ctx, this.client.ui.volumeEmoji(queue), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
             } else {
                 let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');

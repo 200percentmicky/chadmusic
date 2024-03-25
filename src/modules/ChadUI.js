@@ -29,6 +29,7 @@ const {
     InteractionResponse,
     EmbedBuilder
 } = require('discord.js');
+const { Queue } = require('distube');
 const { CommandContext, Member } = require('slash-create');
 
 let baseEmbed = {};
@@ -239,6 +240,23 @@ class ChadUI {
                 });
             }
         }
+    }
+
+    /**
+     * Returns the emoji icon of the player's volume.
+     * @param {Queue} queue
+     */
+    static volumeEmoji (queue) {
+        const volumeIcon = {
+            0: ':mute:',
+            50: ':speaker:',
+            100: ':sound:',
+            150: ':loud_sound:',
+            200: ':loud_sound::zap:',
+            250: ':loud_sound::zap::warning:'
+        };
+        if (queue.volume >= 250) return ':loud_sound::sob::ok_hand:';
+        return volumeIcon[Math.ceil(queue.volume / 50) * 50];
     }
 
     /**

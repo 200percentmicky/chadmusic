@@ -74,7 +74,7 @@ module.exports = class CommandVolume extends Command {
                 if (volume >= 250) return ':loud_sound::sob::ok_hand:';
                 return volumeIcon[Math.round(volume / 50) * 50];
             };
-            return this.client.ui.custom(message, volumeEmoji(), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
+            return this.client.ui.custom(message, this.client.ui.volumeEmoji(queue), process.env.COLOR_INFO, `Current Volume: **${volume}%**`);
         }
 
         let newVolume = parseInt(args.volume);
