@@ -69,8 +69,8 @@ class ChadUtils {
      */
     static async setVcStatus (vc, status) {
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
-        const trackVcStatus = vc.client.settings.get(vc.guild.id, 'trackVcStatus');
-        if (trackVcStatus !== true) return;
+        const songVcStatus = vc.client.settings.get(vc.guild.id, 'songVcStatus');
+        if (songVcStatus !== true) return;
 
         try {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {

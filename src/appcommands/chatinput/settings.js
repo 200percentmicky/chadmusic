@@ -342,6 +342,19 @@ module.exports = class CommandSettings extends SlashCommand {
                     ]
                 },
                 {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'songvcstatus',
+                    description: 'Toggles whether the bot will set the playing track\'s title as a status for the voice channel.',
+                    options: [
+                        {
+                            type: CommandOptionType.BOOLEAN,
+                            name: 'toggle',
+                            description: 'The toggle of the setting.',
+                            required: true
+                        }
+                    ]
+                },
+                {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'global',
                     description: "[Owner Only] Manages the bot's global settings.",
@@ -768,6 +781,16 @@ module.exports = class CommandSettings extends SlashCommand {
                 const newPercentage = parseFloat(ctx.options.votepercentage.percentage) / 100;
                 await settings.set(guild.id, newPercentage, 'votingPercent');
                 this.client.ui.reply(ctx, 'ok', `Voting percentage is set to **${ctx.options.votepercentage.percentage}%**.`);
+                break;
+            }
+
+            case 'songvcstatus': {
+                const toggle = ctx.options.songvcstatus.toggle;
+                await this.client.settings.set(guild.id, toggle, 'songVcStatus');
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'The bot will now set currently playing tracks as a voice channel status.'
+                    : 'The bot will no longer set a voice channel status.'
+                );
                 break;
             }
             }
