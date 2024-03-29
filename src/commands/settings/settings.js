@@ -52,6 +52,7 @@ module.exports = class CommandSettings extends Command {
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
+        const votingPercent = settings.get(message.guild.id, 'votingPercent');
         const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty');
         const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish');
         const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop');
@@ -94,6 +95,7 @@ module.exports = class CommandSettings extends Command {
                 **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                 **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                **:raised_hand: Voting Percentage:** ${parseFloat(votingPercent) * 100}%
                 `
             })
             .setTimestamp()

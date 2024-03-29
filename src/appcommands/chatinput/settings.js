@@ -329,6 +329,19 @@ module.exports = class CommandSettings extends SlashCommand {
                     ]
                 },
                 {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'votepercentage',
+                    description: 'Changes the voting percentage required to skip a track.',
+                    options: [
+                        {
+                            type: CommandOptionType.INTEGER,
+                            name: 'percentage',
+                            description: 'The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50.',
+                            required: true
+                        }
+                    ]
+                },
+                {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'global',
                     description: "[Owner Only] Manages the bot's global settings.",
@@ -418,6 +431,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
+        const votingPercent = settings.get(guild.id, 'votingPercent');
         const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty');
         const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish');
         const leaveOnStop = settings.get(guild.id, 'leaveOnStop');
@@ -502,8 +516,8 @@ module.exports = class CommandSettings extends SlashCommand {
                         value: stripIndents`
                         **:interrobang: Prefix:** \`${prefix}\`
                         **:bookmark: DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-                        **:microhphone: DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-                        **:photo_frame: Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
+                        **:microphone: DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+                        **:frame_photo: Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
                         **:loud_sound: Default Volume:** ${defaultVolume}
                         **:hash: Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
                         **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
@@ -522,6 +536,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                         **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                         **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                        **:raised_hand: Voting Percentage:** ${parseFloat(votingPercent) * 100}%
                         `
                     })
                     .setTimestamp()
@@ -746,6 +761,13 @@ module.exports = class CommandSettings extends SlashCommand {
                     ? 'The bot will now leave the voice channel when the player is stopped.'
                     : 'The bot will now stay in the voice channel regardless if the player was stopped.'
                 );
+                break;
+            }
+
+            case 'votepercentage': {
+                const newPercentage = parseFloat(ctx.options.votepercentage.percentage) / 100;
+                await settings.set(guild.id, newPercentage, 'votingPercent');
+                this.client.ui.reply(ctx, 'ok', `Voting percentage is set to **${ctx.options.votepercentage.percentage}%**.`);
                 break;
             }
             }
