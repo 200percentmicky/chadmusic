@@ -81,6 +81,80 @@ class CommandCore extends SlashCommand {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'reload',
                             description: 'Reloads everything without restarting the bot.'
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'setavatar',
+                            description: "Changes the bot's avatar. If no arguments are provided, removes the avatar.",
+                            options: [
+                                {
+                                    type: CommandOptionType.ATTACHMENT,
+                                    name: 'image',
+                                    description: 'The attached image to use for the avatar. Supports GIF, JPEG, or PNG formats.'
+                                },
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'url',
+                                    description: 'The URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats.'
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'setbanner',
+                            description: "Changes the bot's profile banner. If no arguments are provided, removes the banner.",
+                            options: [
+                                {
+                                    type: CommandOptionType.ATTACHMENT,
+                                    name: 'image',
+                                    description: 'The attached image to use for the banner. Supports GIF, JPEG, or PNG formats.'
+                                },
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'url',
+                                    description: 'The URL of an image to use for the banner. Supports GIF, JPEG, or PNG formats.'
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'setgame',
+                            description: "Changes the bot's playing status.",
+                            options: [
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'status',
+                                    description: 'The new status to set.',
+                                    required: true
+                                },
+                                {
+                                    type: CommandOptionType.STRING,
+                                    name: 'type',
+                                    description: 'The type of status to set.',
+                                    choices: [
+                                        {
+                                            name: 'Competing',
+                                            value: Discord.ActivityType.Competing.toString()
+                                        },
+                                        {
+                                            name: 'Custom',
+                                            value: Discord.ActivityType.Custom.toString()
+                                        },
+                                        {
+                                            name: 'Playing',
+                                            value: Discord.ActivityType.Playing.toString()
+                                        },
+                                        {
+                                            name: 'Listening',
+                                            value: Discord.ActivityType.Listening.toString()
+                                        },
+                                        {
+                                            name: 'Watching',
+                                            value: Discord.ActivityType.Watching.toString()
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 },
@@ -131,7 +205,7 @@ class CommandCore extends SlashCommand {
         case 'owner': {
             switch (ctx.subcommands[1]) {
             case 'eval': {
-                await ctx.defer();
+                await ctx.defer(true);
 
                 // Safety measure.
                 if (!process.env.USE_EVAL) {
@@ -150,14 +224,6 @@ class CommandCore extends SlashCommand {
 
                 const code = ctx.options.owner.eval.code;
 
-                const closeEval = new Discord.ActionRowBuilder()
-                    .addComponents([
-                        new Discord.ButtonBuilder()
-                            .setCustomId('sc_close_eval')
-                            .setStyle(ButtonStyle.Danger)
-                            .setEmoji(process.env.CLOSE)
-                    ]);
-
                 try {
                     // eslint-disable-next-line no-eval
                     let evaled = await eval(code);
@@ -170,36 +236,32 @@ class CommandCore extends SlashCommand {
                     const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
                     let result = clean(evaled);
-                    const embed = new Discord.EmbedBuilder()
-                        .setDescription(`\`\`\`js\n${result}\`\`\``)
-                        .setFooter({
-                            text: `Took ${end} ms. to complete.`
-                        });
 
                     if (code.match(/\.token/gmi)) {
                         result = 'REACTED';
                     } else {
-                        if (result.length > 4000) {
-                            const buffer = Buffer.from(`// ✅ Took ${end} ms. to complete. ${result}`);
+                        if (result.length >= 2000) {
+                            const buffer = Buffer.from(`${result}`);
+                            const timestamp = new Date();
 
                             try {
-                                await ctx.send({ file: [{ file: buffer, name: 'eval.txt' }], components: [closeEval] });
+                                await ctx.send({ files: [{ file: buffer, name: `eval_${timestamp}.txt` }] });
                             } catch {
                                 try {
-                                    await ctx.member.user.send({ files: [{ attachment: buffer, name: 'eval.txt' }] });
+                                    await member.user.send({ files: [{ data: buffer, name: `eval_${timestamp}.txt` }] });
                                     await ctx.send(`${process.env.EMOJI_WARN} Check your DMs for the output.`);
                                 } catch {
-                                    await ctx.send(`${process.env.EMOJI_ERROR} Unable to generate file. Check the logs or the console for the output.`, { components: [closeEval] });
+                                    await ctx.send(`${process.env.EMOJI_ERROR} Unable to generate file. Check the logs or the console for the output.`);
                                 }
                             } finally {
                                 this.client.logger.info(`✅ Took ${end} ms. to complete.\n${clean(evaled)}`);
                             }
                         } else {
-                            await ctx.send({ embeds: [embed], components: [closeEval] });
+                            await ctx.send({ content: `\`\`\`js\n${result}\`\`\`` });
                         }
                     }
                 } catch (err) {
-                    return this.client.ui.reply(ctx, 'error', `\`\`\`js\n${err.name}: ${err.message}\`\`\``, 'Eval Error', null, null, [closeEval]);
+                    return ctx.send({ content: `\`\`\`js\n${err}\`\`\`` });
                 }
                 break;
             }
@@ -267,6 +329,72 @@ class CommandCore extends SlashCommand {
                     this.client.logger.info(`[Shutdown] ${restartReport}`);
                     this.client.logger.warn('Shutting down...');
                     this.client.die();
+                }
+                break;
+            }
+
+            case 'setavatar': {
+                await ctx.defer(true);
+
+                try {
+                    const newAvatar = ctx.attachments.first().url ??
+                        ctx.options.owner.setavatar.url ??
+                        this.client.user.defaultAvatarURL;
+
+                    await this.client.user.setAvatar(newAvatar);
+                    return this.client.ui.reply(ctx, 'ok', 'Avatar changed.');
+                } catch (err) {
+                    return this.client.ui.reply(ctx, 'error', `An error occured in the response: \`${err}\``);
+                }
+            }
+
+            case 'setbanner': {
+                await ctx.defer(true);
+
+                const imageUrl = ctx.attachments.first().url ??
+                    ctx.options.owner.setbanner.url;
+
+                const setBanner = async (banner) => {
+                    await this.client.rest.patch('/users/@me', {
+                        body: {
+                            banner
+                        }
+                    });
+                };
+
+                if (imageUrl) {
+                    try {
+                        let imageFormat;
+                        try {
+                            imageFormat = imageUrl.match(/(gif|jpg|png)/g)[0];
+                        } catch {
+                            return this.client.ui.reply(ctx, 'error', 'Supported image formats are GIF, JPEG, or PNG.');
+                        }
+
+                        const image = await fetch(imageUrl).catch(() => {});
+                        const buffer = Buffer.from(await image.arrayBuffer()).toString('base64');
+
+                        await setBanner(`data:image/${imageFormat};base64,` + buffer);
+                        return this.client.ui.reply(ctx, 'ok', 'Banner changed.');
+                    } catch (err) {
+                        return this.client.ui.reply(ctx, 'error', `An error occured in the response: \`${err}\``);
+                    }
+                } else {
+                    await setBanner(null);
+                    return this.client.ui.reply(ctx, 'ok', 'Banner changed.');
+                }
+            }
+
+            case 'setgame': {
+                await ctx.defer(true);
+
+                try {
+                    this.client.user.setActivity(ctx.options.owner.setgame.status, {
+                        type: parseInt(ctx.options.owner.setgame.type ?? Discord.ActivityType.Custom)
+                    });
+                    return this.client.ui.reply(ctx, 'ok', 'Activity changed.');
+                } catch (err) {
+                    return this.client.ui.reply(ctx, 'error', `Failed to set status: \`${err}\``);
                 }
             }
             }
