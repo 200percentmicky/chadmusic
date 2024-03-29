@@ -4,23 +4,20 @@ These are all of the commands available to the bot, including their aliases and 
 
 !!! quote "Legend"
 
+    * Commands are formatted as `[p]prefix | [p]alias | /slash command <arguments>`
+    * `[p]` is your bot's prefix.
     * Arguments surrounded in `<>` are required.
     * Arguments surrounded in `[]` are optional. 
-    * Argument surrounded in quotation marks (e.g. <"name">) must use quotation mark! This only applies to prefix commands, not slash commands
-
-!!! note
-
-    All commands shown are formatted as `!prefix | !alias | /slash command <arguments>`.
-
+    * Argument surrounded in quotation marks (e.g. <"name">) must use quotation marks! This only applies to prefix commands, not slash commands
 
 ## Core
 Commands related to core functionality of the bot.
 
-### !about | /core about
+### [p]about | /core about
 
 Displays information about the bot.
 
-### !eval | /core owner eval `<code>`
+### [p]eval | /core owner eval `<code>`
 
 ??? failure "Bot owner only."
 
@@ -45,12 +42,11 @@ The following variables will always be available when running the command:
 * `commonTags` - common-tags
 * `Genius` - genius-lyrics
 
-
 !!! danger "Eval can be harmful!"
 
     Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know what you're doing. If someone is telling you to enable it to have you evaluate a script, you're most likely being scammed!
 
-### !help `[command]`
+### [p]help `[command]`
 
 ??? info "Prefix command only."
 
@@ -62,15 +58,15 @@ Displays available commands and how to use them.
 | --------- | ---- | ----------- |
 | `[command]` | string | The command you want to know more about. Shows you how to use its syntax and what permissions it requires. |
 
-### !license | /core license
+### [p]license | /core license
 
 View this program\'s license.
 
-### !ping | /core ping
+### [p]ping | /core ping
 
 Shows the bot\'s latency.
 
-### !reload | /core owner reload `[reload_slash]`
+### [p]reload | /core owner reload `[reload_slash]`
 
 ??? failure "Bot owner only."
 
@@ -82,26 +78,48 @@ Reloads all of the bot's commands and listeners.
 | --------- | ---- | ----------- |
 | `[reload_slash]` | boolean | Whether to reload the application's slash commands. Either `true` or `false`. Default is `false`. |
 
-### !setgame `[type] <status>`
-
-??? info "Prefix command only."
-
-    This command is only available as a prefix command.
+### [p]setavatar | /core owner setavatar `<image> [url]`
 
 ??? failure "Bot owner only."
 
     This command is restricted to the owner of the application.
 
-Sets the bot's playing status.
-
-Available types are `playing`, `watching`, `listening`, and `streaming`
+Changes the bot's avatar. If no arguments are provided, removes the avatar.
 
 | Arguments  | Type | Description |
 | ---------- | ---- | ----------- |
-| `[type]`   | string | The type of status to set. Default is `playing`. |
+| `<image>` | Attachment | The attached image to use for the avatar. Supports GIF, JPEG, or PNG formats. |
+| `[url]` | string | The URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats. |
+
+### [p]setbanner | /core owner setbanner `<image> [url]`
+
+??? failure "Bot owner only."
+
+    This command is restricted to the owner of the application.
+
+Changes the bot's profile banner. If no arguments are provided, removes the banner.
+
+| Arguments  | Type | Description |
+| ---------- | ---- | ----------- |
+| `<image>` | Attachment | The attached image to use for the banner. Supports GIF, JPEG, or PNG formats. |
+| `[url]` | string | The URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats. |
+
+### [p]setgame | /core owner setgame `[type] <status>`
+
+??? failure "Bot owner only."
+
+    This command is restricted to the owner of the application.
+
+Changes the bot's playing status.
+
+Available types are `playing`, `watching`, `listening`, `custom`, and `competing`.
+
+| Arguments  | Type | Description |
+| ---------- | ---- | ----------- |
+| `[type]`   | string | The type of status to set. Default is `custom`. |
 | `<status>` | string | The overall status for the bot to use. |
 
-### !shutdown | /core owner shutdown `[reason]`
+### [p]shutdown | /core owner shutdown `[reason]`
 
 ??? failure "Bot owner only."
 
@@ -116,7 +134,7 @@ Shuts down the bot.
 ## Filters
 Commands to add or remove filters from the player. The commands in this category will only be available to DJs if **Allow Filters** is off.
 
-### !bassboost | !bass | /filter bassboost `<gain>`
+### [p]bassboost | [p]bass | /filter bassboost `<gain>`
 
 Boosts the bass of the player.
 
@@ -124,7 +142,7 @@ Boosts the bass of the player.
 | --------- | ---- | ----------- |
 | `<gain>` | float | The gain of the bass boost. Must be between `0.01-100` or `off`. |
 
-### !crusher | /filter crusher `<sample> [bits] [mode]`
+### [p]crusher | /filter crusher `<sample> [bits] [mode]`
 
 Crushes the audio without changing the bit depth. Makes it sound more harsh and "digital".
 
@@ -134,7 +152,7 @@ Crushes the audio without changing the bit depth. Makes it sound more harsh and 
 | `[bits]` | number | The bit reduction. Must be between 1-64. Default is `8`. |
 | `[mode]` | string | Changes logarithmic mode to either linear (lin) or logarithmic (log). Default is `lin`. |
 
-### !crystalize | /filter crystalize `<intensity>`
+### [p]crystalize | /filter crystalize `<intensity>`
 
 Sharpens or softens the audio quality.
 
@@ -142,7 +160,7 @@ Sharpens or softens the audio quality.
 | --------- | ---- | ----------- |
 | `<intensity>` | float | The intensity of the effect. Must be between `-10` to `10` or `off`. |
 
-### !customfilter | !cf | /filter customfilter `<argument>`
+### [p]customfilter | [p]cf | /filter customfilter `<argument>`
 
 ??? failure "Bot owner only."
 
@@ -170,11 +188,11 @@ Remove some or all filters active on the player.
 | --------- | ---- | ----------- |
 | `<filter>` | string | The filter to remove from the player. |
 
-### !filteroff | !foff | /filter remove filter:"all"
+### [p]filteroff | [p]foff | /filter remove filter:"all"
 
 Removes all filters from the player.
 
-### !pitch | /filter pitch `<rate>`
+### [p]pitch | /filter pitch `<rate>`
 
 Changes the pitch of the playing track.
 
@@ -182,7 +200,7 @@ Changes the pitch of the playing track.
 | --------- | ---- | ----------- |
 | `<rate>` | float | The rate to change. Must be between `0.1-10` or `off`. |
 
-### !pulsator | /filter pulsator `<frequency>`
+### [p]pulsator | /filter pulsator `<frequency>`
 
 Adds a pulsating effect to the audio.
 
@@ -190,11 +208,11 @@ Adds a pulsating effect to the audio.
 | --------- | ---- | ----------- |
 | `<frequency>` | float | The frequency of the effect in Hz. Must be between 0.01-100 or off. |
 
-### !reverse | /filter reverse
+### [p]reverse | /filter reverse
 
 Plays the track in reverse. Disables if reverse is already enabled.
 
-### !tempo | /filter tempo `<rate>`
+### [p]tempo | /filter tempo `<rate>`
 
 Changes the tempo of the playing track.
 
@@ -202,7 +220,7 @@ Changes the tempo of the playing track.
 | --------- | ---- | ----------- |
 | `<rate>` | float | The rate to change. Must be between `0.1-10` or `off`. |
 
-### !tremolo | /filter tremolo `<depth> [frequency]`
+### [p]tremolo | /filter tremolo `<depth> [frequency]`
 
 Adds a tremolo effect to the player.
 
@@ -211,7 +229,7 @@ Adds a tremolo effect to the player.
 | `<depth>` | float | The depth of the tremolo. Must be between `0.1-1` or `off`. |
 | `[frequency]` | float | The frequency of the tremolo. Minimum value is `0.1`. |
 
-### !vibrato | /filter vibrato `<depth> [frequency]`
+### [p]vibrato | /filter vibrato `<depth> [frequency]`
 
 Adds a vibrato effect to the player.
 
@@ -229,13 +247,13 @@ The main commands of the audio player.
 
     This command is only available as a **Message Command** and must be executed from the **Apps** section in a target message's right-click context menu. [Learn More](https://discord.com/developers/docs/interactions/application-commands#message-commands)
 
+Adds a track to the queue by using the message's content as a search query.
+
 !!! warning
 
     This command requires the **Message Content** privileged intent to work.
 
-Adds a track to the queue by using the message's content as a search query.
-
-### !bindchannel | !bindto | /player bindchannel `[channel]`
+### [p]bindchannel | [p]bindto | /player bindchannel `[channel]`
 
 !!! info
 
@@ -247,7 +265,7 @@ Changes the player's currently binded text or voice channel to a different one.
 | --------- | ---- | ----------- |
 | `[channel]` | Text/Voice Channel | The new channel to bind the player to. If nothing was provided, binds to the channel that the command was used in. |
 
-### !clearqueue | !clear | /queue clear
+### [p]clearqueue | [p]clear | /queue clear
 
 ??? info "DJs only if not alone."
 
@@ -255,7 +273,7 @@ Changes the player's currently binded text or voice channel to a different one.
 
 Clears the player's queue for this server.
 
-### !disconnect | !leave | /player leave
+### [p]disconnect | [p]leave | /player leave
 
 ??? info "DJs only if not alone."
 
@@ -263,7 +281,7 @@ Clears the player's queue for this server.
 
 Disconnects from the current voice channel.
 
-### !earrape | /player earrape
+### [p]earrape | /player earrape
 
 Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
@@ -275,7 +293,7 @@ Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
     Hearing loss or damage to your equipment can occur if the player's volume is set above 200%!
 
-### !forceskip | !fs | /skip force
+### [p]forceskip | [p]fs | /skip force
 
 ??? info "DJ only."
 
@@ -283,15 +301,15 @@ Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
 Force skips the currently playing song, bypassing votes.
 
-### !grab | !yoink | /player grab
+### [p]grab | [p]yoink | /player grab
 
 !!! info
 
-    This command is always available, even when DJ mode active.
+    This command is always available, even when DJ mode is active.
 
 Saves this song to your DMs.
 
-### !iheartradio | !ihr | /play radio iheartradio `<station>`
+### [p]iheartradio | [p]ihr | /play radio iheartradio `<station>`
 
 Play a iHeartRadio station.
 
@@ -299,7 +317,7 @@ Play a iHeartRadio station.
 | --------- | ---- | ----------- |
 | `<search>` | string | The station to search for. The first result is queued. |
 
-### !lyrics | /player lyrics `[query]`
+### [p]lyrics | /player lyrics `[query]`
 
 !!! info
 
@@ -311,7 +329,7 @@ Retrieves lyrics from the playing track or from search query.
 | --------- | ---- | ----------- |
 | `[query]` | string | The search query to find lyrics. If nothing is provided, uses the currently playing track. |
 
-### !move | /queue move `<track>` `[position]`
+### [p]move | /queue move `<track>` `[position]`
 
 Moves a track in the queue to a new position.
 
@@ -320,11 +338,11 @@ Moves a track in the queue to a new position.
 | `<track>` | number | The track to move |
 | `[position]` | number | The new position in the queue. If omitted, moves the selection to the first position in the queue. |
 
-### !nowplaying | !np | /player nowplaying
+### [p]nowplaying | [p]np | /player nowplaying
 
 Shows the currently playing track.
 
-### !pause | /player pause
+### [p]pause | /player pause
 
 ??? info "DJs only if not alone."
 
@@ -332,7 +350,7 @@ Shows the currently playing track.
 
 Pauses the player.
 
-### !play | !p | /play track | /play attachment `<url/search/attachment>`
+### [p]play | [p]p | /play track | /play attachment `<url/search/attachment>`
 
 Adds a track to the queue from a URL, search query, or an attachment.
 
@@ -340,7 +358,7 @@ Adds a track to the queue from a URL, search query, or an attachment.
 | --------- | ---- | ----------- |
 | `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
-### !playnow | !np | /play now `<url/search/attachment>`
+### [p]playnow | [p]np | /play now `<url/search/attachment>`
 
 ??? info "DJs only if not alone."
 
@@ -366,7 +384,7 @@ Plays a custom playlist.
 
 !!! tip
 
-    This command is only used to play custom made playlists in a server. To play online playlists, use `/play track` or `!play` instead.
+    This command is only used to play custom made playlists in a server. To play online playlists, use `/play track` or `[p]play` instead.
 
 ### /play silently `<query>`
 
@@ -384,7 +402,7 @@ Plays a track silently. It will not be sent in chat, and will be hidden from oth
 | --------- | ---- | ----------- |
 | `<query>` | string | The track to silently play. |
 
-### !queue | !q | /queue now `[show_hidden]`
+### [p]queue | [p]q | /queue now `[show_hidden]`
 
 View the queue for this server.
 
@@ -396,7 +414,7 @@ View the queue for this server.
 
     This argument to view all hidden tracks can only be used by DJs.
 
-### !remove | /queue remove `<queue_entry/start> [end]`
+### [p]remove | /queue remove `<queue_entry/start> [end]`
 
 ??? info "DJs only if not alone."
 
@@ -409,7 +427,7 @@ Removes an entry or multiple entries from the queue.
 | `<queue_entry/start>` | number | The queue entry to remove from the queue, or the starting position. |
 | `[end]` | number | The end position for removing multiple entries. Every entry from the starting to end position will be removed from the queue. |
 
-### !repeat | !loop | /player repeat `[mode]`
+### [p]repeat | [p]loop | /player repeat `[mode]`
 
 ??? info "DJs only if not alone."
 
@@ -421,7 +439,7 @@ Toggles repeat mode for the player.
 | --------- | ---- | ----------- |
 | `[mode]` | string | The mode to apply for repeat mode. Valid options are **off**, **song**, or **queue**. Default is **song**. |
 
-### !resume | /player resume
+### [p]resume | /player resume
 
 ??? info "DJs only if not alone."
 
@@ -429,7 +447,7 @@ Toggles repeat mode for the player.
 
 Unpauses the player, resuming playback.
 
-### !reversequeue | !rq | /queue reverse
+### [p]reversequeue | [p]rq | /queue reverse
 
 ??? info "DJs only if not alone."
 
@@ -437,7 +455,7 @@ Unpauses the player, resuming playback.
 
 Reverses the order of the queue.
 
-### !search | /search `<query>`
+### [p]search | /search `<query>`
 
 Searches for a track to play.
 
@@ -445,7 +463,7 @@ Searches for a track to play.
 | --------- | ---- | ----------- |
 | `<query>` | string | The query to search for. |
 
-### !seek | /player seek `<time>`
+### [p]seek | /player seek `<time>`
 
 ??? info "DJs only if not alone."
 
@@ -457,7 +475,7 @@ Sets the playing time of the track to a new position.
 | --------- | ---- | ----------- |
 | `<time>` | number or Notation | The time of the track to seek to in colon notation or in milliseconds. |
 
-### !shuffle | /queue shuffle
+### [p]shuffle | /queue shuffle
 
 ??? info "DJs only if not alone."
 
@@ -465,11 +483,15 @@ Sets the playing time of the track to a new position.
 
 Randomizes the entries in the queue.
 
-### !skip | !s | /skip track
+### [p]skip | [p]s | /skip track
 
 Skips the currently playing song, or vote to skip the track if the voice channel has more than 3 people. The track will skip if the required number of votes has been reached.
 
-### !skipto | !jump | /skip jump `<queue_entry>`
+!!! tip
+
+    If you have the **Manage Server** permission, you can change how the number of votes are calculated by using `/settings votepercentage` or `[p]votepercentage`.
+
+### [p]skipto | [p]jump | /skip jump `<queue_entry>`
 
 ??? info "DJs only if not alone."
 
@@ -481,7 +503,7 @@ Skips to the specified entry in the queue.
 | --------- | ---- | ----------- |
 | `<queue_entry>` | number | The number of the queue entry to skip to. Skips all other entries of the queue. |
 
-### !startover | !restart | /player startover
+### [p]startover | [p]restart | /player startover
 
 ??? info "DJs only if not alone."
 
@@ -493,7 +515,7 @@ Restarts the currently playing song.
     
     If the currently playing track is a live stream, the stream will refresh instead.
 
-### !stop | /player stop
+### [p]stop | /player stop
 
 ??? info "DJs only if not alone."
 
@@ -501,11 +523,11 @@ Restarts the currently playing song.
 
 Destroys the player.
 
-### !summon | !join | /player join
+### [p]summon | [p]join | /player join
 
 Summons the bot to a voice channel.
 
-### !volume | !vol | /player volume view/set `[number]`
+### [p]volume | [p]vol | /player volume view/set `[number]`
 
 Views or changes the volume of the player.
 
@@ -524,7 +546,7 @@ Views or changes the volume of the player.
 ## Playlists
 Commands used to manage playlists on a server. All commands in this category require DJ permissions.
 
-### !playlist-add | !pladd | /playlist add `<"name">` `[track]`
+### [p]playlist-add | [p]pladd | /playlist add `<"name">` `[track]`
 
 !!! info
 
@@ -537,7 +559,7 @@ Adds a track to a playlist.
 | `<name>` | string | The name of the playlist to add tracks to. |
 | `[track]` | URL | A track to add to the playlist. If nothing was provided and a player is currently playing a track, adds the currently playing track to the playlist. |
 
-### !playlist-clone | !plclone | /playlist clone `<"name">` `["clone_name"]`
+### [p]playlist-clone | [p]plclone | /playlist clone `<"name">` `["clone_name"]`
 
 Creates a playlist by cloning an existing one.
 
@@ -546,7 +568,7 @@ Creates a playlist by cloning an existing one.
 | `<name>` | string | The name of the playlist to clone |
 | `[clone_name]` | string | The name to give to the cloned playlist. If nothing was provided, affixes "- Copy" to the original name. |
 
-### !playlist-delete | !pldelete | /playlist delete `<name>`
+### [p]playlist-delete | [p]pldelete | /playlist delete `<name>`
 
 !!! info
 
@@ -558,7 +580,7 @@ Deletes a playlist.
 | --------- | ---- | ----------- |
 | `<name>` | string | The name of the playlist to delete.
 
-### !playlist-new | !plnew | /playlist new `<name>`
+### [p]playlist-new | [p]plnew | /playlist new `<name>`
 
 Creates a new playlist.
 
@@ -566,7 +588,7 @@ Creates a new playlist.
 | --------- | ---- | ----------- |
 | `<name>` | string | The name to give to the new playlist. |
 
-### !playlist-purge | !plpurge | /playlist purge
+### [p]playlist-purge | [p]plpurge | /playlist purge
 
 ??? failure "Administrators only."
 
@@ -574,7 +596,7 @@ Creates a new playlist.
 
 Deletes all playlists on the server.
 
-### !playlist-remove | !plremove | /playlist remove `<"name">` `<index_or_start>` `[end]`
+### [p]playlist-remove | [p]plremove | /playlist remove `<"name">` `<index_or_start>` `[end]`
 
 !!! info
 
@@ -588,11 +610,11 @@ Removes a track or multiple tracks from a playlist.
 | `<index_or_start>` | number | The track or the starting position to remove multiple tracks from the playlist. |
 | `[end]` | number | The ending position to remove multiple tracks. |
 
-### !playlist-show | !plshow | /playlist show
+### [p]playlist-show | [p]plshow | /playlist show
 
 Lists all playlists on the server.
 
-### !playlist-view | !plview | /playlist view `<name>`
+### [p]playlist-view | [p]plview | /playlist view `<name>`
 
 List all tracks in a playlist.
 
@@ -603,7 +625,7 @@ List all tracks in a playlist.
 ## Settings
 Commands to change the bot's settings. All commands in this category require the **Manage Server** permission unless otherwise specified.
 
-### !allowexplicit | /settings allowexplicit `<toggle>`
+### [p]allowexplicit | /settings allowexplicit `<toggle>`
 
 Toggles the ability to allow age restricted content in the queue.
 
@@ -619,7 +641,7 @@ Toggles the ability to allow age restricted content in the queue.
 
     If a cookie wasn't provided in `cookies.json`, you'll still be able to use this command. The player won't be able to play any track that's marked explicit without a valid cookie that allows access to age restricted content.
 
-### !allowfilters | /settings allowfilters `<toggle>`
+### [p]allowfilters | /settings allowfilters `<toggle>`
 
 Toggles the ability to allow members to apply filters to the player.
 
@@ -627,7 +649,7 @@ Toggles the ability to allow members to apply filters to the player.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !allowlinks | /settings allowlinks `<toggle>`
+### [p]allowlinks | /settings allowlinks `<toggle>`
 
 Toggles the ability to add songs to the queue from a URL.
 
@@ -635,7 +657,7 @@ Toggles the ability to add songs to the queue from a URL.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !allowsilenttracks | /settings allowsilenttracks `<toggle>`
+### [p]allowsilenttracks | /settings allowsilenttracks `<toggle>`
 
 Toggles the ability to silently add tracks to the queue.
 
@@ -643,7 +665,7 @@ Toggles the ability to silently add tracks to the queue.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !blocksong add/remove | /settings blocksong add/remove `<phrase>`
+### [p]blocksong add/remove | /settings blocksong add/remove `<phrase>`
 
 Manages the server's list of blocked search phrases.
 
@@ -656,7 +678,7 @@ Manages the server's list of blocked search phrases.
 | --------- | ---- | ----------- |
 | `<phrase>` | string | The phrase to add or remove from the list. |
 
-### !defaultvolume | /settings defaultvolume `<volume>`
+### [p]defaultvolume | /settings defaultvolume `<volume>`
 
 Changes the bot's default volume when creating a player, or when disabling Earrape.
 
@@ -664,7 +686,7 @@ Changes the bot's default volume when creating a player, or when disabling Earra
 | --------- | ---- | ----------- |
 | `<volume>` | number | The new default volume for the server. Must be between `1` to `200`. Default is `100`. |
 
-### !djmode | /settings djmode `<toggle>`
+### [p]djmode | /settings djmode `<toggle>`
 
 !!! info
     
@@ -676,7 +698,7 @@ Toggles DJ Mode for the server.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `off`. |
 
-### !emptycooldown | /settings emptycooldown `<time>`
+### [p]emptycooldown | /settings emptycooldown `<time>`
 
 Sets how long the bots stays in an empty voice channel.
 
@@ -688,7 +710,7 @@ Sets how long the bots stays in an empty voice channel.
 
     This settings only works if **Leave on Empty** is on.
 
-### !freevolume | /settings unlimitedvolume `<toggle>`
+### [p]freevolume | /settings unlimitedvolume `<toggle>`
 
 Toggles the ability to change the volume past 200%.
 
@@ -696,7 +718,7 @@ Toggles the ability to change the volume past 200%.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !globalsettings | /settings global current
+### [p]globalsettings | /settings global current
 
 ??? failure "Bot owner only."
 
@@ -704,7 +726,7 @@ Toggles the ability to change the volume past 200%.
 
 Shows the bot's current global settings.
 
-### !leaveonempty | /settings leaveonempty `<toggle>`
+### [p]leaveonempty | /settings leaveonempty `<toggle>`
 
 Toggles whether the bot should leave when the voice channel is empty for a period of time.
 
@@ -716,7 +738,7 @@ Toggles whether the bot should leave when the voice channel is empty for a perio
 
     When this is active, the bot will leave depending on how long **Empty Cooldown** is set.
 
-### !leaveonfinish | /settings leaveonfinish `<toggle>`
+### [p]leaveonfinish | /settings leaveonfinish `<toggle>`
 
 Toggles whether the bot should leave when the end of the queue has been reached.
 
@@ -724,7 +746,7 @@ Toggles whether the bot should leave when the end of the queue has been reached.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !leaveonstop | /settings leaveonstop `<toggle>`
+### [p]leaveonstop | /settings leaveonstop `<toggle>`
 
 Toggles whether the bot should leave when the player is stopped.
 
@@ -732,7 +754,7 @@ Toggles whether the bot should leave when the player is stopped.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !maxtime | /settings maxtime `<duration>`
+### [p]maxtime | /settings maxtime `<duration>`
 
 Restrict members from adding tracks to the queue that exceed the duration set.
 
@@ -740,7 +762,7 @@ Restrict members from adding tracks to the queue that exceed the duration set.
 | --------- | ---- | ----------- |
 | `<duration>` | Notation | The max duration of the track to limit. Members will be unable to add any tracks to the queue that go past this limit. Default is `0`. Set to `0` or `none` to disable. |
 
-### !prefix | /settings prefix `[new_prefix]`
+### [p]prefix | /settings prefix `[new_prefix]`
 
 Changes the bot's prefix for this server.
 
@@ -752,7 +774,7 @@ Changes the bot's prefix for this server.
 
     This setting will only affect message based commands, not slash commands. The default prefix defined in the bot's configuration in addition to the bot's mention will always be available.
 
-### !resetdata
+### [p]resetdata
 
 ??? info "Prefix command only."
 
@@ -776,7 +798,7 @@ Revert a setting to its default value.
 | --------- | ---- | ----------- |
 | `<setting>` | string | The setting you would like to revert. |
 
-### !setdj | /setting djrole `[role]`
+### [p]setdj | /setting djrole `[role]`
 
 Sets the DJ role for the server.
 
@@ -784,7 +806,7 @@ Sets the DJ role for the server.
 | --------- | ---- | ----------- |
 | `[role]` | Role | The role you would like to set. Can be the name, the ID, or a mention of the role. If none was provided, removes the DJ role. |
 
-### !setqueuelimits | /settings setqueuelimts `<number>`
+### [p]setqueuelimits | /settings setqueuelimts `<number>`
 
 Limits the number of entries that members can add to the queue.
 
@@ -792,11 +814,11 @@ Limits the number of entries that members can add to the queue.
 | --------- | ---- | ----------- |
 | `<number>` | number | The numbers of entries to limit for members. |
 
-### !settings | /settings current
+### [p]settings | /settings current
 
 Displays the bot's current settings for the server.
 
-### !shownewsongonly | /settings global shownewsongonly `<toggle>`
+### [p]shownewsongonly | /settings global shownewsongonly `<toggle>`
 
 ??? failure "Bot owner only."
 
@@ -808,7 +830,19 @@ Toggles whether the Now Playing alerts are shown for new songs only.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### !streamtype | /settings global streamtype `<encoder>`
+### [p]songvcstatus | /settings songvcstatus `<toggle>`
+
+Toggles whether the bot will set the playing track's title as a status for the voice channel.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | boolean | The toggle of the setting. |
+
+!!! warning "Experimental"
+
+    This feature uses an undocumented endpoint in Discord's API and may change at anytime.
+
+### [p]streamtype | /settings global streamtype `<encoder>`
 
 ??? failure "Bot owner only."
 
@@ -825,7 +859,7 @@ Selects which audio encoder the bot should use during streams.
 | opus | Uses the Opus encoder. Better quality, uses more resources. |
 | raw | Uses a RAW encoder. Better performance, uses less resources. |
 
-### !textchannel | /settings textchannel `[channel]`
+### [p]textchannel | /settings textchannel `[channel]`
 
 Sets the text channel to use for music commands.
 
@@ -833,10 +867,18 @@ Sets the text channel to use for music commands.
 | --------- | ---- | ----------- |
 | `[channel]` | Text/Voice Channel | The text or voice channel to apply. Can be the channel's mention or the channel's ID. If none is provided, all channels will be available. |
 
-### !thumbnailsize | /settings thumbnailsize `<size>`
+### [p]thumbnailsize | /settings thumbnailsize `<size>`
 
 Changes the track's thumbnail size of the player's "Now Playing" embeds.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<size>` | string | The size of the track's image. Either `small` or `large`. Default is `small`. |
+
+### [p]votepercentage | /settings votepercentage `<percentage>`
+
+Changes the voting percentage required to skip a track.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<percentage>` | float | The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50. |
