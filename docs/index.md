@@ -11,7 +11,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
-[![forthebadge](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAuNjA5NDA1NTE3NTc4MTIiIGhlaWdodD0iMzUiIHZpZXdCb3g9IjAgMCAxODAuNjA5NDA1NTE3NTc4MTIgMzUiPjxyZWN0IHdpZHRoPSI4NS4zMjgxNDAyNTg3ODkwNiIgaGVpZ2h0PSIzNSIgZmlsbD0iI2ZmZWIwMCIvPjxyZWN0IHg9Ijg1LjMyODE0MDI1ODc4OTA2IiB3aWR0aD0iOTUuMjgxMjY1MjU4Nzg5MDYiIGhlaWdodD0iMzUiIGZpbGw9IiM3MzM3MDMiLz48dGV4dCB4PSI0Mi42NjQwNzAxMjkzOTQ1MyIgeT0iMTcuNSIgZm9udC1zaXplPSIxMiIgZm9udC1mYW1pbHk9IidSb2JvdG8nLCBzYW5zLXNlcmlmIiBmaWxsPSIjMDAwMDAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBhbGlnbm1lbnQtYmFzZWxpbmU9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjIiPlBFRSBQRUU8L3RleHQ+PHRleHQgeD0iMTMyLjk2ODc3Mjg4ODE4MzYiIHk9IjE3LjUiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtZmFtaWx5PSInTW9udHNlcnJhdCcsIHNhbnMtc2VyaWYiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSI5MDAiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMiI+UE9PIFBPTzwvdGV4dD48L3N2Zz4=)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/it-works-dont-ask-me-how.svg)](https://forthebadge.com)
 
 ![YouTube Music](https://img.shields.io/badge/YouTube_Music-FF0000?style=for-the-badge&logo=youtube-music&logoColor=white)
 ![Sound Cloud](https://img.shields.io/badge/sound%20cloud-FF5500?style=for-the-badge&logo=soundcloud&logoColor=white)
@@ -19,34 +19,9 @@
 ![Deezer](https://img.shields.io/badge/Deezer-FEAA2D?style=for-the-badge&logo=deezer&logoColor=white)
 ![Apple Music](https://img.shields.io/badge/Apple_Music-9933CC?style=for-the-badge&logo=apple-music&logoColor=white)
 
-Welcome to the official documentation for **ChadMusic - The Chad Music Bot!** ChadMusic is a versitile open-source audio playing Discord bot built on top of a modified [fork](https://github.com/200percentmicky/chadtube) of **[DisTube.js](https://distube.js.org)**. The bot is easy to use and easily self-hostable. 
 
-## Features
+Welcome to the official documentation for **ChadMusic - The Chad Music Bot!**
 
-* Supports up to 700+ websites.
-    - Anything supported by [yt-dlp](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) is also supported on the bot.
-    - Supports audio and video attachments uploaded to Discord.
-* Add multiple filters to the player.
-* Alter filter values during playback.
-* Unlimited volume! 😂👌
-    - There is no limit to how high you can set the volume. You can set it to 1000000%. (Though why would you want to?)
-* Hide tracks by silently adding them. 🤫
-    - Perfect for trolling your friends, or for hosting game nights.
-* DJ commands to control the player.
-    - Queue and track length limits.
-    - Advanced queue management.
-        - Shuffle, reverse, and remove entries in the queue.
-    - Blacklist search terms.
-        - Prevents members from adding any bad songs to the player.
-    - DJ mode.
-    - Remove the ability to set the volume above 200%.
-    - Set the default volume of the player.
-    - Etc...
-* Slash commands lol
-    - Also includes auto completion when searching for tracks.
-* ???
-* Profit!
+------
 
-## License
-
-ChadMusic is open source software. The software is licensed under GNU General Public License version 3 (GPL-v3).
+[:material-tools: Setup Guide](./setup/getting_started.md){ .md-button .md-button--primary } [:fontawesome-solid-terminal: Commands](./commands.md){ .md-button .md-button--primary } [:octicons-clock-16: Changelog](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=41099548028374&scope=bot%20applications.commands){ .md-button .md-button--primary }
