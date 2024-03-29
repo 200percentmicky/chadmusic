@@ -138,7 +138,7 @@ async function nowPlayingMsg (queue, song) {
         channel.send({ embeds: [window._embed] });
     }
 
-    await channel.client.utils.setVcStatus(vc, `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.username})`);
+    await channel.client.utils.setVcStatus(vc, `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.displayName} - ${song.user.username})`.substring(0, 496) + '...');
 }
 
 module.exports = { nowPlayingMsg };
