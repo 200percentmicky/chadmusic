@@ -21,7 +21,7 @@ module.exports = class CommandSetBanner extends Command {
         super('setbanner', {
             aliases: ['setbanner'],
             description: {
-                text: "Changes the bot's profile banner.",
+                text: "Changes the bot's profile banner. If no arguments are provided, removes the banner.",
                 usage: '[attachment]',
                 details: '`[attachment]` The attachment to use for the banner, or the URL of an image. Supports GIF, JPEG, or PNG formats. If none is provided, removes the banner.'
             },

@@ -21,9 +21,9 @@ module.exports = class CommandSetAvatar extends Command {
         super('setavatar', {
             aliases: ['setavatar'],
             description: {
-                text: "Changes the bot's avatar.",
+                text: "Changes the bot's avatar. If no arguments are provided, removes the avatar.",
                 usage: '[image]',
-                details: '`[image]` The attached image or the URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats. If none is provided, removes the avatar.'
+                details: '`[image]` The attached image or the URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats.'
             },
             category: '💻 Core',
             ownerOnly: true,
