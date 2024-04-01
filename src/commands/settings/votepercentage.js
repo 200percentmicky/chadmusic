@@ -23,7 +23,7 @@ module.exports = class CommandVotePercentage extends Command {
             aliases: ['votepercentage'],
             category: '⚙ Settings',
             description: {
-                text: 'Changes the voting percentage required to skip a track.',
+                text: 'Changes the vote-skip percentage requirement for placing votes to skip a track.',
                 usage: '<percentage:0-100>',
                 details: '`<percentage:0-100>` The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50.'
             },
@@ -53,9 +53,9 @@ module.exports = class CommandVotePercentage extends Command {
             const newPercentage = parseFloat(args.percentage) / 100;
             await this.client.settings.set(message.guild.id, newPercentage, 'votingPercent');
 
-            return this.client.ui.reply(message, 'ok', `Voting percentage is set to **${args.percentage}%**.`);
+            return this.client.ui.reply(message, 'ok', `Vote-skip percentage is set to **${args.percentage}%**.`);
         } catch (err) {
-            return this.client.ui.reply(message, 'error', `Cannot set voting percentage. ${err}`);
+            return this.client.ui.reply(message, 'error', `Cannot set vote-skip percentage. ${err}`);
         }
     }
 };

@@ -331,7 +331,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'votepercentage',
-                    description: 'Changes the voting percentage required to skip a track.',
+                    description: 'Changes the vote-skip percentage requirement for placing votes to skip a track.',
                     options: [
                         {
                             type: CommandOptionType.INTEGER,
@@ -549,7 +549,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                         **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                         **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-                        **:raised_hand: Voting Percentage:** ${parseFloat(votingPercent) * 100}%
+                        **:raised_hand: Vote-skip Percentage:** ${parseFloat(votingPercent) * 100}%
                         `
                     })
                     .setTimestamp()
@@ -780,7 +780,7 @@ module.exports = class CommandSettings extends SlashCommand {
             case 'votepercentage': {
                 const newPercentage = parseFloat(ctx.options.votepercentage.percentage) / 100;
                 await settings.set(guild.id, newPercentage, 'votingPercent');
-                this.client.ui.reply(ctx, 'ok', `Voting percentage is set to **${ctx.options.votepercentage.percentage}%**.`);
+                this.client.ui.reply(ctx, 'ok', `Vote-skip percentage is set to **${ctx.options.votepercentage.percentage}%**.`);
                 break;
             }
 

@@ -95,7 +95,7 @@ module.exports = class CommandSettings extends Command {
                 **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                 **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-                **:raised_hand: Voting Percentage:** ${parseFloat(votingPercent) * 100}%
+                **:raised_hand: Vote-skip Percentage:** ${parseFloat(votingPercent) * 100}%
                 `
             })
             .setTimestamp()
