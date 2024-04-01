@@ -103,6 +103,10 @@ module.exports = class CommandAbout extends Command {
         const actionRow = new ActionRowBuilder()
             .addComponents([urlGithub, support, docsButton]);
 
-        return message.reply({ embeds: [aboutembed], components: [actionRow] });
+        return message.reply({ embeds: [aboutembed], components: [actionRow] })
+            .catch(async () => {
+                await message.react(process.env.EMOJI_MUSIC || '🎵');
+                return message.member.user.send({ embeds: [aboutembed], components: [actionRow] }).catch(() => {});
+            });
     }
 };
