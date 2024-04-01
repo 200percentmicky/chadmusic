@@ -26,8 +26,7 @@ module.exports = class CommandReverseQueue extends Command {
             description: {
                 text: 'Reverses the order of the queue.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

@@ -26,8 +26,7 @@ module.exports = class CommandPause extends Command {
             description: {
                 text: 'Pauses the player.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

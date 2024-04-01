@@ -30,7 +30,6 @@ module.exports = class CommandBassBoost extends Command {
                 details: '`<gain:0.01-100/off> The gain of the bass boost. Must be between 0.01-100 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'gain',

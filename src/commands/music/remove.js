@@ -29,7 +29,6 @@ module.exports = class CommandRemove extends Command {
                 details: '`<queue_entry/starting>` The queue entry to remove from the queue, or the starting position.\n[end] The end position for removing multiple entries.\nEvery entry from the starting to end position will be removed from the queue.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'start',

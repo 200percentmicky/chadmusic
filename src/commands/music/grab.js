@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { CommandContext } = require('slash-create');
 
 module.exports = class CommandGrab extends Command {
@@ -26,8 +26,7 @@ module.exports = class CommandGrab extends Command {
             description: {
                 text: 'Saves this song to your DMs.'
             },
-            channel: 'guild',
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks]
+            channel: 'guild'
         });
     }
 

@@ -30,7 +30,6 @@ module.exports = class CommandTempo extends Command {
                 details: '`<rate:0.1-10>` The rate to change. Must be between 0.1 to 10 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'rate',

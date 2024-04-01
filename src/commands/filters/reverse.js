@@ -28,8 +28,7 @@ module.exports = class CommandReverse extends Command {
             description: {
                 text: 'Plays the track in reverse. Disables the filter if its already active.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

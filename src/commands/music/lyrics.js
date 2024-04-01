@@ -30,7 +30,6 @@ module.exports = class CommandLyrics extends Command {
                 details: '`[query]` The search query to find lyrics.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'query',

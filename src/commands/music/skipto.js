@@ -29,7 +29,6 @@ module.exports = class CommandSkipTo extends Command {
                 details: '`<queue_entry>` The number of the queue entry to skip to. Skips all other entries of the queue.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'entry',

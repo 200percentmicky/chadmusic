@@ -27,8 +27,7 @@ module.exports = class CommandEarrape extends Command {
                 text: 'Changes the volume of the player to 69420%.',
                 details: 'The ratio that no man can withstand. Only works if Unlimited Volume is On.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

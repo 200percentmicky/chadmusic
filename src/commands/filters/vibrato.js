@@ -34,7 +34,6 @@ module.exports = class CommandVibrato extends Command {
                 `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'depth',

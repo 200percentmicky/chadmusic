@@ -27,7 +27,6 @@ module.exports = class CommandImageSize extends Command {
                 usage: '<string:size>',
                 details: '`<string:size>` The size of the track\'s image, either `small` or `large`. Default is `small`.'
             },
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

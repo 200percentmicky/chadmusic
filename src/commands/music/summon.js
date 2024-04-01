@@ -25,8 +25,7 @@ module.exports = class CommandSummon extends Command {
             description: {
                 text: 'Summons the bot to a voice channel.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

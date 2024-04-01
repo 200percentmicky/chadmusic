@@ -26,8 +26,7 @@ module.exports = class CommandShuffle extends Command {
             description: {
                 text: 'Randomizes the entries in the queue.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

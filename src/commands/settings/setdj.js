@@ -28,7 +28,6 @@ module.exports = class CommandSetDJ extends Command {
                 usage: '[role:none/off]',
                 details: '`[role:none/off]` The role you would like to set. Can be the name, the ID, or a mention of the role.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

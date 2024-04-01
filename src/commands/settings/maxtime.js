@@ -28,7 +28,6 @@ module.exports = class CommandMaxTime extends Command {
                 usage: '<duration>',
                 details: '`<duration>` The max duration of the song to limit. Members will be unable to add any songs that go past this limit.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

@@ -27,7 +27,6 @@ module.exports = class CommandVotePercentage extends Command {
                 usage: '<percentage:0-100>',
                 details: '`<percentage:0-100>` The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50.'
             },
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

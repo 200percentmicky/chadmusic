@@ -26,7 +26,6 @@ module.exports = class CommandFreeVolume extends Command {
                 text: 'Toggles the ability to change the volume past 200%.',
                 usage: '<toggle:on/off>'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

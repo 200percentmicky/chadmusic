@@ -42,7 +42,6 @@ module.exports = class CommandIHeartRadio extends Command {
                 details: '`<search>` The station to search for.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'station',

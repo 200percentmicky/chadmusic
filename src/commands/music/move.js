@@ -33,7 +33,6 @@ module.exports = class CommandMove extends Command {
                 `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'track',

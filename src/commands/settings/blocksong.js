@@ -27,7 +27,6 @@ module.exports = class CommandBlocksong extends Command {
                 usage: '<add/remove> <phrase>',
                 details: '`<add/remove>` Subcommands to whether add or remove phrases from the list.\n`<phrase>` The phrase to add or remove from the list.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

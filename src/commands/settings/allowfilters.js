@@ -27,7 +27,6 @@ module.exports = class CommandAllowFilters extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

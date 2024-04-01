@@ -26,8 +26,7 @@ module.exports = class CommandStop extends Command {
             description: {
                 text: 'Stops the player, and clears the queue.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

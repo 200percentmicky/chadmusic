@@ -34,7 +34,6 @@ module.exports = class CommandCustomFilter extends Command {
                 `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             ownerOnly: true,
             args: [
                 {

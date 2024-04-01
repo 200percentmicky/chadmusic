@@ -27,7 +27,6 @@ module.exports = class CommandDefaultVolume extends Command {
                 usage: '<volume:1-200>',
                 details: '`<volume:1-200>` The new default volume for the server.'
             },
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

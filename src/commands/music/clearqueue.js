@@ -26,8 +26,7 @@ module.exports = class CommandClearQueue extends Command {
             description: {
                 text: "Clears the player's queue for this server."
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

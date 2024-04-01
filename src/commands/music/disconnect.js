@@ -26,8 +26,7 @@ module.exports = class CommandDisconnect extends Command {
             description: {
                 text: 'Disconnects from the current voice channel.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

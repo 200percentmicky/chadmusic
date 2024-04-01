@@ -35,7 +35,6 @@ module.exports = class CommandCrusher extends Command {
                 `
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'samples',

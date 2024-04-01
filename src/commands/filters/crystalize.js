@@ -30,7 +30,6 @@ module.exports = class CommandCrystalize extends Command {
                 details: '`<intensity:-10~10/off>` The intensity of the effect. Must be between -10 to 10 or off.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'intensity',

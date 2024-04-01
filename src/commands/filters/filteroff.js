@@ -27,8 +27,7 @@ module.exports = class CommandFilterOff extends Command {
             description: {
                 text: 'Removes all filters from the player.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

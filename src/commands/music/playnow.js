@@ -31,7 +31,6 @@ module.exports = class CommandPlayNow extends Command {
                 usage: 'playnow <URL/search>'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'track',

@@ -26,7 +26,6 @@ module.exports = class CommandBindChannel extends Command {
                 text: 'Changes the player\'s currently binded text or voice channel to a different one.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     type: 'channel',

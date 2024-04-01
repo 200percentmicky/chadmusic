@@ -29,7 +29,6 @@ module.exports = class CommandVolume extends Command {
                 details: '`<number>` The percentage of the new volume to set.'
             },
             channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks,
             args: [
                 {
                     id: 'volume',

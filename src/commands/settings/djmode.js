@@ -27,7 +27,6 @@ module.exports = class CommandDJMode extends Command {
                 usage: '<toggle:on/off>',
                 details: 'Requires the DJ role or the **Manage Channels** permission.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             args: [
                 {
                     id: 'toggle',

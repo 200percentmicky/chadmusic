@@ -26,8 +26,7 @@ module.exports = class CommandSkip extends Command {
             description: {
                 text: 'Skips the currently playing song.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

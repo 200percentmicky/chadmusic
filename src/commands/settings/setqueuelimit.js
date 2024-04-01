@@ -27,7 +27,6 @@ module.exports = class CommandSetQueueLimit extends Command {
                 usage: '<number>',
                 details: '`<number>` The numbers of entries to limit for members.'
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

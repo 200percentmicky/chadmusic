@@ -27,7 +27,6 @@ module.exports = class CommandMusicPrefix extends Command {
                 usage: '<prefix>',
                 details: `\`<prefix>\` The new prefix you want to use. If none, resets the prefix to defaults.\n${process.env.EMOJI_INFO} The default prefix defined in the .env file will always be available.`
             },
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {

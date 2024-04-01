@@ -26,8 +26,7 @@ module.exports = class CommandForceSkip extends Command {
             description: {
                 text: 'Force skips the currently playing song, bypassing votes.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 

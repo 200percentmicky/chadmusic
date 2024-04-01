@@ -35,7 +35,6 @@ module.exports = class CommandPlay extends Command {
                 details: '`<url/search>` The URL or search term to load. Also support audio and video attachments.'
             },
             channel: 'guild',
-            clientPermissions: [PermissionsBitField.Flags.EmbedLinks],
             args: [
                 {
                     id: 'track',

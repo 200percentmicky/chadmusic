@@ -26,8 +26,7 @@ module.exports = class CommandResume extends Command {
             description: {
                 text: 'Unpauses the player, resuming playback.'
             },
-            channel: 'guild',
-            clientPermissions: PermissionsBitField.Flags.EmbedLinks
+            channel: 'guild'
         });
     }
 
