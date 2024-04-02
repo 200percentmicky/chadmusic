@@ -66,7 +66,13 @@ module.exports = class CommandSkip extends Command {
     }
     */
 
-        if (vc.members.size >= 4) {
+        if (vc.members.size >= 3) {
+            if (queue.votes.includes(message.member.user.id)) {
+                return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
+            }
+
+            queue.votes.push(message.member.user.id);
+
             const memberSize = vc.members.size;
             const botSize = vc.members.filter(x => x.user.bot).size;
             const votingPercent = this.client.settings.get(message.guild.id, 'votingPercent') ?? 0.5;
@@ -74,11 +80,6 @@ module.exports = class CommandSkip extends Command {
             const neededVotes = queue.votes.length >= vcSize;
             const votesLeft = Math.floor(vcSize - queue.votes.length);
 
-            if (queue.votes.includes(message.member.user.id)) {
-                return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
-            }
-
-            queue.votes.push(message.member.user.id);
             if (neededVotes) {
                 queue.votes = [];
                 if (!queue.songs[1]) {
