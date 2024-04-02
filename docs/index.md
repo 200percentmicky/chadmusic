@@ -24,4 +24,4 @@ Welcome to the official documentation for **ChadMusic - The Chad Music Bot!**
 
 ------
 
-[:material-tools: Setup Guide](./setup/getting_started.md){ .md-button .md-button--primary } [:fontawesome-solid-terminal: Commands](./commands.md){ .md-button .md-button--primary } [:octicons-clock-16: Changelog](https://discord.com/api/oauth2/authorize?client_id=375450533114413056&permissions=41099548028374&scope=bot%20applications.commands){ .md-button .md-button--primary }
+[:material-tools: Setup Guide](./setup/getting_started.md){ .md-button .md-button--primary } [:fontawesome-solid-terminal: Commands](./commands.md){ .md-button .md-button--primary } [:octicons-clock-16: Changelog](./changelog.md){ .md-button .md-button--primary }
