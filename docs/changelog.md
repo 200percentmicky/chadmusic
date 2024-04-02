@@ -1,5 +1,45 @@
 # Changelog
 
+## 2024.2.0
+This release adds a few new features such as changing the voting system when skipping a track to have a per-server custom percentage, a way for the bot to set the playing track's title as a voice channel status, and ways to easily change the bot's avatar and (more recently) its profile banner.
+
+!!! warning "This release contains an experimental feature."
+
+    Voice channel statuses are considered experimental as they're not documented in Discord's API and may change or break at any time. [Learn more.](https://github.com/discord/discord-api-docs/pull/6400)
+
+* **Added:** New commands.
+    - `[p]songvcstatus` | `/settings songvcstatus`
+    - `[p]votepercentage` | `/settings votepercentage`
+    - `[p]setavatar` | `/core owner setavatar`
+    - `[p]setbanner` | `/core owner setbanner`
+    - `/settings setgame`
+* **Added:** `custom` and `competing` as valid playing status types to `[p]setgame` and `/core owner setgame`
+* **Added:** [Experimental] The ability for the bot to add the playing track's title as a voice channel status.
+* **Added:** [Internal] `die()` to client. Used for destroying the client when shutting down.
+* **Added:** [Internal] `CMPlayerWindow` class.
+* **Changed:** Default playing status type to `custom` in `[p]setgame` and `/core owner setgame`.
+* **Changed:** More emojis from raw unicode to strings.
+* **Changed:** Changed command descriptions for various commands.
+* **Changed:** Various UI changes.
+    - Moved the currently playing track's title to the `description` field in the Now playing embeds.
+    - Changed some prompts regarding blocked features during livestreams from `error` to `no`.
+* **Changed:** [Internal] Moved register slash command functions to the `ready` event.
+* **Fixed:** A typo that displayed `undefined` when a player error occured.
+* **Fixed:** An issue where votes for skipping are not being removed when the track finishes itself, if votes are present.
+* **Fixed:** A regression that prevented a stack trace from being logged to a text channel when a slash command errored.
+* **Fixed:** A regression in `/play attachment` that prevented attachments from being added to the queue.
+* **Fixed:** Security vulnerabilities regarding some old packages.
+* **Fixed:** A memory-leak that occured in an older version of undici.
+* **Updated:** Discord.js to 14.14.1
+* **Updated:** Fork of discord-akairo to 10.1.2-dev
+* **Updated:** slash-create to 6.0.2
+* **Updated:** undici to 6.6.0
+* **Removed:** Unnecessary **Embed Links** client permissions from many commands that don't need it.
+* **Removed:** Global setting values from `[p]globalsettings` and `/settings global current`.
+* **Removed:** [Internal] Unused functions and variables.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.1.0...2024.2.0)
+
 ## 2024.1.0
 First and foremost, Happy New Year to everyone! I hope everyone had a great holiday season. To welcome 2024, this release marks the beginning of the 2024 builds of ChadMusic.
 

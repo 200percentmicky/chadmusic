@@ -877,7 +877,7 @@ Changes the track's thumbnail size of the player's "Now Playing" embeds.
 
 ### [p]votepercentage | /settings votepercentage `<percentage>`
 
-Changes the voting percentage required to skip a track.
+Changes the vote-skip percentage requirement for placing votes to skip a track.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
