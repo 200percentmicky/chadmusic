@@ -38,10 +38,6 @@ module.exports = class CommandGlobalSettings extends Command {
 
         // Global Settings
         const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
-        const emptyCooldown = settings.get('global', 'emptyCooldown'); // Empty Cooldown
-        const leaveOnEmpty = settings.get('global', 'leaveOnEmpty'); // Leave on Empty
-        const leaveOnFinish = settings.get('global', 'leaveOnFinish'); // Leave on Finish
-        const leaveOnStop = settings.get('global', 'leaveOnStop'); // Leave on Stop
         const streamType = settings.get('global', 'streamType'); // Audio Encoder
 
         const encoderType = {

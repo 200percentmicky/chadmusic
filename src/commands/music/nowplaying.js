@@ -142,19 +142,6 @@ module.exports = class CommandNowPlaying extends Command {
             });
         }
 
-        const volumeEmoji = () => {
-            const volume = queue.volume;
-            const volumeIcon = {
-                0: ':mute:',
-                50: ':sound:',
-                100: ':loud_sound:',
-                150: ':loud_sound::zap:',
-                200: ':loud_sound::zap::anger:'
-            };
-            if (volume >= 250) return ':loud_sound::sob::ok_hand:';
-            return volumeIcon[Math.round(volume / 50) * 50];
-        };
-
         embedFields.push({
             name: `${this.client.ui.volumeEmoji(queue)} Volume`,
             value: `${queue.volume}%`,
