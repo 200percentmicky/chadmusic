@@ -42,14 +42,14 @@ module.exports = class CommandSetAvatar extends Command {
         try {
             imageUrl.match(/(gif|jpg|png)/g);
         } catch {
-            return this.client.ui.reply(message, 'error', ':x: Supported image formats are GIF, JPEG, or PNG.');
+            return this.client.ui.reply(message, 'error', 'Supported image formats are GIF, JPEG, or PNG.');
         }
 
         try {
             await this.client.user.setAvatar(imageUrl ?? null);
             return message.react('✅');
         } catch (err) {
-            return message.reply({ content: `:x: An error occured in the response: \`${err}\`` });
+            return message.reply({ content: `An error occured in the response: \`${err}\`` });
         }
     }
 };
