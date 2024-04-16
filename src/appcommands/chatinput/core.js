@@ -289,7 +289,7 @@ class CommandCore extends SlashCommand {
                 // Application Commands
                 // Now to resync all slash commands and reload them.
                 try {
-                    await this.client.creator.syncCommandsAsync({
+                    await this.client.creator.syncCommands({
                         deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
                         skipGuildErrors: true,
                         syncGuilds: true,

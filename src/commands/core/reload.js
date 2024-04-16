@@ -68,7 +68,7 @@ module.exports = class CommandReload extends Command {
 
         if (args.reloadslash) {
             try {
-                await this.client.creator.syncCommandsAsync({
+                await this.client.creator.syncCommands({
                     deleteCommands: process.env.DELETE_INVALID_COMMANDS === 'true' || false,
                     skipGuildErrors: true,
                     syncGuilds: true,
