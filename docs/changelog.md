@@ -1,5 +1,13 @@
 # Changelog
 
+## 20204.2.1
+This is a maintenance release.
+
+* **Changed:** Inhibitors are no longer reloaded when using `[p]reload` and `/core owner reload`.
+* **Fixed:** `[p]reload` and `/core owner reload` throwing a `TypeError` for a function that was renamed.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.2.0...2024.2.1)
+
 ## 2024.2.0
 This release adds a few new features such as changing the voting system when skipping a track to have a per-server custom percentage, a way for the bot to set the playing track's title as a voice channel status, and ways to easily change the bot's avatar and (more recently) its profile banner.
 
