@@ -274,12 +274,10 @@ class CommandCore extends SlashCommand {
                 try {
                     // Everything must be unloaded before we can move on.
                     await this.client.commands.removeAll(); // Commands
-                    await this.client.inhibitors.removeAll(); // Inhibitors
                     await this.client.listeners.removeAll(); // Listeners
 
                     // Now we can load everything.
                     await this.client.commands.loadAll();
-                    await this.client.inhibitors.loadAll();
                     await this.client.listeners.loadAll();
                 } catch (err) {
                     errored = true;
