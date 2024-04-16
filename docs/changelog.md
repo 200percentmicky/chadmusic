@@ -1,6 +1,6 @@
 # Changelog
 
-## 20204.2.1
+## 2024.2.1
 This is a maintenance release.
 
 * **Changed:** Inhibitors are no longer reloaded when using `[p]reload` and `/core owner reload`.
