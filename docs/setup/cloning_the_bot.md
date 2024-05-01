@@ -11,13 +11,9 @@ After cloning, you should be on the `main` branch. This branch is use to track t
 $ git status
 ```
 
-If you wish to run an in-development version of the bot, you can switch to the `develop` branch by running the following:
+If you like to live on the edge and wish to run an in-development version of the bot, you can switch to the `develop` branch by running the following:
 
 ```
 $ git checkout develop
 ```
-
-!!! warning
-
-    It's not recommended to use the `develop` branch in production as bugs may be present.
 

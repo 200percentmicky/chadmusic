@@ -42,6 +42,9 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
+extra_css:
+  - stylesheets/badge.css
+
 repo_name: 200percentmicky/chadmusic
 repo_url: https://github.com/200percentmicky/chadmusic
 
@@ -51,12 +54,13 @@ nav:
   - Commands: 'commands.md'
   - Setup:
     - 'Getting Started': 'setup/getting_started.md'
-    - 'Installing Node.js': 'setup/install_node.md'
-    - 'Installing git': 'setup/install_git.md'
-    - 'Downloading FFmpeg': 'setup/install_ffmpeg.md'
-    - 'Creating your bot': 'setup/creating_app.md'
-    - 'Cloning the bot': 'setup/cloning_the_bot.md'
-    - 'Installing Dependencies': 'setup/install_packages.md'
-    - 'Configuring the bot': 'setup/configuration.md'
-    - 'Customizing the bot': 'setup/customization.md'
-    - 'Starting the bot': 'setup/starting_the_bot.md'
+    - '1. Installing Node.js': 'setup/install_node.md'
+    - '2. Installing git': 'setup/install_git.md'
+    - '3. Downloading FFmpeg': 'setup/install_ffmpeg.md'
+    - '4. Creating your bot': 'setup/creating_app.md'
+    - '5. Cloning the bot': 'setup/cloning_the_bot.md'
+    - '6. Installing Packages': 'setup/install_packages.md'
+    - '7. Starting the bot': 'setup/starting_the_bot.md'
+  - Configuration:
+    - 'Customization': 'configuration/customization.md'
+    - 'Environment Variables': 'configuration/env_variables.md'

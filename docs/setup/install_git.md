@@ -6,6 +6,18 @@ You can download the latest version of `git` below.
 
 [:simple-git: Download git](https://git-scm.com/download/win){ .md-button .md-button--primary }
 
+### Chocolatey
+If you have Chocolatey installed, `git` can be installed this way.
+```
+C:\> choco install git
+```
+
+### Scoop
+If you have Scoop installed, `git` is available in the `main` bucket.
+```
+C:\> scoop install git
+```
+
 ## Mac
 You can install `git` from either [Homebrew](https://brew.sh/) or from [MacPorts](https://www.macports.org/).
 

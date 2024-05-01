@@ -1,18 +1,44 @@
 # Installing Node.js
-The bot uses Node.js for it's runtime. The bot was written to work with the latest LTS version of Node.js, but the latest up to date version is also supported. Please note that the bot requires at least Node.js 18 or up. Any version below that is not supported, including Node.js 16 which is has reached end-of-life.
+The bot uses Node.js for it's runtime. The bot was written to run on LTS versions of Node.js, but the latest up to date version is also supported. Please note that the bot requires at least Node.js 18.
 
 ## Windows
-You can download the latest Node.js binaries below.
+You can download Node.js below.
 
 [:fontawesome-brands-node-js: Download Node.js](https://nodejs.org/en/download){ .md-button .md-button--primary }
 
+### Chocolatey
+If you have Chocolatey installed, Node.js can be installed this way.
+```
+# Latest
+C:\> choco install nodejs
+
+# LTS
+C:\> choco install nodejs-lts
+```
+
+### Scoop
+If you have Scoop installed, Node.js is available in the `main` bucket.
+```
+# Latest
+C:\> scoop install nodejs
+
+# LTS
+C:\> scoop install nodejs-lts
+```
+
 ## Linux and Mac
-There are binaries available for macOS by clicking the button above. For most cases, you can use `nvm` to install and manage several installations of Node.js. The same can be said for Windows, however `nvm` doesn't currently manage Windows binaries. If you use `nvm` on Windows, you will need to use the Windows Subsystem for Linux. You can visit `nvm`'s repo below.
+There are binaries available for macOS by clicking the button above. For most cases, you can use `nvm` to install and manage several installations of Node.js on both macOS and Linux. `nvm` can also be used on Windows, but you will need to use Windows Subsystem for Linux since `nvm` doesn't maintain Windows executables. To install `nvm`, please visit the repo below for instructions.
 
 [:simple-github: nvm GitHub](https://github.com/nvm-sh/nvm){ .md-button }
 
-Once `nvm` is installed, installing an LTS version of Node.js is as simple as running the following:
+Once `nvm` is installed, installing Node.js is as simple as running the following:
 
 ```
-$ nvm install --lts
+$ nvm install latest
+```
+
+Alternatively, you can install the latest LTS version by running the following:
+
+```
+$ nvm install lts
 ```

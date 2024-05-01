@@ -18,10 +18,7 @@ Commands related to core functionality of the bot.
 Displays information about the bot.
 
 ### [p]eval | /core owner eval `<code>`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Executes Javascript code.
 
@@ -42,15 +39,12 @@ The following variables will always be available when running the command:
 * `commonTags` - common-tags
 * `Genius` - genius-lyrics
 
-!!! danger "Eval can be harmful!"
+!!! danger
 
     Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know what you're doing. If someone is telling you to enable it to have you evaluate a script, you're most likely being scammed!
 
 ### [p]help `[command]`
-
-??? info "Prefix command only."
-
-    This command is only available as a prefix command.
+<span class="badge-info">:information_source: Prefix command only</span>
 
 Displays available commands and how to use them.
 
@@ -67,10 +61,7 @@ View this program\'s license.
 Shows the bot\'s latency.
 
 ### [p]reload | /core owner reload `[reload_slash]`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Reloads all of the bot's commands and listeners.
 
@@ -79,10 +70,7 @@ Reloads all of the bot's commands and listeners.
 | `[reload_slash]` | boolean | Whether to reload the application's slash commands. Either `true` or `false`. Default is `false`. |
 
 ### [p]setavatar | /core owner setavatar `<image> [url]`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Changes the bot's avatar. If no arguments are provided, removes the avatar.
 
@@ -92,10 +80,7 @@ Changes the bot's avatar. If no arguments are provided, removes the avatar.
 | `[url]` | string | The URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats. |
 
 ### [p]setbanner | /core owner setbanner `<image> [url]`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Changes the bot's profile banner. If no arguments are provided, removes the banner.
 
@@ -105,10 +90,7 @@ Changes the bot's profile banner. If no arguments are provided, removes the bann
 | `[url]` | string | The URL of an image to use for the avatar. Supports GIF, JPEG, or PNG formats. |
 
 ### [p]setgame | /core owner setgame `[type] <status>`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Changes the bot's playing status.
 
@@ -120,10 +102,7 @@ Available types are `playing`, `watching`, `listening`, `custom`, and `competing
 | `<status>` | string | The overall status for the bot to use. |
 
 ### [p]shutdown | /core owner shutdown `[reason]`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Shuts down the bot.
 
@@ -161,10 +140,7 @@ Sharpens or softens the audio quality.
 | `<intensity>` | float | The intensity of the effect. Must be between `-10` to `10` or `off`. |
 
 ### [p]customfilter | [p]cf | /filter customfilter `<argument>`
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Adds a custom FFMPEG filter to the player.
 
@@ -177,10 +153,7 @@ Adds a custom FFMPEG filter to the player.
     If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
 
 ### /filter remove `<filter>`
-
-??? info "Slash command only."
-
-    This command is only available as a slash command.
+<span class="badge-info">:information_source: Slash command only<span>
 
 Remove some or all filters active on the player.
 
@@ -242,10 +215,7 @@ Adds a vibrato effect to the player.
 The main commands of the audio player.
 
 ### Message > Apps > Add to queue
-
-??? info "Message Command only"
-
-    This command is only available as a **Message Command** and must be executed from the **Apps** section in a target message's right-click context menu. [Learn More](https://discord.com/developers/docs/interactions/application-commands#message-commands)
+<span class="badge-info">:information_source: Message Context Menu only. [Learn More](https://discord.com/developers/docs/interactions/application-commands#message-commands)</span>
 
 Adds a track to the queue by using the message's content as a search query.
 
@@ -254,10 +224,7 @@ Adds a track to the queue by using the message's content as a search query.
     This command requires the **Message Content** privileged intent to work.
 
 ### [p]bindchannel | [p]bindto | /player bindchannel `[channel]`
-
-!!! info
-
-    This command is only available to DJs.
+<span class="badge-info">:musical_note: Requires DJ permissions</span>
 
 Changes the player's currently binded text or voice channel to a different one.
 
@@ -266,18 +233,12 @@ Changes the player's currently binded text or voice channel to a different one.
 | `[channel]` | Text/Voice Channel | The new channel to bind the player to. If nothing was provided, binds to the channel that the command was used in. |
 
 ### [p]clearqueue | [p]clear | /queue clear
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Clears the player's queue for this server.
 
 ### [p]disconnect | [p]leave | /player leave
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Disconnects from the current voice channel.
 
@@ -295,9 +256,7 @@ Changes the volume of the player to 69420%. The ratio that no man can withstand.
 
 ### [p]forceskip | [p]fs | /skip force
 
-??? info "DJ only."
-
-    This command is only available to DJs.
+<span class="badge-info">:musical_note: Requires DJ permissions</span>
 
 Force skips the currently playing song, bypassing votes.
 
@@ -305,9 +264,9 @@ Force skips the currently playing song, bypassing votes.
 
 !!! info
 
-    This command is always available, even when DJ mode is active.
+    This command can be used by everyone while **DJ Mode** is active.
 
-Saves this song to your DMs.
+Saves the currently playing track to your DMs.
 
 ### [p]iheartradio | [p]ihr | /play radio iheartradio `<station>`
 
@@ -319,15 +278,15 @@ Play a iHeartRadio station.
 
 ### [p]lyrics | /player lyrics `[query]`
 
-!!! info
-
-    This command can be used without the player being active.
-
 Retrieves lyrics from the playing track or from search query.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `[query]` | string | The search query to find lyrics. If nothing is provided, uses the currently playing track. |
+
+!!! info
+
+    This command can be used without the player being active.
 
 ### [p]move | /queue move `<track>` `[position]`
 
@@ -343,10 +302,7 @@ Moves a track in the queue to a new position.
 Shows the currently playing track.
 
 ### [p]pause | /player pause
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Pauses the player.
 
@@ -359,10 +315,7 @@ Adds a track to the queue from a URL, search query, or an attachment.
 | `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
 ### [p]playnow | [p]np | /play now `<url/search/attachment>`
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Adds a track to the queue and skips the currently playing track, if there was a track playing.
 
@@ -371,10 +324,7 @@ Adds a track to the queue and skips the currently playing track, if there was a 
 | `<url/search/attachment>` | string or Attachment | The URL, search query, or attachment to load. Only audio and video attachments are supported. |
 
 ### /play playlist `<name>`
-
-??? info "Slash command only."
-
-    This command is only available as a slash command.
+<span class="badge-info">:information_source: Slash command only</span>
 
 Plays a custom playlist.
 
@@ -384,23 +334,21 @@ Plays a custom playlist.
 
 !!! tip
 
-    This command is only used to play custom made playlists in a server. To play online playlists, use `/play track` or `[p]play` instead.
+    If you want to play an online playlist, consider using `/play track` or `[p]play` instead. This command is used to load server playlists.
 
 ### /play silently `<query>`
 
-??? info "Slash command only."
-
-    This command is only available as a slash command.
-
-!!! info
-
-    This command is only available to DJs if **Allow Silent Tracks** is off.
+<span class="badge-info">:information_source: Slash command only</span>
 
 Plays a track silently. It will not be sent in chat, and will be hidden from others in the queue.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<query>` | string | The track to silently play. |
+
+!!! info
+
+    This command is only available to DJs if **Allow Silent Tracks** is off.
 
 ### [p]queue | [p]q | /queue now `[show_hidden]`
 
@@ -415,10 +363,7 @@ View the queue for this server.
     This argument to view all hidden tracks can only be used by DJs.
 
 ### [p]remove | /queue remove `<queue_entry/start> [end]`
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Removes an entry or multiple entries from the queue.
 
@@ -428,10 +373,7 @@ Removes an entry or multiple entries from the queue.
 | `[end]` | number | The end position for removing multiple entries. Every entry from the starting to end position will be removed from the queue. |
 
 ### [p]repeat | [p]loop | /player repeat `[mode]`
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Toggles repeat mode for the player.
 
@@ -440,18 +382,12 @@ Toggles repeat mode for the player.
 | `[mode]` | string | The mode to apply for repeat mode. Valid options are **off**, **song**, or **queue**. Default is **song**. |
 
 ### [p]resume | /player resume
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Unpauses the player, resuming playback.
 
 ### [p]reversequeue | [p]rq | /queue reverse
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Reverses the order of the queue.
 
@@ -464,10 +400,7 @@ Searches for a track to play.
 | `<query>` | string | The query to search for. |
 
 ### [p]seek | /player seek `<time>`
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Sets the playing time of the track to a new position.
 
@@ -476,10 +409,7 @@ Sets the playing time of the track to a new position.
 | `<time>` | number or Notation | The time of the track to seek to in colon notation or in milliseconds. |
 
 ### [p]shuffle | /queue shuffle
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Randomizes the entries in the queue.
 
@@ -492,10 +422,7 @@ Skips the currently playing song, or vote to skip the track if the voice channel
     If you have the **Manage Server** permission, you can change how the number of votes are calculated by using `/settings votepercentage` or `[p]votepercentage`.
 
 ### [p]skipto | [p]jump | /skip jump `<queue_entry>`
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Skips to the specified entry in the queue.
 
@@ -504,22 +431,16 @@ Skips to the specified entry in the queue.
 | `<queue_entry>` | number | The number of the queue entry to skip to. Skips all other entries of the queue. |
 
 ### [p]startover | [p]restart | /player startover
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Restarts the currently playing song.
 
 !!! tip
     
-    If the currently playing track is a live stream, the stream will refresh instead.
+    If the currently playing track is a live stream, this command can be used to refresh the live stream instead.
 
 ### [p]stop | /player stop
-
-??? info "DJs only if not alone."
-
-    This command can only be used by DJs if there are more than 2 people in the voice channel.
+<span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
 Destroys the player.
 
@@ -548,16 +469,16 @@ Commands used to manage playlists on a server. All commands in this category req
 
 ### [p]playlist-add | [p]pladd | /playlist add `<"name">` `[track]`
 
-!!! info
-
-    To add tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
-
 Adds a track to a playlist.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<name>` | string | The name of the playlist to add tracks to. |
 | `[track]` | URL | A track to add to the playlist. If nothing was provided and a player is currently playing a track, adds the currently playing track to the playlist. |
+
+!!! info
+
+    To add tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
 
 ### [p]playlist-clone | [p]plclone | /playlist clone `<"name">` `["clone_name"]`
 
@@ -570,15 +491,15 @@ Creates a playlist by cloning an existing one.
 
 ### [p]playlist-delete | [p]pldelete | /playlist delete `<name>`
 
-!!! info
-
-    To delete a playlist, you must be the user that created the playlist, unless you have the **Administrator** permission.
-
 Deletes a playlist.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<name>` | string | The name of the playlist to delete.
+
+!!! info
+
+    To delete a playlist, you must be the user that created the playlist, unless you have the **Administrator** permission.
 
 ### [p]playlist-new | [p]plnew | /playlist new `<name>`
 
@@ -589,18 +510,11 @@ Creates a new playlist.
 | `<name>` | string | The name to give to the new playlist. |
 
 ### [p]playlist-purge | [p]plpurge | /playlist purge
-
-??? failure "Administrators only."
-
-    This command is only available to server admimistrators.
+<span class="badge-danger">:x: Administrators only</span>
 
 Deletes all playlists on the server.
 
 ### [p]playlist-remove | [p]plremove | /playlist remove `<"name">` `<index_or_start>` `[end]`
-
-!!! info
-
-    To remove tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
 
 Removes a track or multiple tracks from a playlist.
 
@@ -609,6 +523,10 @@ Removes a track or multiple tracks from a playlist.
 | `<name>` | string | The name of the playlist to remove tracks. |
 | `<index_or_start>` | number | The track or the starting position to remove multiple tracks from the playlist. |
 | `[end]` | number | The ending position to remove multiple tracks. |
+
+!!! info
+
+    To remove tracks, you must be the user that created the playlist, unless you have the **Administrator** permission.
 
 ### [p]playlist-show | [p]plshow | /playlist show
 
@@ -719,10 +637,7 @@ Toggles the ability to change the volume past 200%.
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ### [p]globalsettings | /settings global current
-
-??? failure "Bot owner only."
-
-    This command is restricted to the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
 
 Shows the bot's current global settings.
 
@@ -775,22 +690,13 @@ Changes the bot's prefix for this server.
     This setting will only affect message based commands, not slash commands. The default prefix defined in the bot's configuration in addition to the bot's mention will always be available.
 
 ### [p]resetdata
-
-??? info "Prefix command only."
-
-    This command is only available as a prefix command.
-
-??? failure "Administrators only."
-
-    This command is only available to server admimistrators.
+<span class="badge-info">:information_source: Prefix command only</span>
+<span class="badge-danger">:x: Administrators only</span>
 
 Resets the bot's settings for the server to its default settings.
 
 ### /settings remove `<setting>`
-
-??? info "Slash command only."
-
-    This command is only available as a slash command.
+<span class="badge-info">:information_source: Slash command only<span>
 
 Revert a setting to its default value.
 
@@ -819,10 +725,7 @@ Limits the number of entries that members can add to the queue.
 Displays the bot's current settings for the server.
 
 ### [p]shownewsongonly | /settings global shownewsongonly `<toggle>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Toggles whether the Now Playing alerts are shown for new songs only.
 
@@ -843,10 +746,7 @@ Toggles whether the bot will set the playing track's title as a status for the v
     This feature uses an undocumented endpoint in Discord's API and may change at anytime.
 
 ### [p]streamtype | /settings global streamtype `<encoder>`
-
-??? failure "Bot owner only."
-
-    This is a global setting that can only be changed by the owner of the application.
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
 
 Selects which audio encoder the bot should use during streams.
 

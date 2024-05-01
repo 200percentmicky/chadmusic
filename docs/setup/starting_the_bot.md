@@ -1,5 +1,5 @@
 # Starting the bot
-If you followed the installation guide section-by-section, you should now be able to run the bot for the first time. You can start the bot by running the following command:
+If you followed the installation guide section-by-section, you should now be able to run the bot for the first time. Before you start your bot, you must set your bot's token and application ID in the bot's environment variables. You can learn more about how to configure your bot's variables in **[Configuration > Environment Variables](../configuration/env_variables.md)**. Once you finished configuring your bot's variables, you can start the bot by running the following command:
 
 ```
 $ npm run bot
@@ -21,15 +21,8 @@ If a new version of the bot is release, run the following command to update the 
 $ npm run update
 ```
 
-If you want to switch to the `develop` branch, or update to the latest commit, run the following instead:
+If you want to live on the edge and use a version that's in development, you can switch to the `develop` branch by running the following:
 
 ```
 $ npm run update:dev
 ```
-
-!!! warning
-
-    If you made any changes to the bot, all changes will be discarded when running either of those scripts. Consider either of the following to keep your changes:
-    
-    * Stashing your changes, running `git pull`, and reapplying your stash.
-    * Forking the bot to save your changes.

@@ -1,15 +1,12 @@
-# Configuring the bot
-The bot utilizes environment variables for its configuration. The bot comes bundled with a `.env.example` that you can fill out. Once you're finished editing the file, rename it to `.env` so the bot can read and save that configuration during boot. If for any reason the values were changed while the bot is online, a reboot is necessary for the changes to take effect.
+# Environment Variables
+ChadMusic utilizes environment variables for certain configurations. Bundled with the bot is a `.env.example` file that you can use set your configurations to. Once you're finished editing the file, you will need to rename it to `.env` so the bot can read and use the configurations you set during boot. Changing any of the values during the bot's runtime will not be applied until the bot has been rebooted.
 
-Below are all the variables that are used in case you want to make your own `.env` file instead.
+In the case where you want to create your own `.env` file instead, provided below are all the variables that the bot uses. Not every single value is listed on this page, such as the variables used to manage the bot's user interface. If you want to change the bot's user interface, please go to **[Configuration > Customization](customization.md)** for more information.
 
 ## Client Configuration
 
 ### TOKEN
-
-??? warning "This field is required."
-
-    For the bot to function, this field must be used.
+<span class="badge-warn">:warning: This field is required.</span>
 
 Your bot's token.
 
@@ -25,10 +22,7 @@ The default prefix for your bot to respond to. Does not apply to slash commands.
 Your user ID. This is the unique ID that is attached to your Discord account and can only be retrieved by using developer mode. You must provide this for the bot to recognize you as the owner.
 
 ### APP_ID
-
-??? warning "This field is required."
-
-    For the bot to function, this field must be used.
+<span class="badge-warn">:warning: This field is required.</span>
 
 Your application's user ID. This is needed to sync any slash commands on your bot to Discord.
 
@@ -38,27 +32,24 @@ Your application's public key. This is also needed to sync any slash commands on
 
 ### SHARDING
 
+Enables sharding the bot. This should only be used for large bots that are in over 2500 guilds. When enabled, you must send a SIGINT signal if you want to completely shut down the bot. Using the shutdown command restarts all shards instead.
+
 !!! info
 
     Sharding the bot isn't necessary until your bot reaches 2500 guilds.
 
-Enables sharding the bot. This should only be used for large bots that are in over 2500 guilds. When enabled, you must send a SIGINT signal if you want to completely shut down the bot. Using the shutdown command restarts all shards instead.
-
 ### SHARDS
 
-!!! info
-
-    SHARDING must be set to true for this variable to work.
-
 The number of shards to use. This splits the bot into multiple processes to ease the load of a single shard. Disable to have the bot spawn shards automatically.
+
+!!! warning
+
+    SHARDING must be set to `true` for this variable to work.
 
 ## Player Configuration
 
 ### YOUTUBE_COOKIE
-
-!!! failure "This field is deprecated."
-
-    This field has been deprecated in favor of the new cookie system intrduced in 2023.5.0 and will be removed in the future. Please read the [**Adding Cookies**](#adding-cookies) section below for more information.
+<span class="badge-danger">:x: This field is deprecated. [Learn more.](#adding-cookies)</span>
 
 The cookie to use from YouTube. This is optional but recommended to use. To learn how to get a cookie header, you can look at the example from [here](https://github.com/fent/node-ytdl-core/blob/997efdd5dd9063363f6ef668bb364e83970756e7/example/cookies.js#L6-L12). It tells you how to get the cookie header. Once you have what you need, paste the entire content in this variable.
 
@@ -90,12 +81,11 @@ The token to access Genius API for song lyrics. If this variable is unused, scra
 The guild's ID. Enabling this will turn the bot's commands into guild commands for the specified guild. Do not use this varibale to make the commands global.
 
 ### USE_EVAL
-
-!!! danger "Eval can be harmful!"
-
-    Eval can be dangerous if used improperly! Do not enable this variable if you don't know what you're doing. If someone is telling you to enable it to have you evaluate a script, you're most likely being scammed! If you do know what you're doing and want to enable this variable, set this variable to **true**.
-
 Enables the `eval` command. With great power comes great responsibility.
+
+!!! danger
+
+    Eval can be dangerous if used improperly. You should not enable this variable, unless you know exactly what you're doing. If someone is telling you to enable the eval command to run something, you're most likely being scammed!
 
 ### USE_CONSOLE
 Allows the bot to log to the console window.
