@@ -69,6 +69,5 @@
     "undici": "^6.11.1",
     "formidable": "^3.5.1",
     "tar": "^6.2.1"
-  },
-  "packageManager": "yarn@4.1.1"
+  }
 }
