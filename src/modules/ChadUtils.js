@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /* eslint-disable no-unused-vars */
-const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel } = require('discord.js');
+const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel, Team } = require('discord.js');
 const { CommandContext } = require('slash-create');
 const CMError = require('./CMError.js');
 /* eslint-enable no-unused-vars */
@@ -49,11 +49,16 @@ class ChadUtils {
      * @param {GuildMember} member The guild member to check for DJ permissions.
      * @returns {boolean}
      */
-    static isDJ (channel, member) {
+    static async isDJ (channel, member) {
+        const app = await channel.client.application.fetch();
+
+        let isOwner = member.user?.id === app.owner?.id;
+        if (app.owner instanceof Team) isOwner = member.user.id === app.owner.members.get(member.user.id).id;
+
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
-        const permission = member.roles.cache.has(djRole) ||
-            channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels) ||
-            member.user.id === process.env.OWNER_ID;
+        const permission = member.roles?.cache?.has(djRole) ||
+            channel.permissionsFor(member.user?.id).has(PermissionsBitField.Flags.ManageChannels) ||
+            isOwner;
 
         return permission;
     }
