@@ -52,8 +52,7 @@ class CommandSearch extends SlashCommand {
         const channel = guild.channels.cache.get(ctx.channelID);
 
         const djMode = this.client.settings.get(guild.id, 'djMode');
-        const djRole = this.client.settings.get(guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(channel, member);
         if (djMode) {
             if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }

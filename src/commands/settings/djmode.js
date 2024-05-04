@@ -37,8 +37,7 @@ module.exports = class CommandDJMode extends Command {
     }
 
     async exec (message, args) {
-        const djRole = this.client.settings.get(message.guild.id, 'djRole');
-        const dj = message.member.roles.cache.has(djRole) || message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(message.channel, message.member);
         if (!dj) return this.client.ui.sendPrompt(message, 'NO_DJ');
 
         if (!args.toggle) return this.client.ui.usage(message, 'djmode <toggle:on/off>');

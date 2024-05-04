@@ -260,9 +260,8 @@ class CommandFilter extends SlashCommand {
         const member = guild.members.cache.get(ctx.user.id);
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
-        const djRole = this.client.settings.get(ctx.guildID, 'djRole');
         const allowFilters = this.client.settings.get(ctx.guildID, 'allowFilters');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(channel, member);
 
         if (djMode && !dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
 

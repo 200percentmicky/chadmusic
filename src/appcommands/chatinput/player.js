@@ -181,8 +181,7 @@ class CommandPlayer extends SlashCommand {
         const _member = await guild.members.fetch(ctx.user.id);
 
         const djMode = client.settings.get(ctx.guildID, 'djMode');
-        const djRole = client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(channel, _member);
         if (djMode) {
             if (ctx.subcommands[0] === 'grab') {} // eslint-disable-line no-empty, brace-style
             else if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');

@@ -50,10 +50,8 @@ module.exports = class CommandVibrato extends Command {
 
     async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
-        const djRole = this.client.settings.get(message.guild.id, 'djRole');
         const allowFilters = this.client.settings.get(message.guild.id, 'allowFilters');
-        const dj = message.member.roles.cache.has(djRole) ||
-            message.channel.permissionsFor(message.member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(message.channel, message.member);
 
         if (djMode) {
             if (!dj) {
