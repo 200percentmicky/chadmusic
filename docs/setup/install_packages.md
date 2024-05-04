@@ -3,14 +3,14 @@ At this point, you should be ready to install the bot's dependencies. Before you
 
 !!! info "Error regarding "yarn not found""
 
-    In certain situation, an error may occur regarding yarn not being found. If that's the case, you'll need to install yarn on your system. Use npm to install yarn globally:
-
+    Some packages require yarn to install them. If you received an error about yarn not being installed, you'll need to install it on your system.
+    
+    First, enable Corepack on your system. This requires administrator privileges.
     ```
-    $ npm install -g yarn
+    # corepack enable
     ```
 
-    Once you installed yarn, upgrade it to the latest version:
-
+    Then, update yarn to the latest version.
     ```
     $ yarn set version stable
     ```
