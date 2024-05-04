@@ -20,7 +20,6 @@ require('dotenv').config();
 const { ShardingManager } = require('discord.js');
 const ChadMusic = require('./src/bot.js');
 const logger = require('./src/modules/ChadLogger.js');
-const { execSync } = require('child_process');
 
 if (process.versions.node.split('.')[0] < 18) {
     logger.error(`ChadMusic requires Node.js 18 or later. You currently have ${process.versions.node} installed. Please update your Node.js installation.`);
@@ -36,7 +35,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky | @200percentmicky');
-logger.info(`Bot Version: ${version} (Build ${execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).toString().trim()})`);
+logger.info(`Bot Version: ${version}`);
 logger.info('Loading libraries...');
 
 if (process.env.YOUTUBE_COOKIE) {
