@@ -226,7 +226,7 @@ class CommandCore extends SlashCommand {
 
                 try {
                     // eslint-disable-next-line no-eval
-                    let evaled = await eval(code);
+                    let evaled = await eval(`(async () => { return ${code} })();`);
 
                     if (typeof evaled !== 'string') {
                         evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
