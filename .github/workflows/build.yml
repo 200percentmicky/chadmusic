@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Installing Yarn
-        run: npm i -g yarn
+      - name: Enable Corepack
+        run: corepack enable
       - name: Updating Yarn
         run: yarn set version stable
       - name: Installing Dependencies
@@ -26,8 +26,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Installing Yarn
-        run: npm i -g yarn
+      - name: Enable Corepack
+        run: corepack enable
       - name: Updating Yarn
         run: yarn set version stable
       - name: Installing Dependencies
