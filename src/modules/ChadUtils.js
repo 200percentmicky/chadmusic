@@ -52,13 +52,22 @@ class ChadUtils {
     static async isDJ (channel, member) {
         const app = await channel.client.application.fetch();
 
-        let isOwner = member.user?.id === app.owner?.id;
-        if (app.owner instanceof Team) isOwner = member.user.id === app.owner.members.get(member.user.id).id;
+        const isOwner = async () => {
+            if (!channel.client.player.ownerDjBypass) {
+                return false;
+            }
+
+            if (app.owner instanceof Team) {
+                return member.user.id === app.owner.members.get(member.user.id).id;
+            }
+
+            return member.user?.id === app.owner?.id;
+        };
 
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
         const permission = member.roles?.cache?.has(djRole) ||
             channel.permissionsFor(member.user?.id).has(PermissionsBitField.Flags.ManageChannels) ||
-            isOwner;
+            isOwner();
 
         return permission;
     }
