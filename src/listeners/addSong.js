@@ -114,10 +114,7 @@ module.exports = class ListenerAddSong extends Listener {
             .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }));
 
         if (song.metadata?.silent) {
-            window.setAuthor({
-                name: `Added silently to the queue - ${member.voice.channel.name}`,
-                iconURL: guild.iconURL({ dynamic: true })
-            });
+            window.windowTitle(`Added silently to the queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }));
         }
 
         try {
