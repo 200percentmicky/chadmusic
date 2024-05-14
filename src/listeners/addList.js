@@ -36,7 +36,7 @@ module.exports = class ListenerAddList extends Listener {
             .windowTitle(`Playlist added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
             .trackTitle(`[${playlist.name}](${playlist.url})`)
             .trackImage('small', playlist.thumbnail)
-            .setFooter(playlist.user.tag.replace(/#0{1,1}$/, ''), playlist.user.avatarURL({ dynamic: true }));
+            .setFooter(`${playlist.user.globalName} - ${playlist.user.tag.replace(/#0{1,1}$/, '')}`, playlist.user.avatarURL({ dynamic: true }));
 
         const embedFields = [];
 

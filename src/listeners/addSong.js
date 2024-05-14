@@ -111,7 +111,7 @@ module.exports = class ListenerAddSong extends Listener {
             .windowTitle(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
             .trackTitle(`[${song.name}](${song.url})`)
             .trackImage('small', song.thumbnail)
-            .setFooter(song.user.tag.replace(/#0{1,1}$/, ''), song.user.avatarURL({ dynamic: true }));
+            .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }));
 
         if (song.metadata?.silent) {
             window.setAuthor({
