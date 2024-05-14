@@ -29,6 +29,7 @@ const ChadUtils = require('./modules/ChadUtils');
 const path = require('path');
 const fs = require('fs');
 const { version } = require('../package.json');
+const { getInfo, ClusterClient } = require('discord-hybrid-sharding');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -51,8 +52,13 @@ class ChadMusic extends AkairoClient {
                 Partials.Channel,
                 Partials.Message,
                 Partials.User
-            ]
+            ],
+            shards: process.env.SHARDING ? getInfo().SHARD_LIST : [0],
+            shardCount: process.env.SHARDING ? getInfo().TOTAL_SHARDS : 1
         });
+
+        // Hybrid sharding
+        this.cluster = process.env.SHARDING ? new ClusterClient(this) : undefined;
 
         // Calling packages that can be used throughout the client.
         this.logger = logger;

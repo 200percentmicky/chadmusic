@@ -17,8 +17,7 @@
 /* Index File */
 
 require('dotenv').config();
-const { ShardingManager } = require('discord.js');
-const ChadMusic = require('./src/bot.js');
+const { ClusterManager } = require('discord-hybrid-sharding');
 const logger = require('./src/modules/ChadLogger.js');
 
 if (process.versions.node.split('.')[0] < 18) {
@@ -43,16 +42,26 @@ if (process.env.YOUTUBE_COOKIE) {
 }
 
 if (process.env.SHARDING) {
-    const manager = new ShardingManager('./src/bot.js', {
-        token: process.env.TOKEN,
-        totalShards: parseInt(process.env.SHARDS) ?? 'auto'
+    logger.info('Starting client with sharding enabled.');
+
+    const manager = new ClusterManager('./src/bot.js', {
+        totalShards: parseInt(process.env.SHARDS) ?? 'auto',
+        shardsPerClusters: parseInt(process.env.SHARDS_PER_CLUSTER) ?? 2,
+        mode: 'process'
     });
 
-    manager.on('shardCreate', s => logger.info(`Shard ${s.id} launched.`));
+    if (manager.totalShards === 'auto') {
+        manager.token = process.env.TOKEN;
+    }
 
-    manager.spawn();
+    manager.on('clusterCreate', c => logger.info(`Cluster ${c.id} launched.`))
+        .on('clusterReady', c => logger.info(`Cluster ${c.id} is ready.`));
+
+    manager.spawn({ timeout: -1 });
 } else {
     logger.info('Starting client with sharding disabled.');
+
+    const ChadMusic = require('./src/bot.js');
 
     try {
         new ChadMusic().login(process.env.TOKEN);
