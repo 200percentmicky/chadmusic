@@ -44,8 +44,9 @@ module.exports = class ListenerAddSong extends Listener {
         if (!allowAgeRestricted) {
             if (!dj) {
                 if (song.age_restricted) {
-                    this.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
-                    return queue.songs.pop();
+                    if (queue.songs.length === 1) channel.client.player.stop(guild);
+                    else queue.songs.pop();
+                    return channel.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
                 }
             }
         }
@@ -56,8 +57,9 @@ module.exports = class ListenerAddSong extends Listener {
                 // Using Math.floor() to round down.
                 // Still need to apend '000' to be accurate.
                 if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    this.client.ui.reply(message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
-                    return queue.songs.pop();
+                    if (queue.songs.length === 1) channel.client.player.stop(guild);
+                    else queue.songs.pop();
+                    return this.client.ui.reply(message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                 }
             }
         }
