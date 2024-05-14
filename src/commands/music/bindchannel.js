@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandBindChannel extends Command {
     constructor () {

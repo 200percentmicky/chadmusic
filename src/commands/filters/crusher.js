@@ -16,7 +16,6 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../modules/pushFormatFilter');
 

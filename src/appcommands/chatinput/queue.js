@@ -19,7 +19,6 @@ const {
     ButtonBuilder,
     ActionRowBuilder,
     EmbedBuilder,
-    PermissionsBitField,
     ButtonStyle
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
