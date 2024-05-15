@@ -39,6 +39,7 @@ module.exports = class ListenerAddSong extends Listener {
         const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
+        const maxQueueLimit = await channel.client.settings.get(guild.id, 'maxQueueLimit');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
         if (!allowAgeRestricted) {
@@ -61,6 +62,15 @@ module.exports = class ListenerAddSong extends Listener {
                     else queue.songs.pop();
                     return this.client.ui.reply(message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
                 }
+            }
+        }
+
+        if (maxQueueLimit) {
+            const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+            if (queueMemberSize > maxQueueLimit) {
+                if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
+                else queue.songs.pop();
+                return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
             }
         }
 

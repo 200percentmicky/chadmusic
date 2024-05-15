@@ -251,21 +251,6 @@ class CommandPlay extends SlashCommand {
             if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
         }
 
-        const queue = this.client.player.getQueue(guild.id);
-
-        // These limitations should not affect a member with DJ permissions.
-        if (!dj) {
-            if (queue) {
-                const maxQueueLimit = await this.client.settings.get(guild.id, 'maxQueueLimit');
-                if (maxQueueLimit) {
-                    const queueMemberSize = queue.songs.filter(entries => entries.user.id === _member.user.id).length;
-                    if (queueMemberSize >= maxQueueLimit) {
-                        return this.client.ui.reply(ctx, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
-                    }
-                }
-            }
-        }
-
         try {
             this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
                 ? ytdl.createAgent(undefined, {
