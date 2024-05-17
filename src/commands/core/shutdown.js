@@ -43,7 +43,9 @@ module.exports = class CommandShutdown extends Command {
         await message.reply(':warning: Shutting down...');
 
         const errChannel = this.client.channels.cache.find(val => val.id === process.env.BUG_CHANNEL);
-        await errChannel.send({ content: `:warning: **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` });
+        await errChannel
+            .send({ content: `:warning: **Shutdown**\n\`\`\`js\n${restartReport}\`\`\`` })
+            .catch(() => {});
 
         this.client.logger.info(`[Shutdown] ${restartReport}`);
         this.client.logger.warn('Shutting down...');
