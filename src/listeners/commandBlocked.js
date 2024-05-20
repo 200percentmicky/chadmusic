@@ -26,7 +26,7 @@ module.exports = class CommandBlockedListener extends Listener {
     }
 
     async exec (message, command, reason) {
-        if (reason === 'owner') return this.client.ui.reply(message, 'no', 'This command can only be used by the bot owner.');
+        if (reason === 'owner') return this.client.ui.reply(message, 'no', 'This command is only available to the application owner.');
         if (reason === 'guild') return this.client.ui.reply(message, 'no', 'This command cannot be used in Direct Messages.');
         if (reason === ChannelType.DM) return this.client.ui.reply(message, 'no', 'This command cannot be used in servers.');
     }
