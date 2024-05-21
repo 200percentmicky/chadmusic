@@ -20,6 +20,7 @@ const {
     PermissionsBitField
 } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
+const AutoComplete = require('youtube-autocomplete');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
 const CMError = require('../../modules/CMError');
@@ -34,12 +35,25 @@ class CommandSearch extends SlashCommand {
                     type: CommandOptionType.STRING,
                     name: 'query',
                     description: 'The track to search for. Provides the first 10 results.',
-                    required: true
+                    required: true,
+                    autocomplete: true
                 }
             ]
         });
 
         this.filePath = __filename;
+    }
+
+    async autocomplete (ctx) {
+        const query = ctx.options[ctx.focused];
+        if (this.client.utils.hasURL(query)) return [];
+        AutoComplete(query, (err, queries) => {
+            if (err) {
+                this.client.logger.error(`Unable to gather autocomplete data.\n${err.stack}`);
+                return ctx.sendResults([]);
+            }
+            return ctx.sendResults(queries[1].map((x) => ({ name: x, value: x })));
+        });
     }
 
     async run (ctx) {
