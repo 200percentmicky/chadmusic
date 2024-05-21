@@ -17,6 +17,7 @@
 const { Listener } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 const CMPlayerWindow = require('../modules/CMPlayerWindow');
+const _ = require('lodash');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
@@ -30,6 +31,7 @@ module.exports = class ListenerAddList extends Listener {
         const channel = queue.textChannel;
         const guild = channel.guild;
         const member = channel.guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
+        const message = playlist.metadata?.message || playlist.metadata?.ctx;
 
         const window = new CMPlayerWindow()
             .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
@@ -40,43 +42,45 @@ module.exports = class ListenerAddList extends Listener {
 
         const embedFields = [];
 
+        embedFields.push({
+            name: '🔢 Number of entries',
+            value: `${playlist.songs.length}`
+        });
+
         // Cut some or many entries if maxQueueLimit is in place.
         const djRole = this.client.settings.get(channel.guild.id, 'djRole');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
         if (!dj) {
             const maxQueueLimit = this.client.settings.get(channel.guild.id, 'maxQueueLimit');
             if (maxQueueLimit) {
-                const queueLength = queue.songs.length - playlist.songs.length; // The length before the playlist was added.
-                const allowedLimit = queueLength + maxQueueLimit; // The result of the added playlist if maxQueueLimit is in place.
+                const queueBefore = _.difference(queue.songs, playlist.songs); // The queue before the playlist was added.
+                const queueLength = queueBefore.length; // Queue length before add.
+                const queueMemberSize = queueBefore.filter(entries => entries.user.id === member.user.id).length; // How many tracks that the user added.
+                const allowedLimit = maxQueueLimit - queueMemberSize; // The allowed limit.
 
-                // The queue has the currently playing song as the first element
-                // in the array, so we don't need to subtract the number to get
-                // the correct element.
-                queue.songs.splice(allowedLimit, playlist.songs.length - maxQueueLimit);
+                if (queueMemberSize > allowedLimit) {
+                    if (queueLength <= 1) this.client.player.stop(guild);
+                    else queue.songs.splice(queueLength - 1, playlist.songs.length);
+                    return this.client.ui.reply(message, 'error', `The playlist cannot be added because you already exceeded the maximum number of **${maxQueueLimit} track(s)** allowed on this server.`);
+                }
 
-                embedFields.push({
-                    name: '🔢 Number of entries',
-                    value: `${playlist.songs.length}`
-                });
+                const queueAfter = _.dropRight(queue.songs, playlist.songs.length - allowedLimit);
+
+                queue.songs = queueAfter;
+
                 embedFields.push({
                     name: ':warning: Not everything was added!',
-                    value: `Due to limits set on this server, only the first ${maxQueueLimit > 1 ? `**${maxQueueLimit}** entries` : 'entry'}** out of **${playlist.songs.length}** were added to the queue.`
+                    value: `Due to limits set on this server, only **${allowedLimit}** track(s) out of **${playlist.songs.length}** were added to the queue.`
                 });
-                window.addFields(embedFields);
-                return channel.send({ embeds: [window._embed] });
             }
-        } else {
-            embedFields.push({
-                name: '🔢 Number of entries',
-                value: `${playlist.songs.length}`
-            });
-            window.addFields(embedFields);
+        }
 
-            try {
-                playlist.metadata?.ctx.send({ embeds: [window._embed] });
-            } catch {
-                channel.send({ embeds: [window._embed] });
-            }
+        window.addFields(embedFields);
+
+        try {
+            playlist.metadata?.ctx.send({ embeds: [window._embed] });
+        } catch {
+            channel.send({ embeds: [window._embed] });
         }
     }
 };
