@@ -59,8 +59,12 @@ module.exports = class ListenerAddList extends Listener {
                 const allowedLimit = maxQueueLimit - queueMemberSize; // The allowed limit.
 
                 if (queueMemberSize > allowedLimit) {
-                    if (queueLength <= 1) this.client.player.stop(guild);
-                    else queue.songs.splice(queueLength - 1, playlist.songs.length);
+                    if (queueLength <= 1) {
+                        this.client.player.stop(guild);
+                    } else {
+                        const queueAfter = _.dropRight(queue.songs, playlist.songs.length);
+                        queue.songs = queueAfter;
+                    }
                     return this.client.ui.reply(message, 'error', `The playlist cannot be added because you already exceeded the maximum number of **${maxQueueLimit} track(s)** allowed on this server.`);
                 }
 
