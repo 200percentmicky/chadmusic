@@ -155,6 +155,11 @@ class CommandCore extends SlashCommand {
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'sudo',
+                            description: 'Allows for the bot owner to bypass DJ permissions in the given server.'
                         }
                     ]
                 },
@@ -394,6 +399,24 @@ class CommandCore extends SlashCommand {
                 } catch (err) {
                     return this.client.ui.reply(ctx, 'error', `Failed to set status: \`${err}\``);
                 }
+            }
+
+            case 'sudo': {
+                const sudo = this.client.player.sudoAccess;
+
+                if (sudo.includes(guild.id)) {
+                    _.remove(sudo, g => {
+                        return g === guild.id;
+                    });
+                    return this.client.ui.reply(ctx, 'info', 'Disabled sudo access on this server.');
+                }
+
+                if (await this.client.utils.isDJ(channel, member)) {
+                    return this.client.ui.reply(ctx, 'warn', 'You\'re already a DJ in this server.');
+                }
+
+                sudo.push(guild.id);
+                return this.client.ui.reply(ctx, 'info', 'Enabled sudo access on this server.');
             }
             }
             break;
