@@ -182,6 +182,7 @@ class ChadMusic extends AkairoClient {
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
+        this.player.sudoAccess = [];
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {

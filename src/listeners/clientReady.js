@@ -26,9 +26,6 @@ module.exports = class SurferReady extends Listener {
     }
 
     async exec () {
-        // Owner bypass for DJ permissions should be opted into.
-        this.client.player.ownerDjBypass = false;
-
         // Register commands in the "commands" directory.
         this.client.logger.info('Registering app commands...');
         await this.client.creator.registerCommandsIn(path.join(__dirname, '..', 'appcommands'));

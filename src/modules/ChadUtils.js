@@ -52,8 +52,8 @@ class ChadUtils {
     static async isDJ (channel, member) {
         const app = await channel.client.application.fetch();
 
-        const isOwner = async () => {
-            if (!channel.client.player.ownerDjBypass) {
+        const isOwner = () => {
+            if (!channel.client.player.sudoAccess.includes(channel.guild.id)) {
                 return false;
             }
 
