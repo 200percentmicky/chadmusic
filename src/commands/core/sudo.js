@@ -30,9 +30,6 @@ module.exports = class CommandSudo extends Command {
     }
 
     async exec (message) {
-        if (await this.client.utils.isDJ(message.channel, message.member)) {
-            return this.client.ui.reply(message, 'warn', 'You\'re already a DJ in this server.');
-        }
         const sudo = this.client.player.sudoAccess;
 
         if (sudo.includes(message.guild.id)) {
@@ -40,6 +37,10 @@ module.exports = class CommandSudo extends Command {
                 return g === message.guild.id;
             });
             return this.client.ui.reply(message, 'info', 'Disabled sudo access on this server.');
+        }
+
+        if (await this.client.utils.isDJ(message.channel, message.member)) {
+            return this.client.ui.reply(message, 'warn', 'You\'re already a DJ in this server.');
         }
 
         sudo.push(message.guild.id);
