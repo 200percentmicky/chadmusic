@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
 const CMPlayerWindow = require('../modules/CMPlayerWindow');
 const _ = require('lodash');
 
@@ -48,8 +47,7 @@ module.exports = class ListenerAddList extends Listener {
         });
 
         // Cut some or many entries if maxQueueLimit is in place.
-        const djRole = this.client.settings.get(channel.guild.id, 'djRole');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(message.channel, message.member);
         if (!dj) {
             const maxQueueLimit = this.client.settings.get(channel.guild.id, 'maxQueueLimit');
             if (maxQueueLimit) {
