@@ -166,6 +166,8 @@ class ChadMusic extends AkairoClient {
                 }),
                 new YtDlpPlugin({ update: true })
             ],
+            emitAddListWhenCreatingQueue: true,
+            emitAddSongWhenCreatingQueue: true,
             emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
             emptyCooldown: 60,
             leaveOnStop: false, // this.settings.get('global', 'leaveOnStop') ?? true,
