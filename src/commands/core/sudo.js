@@ -22,7 +22,8 @@ module.exports = class CommandSudo extends Command {
         super('sudo', {
             aliases: ['sudo'],
             description: {
-                text: 'Allows for the bot owner to bypass DJ permissions in the given server.\n:warning: Sudo access is per server, not globally. Sudo is also disabled by default and resets everytime the bot restarts.'
+                text: 'Grants or denies the bot owner DJ permissions in the given server.',
+                details: ':warning: Sudo access is per server, not globally. Sudo is also disabled by default and resets everytime the bot restarts.'
             },
             category: '💻 Core',
             ownerOnly: true
