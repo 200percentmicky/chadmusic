@@ -158,7 +158,7 @@ class CommandCore extends SlashCommand {
                         {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'sudo',
-                            description: 'Allows for the bot owner to bypass DJ permissions in the given server.'
+                            description: 'Grants or denies the bot owner DJ permissions in the given server.'
                         }
                     ]
                 },
