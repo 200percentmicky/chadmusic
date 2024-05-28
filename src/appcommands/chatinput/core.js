@@ -38,7 +38,6 @@ const prettyms = require('pretty-ms');
 const bot = require('../../../package.json');
 const sc = require('slash-create/package.json');
 const akairo = require('discord-akairo/package.json');
-const discord = require('discord.js/package.json');
 const distube = require('../../../node_modules/distube/package.json'); // Temporary
 
 class CommandCore extends SlashCommand {
@@ -509,7 +508,7 @@ class CommandCore extends SlashCommand {
                     **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
                     **Bot Version:** ${this.client.version}
                     **Node.js:** ${process.version}
-                    **Discord.js:** ${discord.version}
+                    **Discord.js:** ${Discord.version}
                     **slash-create:** ${sc.version}
                     **Akairo Framework:** ${akairo.version}
                     **DisTube.js:** ${distube.version}
