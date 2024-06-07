@@ -42,38 +42,6 @@ module.exports = class ListenerAddSong extends Listener {
         const maxQueueLimit = await channel.client.settings.get(guild.id, 'maxQueueLimit');
         const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
 
-        if (!allowAgeRestricted) {
-            if (!dj) {
-                if (song.age_restricted) {
-                    if (queue.songs.length === 1) channel.client.player.stop(guild);
-                    else queue.songs.pop();
-                    return channel.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
-                }
-            }
-        }
-
-        if (maxTime) {
-            if (!dj) {
-                // DisTube provide the duration as a decimal.
-                // Using Math.floor() to round down.
-                // Still need to apend '000' to be accurate.
-                if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
-                    if (queue.songs.length === 1) channel.client.player.stop(guild);
-                    else queue.songs.pop();
-                    return this.client.ui.reply(message, 'no', `**${song.name}** cannot be added to the queue since the duration of this song exceeds the max limit of \`${prettyms(maxTime, { colonNotation: true })}\` for this server.`);
-                }
-            }
-        }
-
-        if (maxQueueLimit) {
-            const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
-            if (queueMemberSize > maxQueueLimit) {
-                if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
-                else queue.songs.pop();
-                return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
-            }
-        }
-
         // If its a live radio station, lets add some extra info to it.
         if (song.metadata?.isRadio) {
             const station = song.metadata?.radioStation;
@@ -109,6 +77,38 @@ module.exports = class ListenerAddSong extends Listener {
                 this.client.ui.reply(message, 'error', 'Invalid data was provided while processing the file, or the file is not supported.');
                 if (queue.songs.length === 1) return this.client.player.stop(guild);
                 else return queue.songs.pop();
+            }
+        }
+
+        if (!allowAgeRestricted) {
+            if (!dj) {
+                if (song.age_restricted) {
+                    if (queue.songs.length === 1) channel.client.player.stop(guild);
+                    else queue.songs.pop();
+                    return channel.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);
+                }
+            }
+        }
+
+        if (maxTime) {
+            if (!dj) {
+                // DisTube provide the duration as a decimal.
+                // Using Math.floor() to round down.
+                // Still need to apend '000' to be accurate.
+                if (parseInt(Math.floor(song.duration + '000')) > maxTime) {
+                    if (queue.songs.length === 1) channel.client.player.stop(guild);
+                    else queue.songs.pop();
+                    return this.client.ui.reply(message, 'no', `You can't add **${song.name}** to the queue. The duration of that track exceeds the max time allowed on this server. (\`${prettyms(maxTime, { colonNotation: true })}\`).`);
+                }
+            }
+        }
+
+        if (maxQueueLimit) {
+            const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+            if (queueMemberSize > maxQueueLimit) {
+                if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
+                else queue.songs.pop();
+                return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} track(s) to the queue.`);
             }
         }
 
