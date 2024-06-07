@@ -110,10 +110,16 @@ module.exports = class CommandIHeartRadio extends Command {
         if (!dj) {
             if (queue) {
                 const maxQueueLimit = await this.client.settings.get(message.guild.id, 'maxQueueLimit');
+                const maxTime = await this.client.settings.get(message.guild.id, 'maxTime');
+
+                if (maxTime) {
+                    return this.client.ui.reply(message, 'no', 'You can\'t add radio broadcasts to the queue while a max time limit is set on this server.');
+                }
+
                 if (maxQueueLimit) {
                     const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
                     if (queueMemberSize >= maxQueueLimit) {
-                        return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} entr${maxQueueLimit === 1 ? 'y' : 'ies'} to the queue.`);
+                        return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} track(s) to the queue.`);
                     }
                 }
             }

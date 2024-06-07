@@ -326,6 +326,14 @@ class CommandPlay extends SlashCommand {
             case 'radio': {
                 switch (ctx.subcommands[1]) {
                 case 'iheartradio': {
+                    if (!dj) {
+                        const maxTime = await this.client.settings.get(guild.id, 'maxTime');
+
+                        if (maxTime) {
+                            return this.client.ui.reply(ctx, 'no', 'You can\'t add radio broadcasts to the queue while a max time limit is set on this server.');
+                        }
+                    }
+
                     const search = await iheart.search(ctx.options.radio.iheartradio.station);
                     const stations = search.stations;
 
