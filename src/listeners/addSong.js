@@ -92,10 +92,10 @@ module.exports = class ListenerAddSong extends Listener {
 
         if (maxTime) {
             if (!dj) {
-                if (song.isLive) {
+                if (song.isLive || song.metadata?.isRadio) {
                     if (queue.songs.length === 1) channel.client.player.stop(guild);
                     else queue.songs.pop();
-                    return this.client.ui.reply(message, 'no', `You can't add **${song.name}** to the queue. Live streams can't be added while a max time is set on this server.`);
+                    return this.client.ui.reply(message, 'no', `You can't add **${song.name}** to the queue. Live streams and radio broadcasts can't be added while a max time limit is set on this server.`);
                 }
 
                 // DisTube provide the duration as a decimal.
