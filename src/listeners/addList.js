@@ -71,8 +71,8 @@ module.exports = class ListenerAddList extends Listener {
                 queue.songs = queueAfter;
 
                 embedFields.push({
-                    name: ':warning: Not everything was added!',
-                    value: `Due to limits set on this server, only **${allowedLimit}** track(s) out of **${playlist.songs.length}** were added to the queue.`
+                    name: `:warning: ${playlist.songs[0].length - allowedLimit} tracks(s) were removed.`,
+                    value: `You're only allowed to add **${allowedLimit}** track(s) to the queue on this server.`
                 });
             }
         }
