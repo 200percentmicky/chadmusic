@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
 const prettyms = require('pretty-ms');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
@@ -36,11 +35,10 @@ module.exports = class ListenerAddSong extends Listener {
         const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
         const message = song.metadata?.message || song.metadata?.ctx;
 
-        const djRole = await channel.client.settings.get(guild.id, 'djRole');
         const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
         const maxQueueLimit = await channel.client.settings.get(guild.id, 'maxQueueLimit');
-        const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = await this.client.utils.isDJ(channel, member);
 
         // If its a live radio station, lets add some extra info to it.
         if (song.metadata?.isRadio) {
