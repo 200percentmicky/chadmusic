@@ -28,6 +28,6 @@ module.exports = class ListenerProcessUnhandledException extends Listener {
         this.client.logger.error('ChadMusic has crashed! :(');
         this.client.logger.fatal(`[process] [FATAL]\n${error.stack}`);
         this.client.logger.error('Please report this crash to the developer. Shutting down...');
-        process.exit(1);
+        this.client.die(1);
     }
 };
