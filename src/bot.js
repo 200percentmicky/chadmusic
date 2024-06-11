@@ -272,8 +272,9 @@ class ChadMusic extends AkairoClient {
 
     /**
      * Logs the client off Discord and destorys the client.
+     * @param {Number} exitCode Exit code for process exit. Default is 0
      */
-    async die () {
+    async die (exitCode = 0) {
         logger.warn('Shutting down...');
         this.creator.cleanRegisteredComponents();
         this.destroy();
