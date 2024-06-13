@@ -511,7 +511,7 @@ class CommandCore extends SlashCommand {
                     **Discord.js:** ${Discord.version}
                     **slash-create:** ${sc.version}
                     **Akairo Framework:** ${akairo.version}
-                    **DisTube.js:** ${distube.version}
+                    **DisTube.js:** ${this.client.player.version}
                     **Voice Connections:** ${this.client.vc.voices.collection.size}
                     **Uptime:** ${prettyms(this.client.uptime, { verbose: true })}
                     `,
@@ -560,10 +560,10 @@ class CommandCore extends SlashCommand {
                       Client: ${this.client.user.tag.replace(/#0{1,1}$/, '')} (ID: ${this.client.user.id})
                        Owner: ${owner}
                      Node.js: ${process.version}
-                  Discord.js: ${require('discord.js/package.json').version}
-            Akairo Framework: ${require('discord-akairo/package.json').version}
-                  DisTube.js: ${require('../../../node_modules/distube/package.json').version}
-                slash-create: ${require('slash-create/package.json').version}
+                  Discord.js: ${Discord.version}
+            Akairo Framework: ${akairo.version}
+                  DisTube.js: ${this.client.player.version}
+                slash-create: ${sc.version}
            Voice Connections: ${this.client.vc.voices.collection.size}
                       Uptime: ${prettyMs(this.client.uptime, { verbose: true })}
         
