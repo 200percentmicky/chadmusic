@@ -9,13 +9,13 @@ You can download the latest version of `git` below.
 ### Chocolatey
 If you have Chocolatey installed, `git` can be installed this way.
 ```
-C:\> choco install git
+choco install git
 ```
 
 ### Scoop
 If you have Scoop installed, `git` is available in the `main` bucket.
 ```
-C:\> scoop install git
+scoop install git
 ```
 
 ## Mac
@@ -23,12 +23,12 @@ You can install `git` from either [Homebrew](https://brew.sh/) or from [MacPorts
 
 ```
 # Homebrew
-$ brew install git
+brew install git
 ```
 
 ```
 # MacPorts
-$ sudo port install git
+sudo port install git
 ```
 
 ## Linux
@@ -37,8 +37,8 @@ $ sudo port install git
 `git` is available in Ubuntu's repositories.
 
 ```
-$ sudo apt update
-$ sudo apt install git
+sudo apt update
+sudo apt install git
 ```
 
 **Debian**
@@ -46,7 +46,7 @@ $ sudo apt install git
 `git` is available in Debian's repositories.
 
 ```
-$ sudo apt-get update
+sudo apt-get update
 sudo apt-get install git
 ```
 
@@ -55,6 +55,6 @@ sudo apt-get install git
 `git` is available in Fedora's repositories.
 
 ```
-$ sudo dnf update
-$ sudo dnf install git
+sudo dnf update
+sudo dnf install git
 ```

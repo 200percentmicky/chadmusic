@@ -110,6 +110,15 @@ Shuts down the bot.
 | --------- | ---- | ----------- |
 | `[reason]` | string | The reason for shutting down the bot. |
 
+### [p]sudo | /core owner sudo
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
+
+Grants or denies the bot owner DJ permissions in the given server.
+
+!!! warning
+
+    Sudo access is per server, not globally. Sudo is also disabled by default and resets everytime the bot restarts.
+
 ## Filters
 Commands to add or remove filters from the player. The commands in this category will only be available to DJs if **Allow Filters** is off.
 

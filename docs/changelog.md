@@ -1,5 +1,35 @@
 # Changelog
 
+## 2024.3.0
+This release adds sudo access which grants the bot owner DJ for a server regardless of permissions, changes sharding to use [discord-hybrid-sharding](https://www.npmjs.com/package/discord-hybrid-sharding), and fixes additional bugs that have been present in the bot for quite some time. This release also adds a few new features that may be useful for debugging purposes.
+
+* **Added:** Sudo access. ([#17](https://github.com/200percentmicky/chadmusic/issues/17))
+* **Added:** New commands.
+    - `[p]sudo` | `/core owner sudo`
+* **Added:** `creatorError` event.
+* **Added:** `processExit` event. This is useful if the bot's Node.js process exited with a non-zero status code.
+* **Added:** `SHARDS_PER_CLUSTER` variable.
+* **Added:** `ffmpegDebug` event. Set `DEBUG_LOGGING` to `true` to enable.
+* **Added:** User's global nicknames to the footers of player windows.
+* **Added:** Autocomplete to `/search`.
+* **Added:** `exitCode` parameter to `ChadMusic.die()`. Default is `0`.
+* **Added:** Sharding info to `/core debug`.
+* **Changed:** Blocked live streams and radio broadcasts from being added to the queue while a max time limit is set.
+* **Changed:** Sharding to use [discord-hybrid-sharding](https://www.npmjs.com/package/discord-hybrid-sharding). ([#15](https://github.com/200percentmicky/chadmusic/issues/15))
+* **Changed:** Eval is now asynchronous.
+* **Changed:** DJ check variables throughout the bot to use `isDJ` function.
+* **Changed:** `unhandledException` event to use `ChadMusic.die()` with a exit code of `1`.
+* **Fixed:** Playlists bypassing max queue limits, if any.
+* **Fixed:** `[p]shutdown` not working without the `BUG_CHANNEL` variable being defined, causing a `TypeError` exception. 
+* **Fixed:** Max time limits not destroying the player if the queue is empty causing a `TypeError` exception in some commands. ([#19](https://github.com/200percentmicky/chadmusic/issues/19))
+* **Fixed:** An error occurring in `/core debug` due to a package with an undefined export.
+* **Updated:** DisTube to 4.2.2
+* **Updated:** Discord.JS to 14.15.2
+* **Updated:** slash-create to 6.1.3
+* **Removed:** Commit hash string from version number.
+* **Known issue:** There is a slight delay by around ~1 second when changing filters. There is currently no fix for this at the moment.
+* **Known issue:** It's possible for members without DJ permissions to add a playlist with tracks that exceed max time limits. Currently looking into this issue.
+
 ## 2024.2.1
 This is a maintenance release.
 

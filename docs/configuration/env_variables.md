@@ -30,6 +30,8 @@ Your application's user ID. This is needed to sync any slash commands on your bo
 
 Your application's public key. This is also needed to sync any slash commands on your bot to Discord. Your bot's public key and can be fetched from your app's developer page.
 
+## Sharding
+
 ### SHARDING
 
 Enables sharding the bot. This should only be used for large bots that are in over 2500 guilds. When enabled, you must send a SIGINT signal if you want to completely shut down the bot. Using the shutdown command restarts all shards instead.
@@ -39,12 +41,14 @@ Enables sharding the bot. This should only be used for large bots that are in ov
     Sharding the bot isn't necessary until your bot reaches 2500 guilds.
 
 ### SHARDS
+<span class="badge-warn">:warning: Requires [SHARDING](#sharding-1) variable.</span>
 
 The number of shards to use. This splits the bot into multiple processes to ease the load of a single shard. Disable to have the bot spawn shards automatically.
 
-!!! warning
+### SHARDS_PER_CLUSTER
+<span class="badge-warn">:warning: Requires [SHARDING](#sharding-1) variable.</span>
 
-    SHARDING must be set to `true` for this variable to work.
+The number of shards that a single cluster will utilize. Clusters are shards that spawn their own internal shards to reduce memory usage. [Learn more](https://github.com/meister03/discord-hybrid-sharding?tab=readme-ov-file#how-does-it-work)
 
 ## Player Configuration
 

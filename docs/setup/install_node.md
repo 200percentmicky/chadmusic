@@ -10,20 +10,20 @@ You can download Node.js below.
 If you have Chocolatey installed, Node.js can be installed this way.
 ```
 # Latest
-C:\> choco install nodejs
+choco install nodejs
 
 # LTS
-C:\> choco install nodejs-lts
+choco install nodejs-lts
 ```
 
 ### Scoop
 If you have Scoop installed, Node.js is available in the `main` bucket.
 ```
 # Latest
-C:\> scoop install nodejs
+scoop install nodejs
 
 # LTS
-C:\> scoop install nodejs-lts
+scoop install nodejs-lts
 ```
 
 ## Linux and Mac
@@ -34,11 +34,11 @@ There are binaries available for macOS by clicking the button above. For most ca
 Once `nvm` is installed, installing Node.js is as simple as running the following:
 
 ```
-$ nvm install latest
+nvm install --latest
 ```
 
 Alternatively, you can install the latest LTS version by running the following:
 
 ```
-$ nvm install lts
+nvm install --lts
 ```
