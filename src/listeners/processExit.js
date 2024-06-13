@@ -25,6 +25,6 @@ module.exports = class ListenerProcessExit extends Listener {
     }
 
     async exec (code) {
-        this.client.logger.warn(`Client process terminated with code ${code}`);
+        this.client.logger.debug(`Client process exited with code ${code}`);
     }
 };
