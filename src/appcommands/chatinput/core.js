@@ -566,6 +566,8 @@ class CommandCore extends SlashCommand {
                 slash-create: ${sc.version}
            Voice Connections: ${this.client.vc.voices.collection.size}
                       Uptime: ${prettyMs(this.client.uptime, { verbose: true })}
+                  Cluster ID: ${this.client.cluster?.id ?? 'N/A'}
+                    Shard ID: ${guild.shardId ?? 'N/A'}
         
             __**System**__
                       CPU: ${os.cpus()[0].model}
