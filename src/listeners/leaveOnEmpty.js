@@ -34,7 +34,7 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
             try {
                 clearTimeout(activeTimeout);
             } catch {}
-            this.client.logger.debug(`Timeout data for Guild ID ${newState.guild.id} has been cleared.`);
+            this.client.logger.debug(`[${newState.guild.id}] Timeout data cleared.`);
             this.timeoutIds.delete(newState.guild.id);
         };
 
@@ -59,20 +59,22 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
 
         if (queue && queue.leaveOnEmpty === true) {
             const emptyCooldown = queue.emptyCooldown;
+            const clientVc = await newState.guild.channels.cache.get(queue.voice?.connection.joinConfig.channelId);
 
-            if (!newState.channel) {
+            console.log(clientVc.members.size);
+            if (clientVc.members.size === 1) {
                 const leaveOnEmptyTimeout = setTimeout(() => {
                     this.timeoutIds.delete(newState.guild.id);
                     return this.client.vc.leave(newState.guild);
                 }, parseInt(emptyCooldown * 1000));
                 this.timeoutIds.set(newState.guild.id, leaveOnEmptyTimeout[Symbol.toPrimitive]());
-                this.client.logger.debug(`TImeout for Guild ID ${newState.guild.id} has been set to ${emptyCooldown} seconds.`);
+                this.client.logger.debug(`[${newState.guild.id}] Timeout set for ${emptyCooldown} seconds.`);
             } else {
                 if (activeTimeout) {
                     clearTimeout(activeTimeout);
                 }
                 this.timeoutIds.delete(newState.guild.id);
-                this.client.logger.debug(`Timeout data for ${newState.guild.id} has been cleared.`);
+                this.client.logger.debug(`[${newState.guild.id}] Timeout cleared or no timeout active.`);
             }
         }
     }
