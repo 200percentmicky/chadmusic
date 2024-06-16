@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.3.1
+This is a maintenance release.
+
+* **Fixed:** Leave on empty activating when a voice channel is not empty.
+* **Updated:** Discord.js to 14.15.3
+* **Updated:** slash-create to 6.1.4
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.3.0...2024.3.1)
+
 ## 2024.3.0
 This release adds sudo access which grants the bot owner DJ for a server regardless of permissions, changes sharding to use [discord-hybrid-sharding](https://www.npmjs.com/package/discord-hybrid-sharding), and fixes additional bugs that have been present in the bot for quite some time. This release also adds a few new features that may be useful for debugging purposes.
 
@@ -29,6 +38,8 @@ This release adds sudo access which grants the bot owner DJ for a server regardl
 * **Removed:** Commit hash string from version number.
 * **Known issue:** There is a slight delay by around ~1 second when changing filters. There is currently no fix for this at the moment.
 * **Known issue:** It's possible for members without DJ permissions to add a playlist with tracks that exceed max time limits. Currently looking into this issue.
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.2.1...2024.3.0)
 
 ## 2024.2.1
 This is a maintenance release.
