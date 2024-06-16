@@ -30,12 +30,12 @@ module.exports = class ListenerDeleteQueue extends Listener {
         if (queue.hasStopped) {
             if (queue.leaveOnStop) {
                 this.client.vc.leave(queue.textChannel.guild);
-                return this.client.logger.debug(`Left the voice channel in Guild ID ${queue.textChannel.guild.id}. The player was stopped.`);
+                return this.client.logger.debug(`[${queue.textChannel.guild.id}] The player was destroyed.`);
             }
         } else {
             if (queue.leaveOnFinish) {
                 this.client.vc.leave(queue.textChannel.guild);
-                return this.client.logger.debug(`Left the voice channel in Guild ID ${queue.textChannel.guild.id}. The queue has reached the end.`);
+                return this.client.logger.debug(`[${queue.textChannel.guild.id}] End of the queue reached.`);
             }
         }
     }
