@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandLeaveOnEmpty extends Command {
     constructor () {
@@ -26,7 +27,7 @@ module.exports = class CommandLeaveOnEmpty extends Command {
                 usage: '<toggle:on/off>',
                 details: `\`<toggle:on/off>\` The toggle of the setting.\n${process.env.EMOJI_INFO} When this is active, the bot will leave depending on how long *Empty Cooldown* is set.`
             },
-            ownerOnly: true,
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'toggle',

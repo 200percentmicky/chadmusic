@@ -16,6 +16,7 @@
 
 const { stripIndent } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandEmptyCooldown extends Command {
     constructor () {
@@ -30,7 +31,7 @@ module.exports = class CommandEmptyCooldown extends Command {
                 :information_source: This settings only works if **Leave on Empty** is on.
                 `
             },
-            ownerOnly: true,
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'time',

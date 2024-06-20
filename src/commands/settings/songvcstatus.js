@@ -16,6 +16,7 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandSongVcStatus extends Command {
     constructor () {
@@ -31,7 +32,7 @@ module.exports = class CommandSongVcStatus extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            ownerOnly: true,
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'toggle',

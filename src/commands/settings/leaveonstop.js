@@ -15,6 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandLeaveOnStop extends Command {
     constructor () {
@@ -26,7 +27,7 @@ module.exports = class CommandLeaveOnStop extends Command {
                 usage: '<toggle:on/off>',
                 details: '`<toggle:on/off>` The toggle of the setting.'
             },
-            ownerOnly: true,
+            userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
                 {
                     id: 'toggle',
