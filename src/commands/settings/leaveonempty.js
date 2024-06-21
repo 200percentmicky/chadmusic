@@ -42,12 +42,14 @@ module.exports = class CommandLeaveOnEmpty extends Command {
 
         const settings = this.client.settings;
         const queue = await this.client.player.getQueue(message.guild);
+        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown');
+
         switch (args.toggle) {
         case 'true':
         case 'on': {
             await settings.set(message.guild.id, true, 'leaveOnEmpty');
             if (queue) queue.leaveOnEmpty = true;
-            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the channel is empty for a period of time. See **Empty Cooldown** for how long I\'ll stay when the channel is empty.');
+            this.client.ui.reply(message, 'ok', `The bot will now leave the voice channel when the channel is empty for a period of time. Current **Empty Cooldown** is set to \`${emptyCooldown}\` seconds.`);
             break;
         }
         case 'false':
