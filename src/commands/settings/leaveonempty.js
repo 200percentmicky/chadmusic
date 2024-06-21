@@ -42,6 +42,7 @@ module.exports = class CommandLeaveOnEmpty extends Command {
 
         const settings = this.client.settings;
         const queue = await this.client.player.getQueue(message.guild);
+        const prefix = settings.get(message.guild?.id, 'prefix') ?? process.env.PREFIX;
         const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown');
 
         switch (args.toggle) {
@@ -49,7 +50,7 @@ module.exports = class CommandLeaveOnEmpty extends Command {
         case 'on': {
             await settings.set(message.guild.id, true, 'leaveOnEmpty');
             if (queue) queue.leaveOnEmpty = true;
-            this.client.ui.reply(message, 'ok', `The bot will now leave the voice channel when the channel is empty for a period of time. Current **Empty Cooldown** is set to \`${emptyCooldown}\` seconds.`);
+            this.client.ui.reply(message, 'ok', `The bot will now leave the voice channel when the channel is empty for a period of time. **Empty Cooldown** is ${emptyCooldown === (0 || undefined) ? `not set. Run \`${prefix}emptycooldown\` to set it.` : `set to \`${emptyCooldown}\``}`);
             break;
         }
         case 'false':
