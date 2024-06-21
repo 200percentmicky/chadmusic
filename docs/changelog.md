@@ -1,5 +1,18 @@
 # Changelog
 
+## 2024.3.2
+This is a maintenance release.
+
+* **Changed:** The message when enabling Leave on Empty to include the currently set Empty Cooldown time.
+* **Fixed:** Permission issues for the following commands that were falsely marked as "Owner Only". These commands are available to everyone and require the **Manage Server** permission to use.
+    - `[p]emptycooldown`
+    - `[p]leaveonempty`
+    - `[p]leaveonfinish`
+    - `[p]leaveonstop`
+    - `[p]songvcstatus`
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.3.1...2024.3.2)
+
 ## 2024.3.1
 This is a maintenance release.
 
