@@ -1,5 +1,5 @@
 <h1>
-    Welcome! <img align="right" src="assets/deejaytreefiddy.png" width=250>
+    Welcome! <img align="right" src="assets/deejaytreefiddy.png" width=175>
 </h1>
 
 This is the official documentation for
