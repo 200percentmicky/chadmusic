@@ -203,11 +203,11 @@ module.exports = class CommandIHeartRadio extends Command {
                 const url = await iheart.streamURL(stations[parseInt(interaction.values[0])].id);
 
                 try {
-                    this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
-                        ? ytdl.createAgent(undefined, {
+                    this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
+                        ? ytdl.createProxyAgent({
                             localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                         })
-                        : undefined;
+                        : this.client.player.youtube.ytdlOptions.agent;
 
                     await this.client.player.play(vc, url, {
                         member: message.member,

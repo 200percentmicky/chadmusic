@@ -232,11 +232,11 @@ class CommandSearch extends SlashCommand {
                 }
 
                 try {
-                    this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
-                        ? ytdl.createAgent(undefined, {
+                    this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
+                        ? ytdl.createProxyAgent({
                             localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                         })
-                        : undefined;
+                        : this.client.player.youtube.ytdlOptions.agent;
 
                     await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                         member,
