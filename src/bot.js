@@ -162,35 +162,57 @@ class ChadMusic extends AkairoClient {
             }
         };
 
+        // Player Plugins
+        // Direct Link
+        const directLink = new DirectLinkPlugin();
+
+        // Deezer
+        const deezer = new DeezerPlugin();
+
+        // Files
+        const files = new FilePlugin();
+
+        // SoundCloud
+        const soundcloud = new SoundCloudPlugin({
+            clientId: process.env.SOUNDCLOUD_CLIENT_ID ?? undefined,
+            oauthToken: process.env.SOUNDCLOUD_OAUTH_TOKEN ?? undefined
+        });
+
+        // Spotify
+        const spotify = new SpotifyPlugin({
+            api: {
+                clientId: process.env.SPOTIFY_CLIENT_ID ?? undefined,
+                clientSecret: process.env.SPOTIFY_CLIENT_SECRET ?? undefined,
+                topTracksCountry: process.env.SPOTIFY_TOP_TRACKS_COUNTRY ?? undefined
+            }
+        });
+
+        // YouTube
+        const youtube = new YouTubePlugin({
+            cookies: this.cookies(),
+            ytdlOptions: {
+                quality: 'highestaudio',
+                filter: 'audioonly',
+                dlChunkSize: 25000,
+                highWaterMark: 1024
+            }
+        });
+
+        // yt-dlp
+        const ytdlp = new YtDlpPlugin({
+            update: process.env.UPDATE_YTDLP ?? true
+        });
+
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
-                new DirectLinkPlugin(),
-                new DeezerPlugin(),
-                new FilePlugin(),
-                new SoundCloudPlugin({
-                    clientId: process.env.SOUNDCLOUD_CLIENT_ID ?? undefined,
-                    oauthToken: process.env.SOUNDCLOUD_OAUTH_TOKEN ?? undefined
-                }),
-                new SpotifyPlugin({
-                    api: {
-                        clientId: process.env.SPOTIFY_CLIENT_ID ?? undefined,
-                        clientSecret: process.env.SPOTIFY_CLIENT_SECRET ?? undefined,
-                        topTracksCountry: process.env.SPOTIFY_TOP_TRACKS_COUNTRY ?? undefined
-                    }
-                }),
-                new YouTubePlugin({
-                    cookies: this.cookies(),
-                    ytdlOptions: {
-                        quality: 'highestaudio',
-                        filter: 'audioonly',
-                        dlChunkSize: 25000,
-                        highWaterMark: 1024
-                    }
-                }),
-                new YtDlpPlugin({
-                    update: process.env.UPDATE_YTDLP ?? true
-                })
+                directLink,
+                deezer,
+                files,
+                soundcloud,
+                spotify,
+                youtube,
+                ytdlp
             ],
             emitAddListWhenCreatingQueue: true,
             emitAddSongWhenCreatingQueue: true,
@@ -199,6 +221,15 @@ class ChadMusic extends AkairoClient {
         });
         this.vc = this.player.voices; // @discordjs/voice
         this.player.sudoAccess = [];
+
+        // Attaching plugins to player for easy access.
+        this.player.directLink = directLink;
+        this.player.deezer = deezer;
+        this.player.files = files;
+        this.player.soundcloud = soundcloud;
+        this.player.spotify = spotify;
+        this.player.youtube = youtube;
+        this.player.ytdlp = ytdlp;
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {
