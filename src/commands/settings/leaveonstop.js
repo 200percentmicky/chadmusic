@@ -47,14 +47,14 @@ module.exports = class CommandLeaveOnStop extends Command {
         case 'on': {
             await settings.set(message.guild.id, true, 'leaveOnStop');
             if (queue) queue.leaveOnStop = true;
-            this.client.ui.reply(message, 'ok', 'The bot will now leave the voice channel when the player is stopped.');
+            this.client.ui.reply(message, 'ok', 'I\'ll leave the voice channel when the player is stopped.');
             break;
         }
         case 'false':
         case 'off': {
             await settings.set(message.guild.id, false, 'leaveOnStop');
             if (queue) queue.leaveOnStop = false;
-            this.client.ui.reply(message, 'ok', 'The bot will now stay in the voice channel regardless if the player was stopped.');
+            this.client.ui.reply(message, 'ok', 'I\'ll stay in the voice channel when the player is stopped.');
             break;
         }
         default: {

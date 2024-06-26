@@ -295,7 +295,7 @@ class CommandQueue extends SlashCommand {
             /* Map the array. */
             const queueMap = songs.length > 0
                 ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n')
-                : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
+                : '🍃 The queue is empty.';
 
             /* Making the embed. */
             const queueEmbed = new EmbedBuilder()

@@ -747,8 +747,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnEmpty');
                 if (queue) queue.leaveOnEmpty = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
-                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
+                    ? `I'll leave the voice channel when the channel is empty for a period of time. **Empty Cooldown** is ${emptyCooldown === (0 || undefined) ? `not set. Run \`${prefix}emptycooldown\` to set it.` : `set to \`${emptyCooldown}\``}`
+                    : 'I\'ll stay in the voice channel when the channel becomes empty.'
                 );
                 break;
             }
@@ -759,8 +759,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnFinish');
                 if (queue) queue.leaveOnFinish = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
-                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
+                    ? 'I\'ll leave the voice channel when the queue finishes.'
+                    : 'I\'ll stay in the voice channel when the queue finishes.'
                 );
                 break;
             }
@@ -771,8 +771,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnStop');
                 if (queue) queue.leaveOnStop = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the player is stopped.'
-                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
+                    ? 'I\'ll leave the voice channel when the player is stopped.'
+                    : 'I\'ll stay in the voice channel when the player is stopped.'
                 );
                 break;
             }
