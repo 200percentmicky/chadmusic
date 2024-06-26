@@ -160,27 +160,12 @@ class ChadMusic extends AkairoClient {
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
-                new SpotifyPlugin({
-                    emitEventsAfterFetching: process.env.SPOTIFY_EMIT_EVENTS_AFTER_FETCHING === 'false' ?? false,
-                    parallel: process.env.SPOTIFY_PARALLEL === 'true' ?? true
-                }),
+                new SpotifyPlugin(),
                 new YtDlpPlugin({ update: true })
             ],
             emitAddListWhenCreatingQueue: true,
             emitAddSongWhenCreatingQueue: true,
             emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
-            emptyCooldown: 60,
-            leaveOnStop: false, // this.settings.get('global', 'leaveOnStop') ?? true,
-            leaveOnEmpty: false, // this.settings.get('global', 'leaveOnEmpty') ?? true,
-            leaveOnFinish: false, // this.settings.get('global', 'leaveOnFinish') ?? true,
-            streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: this.cookies(),
-            ytdlOptions: {
-                quality: 'highestaudio',
-                filter: 'audioonly',
-                dlChunkSize: 25000,
-                highWaterMark: 1024
-            },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
