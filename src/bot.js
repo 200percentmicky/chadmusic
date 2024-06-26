@@ -30,6 +30,11 @@ const path = require('path');
 const fs = require('fs');
 const { version } = require('../package.json');
 const { getInfo, ClusterClient } = require('discord-hybrid-sharding');
+const { YouTubePlugin } = require('@distube/youtube');
+const { FilePlugin } = require('@distube/file');
+const { DirectLinkPlugin } = require('@distube/direct-link');
+const { default: SoundCloudPlugin } = require('@distube/soundcloud');
+const { default: DeezerPlugin } = require('@distube/deezer');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -160,8 +165,32 @@ class ChadMusic extends AkairoClient {
         // Music Player.
         this.player = new DisTube(this, {
             plugins: [
-                new SpotifyPlugin(),
-                new YtDlpPlugin({ update: true })
+                new DirectLinkPlugin(),
+                new DeezerPlugin(),
+                new FilePlugin(),
+                new SoundCloudPlugin({
+                    clientId: process.env.SOUNDCLOUD_CLIENT_ID ?? undefined,
+                    oauthToken: process.env.SOUNDCLOUD_OAUTH_TOKEN ?? undefined
+                }),
+                new SpotifyPlugin({
+                    api: {
+                        clientId: process.env.SPOTIFY_CLIENT_ID ?? undefined,
+                        clientSecret: process.env.SPOTIFY_CLIENT_SECRET ?? undefined,
+                        topTracksCountry: process.env.SPOTIFY_TOP_TRACKS_COUNTRY ?? undefined
+                    }
+                }),
+                new YouTubePlugin({
+                    cookies: this.cookies(),
+                    ytdlOptions: {
+                        quality: 'highestaudio',
+                        filter: 'audioonly',
+                        dlChunkSize: 25000,
+                        highWaterMark: 1024
+                    }
+                }),
+                new YtDlpPlugin({
+                    update: process.env.UPDATE_YTDLP ?? true
+                })
             ],
             emitAddListWhenCreatingQueue: true,
             emitAddSongWhenCreatingQueue: true,
