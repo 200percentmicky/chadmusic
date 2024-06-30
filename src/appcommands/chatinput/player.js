@@ -231,7 +231,7 @@ class CommandPlayer extends SlashCommand {
                 inline: true
             });
 
-            if (song.age_restricted) {
+            if (song.ageRestricted) {
                 nowPlayingFields.push({
                     name: ':underage: Explicit',
                     value: 'This track is **Age Restricted**',

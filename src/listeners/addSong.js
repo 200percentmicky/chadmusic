@@ -80,7 +80,7 @@ module.exports = class ListenerAddSong extends Listener {
 
         if (!allowAgeRestricted) {
             if (!dj) {
-                if (song.age_restricted) {
+                if (song.ageRestricted) {
                     if (queue.songs.length === 1) channel.client.player.stop(guild);
                     else queue.songs.pop();
                     return channel.client.ui.reply(message, 'no', `${process.env.EMOJI_NO} **${song.name}** cannot be added because **Age Restricted** tracks are not allowed on this server.`);

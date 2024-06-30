@@ -82,7 +82,7 @@ module.exports = class CommandNowPlaying extends Command {
             inline: true
         });
 
-        if (song.age_restricted) {
+        if (song.ageRestricted) {
             embedFields.push({
                 name: ':underage: Explicit',
                 value: 'This track is **Age Restricted**',

@@ -55,7 +55,7 @@ module.exports = class ListenerPlaySong extends Listener {
                 inline: true
             });
 
-            if (song.age_restricted) {
+            if (song.ageRestricted) {
                 songNowFields.push({
                     name: ':underage: Explicit',
                     value: 'This track is **Age Restricted**',
