@@ -52,6 +52,7 @@ nav:
   - Home: 'index.md'
   - Changelog: 'changelog.md'
   - Commands: 'commands.md'
+  - Supported Sites: 'supported_sites.md'
   - Setup:
     - 'Getting Started': 'setup/getting_started.md'
     - '1. Installing Node.js': 'setup/install_node.md'
