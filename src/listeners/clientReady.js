@@ -21,7 +21,8 @@ module.exports = class SurferReady extends Listener {
     constructor () {
         super('ready', {
             emitter: 'client',
-            event: 'ready'
+            event: 'ready',
+            type: 'once'
         });
     }
 
