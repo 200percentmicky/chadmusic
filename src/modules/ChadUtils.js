@@ -49,19 +49,17 @@ class ChadUtils {
      * @param {GuildMember} member The guild member to check for DJ permissions.
      * @returns {boolean}
      */
-    static async isDJ (channel, member) {
-        const app = await channel.client.application.fetch();
-
+    static isDJ (channel, member) {
         const isOwner = () => {
             if (!channel.client.player.sudoAccess.includes(channel.guild.id)) {
                 return false;
             }
 
-            if (app.owner instanceof Team) {
-                return member.user.id === app.owner.members.get(member.user.id).id;
+            if (this.client.owner instanceof Team) {
+                return member.user.id === this.client.owner.members.get(member.user.id).id;
             }
 
-            return member.user?.id === app.owner?.id;
+            return member.user?.id === this.client.owner?.id;
         };
 
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');

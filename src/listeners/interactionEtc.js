@@ -31,7 +31,7 @@ module.exports = class ListenerInteractionEtc extends Listener {
         switch (interaction.customId) {
         case 'close_eval': {
             await interaction.deferUpdate();
-            if (interaction.user.id !== process.env.OWNER_ID) {
+            if (interaction.user.id !== this.client.owner?.id) {
                 return interaction.followUp({
                     embeds: [
                         new EmbedBuilder()

@@ -27,11 +27,9 @@ module.exports = class ListenerCreatorComponentInteraction extends Listener {
     }
 
     async exec (ctx) {
-        const app = await this.client.application.fetch();
-
         switch (ctx.customID) {
         case 'sc_close_eval': {
-            if (app.owner?.id !== ctx.user.id) return ctx.sendFollowUp(':no_entry_sign: Only the owner of this application can use this command.', { ephemeral: true });
+            if (this.client.owner?.id !== ctx.user.id) return ctx.sendFollowUp(':no_entry_sign: Only the owner of this application can use this command.', { ephemeral: true });
 
             ctx.acknowledge();
             ctx.delete();

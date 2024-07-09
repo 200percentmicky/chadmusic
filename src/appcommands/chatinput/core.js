@@ -192,7 +192,7 @@ class CommandCore extends SlashCommand {
         let app;
         if (ctx.subcommands[0] === 'owner') {
             app = await this.client.application.fetch();
-            if (app.owner?.id !== ctx.user.id) return ctx.send(`${process.env.EMOJI_NO} Only the owner of this application can use this command.`);
+            if (this.client.owner?.id !== ctx.user.id) return ctx.send(`${process.env.EMOJI_NO} Only the owner of this application can use this command.`);
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);
@@ -475,9 +475,9 @@ class CommandCore extends SlashCommand {
         case 'about': {
             app = this.client.application;
 
-            if (!app.owner) await this.client.application.fetch();
+            if (!this.client.owner) await this.client.application.fetch();
 
-            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag.replace(/#0{1,1}$/, '')} (${app.owner?.id})`;
+            const owner = this.client.owner instanceof Discord.Team ? `${this.client.owner?.name}` : `${this.client.owner?.tag.replace(/#0{1,1}$/, '')} (${this.client.owner?.id})`;
             // Had to fetch this for some reason...
             const botColor = await this.client.guilds.cache.get(ctx.guildID).members.me.displayColor ?? null;
             const aboutembed = new Discord.EmbedBuilder()
@@ -520,7 +520,7 @@ class CommandCore extends SlashCommand {
                 .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
                 .setFooter({
                     text: `The owner of this instance is ${owner}`,
-                    iconURL: app.owner instanceof Discord.Team ? app.owner?.iconURL() : app.owner?.avatarURL({ dynamic: true })
+                    iconURL: this.client.owner instanceof Discord.Team ? this.client.owner?.iconURL() : this.client.owner?.avatarURL({ dynamic: true })
                 });
 
             const urlGithub = new Discord.ButtonBuilder()
@@ -550,8 +550,8 @@ class CommandCore extends SlashCommand {
             const memory = await si.mem();
             const user = os.userInfo();
             app = this.client.application;
-            if (!app.owner) await this.client.application.fetch();
-            const owner = app.owner instanceof Discord.Team ? `${app.owner?.name}` : `${app.owner?.tag.replace(/#0{1,1}$/, '')} (${app.owner?.id})`;
+            if (!this.client.owner) await this.client.application.fetch();
+            const owner = this.client.owner instanceof Discord.Team ? `${this.client.owner?.name}` : `${this.client.owner?.tag.replace(/#0{1,1}$/, '')} (${this.client.owner?.id})`;
 
             const data = stripIndents`
             **ChadMusic - The Chad Music Bot!**
