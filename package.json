@@ -11,7 +11,7 @@
     "update:dev": "git checkout -f develop && git pull && npm run build"
   },
   "author": "200percentmicky",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
@@ -22,7 +22,7 @@
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.2",
     "@distube/yt-dlp": "^2.0.1",
-    "@distube/ytdl-core": "^4.13.4",
+    "@distube/ytdl-core": "^4.13.5",
     "@distube/ytsr": "^2.0.0",
     "array-paginator": "^1.5.2",
     "bot-utils": "^1.4.2",
@@ -75,6 +75,7 @@
     "@distube/ytsr": "$@distube/ytsr",
     "undici": "^6.19.2",
     "formidable": "^3.5.1",
-    "tar": "^6.2.1"
+    "tar": "^6.2.1",
+    "ws": "^8.18.0"
   }
 }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2024.3.3
+This release fixes a major bug and patches security vulnerabilities.
+
+* **Updated:** @distube/ytdl-core to 4.13.5 ([#20](https://github.com/200percentmicky/chadmusic/issues/20))
+* **Updated:** undici to 6.19.2
+* **Updated:** ws to 8.18.0
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.3.2...2024.3.3)
+
 ## 2024.3.2
 This is a maintenance release.
 
