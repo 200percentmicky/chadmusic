@@ -11,7 +11,7 @@
     "update:dev": "git checkout -f develop && git pull && npm run build"
   },
   "author": "200percentmicky",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.16.0",
