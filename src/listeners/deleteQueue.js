@@ -15,12 +15,13 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('distube');
 
 module.exports = class ListenerDeleteQueue extends Listener {
     constructor () {
         super('deleteQueue', {
             emitter: 'player',
-            event: 'deleteQueue'
+            event: Events.DELETE_QUEUE
         });
     }
 

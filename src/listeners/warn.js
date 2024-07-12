@@ -15,12 +15,13 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('discord.js');
 
 module.exports = class ListenerWarn extends Listener {
     constructor () {
         super('warn', {
             emitter: 'client',
-            event: 'warn'
+            event: Events.Warn
         });
     }
 

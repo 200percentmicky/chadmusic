@@ -15,13 +15,14 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('discord.js');
 const Enmap = require('enmap');
 
 module.exports = class ListenerLeaveOnEmpty extends Listener {
     constructor () {
         super('leaveOnEmpty', {
             emitter: 'client',
-            event: 'voiceStateUpdate'
+            event: Events.VoiceStateUpdate
         });
 
         this.timeoutIds = new Enmap();

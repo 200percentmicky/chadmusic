@@ -20,12 +20,13 @@ const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
 const CMPlayerWindow = require('../modules/CMPlayerWindow');
+const { Events } = require('distube');
 
 module.exports = class ListenerAddSong extends Listener {
     constructor () {
         super('addSong', {
             emitter: 'player',
-            event: 'addSong'
+            event: Events.ADD_SONG
         });
     }
 

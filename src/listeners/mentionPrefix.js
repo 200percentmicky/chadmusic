@@ -15,13 +15,13 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField, Events } = require('discord.js');
 
 module.exports = class ListenerMentionPrefix extends Listener {
     constructor () {
         super('mentionPrefix', {
             emitter: 'client',
-            event: 'messageCreate'
+            event: Events.MessageCreate
         });
     }
 

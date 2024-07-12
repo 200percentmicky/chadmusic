@@ -16,12 +16,13 @@
 
 const { Listener } = require('discord-akairo');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { Events } = require('distube');
 
 module.exports = class ListenerPlayerError extends Listener {
     constructor () {
         super('playerError', {
             emitter: 'player',
-            event: 'error'
+            event: Events.ERROR
         });
     }
 

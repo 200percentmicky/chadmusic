@@ -17,12 +17,13 @@
 const { Listener } = require('discord-akairo');
 const CMPlayerWindow = require('../modules/CMPlayerWindow');
 const _ = require('lodash');
+const { Events } = require('distube');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
         super('addList', {
             emitter: 'player',
-            event: 'addList'
+            event: Events.ADD_LIST
         });
     }
 

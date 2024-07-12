@@ -15,12 +15,13 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('distube');
 
 module.exports = class ListenerFfmpegDebug extends Listener {
     constructor () {
         super('ffmpegDebug', {
             emitter: 'player',
-            event: 'ffmpegDebug'
+            event: Events.FFMPEG_DEBUG
         });
     }
 
