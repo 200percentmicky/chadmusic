@@ -49,7 +49,7 @@
     "pretty-error": "^4.0.0",
     "pretty-ms": "^7.0.1",
     "rotating-file-stream": "^3.1.1",
-    "slash-create": "^6.1.4",
+    "slash-create": "^6.2.0",
     "sodium-native": "^4.1.1",
     "string-progressbar": "^1.0.4",
     "systeminformation": "^5.21.15",
