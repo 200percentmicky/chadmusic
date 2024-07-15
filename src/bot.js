@@ -40,7 +40,7 @@ const { default: DeezerPlugin } = require('@distube/deezer');
 class ChadMusic extends AkairoClient {
     constructor () {
         super({
-            ownerID: process.env.OWNER_ID
+            ownerID: undefined // Applied after ready event.
         }, {
             allowedMentions: {
                 repliedUser: false
@@ -323,7 +323,7 @@ class ChadMusic extends AkairoClient {
         logger.warn('Shutting down...');
         this.creator.cleanRegisteredComponents();
         this.destroy();
-        process.exitCode = 0;
+        process.exitCode = exitCode;
     }
 }
 

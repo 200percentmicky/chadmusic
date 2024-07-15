@@ -40,6 +40,8 @@ module.exports = class SurferReady extends Listener {
 
         // Fetch app owner and apply to client.
         this.client.owner = (await this.client.application.fetch(true)).owner;
+        this.client.ownerID = this.client.owner.id;
+        this.client.logger.debug(`[Client] Owner fetched. ${this.client.owner.username} (${this.client.owner.id})`);
 
         this.client.logger.info(`Logged in as ${this.client.user.tag.replace(/#0{1,1}$/, '')} (${this.client.user.id})`);
         this.client.logger.info('[Ready!<3♪] Let\'s party!!');
