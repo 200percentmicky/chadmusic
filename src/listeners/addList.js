@@ -45,10 +45,13 @@ module.exports = class ListenerAddList extends Listener {
         embedFields.push({
             name: '🔢 Number of entries',
             value: `${playlist.songs.length}`
+        }, {
+            name: ':bookmark_tabs: Position',
+            value: `${(queue.songs.length - 1) - (playlist.songs.length - 1)}-${queue.songs.length - 1}`
         });
 
         // Cut some or many entries if maxQueueLimit is in place.
-        const dj = await this.client.utils.isDJ(message.channel, message.member);
+        const dj = await this.client.utils.isDJ(channel, member);
         if (!dj) {
             const maxQueueLimit = this.client.settings.get(channel.guild.id, 'maxQueueLimit');
             if (maxQueueLimit) {

@@ -111,9 +111,11 @@ module.exports = class ListenerAddSong extends Listener {
         if (maxQueueLimit) {
             const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
             if (queueMemberSize > maxQueueLimit) {
-                if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
-                else queue.songs.pop();
-                return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} track(s) to the queue.`);
+                if (!dj) {
+                    if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
+                    else queue.songs.pop();
+                    return this.client.ui.reply(message, 'no', `You are only allowed to add a max of ${maxQueueLimit} track(s) to the queue.`);
+                }
             }
         }
 
@@ -128,7 +130,11 @@ module.exports = class ListenerAddSong extends Listener {
             .windowTitle(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
             .trackTitle(`[${song.name}](${song.url})`)
             .trackImage('small', song.thumbnail)
-            .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }));
+            .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }))
+            .addFields([{
+                name: ':bookmark_tabs: Position',
+                value: `${queue.songs.length - 1}`
+            }]);
 
         if (song.metadata?.silent) {
             window.windowTitle(`Added silently to the queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }));
