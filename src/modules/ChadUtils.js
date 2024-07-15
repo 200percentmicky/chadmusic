@@ -56,10 +56,10 @@ class ChadUtils {
             }
 
             if (this.client.owner instanceof Team) {
-                return member.user.id === this.client.owner.members.get(member.user.id).id;
+                return member.user.id === channel.client.owner.members.get(member.user.id).id;
             }
 
-            return member.user?.id === this.client.owner?.id;
+            return member.user?.id === channel.client.owner?.id;
         };
 
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
