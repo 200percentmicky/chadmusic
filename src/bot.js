@@ -16,7 +16,7 @@
 
 'use strict';
 
-const logger = require('./modules/ChadLogger.js');
+const logger = require('./lib/ChadLogger.js');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { ChannelType, GatewayIntentBits, Partials, REST } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
@@ -24,8 +24,8 @@ const DisTube = require('distube').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Enmap = require('enmap');
-const ChadUI = require('./modules/ChadUI');
-const ChadUtils = require('./modules/ChadUtils');
+const ChadUI = require('./lib/ChadUI');
+const ChadUtils = require('./lib/ChadUtils');
 const path = require('path');
 const fs = require('fs');
 const { version } = require('../package.json');

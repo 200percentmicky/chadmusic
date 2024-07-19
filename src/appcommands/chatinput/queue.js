@@ -23,8 +23,8 @@ const {
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const CMError = require('../../modules/CMError');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const CMError = require('../../lib/CMError');
 
 class CommandQueue extends SlashCommand {
     constructor (creator) {

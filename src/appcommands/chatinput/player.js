@@ -17,10 +17,10 @@
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toMilliseconds } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const Genius = require('genius-lyrics');
-const CMError = require('../../modules/CMError');
-const CMPlayerWindow = require('../../modules/CMPlayerWindow');
+const CMError = require('../../lib/CMError');
+const CMPlayerWindow = require('../../lib/CMPlayerWindow');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {

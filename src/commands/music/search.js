@@ -27,7 +27,7 @@ const {
 } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
 module.exports = class CommandSearch extends Command {

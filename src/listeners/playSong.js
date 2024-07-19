@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const CMPlayerWindow = require('../modules/CMPlayerWindow.js');
+const CMPlayerWindow = require('../lib/CMPlayerWindow.js');
 const { Events } = require('distube');
 
 module.exports = class ListenerPlaySong extends Listener {

@@ -15,10 +15,10 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const { pushFormatFilter } = require('../../modules/pushFormatFilter');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const { pushFormatFilter } = require('../../lib/pushFormatFilter');
 const _ = require('lodash');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 class CommandFilter extends SlashCommand {
     constructor (creator) {

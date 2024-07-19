@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const CMPlayerWindow = require('../modules/CMPlayerWindow');
+const CMPlayerWindow = require('../lib/CMPlayerWindow');
 const _ = require('lodash');
 const { Events } = require('distube');
 

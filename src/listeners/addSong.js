@@ -19,7 +19,7 @@ const prettyms = require('pretty-ms');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
-const CMPlayerWindow = require('../modules/CMPlayerWindow');
+const CMPlayerWindow = require('../lib/CMPlayerWindow');
 const { Events } = require('distube');
 
 module.exports = class ListenerAddSong extends Listener {

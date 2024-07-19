@@ -18,7 +18,7 @@
 
 require('dotenv').config();
 const { ClusterManager } = require('discord-hybrid-sharding');
-const logger = require('./src/modules/ChadLogger.js');
+const logger = require('./src/lib/ChadLogger.js');
 
 if (process.versions.node.split('.')[0] < 18) {
     logger.error(`ChadMusic requires Node.js 18 or later. You currently have ${process.versions.node} installed. Please update your Node.js installation.`);

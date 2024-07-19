@@ -26,14 +26,14 @@ const {
 } = require('discord.js');
 const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
-const { hasURL } = require('../../modules/hasURL');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { hasURL } = require('../../lib/hasURL');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { toColonNotation } = require('colon-notation');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {

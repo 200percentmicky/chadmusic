@@ -28,7 +28,7 @@ const {
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 // const { FieldsEmbed } = require('discord-paginationembed')
 
 // TODO: Use Discord Embed Buttons to go to the next page.

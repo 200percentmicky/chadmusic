@@ -19,7 +19,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 // TODO: Look into condensing all changes into a single method.
 // A majority of this command is nothing but copying and pasting

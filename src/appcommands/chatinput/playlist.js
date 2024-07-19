@@ -18,7 +18,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 class CommandPlaylist extends SlashCommand {
     constructor (creator) {
