@@ -109,7 +109,7 @@ module.exports = class ListenerAddSong extends Listener {
         }
 
         if (maxQueueLimit) {
-            const queueMemberSize = queue.songs.filter(entries => entries.user.id === message.member.user.id).length;
+            const queueMemberSize = queue.songs.filter(entries => entries.user.id === member.user.id).length;
             if (queueMemberSize > maxQueueLimit) {
                 if (!dj) {
                     if (queue.songs.length === 1) channel.client.player.stop(guild); // Probably doesn't matter in the slightest.
