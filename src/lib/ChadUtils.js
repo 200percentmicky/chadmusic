@@ -96,6 +96,22 @@ class ChadUtils {
     }
 
     /**
+     * Attaches additional metadata from the Discord.js Client to a CommandContext interaction.
+     * @param {Client} client
+     * @param {CommandContext} ctx
+     */
+    static attach (client, ctx) {
+        const guild = client.guilds.cache.get(ctx.guildID);
+
+        ctx.guild = guild;
+
+        if (guild.available) {
+            ctx._channel = guild.channels.cache.get(ctx.channelID);
+            ctx.member = guild.members.cache.get(ctx.user.id);
+        }
+    }
+
+    /**
      * Attempts to execute a standard prefix command.
      *
      * @param {Message|CommandContext} message The message object or an instance of `CommandContext`.
