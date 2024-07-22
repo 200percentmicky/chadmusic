@@ -212,7 +212,12 @@ module.exports = class CommandSearch extends Command {
         });
 
         collector.on('collect', async interaction => {
-            if (interaction.customId === 'cancel_search') return collector.stop();
+            interaction.deferUpdate();
+
+            if (interaction.customId === 'cancel_search') {
+                return collector.stop();
+            }
+
             message.channel.sendTyping();
 
             try {

@@ -232,6 +232,9 @@ class CommandSearch extends SlashCommand {
                 }
 
                 try {
+                    selCtx.acknowledge();
+                    channel.sendTyping();
+
                     this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                         ? ytdl.createProxyAgent({
                             localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
@@ -268,6 +271,7 @@ class CommandSearch extends SlashCommand {
                     });
                 }
 
+                btnCtx.acknowledge();
                 return ctx.delete();
             },
             30 * 1000
