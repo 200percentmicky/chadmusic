@@ -52,12 +52,12 @@ module.exports = class CommandSettings extends Command {
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
-        const votingPercent = settings.get(message.guild.id, 'votingPercent');
-        const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty');
-        const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish');
-        const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop');
-        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown');
-        // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
+        const votingPercent = settings.get(message.guild.id, 'votingPercent'); // Voting Percentage
+        const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop'); // Leave on Stop
+        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown'); // Empty Cooldown
+        const songVcStatus = settings.get(message.guild.id, 'songVcStatus'); // Track Title as VC Status
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -83,6 +83,7 @@ module.exports = class CommandSettings extends Command {
                 **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                 **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
                 `
             },
             {

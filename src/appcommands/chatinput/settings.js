@@ -444,12 +444,12 @@ module.exports = class CommandSettings extends SlashCommand {
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
-        const votingPercent = settings.get(guild.id, 'votingPercent');
-        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty');
-        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish');
-        const leaveOnStop = settings.get(guild.id, 'leaveOnStop');
-        const emptyCooldown = settings.get(guild.id, 'emptyCooldown');
-        // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
+        const votingPercent = settings.get(guild.id, 'votingPercent'); // Voting Percentage
+        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get(guild.id, 'leaveOnStop'); // Leave on Stop
+        const emptyCooldown = settings.get(guild.id, 'emptyCooldown'); // Empty Cooldown
+        const songVcStatus = settings.get(guild.id, 'songVcStatus'); // Track Title as VC Status
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -536,7 +536,8 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
                         **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                         **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
-                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds        
+                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                        **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}       
                         `
                     },
                     {
