@@ -107,7 +107,7 @@ class ChadUtils {
 
         if (guild.available) {
             ctx._channel = guild.channels.cache.get(ctx.channelID);
-            ctx.member = guild.members.cache.get(ctx.user.id);
+            ctx._member = guild.members.cache.get(ctx.user.id);
         }
     }
 
