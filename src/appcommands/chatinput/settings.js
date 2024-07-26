@@ -247,6 +247,11 @@ module.exports = class CommandSettings extends SlashCommand {
                                 description: 'The phrase to remove from the list.',
                                 required: true
                             }]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'list',
+                            description: 'Lists all blocked phrases on this server.'
                         }
                     ]
                 },
@@ -559,29 +564,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                     });
 
-                const blockedEmbed = new EmbedBuilder()
-                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                    .setAuthor({
-                        name: `${guild.name}`,
-                        iconURL: guild.iconURL({ dynamic: true })
-                    })
-                    .setTitle(':notes::x: Blocked Songs')
-                    .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-                    .setTimestamp()
-                    .setFooter({
-                        text: `ChadMusic v${version}`,
-                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                    });
-
-                if (blockedPhrases.length === 0) {
-                    blockedEmbed.setDescription(null);
-                    blockedEmbed.addFields({
-                        name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
-                        value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
-                    });
-                }
-
-                return ctx.send({ embeds: [embed, blockedEmbed] });
+                return ctx.send({ embeds: [embed] });
             }
 
             case 'remove': {
@@ -702,6 +685,8 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'blocksong': {
+                await ctx.defer(true);
+
                 switch (ctx.subcommands[1]) {
                 case 'add': {
                     if (settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
@@ -717,6 +702,32 @@ module.exports = class CommandSettings extends SlashCommand {
                     }
                     await settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
                     return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
+                }
+
+                case 'list': {
+                    const blockedEmbed = new EmbedBuilder()
+                        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                        .setAuthor({
+                            name: `${guild.name}`,
+                            iconURL: guild.iconURL({ dynamic: true })
+                        })
+                        .setTitle(':notes::x: Blocked Songs')
+                        .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
+                        .setTimestamp()
+                        .setFooter({
+                            text: `ChadMusic v${version}`,
+                            iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                        });
+
+                    if (blockedPhrases.length === 0) {
+                        blockedEmbed.setDescription(null);
+                        blockedEmbed.addFields({
+                            name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
+                            value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
+                        });
+                    }
+
+                    return ctx.send({ embeds: [blockedEmbed] });
                 }
                 }
                 break;
