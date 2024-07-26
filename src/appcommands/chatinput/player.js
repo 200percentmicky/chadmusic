@@ -401,7 +401,7 @@ class CommandPlayer extends SlashCommand {
                 let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');
                 if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200;
-                this.client.player.setVolume(guild.id, newVolume);
+                queue.setVolume(newVolume);
 
                 if (newVolume >= 201) {
                     return this.client.ui.reply(
