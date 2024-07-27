@@ -258,7 +258,7 @@ class ChadMusic extends AkairoClient {
 
         // Create Listener Handler
         this.listeners = new ListenerHandler(this, {
-            directory: './src/listeners'
+            directory: './src/events'
         });
 
         // Create Inhibitor Handler
