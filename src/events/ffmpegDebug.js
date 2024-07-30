@@ -26,7 +26,8 @@ module.exports = class ListenerFfmpegDebug extends Listener {
     }
 
     async exec (debug) {
-        if (!process.env.FFMPEG_DEBUG_LOGGING) return;
-        this.client.logger.debug(`[Client] [FFMPEG] ${debug}`);
+        if (process.env.FFMPEG_DEBUG_LOGGING) {
+            this.client.logger.debug(`[Client] [FFMPEG] ${debug}`);
+        } else {} // eslint-disable-line no-empty
     }
 };
