@@ -1,6 +1,11 @@
 # Changelog
 
 ## 2024.3.3
+
+!!! bug
+
+    There is an issue that prevents some tracks from loading. This has been fixed, and can be patched by running `npm run update` from the terminal. ytdl-core will now be updated to 4.13.6 instead.
+
 This release fixes a major bug and patches security vulnerabilities.
 
 * **Updated:** @distube/ytdl-core to 4.13.5 ([#20](https://github.com/200percentmicky/chadmusic/issues/20))
