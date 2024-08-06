@@ -123,6 +123,11 @@ module.exports = class ListenerAddSong extends Listener {
         // TODO: Fix toColonNotation in queue.js
         if (song.isLive) song.duration = 1;
 
+        // Resize album artwork if the track is from SoundCloud.
+        if (song.source === 'soundcloud') {
+            song.thumbnail = song.thumbnail.replace('-large', '-t500x500');
+        }
+
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
         const window = new CMPlayerWindow()
