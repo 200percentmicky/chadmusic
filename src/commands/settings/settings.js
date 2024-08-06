@@ -50,7 +50,6 @@ module.exports = class CommandSettings extends Command {
         const allowSilent = settings.get(message.guild.id, 'allowSilent'); // Allow Silent Tracks
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
-        const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
         const votingPercent = settings.get(message.guild.id, 'votingPercent'); // Voting Percentage
         const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty'); // Leave on Empty
@@ -105,28 +104,6 @@ module.exports = class CommandSettings extends Command {
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             });
 
-        const blockedEmbed = new EmbedBuilder()
-            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-            .setAuthor({
-                name: `${message.guild.name}`,
-                iconURL: message.guild.iconURL({ dynamic: true })
-            })
-            .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-            .setTitle(':notes::x: Blocked Songs')
-            .setTimestamp()
-            .setFooter({
-                text: `ChadMusic v${version}`,
-                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-            });
-
-        if (blockedPhrases.length === 0) {
-            blockedEmbed.setDescription(null);
-            blockedEmbed.addFields({
-                name: `${process.env.EMOJI_INFO} No song phrases are being blocked in this server.`,
-                value: `To add phrases to the list, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
-            });
-        }
-
-        return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });
+        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
     }
 };
