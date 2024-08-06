@@ -14,6 +14,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
@@ -24,8 +25,16 @@ module.exports = class CommandBlocksong extends Command {
             category: '⚙ Settings',
             description: {
                 text: 'Manages the server\'s list of blocked search phrases.',
-                usage: '<add/remove> <phrase>',
-                details: '`<add/remove>` Subcommands to whether add or remove phrases from the list.\n`<phrase>` The phrase to add or remove from the list.'
+                usage: '<add/remove/list> <phrase>',
+                details: stripIndents`
+                **Subcommands**
+                \`add\` Adds a phrase to the list.
+                \`remove\` Removes a phrase from the list.
+                \`list\` View the current list for the server.
+
+                **Arguments**
+                \`<phrase>\` The phrase to add or remove from the list.
+                `
             },
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
@@ -44,7 +53,7 @@ module.exports = class CommandBlocksong extends Command {
     async exec (message, args) {
         switch (args.subcommand) {
         case 'add': {
-            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove> <phrase>');
+            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove/list> <phrase>');
             if (this.client.settings.includes(message.guild.id, args.phrase, 'blockedPhrases')) {
                 return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the list.`);
             }
@@ -55,7 +64,7 @@ module.exports = class CommandBlocksong extends Command {
         }
 
         case 'remove': {
-            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove> <phrase>');
+            if (!args.phrase) return this.client.ui.usage(message, 'blocksong <add/remove/list> <phrase>');
             if (!this.client.settings.includes(message.guild.id, args.phrase, 'blockedPhrases')) {
                 return this.client.ui.reply(message, 'warn', `\`${args.phrase}\` doesn't exist in the list.`);
             }
