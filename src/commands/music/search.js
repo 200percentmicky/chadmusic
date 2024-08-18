@@ -236,7 +236,7 @@ module.exports = class CommandSearch extends Command {
                     }
                 });
             } catch (err) {
-                return this.client.ui.reply(message, 'error', err, 'Player Error');
+                return this.client.ui.reply(message, 'error', err.message, 'Player Error');
             } finally {
                 message.react(process.env.REACTION_MUSIC).catch(() => {});
                 collector.stop();

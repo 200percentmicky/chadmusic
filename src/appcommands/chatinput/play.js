@@ -413,7 +413,7 @@ class CommandPlay extends SlashCommand {
                                 selCtx.acknowledge();
                                 await boogie(selected);
                             } catch (err) {
-                                return this.client.ui.reply(selCtx, 'error', err, 'Player Error');
+                                return this.client.ui.reply(selCtx, 'error', err.message, 'Player Error');
                             } finally {
                                 ctx.delete();
                             }
@@ -472,7 +472,7 @@ class CommandPlay extends SlashCommand {
             }
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
-            return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
         }
     }
 }

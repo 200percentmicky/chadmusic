@@ -249,7 +249,7 @@ class CommandSearch extends SlashCommand {
                         }
                     });
                 } catch (err) {
-                    return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+                    return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
                 } finally {
                     ctx.delete();
                 }

@@ -60,7 +60,7 @@ module.exports = class ListenerPlayerError extends Listener {
             }
         }
 
-        embed.setDescription(`${formattedError ? `${formattedError}\n` : ''}${error}`);
+        embed.setDescription(`${formattedError ? `${formattedError}\n` : ''}${error.message}`);
         embed.addFields([
             {
                 name: 'Track',
@@ -70,7 +70,7 @@ module.exports = class ListenerPlayerError extends Listener {
 
         queue.textChannel.send(linkPerms
             ? { embeds: [embed] }
-            : { content: `${process.env.EMOJI_ERROR} **Player Error**\n**[${song.name}](${song.url})**\n${formattedError}\n${error}` }
+            : { content: `${process.env.EMOJI_ERROR} **Player Error**\n**[${song.name}](${song.url})**\n${formattedError}\n${error.message}` }
         );
     }
 };

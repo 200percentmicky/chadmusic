@@ -131,7 +131,7 @@ class ContextMenuAddToQueue extends SlashCommand {
             });
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
         }
     }
 }
