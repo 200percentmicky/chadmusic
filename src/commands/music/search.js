@@ -222,7 +222,7 @@ module.exports = class CommandSearch extends Command {
 
             try {
                 this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
-                    ? ytdl.createProxyAgent({
+                    ? ytdl.createAgent(undefined, {
                         localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                     })
                     : this.client.player.youtube.ytdlOptions.agent;
