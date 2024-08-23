@@ -592,7 +592,7 @@ Toggles the ability to silently add tracks to the queue.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### [p]blocksong add/remove | /settings blocksong add/remove `<phrase>`
+### [p]blocksong add/remove/list | /settings blocksong add/remove/list `<phrase>`
 
 Manages the server's list of blocked search phrases.
 
@@ -600,6 +600,7 @@ Manages the server's list of blocked search phrases.
 | ---------- | ----------- |
 | add | Adds a phrase to the list. |
 | remove | Removes a phrase from the list. |
+| list | View the current list for the server. |
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |

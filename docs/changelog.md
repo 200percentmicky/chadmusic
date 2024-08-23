@@ -43,6 +43,8 @@ This release updates the bot to DisTube v5 and incorporates new featues and chan
     - SPOTIFY_EMIT_EVENTS_AFTER_FETCHING
     - SPOTIFY_PARALLEL
 
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.3.3...2024.4.0)
+
 ## 2024.3.3
 
 !!! bug
