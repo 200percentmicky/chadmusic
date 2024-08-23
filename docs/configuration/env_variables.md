@@ -28,6 +28,10 @@ Your application's user ID. This is needed to sync any slash commands on your bo
 
 Your application's public key. This is also needed to sync any slash commands on your bot to Discord. Your bot's public key and can be fetched from your app's developer page.
 
+### OWNER_ID
+<span class="badge-danger">:x: This field is deprecated.</span>
+The bot owner's user ID.
+
 ### IPV6_BLOCK
 
 A IPv6 range block address for IP rotation. If you have a IPv6 range, you can use it in this field. This will alleviate the need for a cookie. If you do not know how to use this field, or you don't have an active IPv6 range added to your host, you can leave this field empty and provide a cookie instead.

@@ -1,5 +1,48 @@
 # Changelog
 
+## 2024.4.0
+This release updates the bot to DisTube v5 and incorporates new featues and changes introduced in the new version.
+
+!!! warning "Important information regarding the future of ChadMusic"
+
+    For some time now, I decided to look into doing a rewrite of this project that will utilize a different library and a new name. The new rewrite will keep most if not all of ChadMusic's functionality, and you can easily migrate your configurations to the new rewrite. However, the new rewrite will not have classic prefixed commands, and will be using slash commands only.
+    
+    Because of this decision, this release will most likely be the final major release of ChadMusic. If you want to keep track of the rewrite, you can check out the new repo [here](https://github.com/200percentmicky/radio-chan).
+
+* **Added:** New environment variables.
+    - SOUNDCLOUD_CLIENT_ID
+    - SOUNDCLOUD_OAUTH_TOKEN
+    - SPOTIFY_CLIENT_ID
+    - SPOTIFY_CLIENT_SECRET
+    - SPOTIFY_TOP_TRACKS_COUNTRY
+    - FFMPEG_DEBUG_LOGGING
+* **Added:** `playerDebug` event.
+* **Added:** Missing **Track Title as VC Status** field to `[p]settings` and `/settings current`.
+* **Added:** New a subcommand to `[p]blocksong` and `/settings blocksong`.
+    - `[p]blocksong`
+    - `/settings blocksong list`
+* **Added:** A newly added track's position in the queue to player windows.
+* **Changed:** SoundCloud is now the default source when using `[p]play` and `/play track`.
+* **Changed:** App owner information is now fetched during boot.
+* **Changed:** The list of blocked songs no longer show in settings in favor of the new subcommands above.
+* **Changed:** The search menu in `[p]search` and `/search` to properly defer after selecting a track.
+* **Changed:** Player errors now show the track that errored out. The errors also no longer show the error name, only its message.
+* **Changed:** Replaced functions for IP Rotation to not use a proxy.
+* **Changed:** Simplified the message for setting a DJ role with a role that's already recognized as a DJ.
+* **Changed:** Reverted eval to being synchronous due to an issue of not being able to define variables.
+* **Changed:** The `clientReady` event to run once.
+* **Changed:** `ffmpegDebug` now requires both DEBUG_LOGGING and FFMPEG_DEBUG_LOGGING to log.
+* **Fixed:** An issue causing a `TypeError` exception in `[p]play` when providing no content in between the `<>` characters. (These characters are used to prevent generating embeds for links.)
+* **Fixed:** Current player volume not being shown (causing an exception) when running `[p]volume` without arguments and `/player volume view`.
+* **Fixed:** An issue in `[p]allowexplicit` that causes the usage prompt to always show regardless if arguments are provided.
+* **Updated:** DisTube to 5.0.2
+* **Updated:** @distube/ytdl-core to 4.14.3
+* **Updated:** undici to 6.19.2
+* **Removed:** The following environment variables.
+    - OWNER_ID (The app owner's user ID is automatically fetched after boot.)
+    - SPOTIFY_EMIT_EVENTS_AFTER_FETCHING
+    - SPOTIFY_PARALLEL
+
 ## 2024.3.3
 
 !!! bug
