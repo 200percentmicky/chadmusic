@@ -3,12 +3,6 @@
 ## 2024.4.0
 This release updates the bot to DisTube v5 and incorporates new featues and changes introduced in the new version.
 
-!!! warning "Important information regarding the future of ChadMusic"
-
-    For some time now, I decided to look into doing a rewrite of this project that will utilize a different library and a new name. The new rewrite will keep most if not all of ChadMusic's functionality, and you can easily migrate your configurations to the new rewrite. However, the new rewrite will not have classic prefixed commands, and will be using slash commands only.
-    
-    Because of this decision, this release will most likely be the final major release of ChadMusic. If you want to keep track of the rewrite, you can check out the new repo [here](https://github.com/200percentmicky/radio-chan).
-
 * **Added:** New environment variables.
     - SOUNDCLOUD_CLIENT_ID
     - SOUNDCLOUD_OAUTH_TOKEN
