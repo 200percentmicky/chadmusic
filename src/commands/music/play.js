@@ -18,8 +18,8 @@ const { Command } = require('discord-akairo');
 const { PermissionsBitField, Message } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const { hasURL } = require('../../modules/hasURL');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const { hasURL } = require('../../lib/hasURL');
 const { CommandContext } = require('slash-create');
 
 /* eslint-disable no-useless-escape */
@@ -66,14 +66,16 @@ module.exports = class CommandPlay extends Command {
         const vc = message.member.voice.channel;
         if (!vc) return this.client.ui.sendPrompt(message, 'NOT_IN_VC');
 
-        if (!args.track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
+        const track = args.track?.replace(/(^\<+|\>+$)/g, '');
 
-        if (this.client.utils.pornPattern(args.track?.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
+        if (!track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
+
+        if (this.client.utils.pornPattern(track || message.attachments.first().url)) {
             return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
         }
 
         if (args.track) {
-            if (hasURL(args.track?.replace(/(^\<+|\>+$)/g, '')) && args.track) {
+            if (hasURL(track) && args.track) {
                 const allowLinks = this.client.settings.get(message.guild.id, 'allowLinks');
                 if (!dj && !allowLinks) {
                     return this.client.ui.reply(message, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
@@ -125,13 +127,13 @@ module.exports = class CommandPlay extends Command {
         else message.channel.sendTyping();
 
         try {
-            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+            this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                 ? ytdl.createAgent(undefined, {
                     localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                 })
-                : undefined;
+                : this.client.player.youtube.ytdlOptions.agent;
 
-            await this.client.player.play(vc, args.track?.replace(/(^\<+|\>+$)/g, '') ?? message.attachments.first().url, {
+            await this.client.player.play(vc, track ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,
                 message: message instanceof Message ? message : undefined,
@@ -142,7 +144,7 @@ module.exports = class CommandPlay extends Command {
             return message.react(process.env.REACTION_MUSIC).catch(() => {});
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
-            return this.client.ui.reply(message, 'error', err, 'Player Error');
+            return this.client.ui.reply(message, 'error', err.message, 'Player Error');
         }
     }
 };

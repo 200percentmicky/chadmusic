@@ -74,11 +74,10 @@ module.exports = class CommandSetDJ extends Command {
                 message,
                 'info',
                 stripIndents`
-                The role you\'re setting as the DJ role is already recognized as a DJ role
-                on this server. This is because the role has the **Manage Channels** permission
-                which automatically grants DJ permissions for members with this role. There is
-                no need to set this role as the DJ role. Do you want to set this role as the DJ
-                role on this server?`,
+                The role you selected is already recognized as a DJ role on this server.
+                This is because the role has the **Manage Channels** permission which
+                automatically grants DJ permissions for members with this role. Do you
+                still want to set this role as the DJ role on this server?`,
                 null,
                 null,
                 null,

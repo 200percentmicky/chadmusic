@@ -16,15 +16,15 @@
 
 const { Listener } = require('discord-akairo');
 
-module.exports = class ListenerClientDebug extends Listener {
+module.exports = class ListenerProcessUnhandledRejection extends Listener {
     constructor () {
-        super('debug', {
-            emitter: 'client',
-            event: 'debug'
+        super('unhandledRejection', {
+            emitter: 'process',
+            event: 'unhandledRejection'
         });
     }
 
-    async exec (debug) {
-        this.client.logger.debug(`[Client] ${debug}`);
+    async exec (reason, promise) {
+        this.client.logger.error(`[process] Unhandled Rejection:\n${reason.stack}\nPromise: ${JSON.stringify(promise)}`);
     }
 };

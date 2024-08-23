@@ -19,7 +19,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 // TODO: Look into condensing all changes into a single method.
 // A majority of this command is nothing but copying and pasting
@@ -247,6 +247,11 @@ module.exports = class CommandSettings extends SlashCommand {
                                 description: 'The phrase to remove from the list.',
                                 required: true
                             }]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'list',
+                            description: 'Lists all blocked phrases on this server.'
                         }
                     ]
                 },
@@ -444,12 +449,12 @@ module.exports = class CommandSettings extends SlashCommand {
         const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
         const blockedPhrases = settings.get(guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
-        const votingPercent = settings.get(guild.id, 'votingPercent');
-        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty');
-        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish');
-        const leaveOnStop = settings.get(guild.id, 'leaveOnStop');
-        const emptyCooldown = settings.get(guild.id, 'emptyCooldown');
-        // const voiceChannel = settings.get(guild.id, 'voiceChannel', null) // Voice Channel
+        const votingPercent = settings.get(guild.id, 'votingPercent'); // Voting Percentage
+        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get(guild.id, 'leaveOnStop'); // Leave on Stop
+        const emptyCooldown = settings.get(guild.id, 'emptyCooldown'); // Empty Cooldown
+        const songVcStatus = settings.get(guild.id, 'songVcStatus'); // Track Title as VC Status
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -536,7 +541,8 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
                         **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                         **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
-                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds        
+                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                        **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}       
                         `
                     },
                     {
@@ -558,29 +564,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                     });
 
-                const blockedEmbed = new EmbedBuilder()
-                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                    .setAuthor({
-                        name: `${guild.name}`,
-                        iconURL: guild.iconURL({ dynamic: true })
-                    })
-                    .setTitle(':notes::x: Blocked Songs')
-                    .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-                    .setTimestamp()
-                    .setFooter({
-                        text: `ChadMusic v${version}`,
-                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                    });
-
-                if (blockedPhrases.length === 0) {
-                    blockedEmbed.setDescription(null);
-                    blockedEmbed.addFields({
-                        name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
-                        value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
-                    });
-                }
-
-                return ctx.send({ embeds: [embed, blockedEmbed] });
+                return ctx.send({ embeds: [embed] });
             }
 
             case 'remove': {
@@ -617,11 +601,10 @@ module.exports = class CommandSettings extends SlashCommand {
                         ctx,
                         'info',
                         stripIndents`
-                        The role you\'re setting as the DJ role is already recognized as a DJ role
-                        on this server. This is because the role has the **Manage Channels** permission
-                        which automatically grants DJ permissions for members with this role. There is
-                        no need to set this role as the DJ role. Do you want to set this role as the DJ
-                        role on this server?`,
+                        The role you selected is already recognized as a DJ role on this server.
+                        This is because the role has the **Manage Channels** permission which
+                        automatically grants DJ permissions for members with this role. Do you
+                        still want to set this role as the DJ role on this server?`,
                         null,
                         null,
                         null,
@@ -701,6 +684,8 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'blocksong': {
+                await ctx.defer(true);
+
                 switch (ctx.subcommands[1]) {
                 case 'add': {
                     if (settings.includes(guild.id, ctx.options.blocksong.add.phrase, 'blockedPhrases')) {
@@ -716,6 +701,32 @@ module.exports = class CommandSettings extends SlashCommand {
                     }
                     await settings.remove(guild.id, ctx.options.blocksong.remove.phrase, 'blockedPhrases');
                     return this.client.ui.reply(ctx, 'ok', `\`${ctx.options.blocksong.remove.phrase}\` is no longer blocked on this server.`);
+                }
+
+                case 'list': {
+                    const blockedEmbed = new EmbedBuilder()
+                        .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                        .setAuthor({
+                            name: `${guild.name}`,
+                            iconURL: guild.iconURL({ dynamic: true })
+                        })
+                        .setTitle(':notes::x: Blocked Songs')
+                        .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
+                        .setTimestamp()
+                        .setFooter({
+                            text: `ChadMusic v${version}`,
+                            iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                        });
+
+                    if (blockedPhrases.length === 0) {
+                        blockedEmbed.setDescription(null);
+                        blockedEmbed.addFields({
+                            name: `${process.env.EMOJI_INFO} No phrases are being blocked in this server.`,
+                            value: 'To add phrases to the list, run `/settings blocksong add <phrase>`.'
+                        });
+                    }
+
+                    return ctx.send({ embeds: [blockedEmbed] });
                 }
                 }
                 break;
@@ -747,8 +758,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnEmpty');
                 if (queue) queue.leaveOnEmpty = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the channel is empty for a period of time.'
-                    : 'The bot will now stay in the voice channel regardless if the channel is empty.'
+                    ? `I'll leave the voice channel when the channel is empty for a period of time. **Empty Cooldown** is ${emptyCooldown === (0 || undefined) ? `not set. Run \`${prefix}emptycooldown\` to set it.` : `set to \`${emptyCooldown}\``}`
+                    : 'I\'ll stay in the voice channel when the channel becomes empty.'
                 );
                 break;
             }
@@ -759,8 +770,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnFinish');
                 if (queue) queue.leaveOnFinish = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the end of the queue is reached.'
-                    : 'The bot will now stay in the voice channel regardless if the queue is finished.'
+                    ? 'I\'ll leave the voice channel when the queue finishes.'
+                    : 'I\'ll stay in the voice channel when the queue finishes.'
                 );
                 break;
             }
@@ -771,8 +782,8 @@ module.exports = class CommandSettings extends SlashCommand {
                 await settings.set(guild.id, toggle, 'leaveOnStop');
                 if (queue) queue.leaveOnStop = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
-                    ? 'The bot will now leave the voice channel when the player is stopped.'
-                    : 'The bot will now stay in the voice channel regardless if the player was stopped.'
+                    ? 'I\'ll leave the voice channel when the player is stopped.'
+                    : 'I\'ll stay in the voice channel when the player is stopped.'
                 );
                 break;
             }

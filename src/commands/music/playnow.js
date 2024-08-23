@@ -18,7 +18,7 @@ const { Command } = require('discord-akairo');
 const { Message, PermissionsBitField } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
 module.exports = class CommandPlayNow extends Command {
@@ -101,11 +101,11 @@ module.exports = class CommandPlayNow extends Command {
             else message.channel.sendTyping();
 
             try {
-                this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                     ? ytdl.createAgent(undefined, {
                         localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                     })
-                    : undefined;
+                    : this.client.player.youtube.ytdlOptions.agent;
 
                 // eslint-disable-next-line no-useless-escape
                 await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
@@ -120,7 +120,7 @@ module.exports = class CommandPlayNow extends Command {
                 await this.client.player.skip(message);
                 message.react(process.env.REACTION_OK).catch(() => {});
             } catch (err) {
-                return this.client.ui.reply(message, 'error', err, 'Player Error');
+                return this.client.ui.reply(message, 'error', err.message, 'Player Error');
             }
         } else {
             return this.client.ui.sendPrompt(message, 'NOT_ALONE');

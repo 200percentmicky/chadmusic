@@ -15,14 +15,15 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const CMPlayerWindow = require('../modules/CMPlayerWindow');
+const CMPlayerWindow = require('../lib/CMPlayerWindow');
 const _ = require('lodash');
+const { Events } = require('distube');
 
 module.exports = class ListenerAddList extends Listener {
     constructor () {
         super('addList', {
             emitter: 'player',
-            event: 'addList'
+            event: Events.ADD_LIST
         });
     }
 
@@ -44,10 +45,13 @@ module.exports = class ListenerAddList extends Listener {
         embedFields.push({
             name: '🔢 Number of entries',
             value: `${playlist.songs.length}`
+        }, {
+            name: ':bookmark_tabs: Position',
+            value: `${(queue.songs.length - 1) - (playlist.songs.length - 1)}-${queue.songs.length - 1}`
         });
 
         // Cut some or many entries if maxQueueLimit is in place.
-        const dj = await this.client.utils.isDJ(message.channel, message.member);
+        const dj = await this.client.utils.isDJ(channel, member);
         if (!dj) {
             const maxQueueLimit = this.client.settings.get(channel.guild.id, 'maxQueueLimit');
             if (maxQueueLimit) {

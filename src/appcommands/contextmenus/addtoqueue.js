@@ -18,7 +18,7 @@ const { SlashCommand, ApplicationCommandType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 
 class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
@@ -115,11 +115,11 @@ class ContextMenuAddToQueue extends SlashCommand {
 
             if (!requested) return this.client.ui.reply(ctx, 'error', 'Cannot add to the queue because the message doesn\'t contain any content to search for.');
 
-            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+            this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                 ? ytdl.createAgent(undefined, {
                     localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                 })
-                : undefined;
+                : this.client.player.youtube.ytdlOptions.agent;
 
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
@@ -131,7 +131,7 @@ class ContextMenuAddToQueue extends SlashCommand {
             });
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
         }
     }
 }

@@ -15,28 +15,20 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('distube');
 
-module.exports = class ListenerDeleteQueue extends Listener {
+module.exports = class ListenerFinishSong extends Listener {
     constructor () {
-        super('deleteQueue', {
+        super('finishSong', {
             emitter: 'player',
-            event: 'deleteQueue'
+            event: Events.FINISH_SONG
         });
     }
 
-    async exec (queue) {
-        await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
-
-        if (queue.hasStopped) {
-            if (queue.leaveOnStop) {
-                this.client.vc.leave(queue.textChannel.guild);
-                return this.client.logger.debug(`[${queue.textChannel.guild.id}] The player was destroyed.`);
-            }
-        } else {
-            if (queue.leaveOnFinish) {
-                this.client.vc.leave(queue.textChannel.guild);
-                return this.client.logger.debug(`[${queue.textChannel.guild.id}] End of the queue reached.`);
-            }
+    async exec (queue, song) {
+        queue.votes = [];
+        if (!queue.songs[1] && !queue.autoplay) {
+            await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
         }
     }
 };

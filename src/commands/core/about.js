@@ -37,11 +37,7 @@ module.exports = class CommandAbout extends Command {
     }
 
     async exec (message) {
-        const app = this.client.application;
-
-        if (!app.owner) await this.client.application.fetch();
-
-        const owner = app.owner instanceof Team ? `${app.owner?.name}` : `${app.owner?.tag.replace(/#0{1,1}$/, '')} (${app.owner?.id})`;
+        const owner = this.client.owner instanceof Team ? `${this.client.owner?.name}` : `${this.client.owner?.tag.replace(/#0{1,1}$/, '')} (${this.client.owner?.id})`;
         const aboutembed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
@@ -82,7 +78,7 @@ module.exports = class CommandAbout extends Command {
             .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
             .setFooter({
                 text: `The owner of this instance is ${owner}`,
-                iconURL: app.owner instanceof Team ? app.owner?.iconURL() : app.owner?.avatarURL({ dynamic: true })
+                iconURL: this.client.owner instanceof Team ? this.client.owner?.iconURL() : this.client.owner?.avatarURL({ dynamic: true })
             });
 
         const urlGithub = new ButtonBuilder()

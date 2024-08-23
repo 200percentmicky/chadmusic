@@ -15,16 +15,17 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('discord.js');
 
-module.exports = class ListenerClientError extends Listener {
+module.exports = class ListenerClientDebug extends Listener {
     constructor () {
-        super('clientError', {
+        super('debug', {
             emitter: 'client',
-            event: 'error'
+            event: Events.Debug
         });
     }
 
-    async exec (error) {
-        this.client.logger.error(error.stack);
+    async exec (debug) {
+        this.client.logger.debug(`[Client] ${debug}`);
     }
 };

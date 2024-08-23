@@ -17,10 +17,10 @@
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toMilliseconds } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const Genius = require('genius-lyrics');
-const CMError = require('../../modules/CMError');
-const CMPlayerWindow = require('../../modules/CMPlayerWindow');
+const CMError = require('../../lib/CMError');
+const CMPlayerWindow = require('../../lib/CMPlayerWindow');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -231,7 +231,7 @@ class CommandPlayer extends SlashCommand {
                 inline: true
             });
 
-            if (song.age_restricted) {
+            if (song.ageRestricted) {
                 nowPlayingFields.push({
                     name: ':underage: Explicit',
                     value: 'This track is **Age Restricted**',
@@ -401,7 +401,7 @@ class CommandPlayer extends SlashCommand {
                 let newVolume = parseInt(ctx.options.volume.set?.value);
                 const allowFreeVolume = await this.client.settings.get(guild.id, 'allowFreeVolume');
                 if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200;
-                this.client.player.setVolume(guild.id, newVolume);
+                queue.setVolume(newVolume);
 
                 if (newVolume >= 201) {
                     return this.client.ui.reply(

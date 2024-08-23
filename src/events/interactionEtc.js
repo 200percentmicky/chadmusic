@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, Events } = require('discord.js');
 
 // Handles various interaction requests not needed within the commands.
 
@@ -23,7 +23,7 @@ module.exports = class ListenerInteractionEtc extends Listener {
     constructor () {
         super('interactionEtc', {
             emitter: 'client',
-            event: 'interactionCreate'
+            event: Events.InteractionCreate
         });
     }
 
@@ -31,7 +31,7 @@ module.exports = class ListenerInteractionEtc extends Listener {
         switch (interaction.customId) {
         case 'close_eval': {
             await interaction.deferUpdate();
-            if (interaction.user.id !== process.env.OWNER_ID) {
+            if (interaction.user.id !== this.client.owner?.id) {
                 return interaction.followUp({
                     embeds: [
                         new EmbedBuilder()

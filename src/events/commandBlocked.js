@@ -15,19 +15,19 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { ChannelType } = require('discord.js');
 
-module.exports = class ListenerFinishSong extends Listener {
+module.exports = class CommandBlockedListener extends Listener {
     constructor () {
-        super('finishSong', {
-            emitter: 'player',
-            event: 'finishSong'
+        super('commandBlocked', {
+            emitter: 'commandHandler',
+            event: 'commandBlocked'
         });
     }
 
-    async exec (queue, song) {
-        queue.votes = [];
-        if (!queue.songs[1] && !queue.autoplay) {
-            await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
-        }
+    async exec (message, command, reason) {
+        if (reason === 'owner') return this.client.ui.reply(message, 'no', 'This command is only available to the application owner.');
+        if (reason === 'guild') return this.client.ui.reply(message, 'no', 'This command cannot be used in Direct Messages.');
+        if (reason === ChannelType.DM) return this.client.ui.reply(message, 'no', 'This command cannot be used in servers.');
     }
 };

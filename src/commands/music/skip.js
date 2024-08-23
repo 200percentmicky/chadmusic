@@ -16,7 +16,7 @@
 
 const { Command } = require('discord-akairo');
 const { EmbedBuilder } = require('discord.js');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 
 module.exports = class CommandSkip extends Command {
     constructor () {

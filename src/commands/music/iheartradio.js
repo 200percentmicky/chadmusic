@@ -28,7 +28,7 @@ const {
 const iheart = require('iheart');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
 module.exports = class CommandIHeartRadio extends Command {
@@ -203,11 +203,11 @@ module.exports = class CommandIHeartRadio extends Command {
                 const url = await iheart.streamURL(stations[parseInt(interaction.values[0])].id);
 
                 try {
-                    this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                    this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                         ? ytdl.createAgent(undefined, {
                             localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                         })
-                        : undefined;
+                        : this.client.player.youtube.ytdlOptions.agent;
 
                     await this.client.player.play(vc, url, {
                         member: message.member,
@@ -220,7 +220,7 @@ module.exports = class CommandIHeartRadio extends Command {
                         }
                     });
                 } catch (err) {
-                    return this.client.ui.reply(message, 'error', err, 'Player Error');
+                    return this.client.ui.reply(message, 'error', err.message, 'Player Error');
                 } finally {
                     message.react(process.env.REACTION_MUSIC).catch(() => {});
                     collector.stop();
@@ -234,7 +234,7 @@ module.exports = class CommandIHeartRadio extends Command {
             return message.react(process.env.REACTION_MUSIC).catch(() => {});
         } catch (err) {
             this.client.logger.error(err.stack); // Just in case.
-            return this.client.ui.reply(message, 'error', err, 'Player Error');
+            return this.client.ui.reply(message, 'error', err.message, 'Player Error');
         }
     }
 };

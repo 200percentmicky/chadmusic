@@ -50,14 +50,13 @@ module.exports = class CommandSettings extends Command {
         const allowSilent = settings.get(message.guild.id, 'allowSilent'); // Allow Silent Tracks
         const defaultVolume = settings.get(message.guild.id, 'defaultVolume'); // Default Volume
         const textChannel = settings.get(message.guild.id, 'textChannel'); // Text Channel
-        const blockedPhrases = settings.get(message.guild.id, 'blockedPhrases'); // Blocked Songs
         const thumbnailSize = settings.get(message.guild.id, 'thumbnailSize'); // Thumbnail Size
-        const votingPercent = settings.get(message.guild.id, 'votingPercent');
-        const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty');
-        const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish');
-        const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop');
-        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown');
-        // const voiceChannel = settings.get(message.guild.id, 'voiceChannel', null) // Voice Channel
+        const votingPercent = settings.get(message.guild.id, 'votingPercent'); // Voting Percentage
+        const leaveOnEmpty = settings.get(message.guild.id, 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get(message.guild.id, 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop'); // Leave on Stop
+        const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown'); // Empty Cooldown
+        const songVcStatus = settings.get(message.guild.id, 'songVcStatus'); // Track Title as VC Status
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -83,6 +82,7 @@ module.exports = class CommandSettings extends Command {
                 **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                 **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
                 `
             },
             {
@@ -104,28 +104,6 @@ module.exports = class CommandSettings extends Command {
                 iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             });
 
-        const blockedEmbed = new EmbedBuilder()
-            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-            .setAuthor({
-                name: `${message.guild.name}`,
-                iconURL: message.guild.iconURL({ dynamic: true })
-            })
-            .setDescription(`\`\`\`${blockedPhrases.join(', ')}\`\`\``)
-            .setTitle(':notes::x: Blocked Songs')
-            .setTimestamp()
-            .setFooter({
-                text: `ChadMusic v${version}`,
-                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-            });
-
-        if (blockedPhrases.length === 0) {
-            blockedEmbed.setDescription(null);
-            blockedEmbed.addFields({
-                name: `${process.env.EMOJI_INFO} No song phrases are being blocked in this server.`,
-                value: `To add phrases to the list, run \`${process.env.PREFIX}blocksong add <phrase>\`.`
-            });
-        }
-
-        return message.reply({ embeds: [embed, blockedEmbed], allowedMentions: { repliedUser: false } });
+        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
     }
 };

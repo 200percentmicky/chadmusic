@@ -27,7 +27,7 @@ const {
 } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
 
 module.exports = class CommandSearch extends Command {
@@ -134,7 +134,7 @@ module.exports = class CommandSearch extends Command {
 
         let results;
         try {
-            results = await this.client.player.search(args.query);
+            results = await this.client.player.youtube.search(args.query);
         } catch (err) {
             if (err.name === 'DisTubeError [NO_RESULT]') {
                 return this.client.ui.reply(message, 'error', `No results found for ${args.query}`);
@@ -212,15 +212,20 @@ module.exports = class CommandSearch extends Command {
         });
 
         collector.on('collect', async interaction => {
-            if (interaction.customId === 'cancel_search') return collector.stop();
+            interaction.deferUpdate();
+
+            if (interaction.customId === 'cancel_search') {
+                return collector.stop();
+            }
+
             message.channel.sendTyping();
 
             try {
-                this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                     ? ytdl.createAgent(undefined, {
                         localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                     })
-                    : undefined;
+                    : this.client.player.youtube.ytdlOptions.agent;
 
                 await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
                     member: message.member,
@@ -231,7 +236,7 @@ module.exports = class CommandSearch extends Command {
                     }
                 });
             } catch (err) {
-                return this.client.ui.reply(message, 'error', err, 'Player Error');
+                return this.client.ui.reply(message, 'error', err.message, 'Player Error');
             } finally {
                 message.react(process.env.REACTION_MUSIC).catch(() => {});
                 collector.stop();

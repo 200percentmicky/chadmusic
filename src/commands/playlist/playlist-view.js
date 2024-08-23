@@ -65,7 +65,7 @@ module.exports = class CommandPlaylistView extends Command {
             message,
             ':page_with_curl:',
             message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null,
-            trackList === '' ? `${process.env.EMOJI_WARN} This playlist is empty.` : trackList,
+            trackList === '' ? '🍃 This playlist is empty.' : trackList,
             `${args.name}`,
             `${playlist.length} ${playlist.length === 1 ? 'track' : 'tracks'}`
         );

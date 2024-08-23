@@ -16,8 +16,8 @@
 
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { EmbedBuilder } = require('discord.js');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const CMError = require('../../modules/CMError');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const CMError = require('../../lib/CMError');
 
 class CommandSkip extends SlashCommand {
     constructor (creator) {

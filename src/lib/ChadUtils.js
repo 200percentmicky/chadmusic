@@ -49,19 +49,17 @@ class ChadUtils {
      * @param {GuildMember} member The guild member to check for DJ permissions.
      * @returns {boolean}
      */
-    static async isDJ (channel, member) {
-        const app = await channel.client.application.fetch();
-
+    static isDJ (channel, member) {
         const isOwner = () => {
             if (!channel.client.player.sudoAccess.includes(channel.guild.id)) {
                 return false;
             }
 
-            if (app.owner instanceof Team) {
-                return member.user.id === app.owner.members.get(member.user.id).id;
+            if (this.client.owner instanceof Team) {
+                return member.user.id === channel.client.owner.members.get(member.user.id).id;
             }
 
-            return member.user?.id === app.owner?.id;
+            return member.user?.id === channel.client.owner?.id;
         };
 
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
@@ -94,6 +92,22 @@ class ChadUtils {
             });
         } catch (err) {
             vc.client.logger.error(`Failed to set voice channel status.\n${err.stack}`);
+        }
+    }
+
+    /**
+     * Attaches additional metadata from the Discord.js Client to a CommandContext interaction.
+     * @param {Client} client
+     * @param {CommandContext} ctx
+     */
+    static attach (client, ctx) {
+        const guild = client.guilds.cache.get(ctx.guildID);
+
+        ctx.guild = guild;
+
+        if (guild.available) {
+            ctx._channel = guild.channels.cache.get(ctx.channelID);
+            ctx._member = guild.members.cache.get(ctx.user.id);
         }
     }
 

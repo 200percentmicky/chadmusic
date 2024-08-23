@@ -16,7 +16,7 @@
 
 const { Command } = require('discord-akairo');
 const { toMilliseconds } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 
 module.exports = class CommandSeek extends Command {
     constructor () {

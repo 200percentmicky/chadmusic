@@ -15,16 +15,28 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('distube');
 
-module.exports = class ListenerFfmpegDebug extends Listener {
+module.exports = class ListenerInitQueue extends Listener {
     constructor () {
-        super('ffmpegDebug', {
+        super('initQueue', {
             emitter: 'player',
-            event: 'ffmpegDebug'
+            event: Events.INIT_QUEUE
         });
     }
 
-    async exec (debug) {
-        this.client.logger.debug(`[Client] [FFMPEG] ${debug}`);
+    async exec (queue) {
+        const guild = queue.textChannel.guild;
+        const settings = this.client.settings.get(guild.id);
+
+        queue.autoplay = false;
+        queue.volume = parseInt(settings.defaultVolume);
+        queue.leaveOnStop = settings.leaveOnStop;
+        queue.leaveOnFinish = settings.leaveOnFinish;
+        queue.leaveOnEmpty = settings.leaveOnEmpty;
+        queue.emptyCooldown = parseInt(settings.emptyCooldown);
+        queue.votes = []; // Initialize an empty array for casting votes.
+        queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
+        queue.peeStoredInBalls = true; // lol
     }
 };

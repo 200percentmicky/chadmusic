@@ -27,6 +27,6 @@ If you want to live on the edge and use a version that's in development, you can
 npm run update:dev
 ```
 
-!!! warn
+!!! warning
 
-    If you're running the bot in a production environment, it's not recommended to use the `develop` branch as bugs or broken features may be present.
+    If you're wanting to use the `develop` branch in production, bugs or broken features may be present. If you want to report any bugs or broken features, please report the issue [here](https://github.com/200percentmicky/chadmusic/issues).

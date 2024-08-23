@@ -38,7 +38,7 @@ module.exports = class CommandAllowExplicit extends Command {
     }
 
     async exec (message, args) {
-        if (!args[1]) return this.client.ui.usage(message, 'allowexplicit <toggle:on/off>');
+        if (!args.toggle) return this.client.ui.usage(message, 'allowexplicit <toggle:on/off>');
 
         const settings = this.client.settings;
         switch (args.text) {

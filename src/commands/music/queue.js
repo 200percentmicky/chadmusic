@@ -28,7 +28,7 @@ const {
 } = require('discord.js');
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 // const { FieldsEmbed } = require('discord-paginationembed')
 
 // TODO: Use Discord Embed Buttons to go to the next page.
@@ -96,7 +96,7 @@ module.exports = class CommandQueue extends Command {
         /* Map the array. */
         const queueMap = songs.length > 0
             ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n')
-            : `${process.env.EMOJI_WARN} The queue is empty. Start adding some songs!`;
+            : '🍃 The queue is empty. Start adding some songs!';
 
         /* Making the embed. */
         const queueEmbed = new EmbedBuilder()

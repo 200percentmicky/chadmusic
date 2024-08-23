@@ -16,8 +16,8 @@
 
 const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const CMPlayerWindow = require('../../modules/CMPlayerWindow');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const CMPlayerWindow = require('../../lib/CMPlayerWindow');
 
 module.exports = class CommandNowPlaying extends Command {
     constructor () {
@@ -82,7 +82,7 @@ module.exports = class CommandNowPlaying extends Command {
             inline: true
         });
 
-        if (song.age_restricted) {
+        if (song.ageRestricted) {
             embedFields.push({
                 name: ':underage: Explicit',
                 value: 'This track is **Age Restricted**',

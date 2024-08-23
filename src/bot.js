@@ -16,7 +16,7 @@
 
 'use strict';
 
-const logger = require('./modules/ChadLogger.js');
+const logger = require('./lib/ChadLogger.js');
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
 const { ChannelType, GatewayIntentBits, Partials, REST } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
@@ -24,18 +24,23 @@ const DisTube = require('distube').default;
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const Enmap = require('enmap');
-const ChadUI = require('./modules/ChadUI');
-const ChadUtils = require('./modules/ChadUtils');
+const ChadUI = require('./lib/ChadUI');
+const ChadUtils = require('./lib/ChadUtils');
 const path = require('path');
 const fs = require('fs');
 const { version } = require('../package.json');
 const { getInfo, ClusterClient } = require('discord-hybrid-sharding');
+const { YouTubePlugin } = require('@distube/youtube');
+const { FilePlugin } = require('@distube/file');
+const { DirectLinkPlugin } = require('@distube/direct-link');
+const { default: SoundCloudPlugin } = require('@distube/soundcloud');
+const { default: DeezerPlugin } = require('@distube/deezer');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
     constructor () {
         super({
-            ownerID: process.env.OWNER_ID
+            ownerID: undefined // Applied after ready event.
         }, {
             allowedMentions: {
                 repliedUser: false
@@ -157,34 +162,74 @@ class ChadMusic extends AkairoClient {
             }
         };
 
-        // Music Player.
-        this.player = new DisTube(this, {
-            plugins: [
-                new SpotifyPlugin({
-                    emitEventsAfterFetching: process.env.SPOTIFY_EMIT_EVENTS_AFTER_FETCHING === 'false' ?? false,
-                    parallel: process.env.SPOTIFY_PARALLEL === 'true' ?? true
-                }),
-                new YtDlpPlugin({ update: true })
-            ],
-            emitAddListWhenCreatingQueue: true,
-            emitAddSongWhenCreatingQueue: true,
-            emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
-            emptyCooldown: 60,
-            leaveOnStop: false, // this.settings.get('global', 'leaveOnStop') ?? true,
-            leaveOnEmpty: false, // this.settings.get('global', 'leaveOnEmpty') ?? true,
-            leaveOnFinish: false, // this.settings.get('global', 'leaveOnFinish') ?? true,
-            streamType: this.settings.get('global', 'streamType') ?? 0,
-            youtubeCookie: this.cookies(),
+        // Player Plugins
+        // Direct Link
+        const directLink = new DirectLinkPlugin();
+
+        // Deezer
+        const deezer = new DeezerPlugin();
+
+        // Files
+        const files = new FilePlugin();
+
+        // SoundCloud
+        const soundcloud = new SoundCloudPlugin({
+            clientId: process.env.SOUNDCLOUD_CLIENT_ID ?? undefined,
+            oauthToken: process.env.SOUNDCLOUD_OAUTH_TOKEN ?? undefined
+        });
+
+        // Spotify
+        const spotify = new SpotifyPlugin({
+            api: {
+                clientId: process.env.SPOTIFY_CLIENT_ID ?? undefined,
+                clientSecret: process.env.SPOTIFY_CLIENT_SECRET ?? undefined,
+                topTracksCountry: process.env.SPOTIFY_TOP_TRACKS_COUNTRY ?? undefined
+            }
+        });
+
+        // YouTube
+        const youtube = new YouTubePlugin({
+            cookies: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
                 highWaterMark: 1024
-            },
+            }
+        });
+
+        // yt-dlp
+        const ytdlp = new YtDlpPlugin({
+            update: process.env.UPDATE_YTDLP ?? true
+        });
+
+        // Music Player.
+        this.player = new DisTube(this, {
+            plugins: [
+                directLink,
+                deezer,
+                files,
+                soundcloud,
+                spotify,
+                youtube,
+                ytdlp
+            ],
+            emitAddListWhenCreatingQueue: true,
+            emitAddSongWhenCreatingQueue: true,
+            emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
         this.player.sudoAccess = [];
+
+        // Attaching plugins to player for easy access.
+        this.player.directLink = directLink;
+        this.player.deezer = deezer;
+        this.player.files = files;
+        this.player.soundcloud = soundcloud;
+        this.player.spotify = spotify;
+        this.player.youtube = youtube;
+        this.player.ytdlp = ytdlp;
 
         // Create Command Handler
         this.commands = new CommandHandler(this, {
@@ -213,7 +258,7 @@ class ChadMusic extends AkairoClient {
 
         // Create Listener Handler
         this.listeners = new ListenerHandler(this, {
-            directory: './src/listeners'
+            directory: './src/events'
         });
 
         // Create Inhibitor Handler
@@ -278,7 +323,7 @@ class ChadMusic extends AkairoClient {
         logger.warn('Shutting down...');
         this.creator.cleanRegisteredComponents();
         this.destroy();
-        process.exitCode = 0;
+        process.exitCode = exitCode;
     }
 }
 

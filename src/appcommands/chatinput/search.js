@@ -22,8 +22,8 @@ const {
 const ytdl = require('@distube/ytdl-core');
 const AutoComplete = require('youtube-autocomplete');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const CMError = require('../../modules/CMError');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const CMError = require('../../lib/CMError');
 
 class CommandSearch extends SlashCommand {
     constructor (creator) {
@@ -140,7 +140,7 @@ class CommandSearch extends SlashCommand {
 
         let results;
         try {
-            results = await this.client.player.search(ctx.options.query);
+            results = await this.client.player.youtube.search(ctx.options.query);
         } catch (err) {
             if (err.name === 'DisTubeError [NO_RESULT]') {
                 return this.client.ui.reply(ctx, 'error', `No results found for ${ctx.options.query}`);
@@ -232,11 +232,14 @@ class CommandSearch extends SlashCommand {
                 }
 
                 try {
-                    this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+                    selCtx.acknowledge();
+                    channel.sendTyping();
+
+                    this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                         ? ytdl.createAgent(undefined, {
                             localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                         })
-                        : undefined;
+                        : this.client.player.youtube.ytdlOptions.agent;
 
                     await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                         member,
@@ -246,7 +249,7 @@ class CommandSearch extends SlashCommand {
                         }
                     });
                 } catch (err) {
-                    return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+                    return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
                 } finally {
                     ctx.delete();
                 }
@@ -268,6 +271,7 @@ class CommandSearch extends SlashCommand {
                     });
                 }
 
+                btnCtx.acknowledge();
                 return ctx.delete();
             },
             30 * 1000

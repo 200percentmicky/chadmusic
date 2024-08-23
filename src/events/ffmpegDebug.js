@@ -15,16 +15,19 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { Events } = require('distube');
 
-module.exports = class ListenerGuildCreate extends Listener {
+module.exports = class ListenerFfmpegDebug extends Listener {
     constructor () {
-        super('guildCreate', {
-            emitter: 'client',
-            event: 'guildCreate'
+        super('ffmpegDebug', {
+            emitter: 'player',
+            event: Events.FFMPEG_DEBUG
         });
     }
 
-    async exec (guild) {
-        this.client.settings.ensure(guild.id, this.client.defaultSettings);
+    async exec (debug) {
+        if (process.env.FFMPEG_DEBUG_LOGGING) {
+            this.client.logger.debug(`[Client] [FFMPEG] ${debug}`);
+        } else {} // eslint-disable-line no-empty
     }
 };

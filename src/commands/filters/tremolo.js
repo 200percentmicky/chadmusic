@@ -16,8 +16,8 @@
 
 const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
-const { pushFormatFilter } = require('../../modules/pushFormatFilter');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const { pushFormatFilter } = require('../../lib/pushFormatFilter');
 
 module.exports = class CommandTremolo extends Command {
     constructor () {

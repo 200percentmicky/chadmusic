@@ -16,26 +16,23 @@
 
 const { Listener } = require('discord-akairo');
 
-// For various interactions throughout the bot. (Excluding Discord.js interactions.)
-
-module.exports = class ListenerCreatorComponentInteraction extends Listener {
+module.exports = class ListenerCooldown extends Listener {
     constructor () {
-        super('creatorComponentInteraction', {
-            emitter: 'creator',
-            event: 'componentInteraction'
+        super('cooldown', {
+            emitter: 'commandHandler',
+            event: 'cooldown'
         });
     }
 
-    async exec (ctx) {
-        const app = await this.client.application.fetch();
-
-        switch (ctx.customID) {
-        case 'sc_close_eval': {
-            if (app.owner?.id !== ctx.user.id) return ctx.sendFollowUp(':no_entry_sign: Only the owner of this application can use this command.', { ephemeral: true });
-
-            ctx.acknowledge();
-            ctx.delete();
-        }
+    async exec (message, command, remaining) {
+        if (command) {
+            const seconds = remaining / 1000.00;
+            const time = Math.floor(parseFloat(seconds));
+            this.client.ui.custom(message, ':hourglass:', process.env.COLOR_NO, `You can run that command again in **${time}** seconds.`, 'Cooldown').then(sent => {
+                setTimeout(() => {
+                    sent.delete();
+                }, 5000);
+            });
         }
     }
 };

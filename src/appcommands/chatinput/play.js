@@ -26,14 +26,14 @@ const {
 } = require('discord.js');
 const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
-const { hasURL } = require('../../modules/hasURL');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { hasURL } = require('../../lib/hasURL');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { toColonNotation } = require('colon-notation');
-const CMError = require('../../modules/CMError');
+const CMError = require('../../lib/CMError');
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {
@@ -252,11 +252,11 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
-            this.client.player.options.ytdlOptions.agent = process.env.IPV6_BLOCK
+            this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
                 ? ytdl.createAgent(undefined, {
                     localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
                 })
-                : undefined;
+                : this.client.player.youtube.ytdlOptions.agent;
 
             let radioStation;
             let fileMetadata;
@@ -413,7 +413,7 @@ class CommandPlay extends SlashCommand {
                                 selCtx.acknowledge();
                                 await boogie(selected);
                             } catch (err) {
-                                return this.client.ui.reply(selCtx, 'error', err, 'Player Error');
+                                return this.client.ui.reply(selCtx, 'error', err.message, 'Player Error');
                             } finally {
                                 ctx.delete();
                             }
@@ -472,7 +472,7 @@ class CommandPlay extends SlashCommand {
             }
         } catch (err) {
             this.client.logger.error(`Cannot play requested track.\n${err.stack}`); // Just in case.
-            return this.client.ui.reply(ctx, 'error', err, 'Player Error');
+            return this.client.ui.reply(ctx, 'error', err.message, 'Player Error');
         }
     }
 }

@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { isSameVoiceChannel } = require('../../modules/isSameVoiceChannel');
+const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 
 module.exports = class CommandVolume extends Command {
     constructor () {
@@ -58,10 +58,12 @@ module.exports = class CommandVolume extends Command {
         if (!queue) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
+        if (!args.volume) return this.client.ui.custom(message, this.client.ui.volumeEmoji(queue), process.env.COLOR_INFO, `Current Volume: **${queue.volume}%**`);
+
         let newVolume = parseInt(args.volume);
         const allowFreeVolume = await this.client.settings.get(message.guild.id, 'allowFreeVolume');
         if (allowFreeVolume === (false || undefined) && newVolume > 200) newVolume = 200;
-        this.client.player.setVolume(message.guild.id, newVolume);
+        queue.setVolume(newVolume);
 
         if (newVolume >= 201) {
             return this.client.ui.reply(
