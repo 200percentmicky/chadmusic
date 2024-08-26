@@ -35,6 +35,8 @@ const { FilePlugin } = require('@distube/file');
 const { DirectLinkPlugin } = require('@distube/direct-link');
 const { default: SoundCloudPlugin } = require('@distube/soundcloud');
 const { default: DeezerPlugin } = require('@distube/deezer');
+const { Player } = require('discord-player');
+const { YoutubeiExtractor } = require('discord-player-youtubei');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -231,6 +233,20 @@ class ChadMusic extends AkairoClient {
         this.player.youtube = youtube;
         this.player.ytdlp = ytdlp;
 
+        this._player = new Player(this, {
+            ipconfig: {
+                blocks: process.env.IPV6_BLOCK ? [process.env.IPV6_BLOCK] : []
+            }
+        });
+
+        this._player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
+        this._player.extractors.register(YoutubeiExtractor, {
+            overrideBridgeMode: 'ytmusic',
+            streamOptions: {
+                highWaterMark: 1024
+            }
+        });
+
         // Create Command Handler
         this.commands = new CommandHandler(this, {
             directory: './src/commands',
@@ -287,6 +303,7 @@ class ChadMusic extends AkairoClient {
             process,
             commandHandler: this.commands,
             player: this.player,
+            playerEvents: this._player.events,
             creator: this.creator
         });
 
