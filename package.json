@@ -43,6 +43,7 @@
     "genius-lyrics": "^4.4.2",
     "human-interval": "^2.0.1",
     "iheart": "github:200percentmicky/iheart",
+    "ip": "^2.0.1",
     "keyv": "^4.0.3",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.21",
