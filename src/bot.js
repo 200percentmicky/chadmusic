@@ -303,6 +303,7 @@ class ChadMusic extends AkairoClient {
             process,
             commandHandler: this.commands,
             player: this.player,
+            _player: this._player,
             playerEvents: this._player.events,
             creator: this.creator
         });
