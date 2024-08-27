@@ -24,6 +24,7 @@ const prettyMs = require('pretty-ms');
 const colonNotation = require('colon-notation');
 const commonTags = require('common-tags');
 const Genius = require('genius-lyrics');
+const { useMainPlayer, useQueue } = require('discord-player');
 
 module.exports = class CommandEval extends Command {
     constructor () {
@@ -68,11 +69,8 @@ module.exports = class CommandEval extends Command {
             `);
         }
 
-        const player = this.client.player;
-        let queue;
-        try {
-            queue = player.getQueue(message.guild);
-        } catch {}
+        const player = useMainPlayer();
+        const queue = useQueue(message.guild.id);
         /* eslint-enable no-unused-vars */
 
         const t1 = process.hrtime();
