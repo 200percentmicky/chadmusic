@@ -16,6 +16,7 @@
 
 // eslint-disable-next-line no-unused-vars
 const { Client, GuildMember, BaseGuildVoiceChannel } = require('discord.js');
+const { useMainPlayer, useQueue } = require('discord-player');
 
 /**
  * Verifys if the user is in the same voice channel as the client.
@@ -25,12 +26,14 @@ const { Client, GuildMember, BaseGuildVoiceChannel } = require('discord.js');
  * @returns boolean
  */
 function isSameVoiceChannel (client, member, vc) {
-    const queue = client.player?.getQueue(member.guild);
+    const player = useMainPlayer();
+    const queue = useQueue(member.guild.id);
+    const connection = player.voiceUtils.getConnection(member.guild.id);
     let channelId;
     try {
-        channelId = queue.voice?.connection.joinConfig.channelId;
+        channelId = queue.channel?.id;
     } catch {
-        channelId = client.vc.get(vc).channel.id;
+        channelId = connection.joinConfig.channelId;
     }
 
     return channelId === vc.id;

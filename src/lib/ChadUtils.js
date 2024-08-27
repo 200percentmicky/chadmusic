@@ -18,6 +18,7 @@
 const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel, Team } = require('discord.js');
 const { CommandContext } = require('slash-create');
 const CMError = require('./CMError.js');
+const { useQueue, useMainPlayer } = require('discord-player');
 /* eslint-enable no-unused-vars */
 
 /**
@@ -32,12 +33,14 @@ class ChadUtils {
      * @returns {boolean}
      */
     static isSameVoiceChannel (client, member, vc) {
-        const queue = client.player?.getQueue(member.guild);
+        const player = useMainPlayer();
+        const queue = useQueue(member.guild.id);
+        const connection = player.voiceUtils.getConnection(member.guild.id);
         let channelId;
         try {
-            channelId = queue.voice?.connection.joinConfig.channelId;
+            channelId = queue.channel?.id;
         } catch {
-            channelId = client.vc.get(vc).channel.id;
+            channelId = connection.joinConfig.channelId;
         }
 
         return channelId === vc.id;
