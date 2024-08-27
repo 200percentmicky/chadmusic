@@ -29,12 +29,13 @@ module.exports = class ListenerQueueCreate extends Listener {
         const guild = queue.guild;
         const settings = this.client.settings.get(guild.id);
 
+        // TODO: Remove options from this event.
         queue.autoplay = false;
-        queue.volume = parseInt(settings.defaultVolume);
-        queue.leaveOnStop = settings.leaveOnStop;
-        queue.leaveOnFinish = settings.leaveOnFinish;
-        queue.leaveOnEmpty = settings.leaveOnEmpty;
-        queue.emptyCooldown = parseInt(settings.emptyCooldown);
+        queue.options.volume = parseInt(settings.defaultVolume);
+        queue.options.leaveOnStop = settings.leaveOnStop;
+        queue.options.leaveOnFinish = settings.leaveOnFinish;
+        queue.options.leaveOnEmpty = settings.leaveOnEmpty;
+        queue.options.leaveOnEmptyCooldown = parseInt(settings.emptyCooldown);
         queue.votes = []; // Initialize an empty array for casting votes.
         queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
         queue.peeStoredInBalls = true; // lol
