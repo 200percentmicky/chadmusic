@@ -18,6 +18,8 @@
 const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel, Team } = require('discord.js');
 const { CommandContext } = require('slash-create');
 const CMError = require('./CMError.js');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 /* eslint-enable no-unused-vars */
 
 /**
@@ -41,6 +43,23 @@ class ChadUtils {
         }
 
         return channelId === vc.id;
+    }
+
+    /**
+     * Creates a new ytdl agent.
+     *
+     * @param {Client} client Discord client.
+     */
+    static async createAgent (client) {
+        try {
+            client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
+                ? ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
+                : client.player.youtube.ytdlOptions.agent;
+        } catch (err) {
+            this.client.logger.error(`Failed to create an agent.\n${err.stack}`);
+        }
     }
 
     /**

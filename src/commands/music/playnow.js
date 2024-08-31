@@ -101,11 +101,7 @@ module.exports = class CommandPlayNow extends Command {
             else message.channel.sendTyping();
 
             try {
-                this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
-                    ? ytdl.createAgent(undefined, {
-                        localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                    })
-                    : this.client.player.youtube.ytdlOptions.agent;
+                this.client.utils.createAgent(this.client);
 
                 // eslint-disable-next-line no-useless-escape
                 await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
