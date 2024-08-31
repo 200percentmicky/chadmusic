@@ -75,7 +75,7 @@ module.exports = class ListenerPlaySong extends Listener {
             if (author.name) {
                 songNowFields.push({
                     name: ':arrow_upper_right: Uploader',
-                    value: `[${author.name}](${author.url})` || 'N/A',
+                    value: `${author.url ? `[${author.name}](${author.url})` : `${author.name}`}` || 'N/A',
                     inline: true
                 });
             }
