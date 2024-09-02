@@ -28,6 +28,13 @@ module.exports = class ListenerPlayerError extends Listener {
 
     async exec (error, queue, song) {
         const errsplit = error.message.split(/ +/g);
+        const message = song.metadata?.message || song.metadata?.ctx;
+
+        // TODO: Add option to allow bot owner to change this number.
+        if (queue.totalErrors > 5) {
+            queue.stop();
+            return this.client.ui.reply(message, 'error', 'Too many errors occured and the player has been stopped.');
+        }
 
         const knownErrors = {
             result: 'No results found.',
@@ -72,5 +79,7 @@ module.exports = class ListenerPlayerError extends Listener {
             ? { embeds: [embed] }
             : { content: `${process.env.EMOJI_ERROR} **Player Error**\n**[${song.name}](${song.url})**\n${formattedError}\n${error.message}` }
         );
+
+        queue.totalErrors += 1;
     }
 };
