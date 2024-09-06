@@ -169,13 +169,16 @@ class ChadUtils {
     }
 
     /**
-     * Checks whether the string contains a file extension.
-     * @param {string} string
+     * Checks whether the URL contains a file extension. This function can
+     * also be used to check if the URL is a valid attachment uploaded to
+     * Discord's CDN.
+     *
+     * @param {string} url
      * @returns {boolean|undefined}
      */
-    static hasExt (string) {
+    static hasExt (url) {
         const extPattern = /\.[a-zA-Z0-9]{1,5}$/i;
-        return this.#matchRegex(extPattern, string);
+        return this.#matchRegex(extPattern, url) || url.includes('cdn.discord');
     }
 
     /**
