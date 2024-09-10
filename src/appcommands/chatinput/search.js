@@ -235,11 +235,7 @@ class CommandSearch extends SlashCommand {
                     selCtx.acknowledge();
                     channel.sendTyping();
 
-                    this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
-                        ? ytdl.createAgent(undefined, {
-                            localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                        })
-                        : this.client.player.youtube.ytdlOptions.agent;
+                    this.client.utils.createAgent(this.client);
 
                     await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                         member,

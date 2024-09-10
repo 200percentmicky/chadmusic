@@ -252,11 +252,7 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
-            this.client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
-                ? ytdl.createAgent(undefined, {
-                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                })
-                : this.client.player.youtube.ytdlOptions.agent;
+            this.client.utils.createAgent(this.client);
 
             let radioStation;
             let fileMetadata;

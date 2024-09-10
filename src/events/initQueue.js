@@ -37,6 +37,7 @@ module.exports = class ListenerInitQueue extends Listener {
         queue.emptyCooldown = parseInt(settings.emptyCooldown);
         queue.votes = []; // Initialize an empty array for casting votes.
         queue.formattedFilters = []; // Used to format the active filters in the queue, if any.
+        queue.totalErrors = 0; // Used to keep track of total number of errors occured by the player.
         queue.peeStoredInBalls = true; // lol
     }
 };

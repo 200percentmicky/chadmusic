@@ -75,7 +75,7 @@ module.exports = class ListenerPlaySong extends Listener {
             if (author.name) {
                 songNowFields.push({
                     name: ':arrow_upper_right: Uploader',
-                    value: `[${author.name}](${author.url})` || 'N/A',
+                    value: `${author.url ? `[${author.name}](${author.url})` : `${author.name}`}` || 'N/A',
                     inline: true
                 });
             }
@@ -122,6 +122,8 @@ module.exports = class ListenerPlaySong extends Listener {
 
             const status = `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.displayName} - ${song.user.username})`;
             await channel.client.utils.setVcStatus(vc, status.length > 500 ? status.substring(0, 496) + '...' : status);
+
+            queue.totalErrors = 0;
         }, 500);
     }
 };

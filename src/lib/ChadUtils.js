@@ -19,6 +19,8 @@ const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message
 const { CommandContext } = require('slash-create');
 const CMError = require('./CMError.js');
 const { useQueue, useMainPlayer } = require('discord-player');
+const ytdl = require('@distube/ytdl-core');
+const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 /* eslint-enable no-unused-vars */
 
 /**
@@ -44,6 +46,23 @@ class ChadUtils {
         }
 
         return channelId === vc.id;
+    }
+
+    /**
+     * Creates a new ytdl agent.
+     *
+     * @param {Client} client Discord client.
+     */
+    static async createAgent (client) {
+        try {
+            client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
+                ? ytdl.createAgent(undefined, {
+                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
+                })
+                : client.player.youtube.ytdlOptions.agent;
+        } catch (err) {
+            this.client.logger.error(`Failed to create an agent.\n${err.stack}`);
+        }
     }
 
     /**
@@ -153,13 +172,16 @@ class ChadUtils {
     }
 
     /**
-     * Checks whether the string contains a file extension.
-     * @param {string} string
+     * Checks whether the URL contains a file extension. This function can
+     * also be used to check if the URL is a valid attachment uploaded to
+     * Discord's CDN.
+     *
+     * @param {string} url
      * @returns {boolean|undefined}
      */
-    static hasExt (string) {
+    static hasExt (url) {
         const extPattern = /\.[a-zA-Z0-9]{1,5}$/i;
-        return this.#matchRegex(extPattern, string);
+        return this.#matchRegex(extPattern, url) || url.includes('cdn.discord');
     }
 
     /**
