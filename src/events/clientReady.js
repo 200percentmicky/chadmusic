@@ -16,7 +16,7 @@
 
 const { Listener } = require('discord-akairo');
 const { Events } = require('discord.js');
-const path = require('path');
+const path = require('node:path');
 
 module.exports = class SurferReady extends Listener {
     constructor () {

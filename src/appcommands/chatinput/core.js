@@ -21,7 +21,7 @@ const { version } = require('../../../package.json');
 /* eslint-disable no-unused-vars */
 
 // System Info for debugging.
-const os = require('os');
+const os = require('node:os');
 const si = require('systeminformation');
 
 // Importing libraries for eval use.

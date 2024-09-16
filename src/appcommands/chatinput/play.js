@@ -30,8 +30,6 @@ const { hasURL } = require('../../lib/hasURL');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
-const ytdl = require('@distube/ytdl-core');
-const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { toColonNotation } = require('colon-notation');
 const CMError = require('../../lib/CMError');
 
