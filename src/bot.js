@@ -17,8 +17,8 @@
 'use strict';
 
 const logger = require('./lib/ChadLogger.js');
-const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require('discord-akairo');
-const { ChannelType, GatewayIntentBits, Partials, REST } = require('discord.js');
+const { AkairoClient, ListenerHandler } = require('discord-akairo');
+const { GatewayIntentBits, Partials, REST } = require('discord.js');
 const { SlashCreator, GatewayServer } = require('slash-create');
 const DisTube = require('distube').default;
 const { SpotifyPlugin } = require('@distube/spotify');
@@ -247,39 +247,9 @@ class ChadMusic extends AkairoClient {
             }
         });
 
-        // Create Command Handler
-        this.commands = new CommandHandler(this, {
-            directory: './src/commands',
-            prefix: message => {
-                // This is an attempt to have custom prefixes, despite how Enmap likes to complain.
-                // If no key is found, this should return the configured prefix in the .env file.
-                if (message.channel.type === ChannelType.DM) {
-                    return process.env.PREFIX;
-                } else {
-                    this.settings.ensure(message.guild.id, this.defaultSettings); // Hoping that the bot doesn't have a panic attack.
-                    try {
-                        return [this.settings.get(message.guild.id, 'prefix'), process.env.PREFIX] ?? process.env.PREFIX;
-                    } catch {
-                        return process.env.PREFIX;
-                    }
-                }
-            },
-            commandUtil: true,
-            handleEdits: true,
-            allowMention: true,
-            autoRegisterSlashCommands: false,
-            autoDefer: false,
-            execSlash: true
-        });
-
         // Create Listener Handler
         this.listeners = new ListenerHandler(this, {
             directory: './src/events'
-        });
-
-        // Create Inhibitor Handler
-        this.inhibitors = new InhibitorHandler(this, {
-            directory: './src/inhibitors'
         });
 
         this.creator = new SlashCreator({
@@ -308,16 +278,7 @@ class ChadMusic extends AkairoClient {
             creator: this.creator
         });
 
-        this.commands.useInhibitorHandler(this.inhibitors); // Use all Inhibitors.
-        this.commands.useListenerHandler(this.listeners); // Use all Listeners.
-
-        this.commands.loadAll(); // Load all Inhibitors
         this.listeners.loadAll(); // Load all Listeners.
-
-        // In the case of production, load all Inhibitors.
-        if (process.env.DEV === 'true') {
-            this.inhibitors.loadAll();
-        }
     }
 
     /**
