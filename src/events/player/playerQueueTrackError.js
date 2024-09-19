@@ -16,6 +16,7 @@
 
 const { Listener } = require('discord-akairo');
 const { GuildQueueEvent } = require('discord-player');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = class ListenerPlayerQueueTrackError extends Listener {
     constructor () {
@@ -26,6 +27,38 @@ module.exports = class ListenerPlayerQueueTrackError extends Listener {
     }
 
     async exec (queue, error, track) {
-        this.client.logger.error(`Error playing track: ${error}`);
+        const message = track.metadata?.message || track.metadata?.ctx;
+
+        // Cleaning up the error message. Some extractors output the
+        // entire error stack in its message instead of a simple output.
+        // So far, removing the stack and only cleaning unnecessary bits.
+        const cleanError = error.message
+            .split('\n')
+            .filter(e => !e.startsWith('    at'))
+            .filter(e => !e.startsWith('[Object] '))
+            .filter(e => e !== '')
+            .join();
+
+        console.log(cleanError);
+
+        // TODO: Add option to allow bot owner to change this number.
+        if (queue.totalErrors > 5) {
+            queue.node.stop();
+            return this.client.ui.reply(message, 'error', 'Too many errors occured and the player has been stopped.');
+        }
+
+        const embed = new EmbedBuilder()
+            .setColor(process.env.COLOR_ERROR)
+            .setTitle(`${process.env.EMOJI_ERROR} Player Error`);
+
+        embed.setDescription(`${cleanError}`);
+        embed.addFields([
+            {
+                name: 'Track',
+                value: `**[${track.title}](${track.url})**`
+            }
+        ]);
+
+        queue.channel.send({ embeds: [embed] });
     }
 };
