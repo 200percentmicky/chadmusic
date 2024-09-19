@@ -39,6 +39,7 @@ const bot = require('../../../package.json');
 const sc = require('slash-create/package.json');
 const akairo = require('discord-akairo/package.json');
 const distube = require('../../../node_modules/distube/package.json'); // Temporary
+const { useQueue, useMainPlayer } = require('discord-player');
 
 class CommandCore extends SlashCommand {
     constructor (creator) {
@@ -199,10 +200,10 @@ class CommandCore extends SlashCommand {
         const channel = guild.channels.cache.get(ctx.channelID);
         const member = guild.members.cache.get(ctx.user.id);
 
-        const player = this.client.player;
+        const player = useMainPlayer();
         let queue;
         try {
-            queue = player.getQueue(guild);
+            queue = useQueue(guild.id);
         } catch {}
 
         switch (ctx.subcommands[0]) {
