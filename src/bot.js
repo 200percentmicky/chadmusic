@@ -271,7 +271,6 @@ class ChadMusic extends AkairoClient {
         // Set custom emitters
         this.listeners.setEmitters({
             process,
-            commandHandler: this.commands,
             player: this.player,
             _player: this._player,
             playerEvents: this._player.events,
@@ -301,6 +300,7 @@ class ChadMusic extends AkairoClient {
     async die (exitCode = 0) {
         logger.warn('Shutting down...');
         this.creator.cleanRegisteredComponents();
+        this._player.destroy();
         this.destroy();
         process.exitCode = exitCode;
     }
