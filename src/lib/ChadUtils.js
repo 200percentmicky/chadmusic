@@ -34,18 +34,9 @@ class ChadUtils {
      * @param {BaseGuildVoiceChannel} vc The voice channel.
      * @returns {boolean}
      */
-    static isSameVoiceChannel (client, member, vc) {
-        const player = useMainPlayer();
+    static isSameVoiceChannel (member) {
         const queue = useQueue(member.guild.id);
-        const connection = player.voiceUtils.getConnection(member.guild.id);
-        let channelId;
-        try {
-            channelId = queue.channel?.id;
-        } catch {
-            channelId = connection.joinConfig.channelId;
-        }
-
-        return channelId === vc.id;
+        return queue.dispatcher.channel.id === member.voice.channel.id;
     }
 
     /**
