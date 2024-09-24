@@ -27,11 +27,12 @@ const {
 const iheart = require('iheart');
 const AutoComplete = require('youtube-autocomplete');
 const { hasURL } = require('../../lib/hasURL');
-const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
 const CMError = require('../../lib/CMError');
+const { useMainPlayer, useQueue } = require('discord-player');
+const CMPlayerWindow = require('../../lib/CMPlayerWindow');
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {
@@ -160,6 +161,8 @@ class CommandPlay extends SlashCommand {
             throw new CMError('NO_DMS_ALLOWED');
         }
 
+        const settings = this.client.settings.get(ctx.guildID);
+
         const guild = this.client.guilds.cache.get(ctx.guildID);
         const channel = await guild.channels.fetch(ctx.channelID);
         const _member = await guild.members.fetch(ctx.user.id);
@@ -179,6 +182,20 @@ class CommandPlay extends SlashCommand {
 
         const vc = _member.voice.channel;
         if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
+
+        if (!vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect)) {
+            return this.client.ui.sendPrompt(ctx, 'MISSING_CONNECT', vc.id);
+        }
+
+        if (vc.members.size === vc.userLimit) {
+            if (vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.MoveMembers)) {} // eslint-disable-line no-empty, brace-style
+            else {
+                return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
+            }
+        }
+
+        const player = useMainPlayer();
+        const queue = useQueue(guild.id);
 
         if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
             if (this.client.utils.pornPattern(ctx.options.track?.query)) {
@@ -215,40 +232,6 @@ class CommandPlay extends SlashCommand {
 
         await ctx.defer(ctx.subcommands[0] === 'silently');
 
-        const currentVc = this.client.vc.get(vc);
-        if (!currentVc) {
-            const permissions = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.Flags.Connect);
-            if (!permissions) return this.client.ui.sendPrompt(ctx, 'MISSING_CONNECT', vc.id);
-
-            if (vc.type === 'stage') {
-                try {
-                    this.client.vc.join(vc);
-                } catch (err) {
-                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
-                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
-                }
-                const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
-                if (!stageMod) {
-                    try {
-                        await guild.members.me.voice.setRequestToSpeak(true);
-                    } catch {
-                        await guild.members.me.voice.setSuppressed(false);
-                    }
-                } else {
-                    await guild.members.me.voice.setSuppressed(false);
-                }
-            } else {
-                try {
-                    this.client.vc.join(vc);
-                } catch (err) {
-                    if (err.name.includes('[VOICE_FULL]')) return this.client.ui.sendPrompt(ctx, 'FULL_CHANNEL');
-                    else return this.client.ui.reply(ctx, 'error', `Unable to join the voice channel. ${err.message}`);
-                }
-            }
-        } else {
-            if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
-        }
-
         try {
             this.client.utils.createAgent(this.client);
 
@@ -257,7 +240,7 @@ class CommandPlay extends SlashCommand {
             let isFile = false;
 
             const boogie = async (requested) => {
-                /* eslint-disable-next-line no-useless-escape */
+                /*
                 await this.client.player.play(vc, requested, {
                     textChannel: channel,
                     member: _member,
@@ -271,17 +254,85 @@ class CommandPlay extends SlashCommand {
                         silent: ctx.subcommands[0] === 'silently'
                     }
                 });
+                */
+                player.play(vc, requested, {
+                    metadata: {
+                        textChannel: channel
+                    },
+                    nodeOptions: {
+                        volume: parseInt(settings.defaultVolume),
+                        leaveOnStop: settings.leaveOnStop,
+                        leaveOnEnd: settings.leaveOnFinish,
+                        leaveOnEmpty: settings.leaveOnEmpty,
+                        leaveOnEmptyCooldown: parseInt(settings.emptyCooldown)
+                    }
+                })
+                    .then(song => {
+                        if (vc.type === 'stage') {
+                            const stageMod = vc.permissionsFor(this.client.user.id).has(PermissionsBitField.StageModerator);
+                            if (!stageMod) {
+                                try {
+                                    guild.members.me.voice.setRequestToSpeak(true);
+                                } catch {
+                                    guild.members.me.voice.setSuppressed(false);
+                                }
+                            } else {
+                                guild.members.me.voice.setSuppressed(false);
+                            }
+                        }
 
-                if (ctx.subcommands[0] === 'now') {
-                    try {
-                        await this.client.player.skip(guild);
-                    } catch {}
-                }
+                        Object.assign(song.track, {
+                            ctx,
+                            member: _member,
+                            file: isFile,
+                            radioStation,
+                            fileMetadata,
+                            silent: ctx.subcommands[0] === 'silently',
+                            isRadio: ctx.subcommands[0] === 'radio'
+                        });
+
+                        const window = new CMPlayerWindow()
+                            .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                            .windowTitle(`Added to queue - ${_member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
+                            .trackTitle(`[${song.track.title}](${song.track.url})`)
+                            .trackImage('small', song.track.thumbnail)
+                            .setFooter(`${_member.user.globalName} - ${_member.user.tag.replace(/#0{1,1}$/, '')}`, _member.user.avatarURL({ dynamic: true }));
+
+                        if (song.metadata?.silent) {
+                            window.windowTitle(`Added silently to the queue - ${_member.voice.channel.name}`, guild.iconURL({ dynamic: true }));
+                        }
+
+                        if (queue && queue.tracks?.toArray().length > 0) {
+                            window.addFields([{
+                                name: ':bookmark_tabs: Position',
+                                value: `${queue.tracks.toArray().indexOf(song)}` // Assuming the queue was just made.
+                            }]);
+                        }
+
+                        if (ctx.subcommands[0] === 'now' && queue) {
+                            try {
+                                if (queue.isPlaying()) {
+                                    if (vc.members.size <= 3 || dj) {
+                                        queue.node.skip();
+                                    } else {
+                                        return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
+                                    }
+                                }
+                            } catch {}
+                        }
+
+                        return ctx.send({ embeds: [window._embed] });
+                    });
             };
 
             switch (ctx.subcommands[0]) {
             case 'track': {
                 await boogie(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''));
+                break;
+            }
+
+            case 'now': {
+                await boogie(ctx.options.now?.query.replace(/(^\\<+|\\>+$)/g, ''));
                 break;
             }
 
@@ -429,15 +480,6 @@ class CommandPlay extends SlashCommand {
                         30 * 1000
                     );
                 }
-                }
-                break;
-            }
-
-            case 'now': {
-                if (vc.members.size <= 3 || dj) {
-                    await boogie(ctx.options.now.query.replace(/(^\\<+|\\>+$)/g, ''));
-                } else {
-                    return this.client.ui.sendPrompt(ctx, 'NOT_ALONE');
                 }
                 break;
             }
