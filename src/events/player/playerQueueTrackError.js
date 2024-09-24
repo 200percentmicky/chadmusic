@@ -27,7 +27,7 @@ module.exports = class ListenerPlayerQueueTrackError extends Listener {
     }
 
     async exec (queue, error, track) {
-        const message = track.metadata?.message || track.metadata?.ctx;
+        const message = track.message || track.ctx;
 
         // Cleaning up the error message. Some extractors output the
         // entire error stack in its message instead of a simple output.
@@ -59,6 +59,6 @@ module.exports = class ListenerPlayerQueueTrackError extends Listener {
             }
         ]);
 
-        queue.channel.send({ embeds: [embed] });
+        queue.metadata?.textChannel.send({ embeds: [embed] });
     }
 };
