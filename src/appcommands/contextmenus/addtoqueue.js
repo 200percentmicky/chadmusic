@@ -16,8 +16,6 @@
 
 const { SlashCommand, ApplicationCommandType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
-const ytdl = require('@distube/ytdl-core');
-const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 
 class ContextMenuAddToQueue extends SlashCommand {

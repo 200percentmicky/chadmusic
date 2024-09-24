@@ -19,9 +19,7 @@ const {
     EmbedBuilder,
     PermissionsBitField
 } = require('discord.js');
-const ytdl = require('@distube/ytdl-core');
 const AutoComplete = require('youtube-autocomplete');
-const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const CMError = require('../../lib/CMError');
 

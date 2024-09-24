@@ -16,8 +16,6 @@
 
 const { Command } = require('discord-akairo');
 const { PermissionsBitField, Message } = require('discord.js');
-const ytdl = require('@distube/ytdl-core');
-const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { hasURL } = require('../../lib/hasURL');
 const { CommandContext } = require('slash-create');
