@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **ChadMusic is being rewritten and rebranded!**
+> This project is currently undergoing a rewrite in a different repo under a new name. You can view the development of the rewrite [here](https://github.com/200percentmicky/radio-chan). From this point onward, ChadMusic is now under **maintenance mode** and will eventually be replaced with the new rewrite.
+
 <h1 align="center" style="font-weight: bold; font-style: italic;">
     <img src="docs/assets/deejaytreefiddy.png" width=250>
 </h1>
