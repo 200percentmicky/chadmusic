@@ -1,5 +1,19 @@
 # Changelog
 
+## 2024.4.1
+This is a maintenance release.
+
+!!! info "ChadMusic is being rewritten and rebranded!"
+
+    This project is currently undergoing a rewrite in a different repo under a new name. You can view the development of the rewrite [here](https://github.com/200percentmicky/radio-chan). From this point onward, ChadMusic is now under **maintenance mode** and will eventually be replaced with the new rewrite.
+
+* **Changed:** [Internal] hasExt function will now check if a file exists in Discord's CDN.
+* **Changed:** [Internal] Merged all createAgent functions into one function.
+* **Fixed:** Masked links for the Uploader field PlayerWindow showing `undefined`.
+* **Fixed:** Build errors occuring when attempting to run the build script or from running `npm install`. ([#21](https://github.com/200percentmicky/chadmusic/issues/21))
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.4.0...2024.4.1)
+
 ## 2024.4.0
 This release updates the bot to DisTube v5 and incorporates new featues and changes introduced in the new version.
 
