@@ -189,7 +189,6 @@ class ChadMusic extends AkairoClient {
 
         // YouTube
         const youtube = new YouTubePlugin({
-            cookies: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',

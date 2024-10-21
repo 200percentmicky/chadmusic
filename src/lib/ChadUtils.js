@@ -52,11 +52,9 @@ class ChadUtils {
      */
     static async createAgent (client) {
         try {
-            client.player.youtube.ytdlOptions.agent = process.env.IPV6_BLOCK
-                ? ytdl.createAgent(undefined, {
-                    localAddress: getRandomIPv6(process.env.IPV6_BLOCK)
-                })
-                : client.player.youtube.ytdlOptions.agent;
+            client.player.youtube.ytdlOptions.agent = ytdl.createAgent(client.cookies(), {
+                localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
+            });
         } catch (err) {
             this.client.logger.error(`Failed to create an agent.\n${err.stack}`);
         }
