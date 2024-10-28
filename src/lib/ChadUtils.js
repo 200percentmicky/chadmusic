@@ -55,7 +55,7 @@ class ChadUtils {
             client.player.youtube.ytdlOptions.agent = ytdl.createProxyAgent({
                 uri: process.env.PROXY ?? undefined,
                 localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
-            }, client.cookies());
+            });
         } catch (err) {
             this.client.logger.error(`Failed to create an agent.\n${err.stack}`);
         }
