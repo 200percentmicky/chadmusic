@@ -74,7 +74,6 @@ module.exports = class CommandPlaylistAdd extends Command {
             else return this.client.ui.reply(message, 'no', `\`${args.name}\` is not your playlist.`);
         }
 
-        // TODO: Revert to adding one track instead of multiples.
         if (args.track ?? player) {
             message.channel.sendTyping();
 
@@ -84,13 +83,9 @@ module.exports = class CommandPlaylistAdd extends Command {
                 try {
                     track = await ytdl.getInfo(args.track?.href?.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url);
                 } catch {
-                    for (const p of this.client.player.extractorPlugins) {
-                        if (p.validate(args.track?.href?.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url)) {
-                            track = await p.resolve(args.track?.href?.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url, {
-                                member: message.member
-                            });
-                        }
-                    }
+                    track = await this.client.player.ytdlp.resolve(args.track?.href?.replace(/(^\<+|\>+$)/g, '') ?? player.songs[0].url, {
+                        member: message.member
+                    });
                 }
 
                 const trackInfo = {

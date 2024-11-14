@@ -201,17 +201,15 @@ class CommandPlaylist extends SlashCommand {
             if (ctx.options.add.track ?? player) {
                 try {
                     let track;
+
                     try {
                         track = await ytdl.getInfo(ctx.options.add.track ?? player.songs[0].url);
                     } catch {
-                        for (const p of this.client.player.extractorPlugins) {
-                            if (p.validate(ctx.options.add.track ?? player)) {
-                                track = await p.resolve(ctx.options.add.track ?? player.songs[0].url, {
-                                    member
-                                });
-                            }
-                        }
+                        track = await this.client.player.ytdlp.resolve(ctx.options.add.track ?? player.songs[0].url, {
+                            member
+                        });
                     }
+
                     const trackInfo = {
                         title: track.videoDetails?.title ?? track.name,
                         url: track.videoDetails?.video_url ?? track.url,

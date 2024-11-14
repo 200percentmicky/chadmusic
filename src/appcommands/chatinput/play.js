@@ -449,7 +449,8 @@ class CommandPlay extends SlashCommand {
 
                     const playlist = await this.client.player.createCustomPlaylist(songs, {
                         member: _member,
-                        properties: { name: ctx.options.playlist.name }
+                        name: ctx.options.playlist.name,
+                        parallel: true
                     });
 
                     await boogie(playlist);
