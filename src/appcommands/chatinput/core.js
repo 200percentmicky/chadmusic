@@ -579,6 +579,7 @@ class CommandCore extends SlashCommand {
             Node.js :: ${process.version}
             Discord.js :: ${Discord.version}
             DisTube :: ${player.version}
+            Akairo Framework :: ${akairo.version}
             slash-create :: ${sc.version}
             Voice Connections :: ${this.client.vc.voices.collection.size}
             Uptime :: ${prettyms(this.client.uptime, { verbose: true })}
