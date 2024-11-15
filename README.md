@@ -1,10 +1,3 @@
-> [!IMPORTANT]
-> **Update 10/10/2024**
->
-> A while ago, I previously stated that ChadMusic was going to be rewritten and rebranded. For now, I've decided to vault the rewrite for the time being and resume active development on this repository. I may return to rewriting the bot in the future, but it will be done on this repository in a seperate branch. I probably won't rebrand the project or anything of that nature since it's not really necessary to do so.
->
-> In regards to the `Sign in to confirm you're not a bot` and `Status code: 403` errors, I'm well aware that this is an ongoing issue. As of right now, providing your cookies in the `cookies.json` file will no longer work if this error occurs. I will be implementing a fix for it in the future, but right now it's currently not my top priority to implement a fix for it at this time. If you have a valid IPv6 range address, try utilizing IP rotation for now.
-
 <h1 align="center" style="font-weight: bold; font-style: italic;">
     <img src="docs/assets/deejaytreefiddy.png" width=250>
 </h1>
