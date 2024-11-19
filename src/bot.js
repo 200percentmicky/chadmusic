@@ -193,7 +193,13 @@ class ChadMusic extends AkairoClient {
                 quality: 'highestaudio',
                 filter: 'audioonly',
                 dlChunkSize: 25000,
-                highWaterMark: 1024
+                highWaterMark: 1024,
+                playerClients: [
+                    'IOS',
+                    'WEB_CREATOR',
+                    'ANDROID',
+                    'WEB'
+                ]
             }
         });
 
