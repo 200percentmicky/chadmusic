@@ -138,7 +138,7 @@ class CommandSearch extends SlashCommand {
 
         let results;
         try {
-            results = await this.client.player.youtube.search(ctx.options.query);
+            results = await this.client.player.soundcloud.search(ctx.options.query);
         } catch (err) {
             if (err.name === 'DisTubeError [NO_RESULT]') {
                 return this.client.ui.reply(ctx, 'error', `No results found for ${ctx.options.query}`);

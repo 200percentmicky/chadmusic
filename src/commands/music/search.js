@@ -132,7 +132,7 @@ module.exports = class CommandSearch extends Command {
 
         let results;
         try {
-            results = await this.client.player.youtube.search(args.query);
+            results = await this.client.player.soundcloud.search(args.query);
         } catch (err) {
             if (err.name === 'DisTubeError [NO_RESULT]') {
                 return this.client.ui.reply(message, 'error', `No results found for ${args.query}`);
