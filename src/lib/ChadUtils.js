@@ -57,7 +57,7 @@ class ChadUtils {
                 localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
             });
         } catch (err) {
-            this.client.logger.error(`Failed to create an agent.\n${err.stack}`);
+            client.logger.error(`Failed to create an agent.\n${err.stack}`);
         }
     }
 
