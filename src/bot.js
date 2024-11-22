@@ -189,6 +189,7 @@ class ChadMusic extends AkairoClient {
 
         // YouTube
         const youtube = new YouTubePlugin({
+            cookies: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
                 filter: 'audioonly',
@@ -205,7 +206,6 @@ class ChadMusic extends AkairoClient {
 
         // yt-dlp
         const ytdlp = new YtDlpPlugin({
-            cookies: this.cookies(),
             update: process.env.UPDATE_YTDLP ?? true
         });
 
