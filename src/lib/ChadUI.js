@@ -321,10 +321,18 @@ class ChadUI {
      * @returns {Message} The overall bug report.
      */
     static recordError (client, command, title, error) { // TODO: Remove 'type'.
-        const errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
-        if (!errorChannel) return;
+        if (process.env.BUG_CHANNEL === 'false') return;
 
-        return errorChannel.send({ content: `**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error.stack}\`\`\`` });
+        let errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
+        if (!errorChannel) errorChannel = client.owner;
+
+        const errorContent = `${process.env.EMOJI_WARN || ':warning:'} An error has occured in the application. Please report this to the developer.\n\n**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error.stack ?? 'N/A'}\`\`\``;
+
+        try {
+            return errorChannel.send({ content: `${errorContent}` });
+        } catch {
+            this.client.logger.warn('Cannot send error report to specified bug channel.');
+        }
     }
 }
 
