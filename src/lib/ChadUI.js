@@ -312,13 +312,14 @@ class ChadUI {
     }
 
     /**
-     * Sends an error report to the given bug reports channel, if one was provided in the `.env` file.
+     * Sends an error report to the bot owner or to a given bug reports channel, if one
+     * was provided in the `.env` file.
      *
-     * @param {Client} client An instance of `Discord.Client`
-     * @param {string} command [Optional] The command of the bug report.
+     * @param {Client} client Discord client
+     * @param {string} command The command that errored.
      * @param {string} title The title of the bug report.
      * @param {Error} error The error of the bug report.
-     * @returns {Message} The overall bug report.
+     * @returns {Message}
      */
     static recordError (client, command, title, error) { // TODO: Remove 'type'.
         if (process.env.BUG_CHANNEL === 'false') return;
