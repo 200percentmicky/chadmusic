@@ -27,7 +27,9 @@ const {
     PermissionsBitField,
     ChatInputCommandInteraction,
     InteractionResponse,
-    EmbedBuilder
+    EmbedBuilder,
+    ButtonBuilder,
+    ButtonStyle
 } = require('discord.js');
 const { Queue } = require('distube');
 const { CommandContext, Member } = require('slash-create');
@@ -321,16 +323,34 @@ class ChadUI {
      * @param {Error} error The error of the bug report.
      * @returns {Message}
      */
-    static recordError (client, command, title, error) { // TODO: Remove 'type'.
+    static systemMessage (client, message, command, error) { // TODO: Remove 'type'.
         if (process.env.BUG_CHANNEL === 'false') return;
 
         let errorChannel = client.channels.cache.get(process.env.BUG_CHANNEL);
         if (!errorChannel) errorChannel = client.owner;
 
-        const errorContent = `${process.env.EMOJI_WARN || ':warning:'} An error has occured in the application. Please report this to the developer.\n\n**${title}**${command ? ` in \`${command}\`` : ''}\n\`\`\`js\n${error.stack ?? 'N/A'}\`\`\``;
+        const msg = `${message}${command ? `\n- Command: \`${command}\`` : ''}${error ? `\n\`\`\`js\n${error}\`\`\`\n\`\`\`js\n${error.stack ?? 'N/A'}\`\`\`` : undefined}`;
+
+        let components = [];
+        if (error) {
+            const urlGithub = new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://github.com/200percentmicky/chadmusic')
+                .setLabel('GitHub');
+
+            const support = new ButtonBuilder()
+                .setStyle(ButtonStyle.Link)
+                .setURL('https://discord.com/invite/qQuJ9YQ')
+                .setLabel('Support Server');
+
+            const actionRow = new ActionRowBuilder()
+                .addComponents([urlGithub, support]);
+
+            components = [actionRow];
+        }
 
         try {
-            return errorChannel.send({ content: `${errorContent}` });
+            return errorChannel.send({ content: `${msg}`, components });
         } catch {
             this.client.logger.warn('Cannot send error report to specified bug channel.');
         }

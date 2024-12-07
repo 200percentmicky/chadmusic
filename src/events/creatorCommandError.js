@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class ListenerCreatorCommandError extends Listener {
     constructor () {
@@ -33,25 +32,8 @@ module.exports = class ListenerCreatorCommandError extends Listener {
             return this.client.ui.reply(ctx, 'no', 'This command cannot be used in Direct Messages.');
         }
         default: {
-            let guru = '**💢 Bruh Moment**\nSomething bad happened. Please report this to the developer.';
-
-            guru += `\`\`\`js\n${err.stack}\`\`\``;
-
-            const urlGithub = new ButtonBuilder()
-                .setStyle(ButtonStyle.Link)
-                .setURL('https://github.com/200percentmicky/chadmusic')
-                .setLabel('GitHub');
-
-            const support = new ButtonBuilder()
-                .setStyle(ButtonStyle.Link)
-                .setURL('https://discord.com/invite/qQuJ9YQ')
-                .setLabel('Support Server');
-
-            const actionRow = new ActionRowBuilder()
-                .addComponents([urlGithub, support]);
-
-            await ctx.send({ content: `${guru}`, components: [actionRow] });
-            this.client.ui.recordError(this.client, command.commandName, ':x: Slash Command Error', err);
+            await this.client.ui.custom(ctx, '💢', process.env.COLOR_ERROR, 'Bruh Moment', null, 'Something bad happened. An error report was sent to the owner.');
+            this.client.ui.systemMessage(this.client, ':x: **Slash Command Error**\nPlease report this to the developer.', command.commandName, err);
             this.client.logger.error(`[SlashCreator] Error in slash command "${command.commandName}"\n${err.stack}`);
         }
         }

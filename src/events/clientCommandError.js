@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
-const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class ListenerClientCommandError extends Listener {
     constructor () {
@@ -26,25 +25,8 @@ module.exports = class ListenerClientCommandError extends Listener {
     }
 
     async exec (error, message, command) {
-        let guru = '💢 **Bruh Moment**\nSomething bad happened. Please report this to the developer.';
-
-        guru += `\`\`\`js\n${error.stack}\`\`\``;
-
-        const urlGithub = new ButtonBuilder()
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://github.com/200percentmicky/chadmusic')
-            .setLabel('GitHub');
-
-        const support = new ButtonBuilder()
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://discord.com/invite/qQuJ9YQ')
-            .setLabel('Support Server');
-
-        const actionRow = new ActionRowBuilder()
-            .addComponents([urlGithub, support]);
-
-        await message.reply({ content: `${guru}`, components: [actionRow] });
-        this.client.ui.recordError(this.client, command, ':x: Command Error', error);
+        await this.client.ui.custom(message, '💢', process.env.COLOR_ERROR, 'Bruh Moment', null, 'Something bad happened. An error report was sent to the owner.');
+        this.client.ui.systemMessage(this.client, ':x: **Command Error**\nPlease report this to the developer.', command, error);
         this.client.logger.error(`[Client] Error in command "${command}"\n${error.stack}`);
     }
 };
