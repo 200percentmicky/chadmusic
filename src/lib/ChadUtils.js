@@ -52,10 +52,16 @@ class ChadUtils {
      */
     static async createAgent (client) {
         try {
-            client.player.youtube.ytdlOptions.agent = ytdl.createProxyAgent({
-                uri: process.env.PROXY ?? undefined,
-                localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
-            });
+            if (process.env.PROXY) {
+                client.player.youtube.ytdlOptions.agent = ytdl.createProxyAgent({
+                    uri: process.env.PROXY ?? '',
+                    localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
+                }, client.cookies());
+            } else {
+                client.player.youtube.ytdlOptions.agent = ytdl.createAgent(client.cookies(), {
+                    localAddress: process.env.IPV6_BLOCK ? getRandomIPv6(process.env.IPV6_BLOCK) : undefined
+                });
+            }
         } catch (err) {
             client.logger.error(`Failed to create an agent.\n${err.stack}`);
         }
