@@ -74,11 +74,12 @@ const embedUI = (color, emoji, title, desc, footer) => {
  * @param {string} title The title of the message.
  * @param {GuildMember} author The author of the embed. Usually the member of a guild.
  * @param {string} desc The description of the message.
+ * @param {string} footer The footer of the message.
  * @returns The constructed message.
  */
-const stringUI = (emoji, title, desc) => {
+const stringUI = (emoji, title, desc, footer) => {
     let msgString = `${emoji} ${desc}`;
-    if (title) msgString = `${emoji} **${title}**\n${desc}`;
+    if (title) msgString = `${emoji} **${title}**\n${desc}\n-# ${footer}`;
     return msgString;
 };
 
@@ -151,7 +152,7 @@ class ChadUI {
 
             if (!embedPerms) {
                 return msg.reply({
-                    content: stringUI(embedEmoji[type], title || null, description || null),
+                    content: stringUI(embedEmoji[type], title || null, description || null, footer || null),
                     components: buttons || [],
                     ephemeral: ephemeral ?? false,
                     allowedMentions: {
@@ -224,7 +225,7 @@ class ChadUI {
 
             if (!embedPerms) {
                 return msg.reply({
-                    content: stringUI(emoji || null, title || null, description || null),
+                    content: stringUI(emoji || null, title || null, description || null, footer || null),
                     components: buttons || [],
                     ephemeral: ephemeral ?? false,
                     allowedMentions: {
