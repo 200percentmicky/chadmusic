@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2024.5.0
-This release that adds support for proxy connections, fixes custom playlist support, and updated internal functions to errors more convenient to the bot owner.
+This release that adds support for proxy connections, fixes custom playlist support, and updated internal functions to make it more convenient to the bot owner.
 
 * **Added:** Proxy support.
 * **Added:** New environment variables.
