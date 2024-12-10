@@ -31,7 +31,8 @@ The following variables will always be available when running the command:
 * `Discord` - discord.js
 * `player` - Active player in the server, if any.
 * `queue` - Queue of active player, if any.
-* `message` - Message object
+* `message` - Message object (Prefix command only.)
+* `ctx` - Command context (Slash command only.)
 * `_` - lodash
 * `prettyBytes` - pretty-bytes
 * `prettyMs` - prettyMs
@@ -39,9 +40,9 @@ The following variables will always be available when running the command:
 * `commonTags` - common-tags
 * `Genius` - genius-lyrics
 
-!!! danger
+!!! danger "With great power comes great responsibility!"
 
-    Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know what you're doing. If someone is telling you to enable it to have you evaluate a script, you're most likely being scammed!
+    Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromised the security of your Discord bot!
 
 ### [p]help `[command]`
 <span class="badge-info">:information_source: Prefix command only</span>

@@ -30,6 +30,7 @@ Your application's public key. This is also needed to sync any slash commands on
 
 ### OWNER_ID
 <span class="badge-danger">:x: This field is deprecated.</span>
+
 The bot owner's user ID.
 
 ### IPV6_BLOCK
@@ -39,6 +40,10 @@ A IPv6 range block address for IP rotation. If you have a IPv6 range, you can us
 !!! info
 
     An address with a prefix size of `/64` is recommended, and is usually the most common address assigned by many hosting providers.
+
+### PROXY
+
+The URL or IP address used to connect to a proxy server.
 
 ## Sharding
 These fields are used to enable sharding support for your bot.
@@ -110,11 +115,11 @@ This section allows you to enable features of the bot for debugging and developm
 The guild's ID. Enabling this will turn the bot's slash commands into guild commands for the specified guild. Set to `false` to make the commands global.
 
 ### USE_EVAL
-Enables the `eval` command. With great power comes great responsibility.
+Enables the `eval` command.
 
-!!! danger
+!!! danger "With great power comes great responsibility!"
 
-    Eval can be dangerous if used improperly. You should not enable this variable, unless you know exactly what you're doing. If someone is telling you to enable the eval command to run something, you're most likely being scammed!
+    Eval can be dangerous if used improperly! You should not enable this variable, unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromised the security of your Discord bot!
 
 ### USE_CONSOLE
 Allows the bot to log to the console window.
@@ -129,6 +134,9 @@ Enables Ffmpeg debug logging.
 
 ### DELETE_INVALID_COMMANDS
 Deletes any slash commands that are no longer valid to the bot. Do not use this variable if you have multiple programs controlling one bot account.
+
+### BUG_CHANNEL
+Allows the bot to send any important system messages to the specified channel ID. If no valid channel ID is provided or left blank, system messages will be sent to the application owner instead. If this field is set to `false`, this will disable system messages.
 
 ## Adding Cookies
 Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. Also, with the new cookie system, you're not just limited to one cookie. The new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.

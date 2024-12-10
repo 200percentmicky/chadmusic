@@ -1,5 +1,30 @@
 # Changelog
 
+## 2024.5.0
+This release that adds support for proxy connections, fixes custom playlist support, and updated internal functions to errors more convenient to the bot owner.
+
+* **Added:** Proxy support.
+* **Added:** New environment variables.
+    - `PROXY`
+* **Changed:** Updated the appearance of `/core debug`.
+* **Changed:** Adding tracks into custom playlists now uses yt-dlp to resolve tracks.
+* **Changed:** Default search provider to SoundCloud in `[p]play`, `[p]playnow`, `[p]search`, `/play track`, `/play now` and `/search`
+* **Changed:** Simplified error messages of unhandled exceptions.
+    - The full stack trace is no longer shown when an unhandled error occurs. They will still be visible to the application owner.
+    - Buttons linking to the support server and GitHub repo are no logner provided in the message.
+* **Changed:** `BUG_CHANNEL` now defaults to the owner's DMs if the variable is not set, or no valid channel ID is provided.
+    - Setting `BUG_CHANNEL` to `false` will disable system messages.
+* **Fixed:** Not being able to add tracks to a custom playlist due to a breaking change in DisTube v5.
+* **Fixed:** Cookies not being applied to the correct plugin.
+* **Updated:** discord.js to 14.16.3
+* **Updated:** @discordjs/voice to 0.18.0
+* **Updated:** @distube/soundcloud to 2.0.4
+* **Updated:** @distube/youtube to 1.0.4
+* **Updated:** @distube/ytdl-core to 4.15.1
+* **Updated:** @distube/ytsr to 2.0.4
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.4.1...2024.5.0)
+
 ## 2024.4.1
 This is a maintenance release.
 
