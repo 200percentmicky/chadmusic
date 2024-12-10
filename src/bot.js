@@ -156,7 +156,7 @@ class ChadMusic extends AkairoClient {
         this.cookies = () => {
             const cookies = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'cookies.json')));
             if (cookies.length === 0) {
-                return process.env.YOUTUBE_COOKIE;
+                return [];
             } else {
                 return cookies;
             }
