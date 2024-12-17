@@ -95,7 +95,7 @@ Your Spotify application's client secret key.
 
 ### SPOTIFY_TOP_TRACKS_COUNTRY
 
-The country to use for the top artist tracks. Default is `US`. Country code must use the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) standard.
+The country to use for the top artist tracks. Default is `US`. Country code must use the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-2) standard.
 
 ### SPOTIFY_EMIT_EVENTS_AFTER_FETCHING
 <span class="badge-danger">:x: This field is deprecated.</span>
