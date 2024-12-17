@@ -45,6 +45,10 @@ A IPv6 range block address for IP rotation. If you have a IPv6 range, you can us
 
 The URL or IP address used to connect to a proxy server.
 
+### FFMPEG_PATH
+
+The filepath that contains an FFmpeg executable. If this field is not set or the specified filepath does not contain an FFmpeg executable, then the bot will use your operating system's PATH variable instead, assuming that FFmpeg was installed to the system correctly and is defined in PATH.
+
 ## Sharding
 These fields are used to enable sharding support for your bot.
 
