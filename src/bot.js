@@ -223,6 +223,9 @@ class ChadMusic extends AkairoClient {
             emitAddListWhenCreatingQueue: true,
             emitAddSongWhenCreatingQueue: true,
             emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
+            ffmpeg: {
+                path: process.env.FFMPEG_PATH ?? undefined
+            },
             nsfw: true // Being handled on a per guild basis, not client-wide.
         });
         this.vc = this.player.voices; // @discordjs/voice
