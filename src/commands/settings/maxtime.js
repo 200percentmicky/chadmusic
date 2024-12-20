@@ -48,7 +48,7 @@ module.exports = class CommandMaxTime extends Command {
         }
 
         const notation = toMilliseconds(time);
-        if (!notation) return message.error(`\`${time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
+        if (!notation) return this.client.ui.reply(message, 'error', `\`${time}\` doesn't parse to a time format. The format must be \`xx:xx\`.`);
 
         await this.client.settings.set(message.guild.id, notation, 'maxTime');
         return this.client.ui.reply(message, 'ok', `Max time has been set to \`${time}\``);
