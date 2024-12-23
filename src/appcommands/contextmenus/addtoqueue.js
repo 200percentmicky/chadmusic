@@ -109,9 +109,17 @@ class ContextMenuAddToQueue extends SlashCommand {
         }
 
         try {
-            const requested = ctx.targetMessage.content;
+            let requested;
 
-            if (!requested) return this.client.ui.reply(ctx, 'error', 'Cannot add to the queue because the message doesn\'t contain any content to search for.');
+            if (ctx.targetMessage.embeds[0]) {
+                requested = ctx.targetMessage.embeds[0].title ?? ctx.targetMessage.embeds[0].description;
+            } else {
+                requested = ctx.targetMessage.content ?? undefined;
+            }
+
+            if (!requested) {
+                return this.client.ui.reply(ctx, 'warn', 'The message doesn\'t contain any content to search for.');
+            }
 
             this.client.utils.createAgent(this.client);
 
