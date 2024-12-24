@@ -153,6 +153,10 @@ class ChadUtils {
         }
     }
 
+    // *******************************************************
+    // The rest of the functions below is just regex checking.
+    // *******************************************************
+
     /**
      * Matches a regular expression with a string.
      * @param {RegExp} regex The regex to parse.
@@ -184,6 +188,12 @@ class ChadUtils {
     static hasExt (url) {
         const extPattern = /\.[a-zA-Z0-9]{1,5}$/i;
         return this.#matchRegex(extPattern, url) || url.includes('cdn.discord');
+    }
+
+    static isYouTubeLink (requested) {
+        // eslint-disable-next-line no-useless-escape
+        const ytPattern = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed|shorts\/|v\/)?)([\w\-]+)(\S+)?$/gm;
+        return this.#matchRegex(ytPattern, requested);
     }
 
     /**

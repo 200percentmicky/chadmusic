@@ -288,7 +288,8 @@ class ChadUI {
             MISSING_PERMISSIONS: `You need the **${extra}** permission(s) to use that command.`,
             WRONG_TEXT_CHANNEL_MUSIC: `Music commands must be used in <#${extra}>`,
             OWNER_ONLY: 'This command can only be used by the bot owner.',
-            NSFW_ONLY: 'This command must be used in NSFW channels.'
+            NSFW_ONLY: 'This command must be used in NSFW channels.',
+            YT_NOT_ALLOWED: 'Support for YouTube is disabled.'
         };
 
         const promptType = {
@@ -308,7 +309,8 @@ class ChadUI {
             MISSING_PERMISSIONS: 'no',
             WRONG_TEXT_CHANNEL_MUSIC: 'no',
             OWNER_ONLY: 'no',
-            NSFW_ONLY: 'no'
+            NSFW_ONLY: 'no',
+            YT_NOT_ALLOWED: 'no'
         };
 
         return this.reply(msg, promptType[prompt], promptMessage[prompt]);

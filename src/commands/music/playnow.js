@@ -99,6 +99,13 @@ module.exports = class CommandPlayNow extends Command {
             else message.channel.sendTyping();
 
             try {
+                // eslint-disable-next-line no-useless-escape
+                if (this.client.utils.isYouTubeLink(text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
+                    if (!this.client.settings.get('global', 'allowYouTube')) {
+                        return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
+                    }
+                }
+
                 this.client.utils.createAgent(this.client);
 
                 // eslint-disable-next-line no-useless-escape

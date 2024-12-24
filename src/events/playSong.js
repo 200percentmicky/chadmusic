@@ -27,6 +27,19 @@ module.exports = class ListenerPlaySong extends Listener {
     }
 
     async exec (queue, song) {
+        const message = song.metadata?.message || song.metadata?.ctx;
+
+        if (this.client.utils.isYouTubeLink(song.url)) {
+            if (!this.client.settings.get('global', 'allowYouTube')) {
+                if (!queue.songs[1]) {
+                    this.client.player.stop(queue.textChannel.guild);
+                } else {
+                    this.client.player.skip(queue.textChannel.guild);
+                }
+                return this.client.ui.reply(message, 'no', `Unable to play **[${song.name}](${song.url})** because support for YouTube is disabled.`);
+            }
+        }
+
         // The event is being called way too quickly for metadata to be parsed correctly
         // when a player is created. Using a setTimeout() here will allow for metadata to be parsed correctly.
         setTimeout(async () => {

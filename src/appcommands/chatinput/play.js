@@ -257,6 +257,12 @@ class CommandPlay extends SlashCommand {
             let isFile = false;
 
             const boogie = async (requested) => {
+                if (this.client.utils.isYouTubeLink(requested)) {
+                    if (!this.client.settings.get('global', 'allowYouTube')) {
+                        return this.client.ui.sendPrompt(ctx, 'YT_NOT_ALLOWED');
+                    }
+                }
+
                 /* eslint-disable-next-line no-useless-escape */
                 await this.client.player.play(vc, requested, {
                     textChannel: channel,

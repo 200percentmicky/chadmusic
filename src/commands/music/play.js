@@ -125,6 +125,12 @@ module.exports = class CommandPlay extends Command {
         else message.channel.sendTyping();
 
         try {
+            if (this.client.utils.isYouTubeLink(track ?? message.attachments.first().url)) {
+                if (!this.client.settings.get('global', 'allowYouTube')) {
+                    return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
+                }
+            }
+
             this.client.utils.createAgent(this.client);
 
             await this.client.player.play(vc, track ?? message.attachments.first().url, {
