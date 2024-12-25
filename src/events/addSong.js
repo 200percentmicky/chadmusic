@@ -125,7 +125,9 @@ module.exports = class ListenerAddSong extends Listener {
 
         // Resize album artwork if the track is from SoundCloud.
         if (song.source === 'soundcloud') {
-            song.thumbnail = song.thumbnail.replace('-large', '-t500x500');
+            try {
+                song.thumbnail = song.thumbnail?.replace('-large', '-t500x500');
+            } catch {}
         }
 
         if (!queue.songs[1]) return; // Don't send to channel if a player was created.
