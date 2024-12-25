@@ -15,12 +15,13 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { CommandHandlerEvent } = require('discord-akairo/dist/src/util/Constants');
 
 module.exports = class ListenerCooldown extends Listener {
     constructor () {
         super('cooldown', {
             emitter: 'commandHandler',
-            event: 'cooldown'
+            event: CommandHandlerEvent.COOLDOWN
         });
     }
 

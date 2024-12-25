@@ -15,13 +15,14 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Listener } = require('discord-akairo');
+const { CommandHandlerEvent } = require('discord-akairo/dist/src/util/Constants');
 const { ChannelType } = require('discord.js');
 
 module.exports = class CommandBlockedListener extends Listener {
     constructor () {
         super('commandBlocked', {
             emitter: 'commandHandler',
-            event: 'commandBlocked'
+            event: CommandHandlerEvent.COMMAND_BLOCKED
         });
     }
 
