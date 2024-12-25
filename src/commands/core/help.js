@@ -114,15 +114,11 @@ module.exports = class CommandHelp extends Command {
                 const commandEmbed = new EmbedBuilder()
                     .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                     .setAuthor({
-                        name: 'ChadMusic - The Chad Music Bot',
+                        name: `${this.client.user.username} - ChadMusic Help`,
                         iconURL: this.client.user.avatarURL({ dynamic: true })
                     })
                     .setDescription(`\`\`\`\n${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\`\`\`\n**${command.description.text}**\n${command.description.details ?? ''}`)
-                    .setTimestamp()
-                    .setFooter({
-                        text: '<Required> • [Optional]',
-                        iconURL: message.member.user.avatarURL({ dynamic: true })
-                    });
+                    .setTimestamp();
 
                 const commandFields = [];
 
@@ -169,7 +165,7 @@ module.exports = class CommandHelp extends Command {
         const helpEmbed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: 'ChadMusic - The Chad Music Bot',
+                name: `${this.client.user.username} - ChadMusic Help`,
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setTimestamp()
@@ -194,7 +190,7 @@ module.exports = class CommandHelp extends Command {
 
         helpFields.push({
             name: 'Slash Commands',
-            value: `The following slash commands are available to use.\n${creatorCommands.join(' ')}`
+            value: `The following slash commands are available to use. Type \`/\` for a full list of slash commands.\n${creatorCommands.join(' ')}`
         });
 
         helpEmbed.addFields(helpFields);
