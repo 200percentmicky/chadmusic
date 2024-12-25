@@ -14,43 +14,34 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const { Command } = require('discord-akairo');
+const { CommandContext } = require('slash-create');
 
-class CommandTest extends SlashCommand {
-    constructor (creator) {
-        super(creator, {
-            name: 'test',
-            description: 'Test command. Pay no heed.',
-            options: [
+module.exports = class CommandTest extends Command {
+    constructor () {
+        super('test', {
+            aliases: ['test'],
+            description: {
+                text: 'Just a normal test command. Also pay no heed.'
+            },
+            category: '💻 Core',
+            args: [
                 {
-                    type: CommandOptionType.SUB_COMMAND,
-                    name: 'normal',
-                    description: 'Just a normal test command. Also pay no heed.'
-                },
-                {
-                    type: CommandOptionType.SUB_COMMAND,
-                    name: 'error',
-                    description: 'bruh moment'
+                    id: 'error',
+                    match: 'rest'
                 }
             ]
         });
-
-        this.filePath = __filename;
     }
 
-    async run (ctx) {
-        switch (ctx.subcommands[0]) {
-        case 'normal': {
-            return this.client.ui.reply(ctx, 'info', 'lol');
-        }
-
-        case 'error': {
+    async exec (message, args) {
+        if (args.error === 'error') {
             const e = new Error('I did an oopsie.');
             e.name = 'GuruMeditationTest';
             throw e;
-        }
+        } else {
+            return this.client.util.reply(message, 'info', 'lol');
+            )
         }
     }
-}
-
-module.exports = CommandTest;
+};
