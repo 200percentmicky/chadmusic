@@ -15,7 +15,6 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { CommandContext } = require('slash-create');
 
 module.exports = class CommandTest extends Command {
     constructor () {
@@ -41,7 +40,6 @@ module.exports = class CommandTest extends Command {
             throw e;
         } else {
             return this.client.util.reply(message, 'info', 'lol');
-            )
         }
     }
 };
