@@ -39,6 +39,7 @@ module.exports = class CommandGlobalSettings extends Command {
         // Global Settings
         const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
         const streamType = settings.get('global', 'streamType'); // Audio Encoder
+        const allowYouTube = settings.get('global', 'allowYouTube'); // Allow YouTube
 
         const encoderType = {
             0: 'Opus',
@@ -55,6 +56,7 @@ module.exports = class CommandGlobalSettings extends Command {
             .setDescription(stripIndents`
                 **Audio Encoder:** ${encoderType[streamType]}
                 **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
+                **Allow YouTube:** ${allowYouTube === true ? 'Yes' : 'No'}
                 `
             )
             .setTimestamp();

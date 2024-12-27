@@ -384,6 +384,19 @@ module.exports = class CommandSettings extends SlashCommand {
                         },
                         {
                             type: CommandOptionType.SUB_COMMAND,
+                            name: 'allowyoutube',
+                            description: 'Toggles the ability to allow tracks from YouTube to be added to the player.',
+                            options: [
+                                {
+                                    type: CommandOptionType.BOOLEAN,
+                                    name: 'toggle',
+                                    description: 'Enables or disables the feature.',
+                                    required: true
+                                }
+                            ]
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
                             name: 'streamtype',
                             description: 'Selects which audio encoder the bot should use during streams.',
                             options: [
@@ -429,6 +442,7 @@ module.exports = class CommandSettings extends SlashCommand {
         // Global Settings
         const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
         const streamType = settings.get('global', 'streamType'); // Audio Encoder
+        const allowYouTube = settings.get('global', 'allowYouTube'); // Allow YouTube
 
         const encoderType = {
             0: 'Opus',
@@ -478,6 +492,18 @@ module.exports = class CommandSettings extends SlashCommand {
                 break;
             }
 
+            case 'allowyoutube': {
+                const toggle = ctx.options.global.allowyoutube.toggle;
+
+                await settings.set('global', toggle, 'emitNewSongOnly');
+                this.client.player.options.emitNewSongOnly = toggle;
+                this.client.ui.reply(ctx, 'ok', toggle === true
+                    ? 'Enabled YouTube support.'
+                    : 'Disabled YouTube support.'
+                );
+                break;
+            }
+
             case 'streamtype': {
                 const encoderType = {
                     opus: 0,
@@ -502,6 +528,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     .setDescription(stripIndents`
                         **Audio Encoder:** ${encoderType[streamType]}
                         **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
+                        **Allow YouTube:** ${allowYouTube === true ? 'Yes' : 'No'}
                         `
                     )
                     .setTimestamp();
