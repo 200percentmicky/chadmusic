@@ -103,11 +103,8 @@ class ChadMusic extends AkairoClient {
 
         this.defaultGlobalSettings = {
             emitNewSongOnly: true,
-            emptyCooldown: 60,
-            leaveOnStop: true,
-            leaveOnEmpty: true,
-            leaveOnFinish: true,
             streamType: 0,
+            allowYouTube: false,
             emojis: {
                 message: {
                     ok: ':white_check_mark:',
