@@ -112,7 +112,8 @@ class ContextMenuAddToQueue extends SlashCommand {
             let requested;
 
             if (ctx.targetMessage.embeds[0]) {
-                requested = ctx.targetMessage.embeds[0].title ?? ctx.targetMessage.embeds[0].description;
+                const embed = ctx.targetMessage.embeds;
+                requested = embed[0].url ?? embed[0].title ?? embed[0].description;
             } else {
                 requested = ctx.targetMessage.content ?? undefined;
             }
