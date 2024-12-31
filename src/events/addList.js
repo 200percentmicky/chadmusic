@@ -36,9 +36,13 @@ module.exports = class ListenerAddList extends Listener {
         const window = new CMPlayerWindow()
             .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .windowTitle(`Playlist added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
-            .trackTitle(playlist.url ? `[${playlist.name}](${playlist.url})` : `${playlist.name}`)
             .trackImage('small', playlist.thumbnail)
             .setFooter(`${playlist.user.globalName} - ${playlist.user.tag.replace(/#0{1,1}$/, '')}`, playlist.user.avatarURL({ dynamic: true }));
+
+        if (playlist.url) {
+            window.trackTitle(playlist.name);
+            window.trackURL(playlist.url);
+        }
 
         const embedFields = [];
 

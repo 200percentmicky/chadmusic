@@ -64,7 +64,16 @@ class CMPlayerWindow {
      * @param {string} title
      */
     trackTitle (title) {
-        this._embed.description += `### ${title}\n`;
+        this._embed.title = title.substring(0, 252) + '...';
+        return this;
+    }
+
+    /**
+     * The playing track's URL.
+     * @param {string} url
+     */
+    trackURL (url) {
+        this._embed.url = url;
         return this;
     }
 

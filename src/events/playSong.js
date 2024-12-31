@@ -58,7 +58,8 @@ module.exports = class ListenerPlaySong extends Listener {
             const window = new CMPlayerWindow()
                 .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
                 .windowTitle('Now playing', guild.iconURL({ dynamic: true }))
-                .trackTitle(`[${song.name}](${song.url})`)
+                .trackTitle(song.name)
+                .trackURL(song.url)
                 .trackImage(thumbnailSize, song.thumbnail);
 
             const songNowFields = [];

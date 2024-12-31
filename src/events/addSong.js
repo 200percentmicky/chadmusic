@@ -135,7 +135,8 @@ module.exports = class ListenerAddSong extends Listener {
         const window = new CMPlayerWindow()
             .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .windowTitle(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
-            .trackTitle(`[${song.name}](${song.url})`)
+            .trackTitle(song.name)
+            .trackURL(song.url)
             .trackImage('small', song.thumbnail)
             .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }))
             .addFields([{

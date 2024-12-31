@@ -65,7 +65,8 @@ module.exports = class CommandNowPlaying extends Command {
         let window = new CMPlayerWindow()
             .color(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .windowTitle('Currently playing', message.guild.iconURL({ dynamic: true }))
-            .trackTitle(`[${song.name}](${song.url})`)
+            .trackTitle(song.name)
+            .trackURL(song.url)
             .trackImage(thumbnailSize, song.thumbnail);
 
         if (song.isLive || song.metadata?.isRadio) {
