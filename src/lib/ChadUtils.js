@@ -136,20 +136,35 @@ class ChadUtils {
     }
 
     /**
-     * Attempts to execute a standard prefix command.
+     * Attempts to execute a standard prefix command from a CommandContext.
      *
-     * @param {Message|CommandContext} message The message object or an instance of `CommandContext`.
+     * @param {Client} client Discord client.
+     * @param {CommandContext} ctx The message object or an instance of `CommandContext`.
      * @param {string} commandName The name of the command.
      * @param {Object} args Arguments to pass to the command.
      * @returns The execution of the prefix command.
      * @throws Command not found.
      */
-    static async runPrefixCommand (message, commandName, args) {
+    static async runPrefixCommand (client, ctx, commandName, args = {}) {
+        if (!ctx.deferred) {
+            throw new CMError('NOT_DEFERRED', null, 'Interaction must be deferred.');
+        }
+
+        const guild = await client.guilds.fetch(ctx.guildID);
+        const member = await guild.members.fetch(ctx.user.id);
+        const channel = await guild.channels.fetch(ctx.channelID);
+        const message = await ctx.fetch().then(m => { channel.messages.fetch(m.id); });
+
+        message.author = member.user;
+        message.react = (emoji) => {
+            return ctx.send(emoji, { ephemeral: true });
+        };
+
         try {
-            const command = await message.channel.client.commands.findCommand(commandName);
-            return command.exec(message, args);
-        } catch {
-            throw new CMError('COMMAND_NOT_FOUND', null, `Command ${commandName} not found.`);
+            const command = await client.commands.findCommand(commandName);
+            return client.commands.runCommand(message, command, args);
+        } catch (err) {
+            throw new CMError('COMMAND_ERROR', null, `Error finding or running ${commandName}: ${err}`);
         }
     }
 
