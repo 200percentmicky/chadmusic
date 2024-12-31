@@ -82,7 +82,7 @@ class CommandPlayer extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'earrape',
-                    description: "Sets the player's volume to 69420% 😂👌👌. Reverts to defaults if the player's volume is over 5000%."
+                    description: "Sets the player's volume to 69420% 😂👌. Reverts to defaults if the player's volume is over 5000%."
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
@@ -427,13 +427,13 @@ class CommandPlayer extends SlashCommand {
             const defaultVolume = this.client.settings.get(guild.id, 'defaultVolume', 100);
             if (volume >= 5000) {
                 this.client.player.setVolume(guild, defaultVolume);
-                return this.client.ui.reply(ctx, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`);
+                return this.client.ui.reply(ctx, 'ok', `Volume has been set to **${defaultVolume}%**. 😌🙏`);
             } else {
                 this.client.player.setVolume(guild, earrape);
                 return this.client.ui.reply(
                     ctx,
                     'warn',
-                    `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,
+                    `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌`,
                     null,
                     'Volumes exceeding 200% may cause damage to self and equipment.'
                 );

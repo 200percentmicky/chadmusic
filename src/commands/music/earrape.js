@@ -69,13 +69,13 @@ module.exports = class CommandEarrape extends Command {
         const defaultVolume = this.client.settings.get(message.guild.id, 'defaultVolume', 100);
         if (volume >= 5000) {
             this.client.player.setVolume(message, defaultVolume);
-            return this.client.ui.reply(message, 'ok', `Volume has been set to **${defaultVolume}%**. 😌😏`);
+            return this.client.ui.reply(message, 'ok', `Volume has been set to **${defaultVolume}%**. 😌🙏`);
         } else {
             this.client.player.setVolume(message, earrape);
             return this.client.ui.reply(
                 message,
                 'warn',
-                `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌👌`,
+                `🔊💢💀 Volume has been set to **${earrape}%**. 😂👌`,
                 null,
                 'Volumes exceeding 200% may cause damage to self and equipment.'
             );

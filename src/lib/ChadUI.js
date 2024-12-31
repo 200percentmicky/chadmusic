@@ -258,7 +258,7 @@ class ChadUI {
             200: ':loud_sound::zap:',
             250: ':loud_sound::zap::warning:'
         };
-        if (queue.volume >= 250) return ':loud_sound::sob::ok_hand:';
+        if (queue.volume >= 750) return ':loud_sound::sob::ok_hand:';
         return volumeIcon[Math.ceil(queue.volume / 50) * 50];
     }
 
