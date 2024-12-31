@@ -64,7 +64,7 @@ class CMPlayerWindow {
      * @param {string} title
      */
     trackTitle (title) {
-        this._embed.title = title.substring(0, 252) + '...';
+        this._embed.title = title.length > 256 ? title.substring(0, 252) + '...' : title;
         return this;
     }
 
