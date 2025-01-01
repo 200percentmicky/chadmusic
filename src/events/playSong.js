@@ -135,7 +135,7 @@ module.exports = class ListenerPlaySong extends Listener {
             }
 
             const status = `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.displayName} - ${song.user.username})`;
-            await channel.client.utils.setVcStatus(vc, status.length > 500 ? status.substring(0, 496) + '...' : status);
+            await channel.client.utils.setVcStatus(vc, status.length > 500 ? status.substring(0, 496) + '...' : status, 'Started playing a new track.');
 
             queue.totalErrors = 0;
         }, 500);

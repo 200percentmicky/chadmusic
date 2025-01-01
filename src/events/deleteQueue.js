@@ -26,7 +26,9 @@ module.exports = class ListenerDeleteQueue extends Listener {
     }
 
     async exec (queue) {
-        await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
+        try {
+            await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null, 'The player was destroyed.');
+        } catch {}
 
         if (queue.hasStopped) {
             if (queue.leaveOnStop) {

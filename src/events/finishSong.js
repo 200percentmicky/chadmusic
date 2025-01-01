@@ -28,7 +28,9 @@ module.exports = class ListenerFinishSong extends Listener {
     async exec (queue, song) {
         queue.votes = [];
         if (!queue.songs[1] && !queue.autoplay) {
-            await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null);
+            try {
+                await queue.textChannel.client.utils.setVcStatus(queue.voiceChannel, null, 'Finished playing a track.');
+            } catch {}
         }
     }
 };
