@@ -103,7 +103,7 @@ class ChadUtils {
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
      * @param {string|null} status The new status to set.
      */
-    static async setVcStatus (vc, status) {
+    static async setVcStatus (vc, status = null, reason = undefined) {
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
         const songVcStatus = vc.client.settings.get(vc.guild.id, 'songVcStatus');
         if (songVcStatus !== true) return;
@@ -112,7 +112,8 @@ class ChadUtils {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
                 body: {
                     status
-                }
+                },
+                reason
             });
         } catch (err) {
             vc.client.logger.error(`Failed to set voice channel status.\n${err.stack}`);
