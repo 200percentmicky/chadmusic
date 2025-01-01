@@ -53,18 +53,6 @@ module.exports = class CommandSkip extends Command {
         if (!queue || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
-        // For breaking use only.
-        // this.client.player.skip(message)
-        // return this.client.ui.reply(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
-
-        /*
-    if (args[1] === ('--force' || '-f')) {
-      if (!dj) return this.client.ui.reply(message, 'error', 'You must have the DJ role or the **Manage Channel** permission to use the `--force` flag.')
-      this.client.player.skip(message)
-      return this.client.ui.custom(message, ':next_track:', process.env.COLOR_INFO, 'Skipped!')
-    }
-    */
-
         if (vc.members.size >= 3) {
             if (queue.votes.includes(message.member.user.id)) {
                 return this.client.ui.reply(message, 'warn', 'You already voted to skip.');
