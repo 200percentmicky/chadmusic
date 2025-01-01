@@ -102,8 +102,9 @@ class ChadUtils {
      *
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
      * @param {string|null} status The new status to set.
+     * @param {string|null} reason The reason for the change.
      */
-    static async setVcStatus (vc, status = null, reason = undefined) {
+    static async setVcStatus (vc, status = null, reason = null) {
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
         const songVcStatus = vc.client.settings.get(vc.guild.id, 'songVcStatus');
         if (songVcStatus !== true) return;
