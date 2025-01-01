@@ -5,7 +5,7 @@ on:
       - main
       - develop
 jobs:
-  deploy-18:
+  node-18:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
       - name: Installing Dependencies
         run: npm ci
       - run: npm run build --if-present
-  deploy-20:
+  node-20:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,3 +33,18 @@ jobs:
       - name: Installing Dependencies
         run: npm ci
       - run: npm run build --if-present
+  node-22:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Updating Yarn
+        run: yarn set version stable
+      - name: Installing Dependencies
+        run: npm ci
+      - run: npm run build --if-present
+
