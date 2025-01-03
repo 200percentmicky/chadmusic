@@ -299,11 +299,7 @@ class ChadMusic extends AkairoClient {
 
         this.commands.loadAll(); // Load all Inhibitors
         this.listeners.loadAll(); // Load all Listeners.
-
-        // In the case of production, load all Inhibitors.
-        if (process.env.DEV === 'true') {
-            this.inhibitors.loadAll();
-        }
+        this.inhibitors.loadAll(); // Load all Inhibitors
     }
 
     /**
