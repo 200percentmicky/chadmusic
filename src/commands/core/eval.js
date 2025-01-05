@@ -81,7 +81,7 @@ module.exports = class CommandEval extends Command {
         };
 
         // const args = message.content.split(/ +/g)
-        const code = args.code;
+        const code = args.code?.replace(/```/gm, '') ?? undefined;
 
         const closeButton = new Discord.ButtonBuilder()
             .setCustomId('close_eval')
@@ -103,7 +103,7 @@ module.exports = class CommandEval extends Command {
 
             let result = clean(evaled);
 
-            if (code.match(/\.token/gmi)) {
+            if (code?.match(/\.token/gmi)) {
                 result = 'REACTED';
             } else {
                 if (result.length > 2000) {
