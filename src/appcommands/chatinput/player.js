@@ -195,7 +195,10 @@ class CommandPlayer extends SlashCommand {
             }
         }
 
-        if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
+        if (!vc) {
+            if (ctx.subcommands[0] === 'lyrics') {} // eslint-disable-line no-empty, brace-style
+            else return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
+        }
 
         const queue = this.client.player.getQueue(guild);
 
