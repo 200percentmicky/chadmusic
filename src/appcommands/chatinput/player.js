@@ -498,7 +498,6 @@ class CommandPlayer extends SlashCommand {
 
         case 'lyrics': {
             const geniusClient = new Genius.Client(process.env.GENIUS_TOKEN);
-            const queue = this.client.player.getQueue(ctx.guild);
             const query = queue?.songs[0]?.name ?? ctx.options.lyrics.query;
 
             if (!queue && !query) {
