@@ -105,7 +105,9 @@ module.exports = class CommandEval extends Command {
                 if (result.length > 2000) {
                     try {
                         const buffer = Buffer.from(`${result}`);
-                        const file = new Discord.AttachmentBuilder(buffer, { name: 'eval.txt' });
+                        const timestamp = new Date();
+
+                        const file = new Discord.AttachmentBuilder(buffer, { name: `eval_${timestamp}.txt` });
                         if (!message.channel.permissionsFor(this.client.user.id).has(Discord.PermissionsBitField.Flags.AttachFiles)) {
                             try {
                                 await message.member.user.send({ files: [file] });
