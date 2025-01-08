@@ -34,17 +34,17 @@ module.exports = class CommandEval extends Command {
                 text: 'Executes Javascript code.',
                 usage: '<code>',
                 details: commonTags.stripIndents`
-        **Loaded Variables:**
-        \`Discord\` - discord.js
-        \`player\` - Active player in the server, if any.
-        \`queue\` - Queue of active player, if any.
-        \`message\` - Message object
-        \`_\` - lodash
-        \`prettyBytes\` - pretty-bytes
-        \`prettyMs\` - prettyMs
-        \`colonNotation\` - colon-notation
-        \`commonTags\` - common-tags
-        \`Genius\` - genius-lyrics`
+                **Loaded Variables:**
+                \`Discord\` - discord.js
+                \`player\` - Active player in the server, if any.
+                \`queue\` - Queue of active player, if any.
+                \`message\` - Message object
+                \`_\` - lodash
+                \`prettyBytes\` - pretty-bytes
+                \`prettyMs\` - prettyMs
+                \`colonNotation\` - colon-notation
+                \`commonTags\` - common-tags
+                \`Genius\` - genius-lyrics`
             },
             category: '💻 Core',
             args: [
@@ -75,7 +75,6 @@ module.exports = class CommandEval extends Command {
         } catch {}
         /* eslint-enable no-unused-vars */
 
-        const t1 = process.hrtime();
         const clean = text => {
             if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); } else { return text; }
         };
@@ -98,9 +97,6 @@ module.exports = class CommandEval extends Command {
 
             message.channel.sendTyping();
 
-            const t2 = process.hrtime(t1);
-            const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
-
             let result = clean(evaled);
 
             if (code?.match(/\.token/gmi)) {
@@ -108,7 +104,7 @@ module.exports = class CommandEval extends Command {
             } else {
                 if (result.length > 2000) {
                     try {
-                        const buffer = Buffer.from(`// ✅ Evaluated in ${end} ms.\n${result}`);
+                        const buffer = Buffer.from(`${result}`);
                         const file = new Discord.AttachmentBuilder(buffer, { name: 'eval.txt' });
                         if (!message.channel.permissionsFor(this.client.user.id).has(Discord.PermissionsBitField.Flags.AttachFiles)) {
                             try {
@@ -121,7 +117,7 @@ module.exports = class CommandEval extends Command {
                     } catch {
                         return message.reply(':x: Failed to make a file for the eval output. Check the logs or the console for the output.');
                     } finally {
-                        this.client.logger.info(`Took ${end} ms. to complete.\n${clean(evaled)}`);
+                        this.client.logger.info(`${clean(evaled)}`);
                     }
                 } else {
                     return message.reply({ content: `\`\`\`js\n${result}\`\`\``, components: [new Discord.ActionRowBuilder().addComponents(closeButton)] });

@@ -221,7 +221,6 @@ class CommandCore extends SlashCommand {
                          `);
                 }
 
-                const t1 = process.hrtime();
                 const clean = text => {
                     if (typeof (text) === 'string') { return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203)); } else { return text; }
                 };
@@ -235,9 +234,6 @@ class CommandCore extends SlashCommand {
                     if (typeof evaled !== 'string') {
                         evaled = require('util').inspect(evaled, { depth: 1, sorted: true, maxArrayLength: 5 });
                     }
-
-                    const t2 = process.hrtime(t1);
-                    const end = (t2[0] * 1000000000 + t2[1]) / 1000000;
 
                     let result = clean(evaled);
 
@@ -258,7 +254,7 @@ class CommandCore extends SlashCommand {
                                     await ctx.send(`${process.env.EMOJI_ERROR} Unable to generate file. Check the logs or the console for the output.`);
                                 }
                             } finally {
-                                this.client.logger.info(`✅ Took ${end} ms. to complete.\n${clean(evaled)}`);
+                                this.client.logger.info(`${clean(evaled)}`);
                             }
                         } else {
                             await ctx.send({ content: `\`\`\`js\n${result}\`\`\`` });
