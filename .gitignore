@@ -14,6 +14,7 @@ data
 info
 prefixes.db
 console.log
+*console.log.gz
 
 # Directories
 node_modules
