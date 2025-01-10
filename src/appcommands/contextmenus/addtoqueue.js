@@ -17,6 +17,7 @@
 const { SlashCommand, ApplicationCommandType } = require('slash-create');
 const { PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const ytdl = require('@distube/ytdl-core');
 
 class ContextMenuAddToQueue extends SlashCommand {
     constructor (creator) {
@@ -120,6 +121,12 @@ class ContextMenuAddToQueue extends SlashCommand {
 
             if (!requested) {
                 return this.client.ui.reply(ctx, 'warn', 'The message doesn\'t contain any content to search for.');
+            }
+
+            if (ytdl.validateURL(requested.replace(/(^\\<+|\\>+$)/g, ''))) {
+                if (!this.client.settings.get('global', 'allowYouTube')) {
+                    return this.client.ui.sendPrompt(ctx, 'YT_NOT_ALLOWED');
+                }
             }
 
             this.client.utils.createAgent(this.client);
