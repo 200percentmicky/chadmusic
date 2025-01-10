@@ -18,6 +18,7 @@ const { Command } = require('discord-akairo');
 const { Message, PermissionsBitField } = require('discord.js');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
+const ytdl = require('@distube/ytdl-core');
 
 module.exports = class CommandPlayNow extends Command {
     constructor () {
@@ -100,7 +101,7 @@ module.exports = class CommandPlayNow extends Command {
 
             try {
                 // eslint-disable-next-line no-useless-escape
-                if (this.client.utils.isYouTubeLink(text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
+                if (ytdl.validateURL(text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url)) {
                     if (!this.client.settings.get('global', 'allowYouTube')) {
                         return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
                     }

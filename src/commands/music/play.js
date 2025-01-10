@@ -19,6 +19,7 @@ const { PermissionsBitField, Message } = require('discord.js');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { hasURL } = require('../../lib/hasURL');
 const { CommandContext } = require('slash-create');
+const ytdl = require('@distube/ytdl-core');
 
 /* eslint-disable no-useless-escape */
 
@@ -125,7 +126,7 @@ module.exports = class CommandPlay extends Command {
         else message.channel.sendTyping();
 
         try {
-            if (this.client.utils.isYouTubeLink(track ?? message.attachments.first().url)) {
+            if (ytdl.validateURL(track ?? message.attachments.first().url)) {
                 if (!this.client.settings.get('global', 'allowYouTube')) {
                     return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
                 }

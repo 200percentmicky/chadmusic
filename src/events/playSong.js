@@ -17,6 +17,7 @@
 const { Listener } = require('discord-akairo');
 const CMPlayerWindow = require('../lib/CMPlayerWindow.js');
 const { Events } = require('distube');
+const ytdl = require('@distube/ytdl-core');
 
 module.exports = class ListenerPlaySong extends Listener {
     constructor () {
@@ -29,7 +30,7 @@ module.exports = class ListenerPlaySong extends Listener {
     async exec (queue, song) {
         const message = song.metadata?.message || song.metadata?.ctx;
 
-        if (this.client.utils.isYouTubeLink(song.url)) {
+        if (ytdl.validateURL(song.url)) {
             if (!this.client.settings.get('global', 'allowYouTube')) {
                 if (!queue.songs[1]) {
                     this.client.player.stop(queue.textChannel.guild);

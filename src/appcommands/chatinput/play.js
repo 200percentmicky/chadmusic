@@ -32,6 +32,7 @@ const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
 const CMError = require('../../lib/CMError');
+const ytdl = require('@distube/ytdl-core');
 
 class CommandPlay extends SlashCommand {
     constructor (creator) {
@@ -257,7 +258,7 @@ class CommandPlay extends SlashCommand {
             let isFile = false;
 
             const boogie = async (requested) => {
-                if (this.client.utils.isYouTubeLink(requested)) {
+                if (ytdl.validateURL(requested)) {
                     if (!this.client.settings.get('global', 'allowYouTube')) {
                         return this.client.ui.sendPrompt(ctx, 'YT_NOT_ALLOWED');
                     }

@@ -207,12 +207,6 @@ class ChadUtils {
         return this.#matchRegex(extPattern, url) || url.includes('cdn.discord');
     }
 
-    static isYouTubeLink (requested) {
-        // eslint-disable-next-line no-useless-escape
-        const ytPattern = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed|shorts\/|v\/)?)([\w\-]+)(\S+)?$/gm;
-        return this.#matchRegex(ytPattern, requested);
-    }
-
     /**
      * Checks whether the URL provided leads to pornographic content.
      * @param {string} url The URL to parse.
