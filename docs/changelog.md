@@ -1,5 +1,38 @@
 # Changelog
 
+## 2025.1.0
+Happy new year! Hope everyone had a great holiday season. This release makes some quality-of-life changes. Notable changes includes embed support for the "Add to queue" context menu, allowing the bot owner to toggle YouTube support, and a new environment variable to provide a custom FFmpeg binary, if desired.
+
+!!! note "Notice"
+
+    Make sure you use the `DELETE_INVALID_COMMANDS` variable in this release, as the casing for the "Add to queue" context menu was changed from "Add To Queue" to "Add to queue". Not using this variable during startup will leave behind dulicate commands.
+
+* **Added:** The ability for the bot owner to toggle YouTube support. The default toggle is `false`.
+* **Added:** New commands:
+    - `[p]allowyoutube` and `/settings global allowyoutube`
+* **Added:** New environment variables:
+    - `FFMPEG_PATH`
+* **Added:** `clientAkairoDebug` event. Requires `DEBUG_LOGGING` to work.
+* **Changed:** Updated emojis for the player's volume.
+* **Changed:** `[p]eval` to be more compatible with codeblocks.
+* **Changed:** `Add to queue` to support rich embeds, including embeds from links.
+    - The bot will use the following in order to parse content: `url` -> `title` -> `description`
+        - If the bot wasn't able to find anything in the embeds, it'll use the message's content before failing.
+* **Changed:** Voice channel status changes will now provide a reason in the audit log.
+    - It's known that a reason will not be provided when the status is removed. This is most likely a limitation in the API.
+* **Changed:** Reverted the player windows to use the `title` field for track names.
+* **Changed:** `[p]eval` now provides a timestamp in the filename when the bot uploads a txt file.
+* **Fixed:** A potential `TypeError` exception in `[p]maxtime`.
+* **Fixed:** `/player lyrics` not being usable without an active player.
+* **Fixed:** An exception occuring when soundcloud track thumbnails returning `undefined`.
+* **Fixed:** An exception occuring in `/player lyrics` regarding a `GuildIdResolvable` being expected.
+* **Updated:** @distube/ytdl-core to 4.15.8
+* **Updated:** discord-akairo to 10.2.4 (Using [fork](https://github.com/200percentmicky/discord-akairo) of [@tanzanite/discord-akairo](https://github.com/TanzaniteBot/discord-akairo))
+* **Updated:** discord.js to 14.17.2
+* **Updated:** systeminformation to 5.23.23 (This fixes a security vulnerability.)
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2024.5.0...2025.1.0)
+
 ## 2024.5.0
 This release that adds support for proxy connections, fixes custom playlist support, and updated internal functions to make it more convenient to the bot owner.
 
