@@ -189,7 +189,7 @@ class ChadMusic extends AkairoClient {
             cookies: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',
-                filter: 'audioonly',
+                filter: 'audio',
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
                 playerClients: [
