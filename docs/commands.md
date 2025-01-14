@@ -594,6 +594,7 @@ Toggles the ability to silently add tracks to the queue.
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
 ### [p]allowyoutube | /settings global allowyoutube `<toggle>`
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
 
 Toggles the ability to allow tracks from YouTube to be added to the player.
 
