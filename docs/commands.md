@@ -593,6 +593,14 @@ Toggles the ability to silently add tracks to the queue.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
+### [p]allowyoutube | /settings global allowyoutube `<toggle>`
+
+Toggles the ability to allow tracks from YouTube to be added to the player.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
+
 ### [p]blocksong add/remove/list | /settings blocksong add/remove/list `<phrase>`
 
 Manages the server's list of blocked search phrases.
