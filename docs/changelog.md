@@ -5,7 +5,7 @@ Happy new year! Hope everyone had a great holiday season. This release makes som
 
 !!! note "Notice"
 
-    Make sure you use the `DELETE_INVALID_COMMANDS` variable in this release, as the casing for the "Add to queue" context menu was changed from "Add To Queue" to "Add to queue". Not using this variable during startup will leave behind dulicate commands.
+    Make sure you use the `DELETE_INVALID_COMMANDS` variable in this release, as the letter case for the "Add to queue" context menu was changed from "Add To Queue" to "Add to queue". Not using this variable during startup will leave behind duplicate commands.
 
 * **Added:** The ability for the bot owner to toggle YouTube support. The default toggle is `false`.
 * **Added:** New commands:
