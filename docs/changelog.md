@@ -1,5 +1,13 @@
 # Changelog
 
+## 2025.1.1
+This is a maintenance release.
+
+* **Fixed:** An oversight in `/settings global allowyoutube` where the wrong setting was being changed.
+* **Updated:** discord.js to 14.17.3
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.1.0...2025.1.1)
+
 ## 2025.1.0
 Happy new year! Hope everyone had a great holiday season. This release makes some quality-of-life changes. Notable changes includes embed support for the "Add to queue" context menu, allowing the bot owner to toggle YouTube support, and a new environment variable to provide a custom FFmpeg binary, if desired.
 
