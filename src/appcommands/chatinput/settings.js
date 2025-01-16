@@ -495,7 +495,7 @@ module.exports = class CommandSettings extends SlashCommand {
             case 'allowyoutube': {
                 const toggle = ctx.options.global.allowyoutube.toggle;
 
-                await settings.set('global', toggle, 'emitNewSongOnly');
+                await settings.set('global', toggle, 'allowYouTube');
                 this.client.player.options.emitNewSongOnly = toggle;
                 this.client.ui.reply(ctx, 'ok', toggle === true
                     ? 'Enabled YouTube support.'
