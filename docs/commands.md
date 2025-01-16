@@ -42,7 +42,7 @@ The following variables will always be available when running the command:
 
 !!! danger "With great power comes great responsibility!"
 
-    Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromised the security of your Discord bot!
+    Eval can be dangerous if used improperly! The command is disabled by default, but you can enable it through the bot's environment variables by setting **USE_EVAL** to `true`. Do not enable this command unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromise the security of your Discord bot!
 
 ### [p]help `[command]`
 <span class="badge-info">:information_source: Prefix command only</span>

@@ -123,7 +123,7 @@ Enables the `eval` command.
 
 !!! danger "With great power comes great responsibility!"
 
-    Eval can be dangerous if used improperly! You should not enable this variable, unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromised the security of your Discord bot!
+    Eval can be dangerous if used improperly! You should not enable this variable, unless you know exactly what you're doing. If someone is telling you to enable the eval command to run a script, this will most likely compromise the security of your Discord bot!
 
 ### USE_CONSOLE
 Allows the bot to log to the console window.
