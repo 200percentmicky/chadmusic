@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025.1.2
+This is a maintenance release.
+
+* **Changed:** YTDL player clients to `WEB_EMBEDDED`.
+* **Updated:** @discordjs/opus to 0.10.0
+* **Updated:** @distubejs/ytdl-core to 4.15.9
+* **Updated:** undici to 6.21.1
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.1.1...2025.1.2)
+
 ## 2025.1.1
 This is a maintenance release.
 
