@@ -193,9 +193,7 @@ class ChadMusic extends AkairoClient {
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
                 playerClients: [
-                    'IOS',
-                    'ANDROID',
-                    'WEB'
+                    'WEB_EMBEDDED' // TODO: Allow for the bot owner to change this.
                 ]
             }
         });
