@@ -12,6 +12,9 @@
   },
   "author": "200percentmicky",
   "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
     "@discordjs/voice": "^0.18.0",
