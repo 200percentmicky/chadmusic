@@ -35,7 +35,16 @@ logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky | @200percentmicky');
 logger.info(`Bot Version: ${version}`);
+
+if (version.endsWith('-dev')) {
+    logger.warn('The version is considered unstable. Use caution when running this version in a production environment.');
+}
+
 logger.info('Loading libraries...');
+
+if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
+    logger.warn(`NODE_ENV variable is currently set to ${process.env.NODE_ENV}. Unexpected behavior may occur.`);
+}
 
 if (process.env.YOUTUBE_COOKIE) {
     logger.warn('YOUTUBE_COOKIE environment variable has been deprecated. Please switch to the new cookie format by following the instructions at https://distube.js.org/#/docs/DisTube/main/general/cookie. Paste the new cookie in the cookies.json file.');
