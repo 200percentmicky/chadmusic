@@ -15,7 +15,16 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /* eslint-disable no-unused-vars */
-const { Client, GuildMember, BaseGuildVoiceChannel, PermissionsBitField, Message, BaseGuildTextChannel, Team } = require('discord.js');
+const {
+    Client,
+    GuildMember,
+    BaseGuildVoiceChannel,
+    PermissionsBitField,
+    Message,
+    BaseGuildTextChannel,
+    Team,
+    ChatInputCommandInteraction
+} = require('discord.js');
 const { CommandContext } = require('slash-create');
 const CMError = require('./CMError.js');
 const ytdl = require('@distube/ytdl-core');
@@ -138,33 +147,27 @@ class ChadUtils {
     }
 
     /**
-     * Attempts to execute a standard prefix command from a CommandContext.
+     * Attempts to execute a standard prefix command from a command interaction.
      *
-     * @param {Client} client Discord client.
-     * @param {CommandContext} ctx The message object or an instance of `CommandContext`.
+     * @param {ChatInputCommandInteraction} interaction The command's interaction.
      * @param {string} commandName The name of the command.
      * @param {Object} args Arguments to pass to the command.
      * @returns The execution of the prefix command.
      * @throws Command not found.
      */
-    static async runPrefixCommand (client, ctx, commandName, args = {}) {
-        if (!ctx.deferred) {
+    static async handleCommand (interaction, commandName, args = {}) {
+        if (!interaction.deferred) {
             throw new CMError('NOT_DEFERRED', null, 'Interaction must be deferred.');
         }
 
-        const guild = await client.guilds.fetch(ctx.guildID);
-        const member = await guild.members.fetch(ctx.user.id);
-        const channel = await guild.channels.fetch(ctx.channelID);
-        const message = await ctx.fetch().then(m => { channel.messages.fetch(m.id); });
-
-        message.author = member.user;
-        message.react = (emoji) => {
-            return ctx.send(emoji, { ephemeral: true });
+        interaction.author = interaction.member;
+        interaction.react = (emoji) => {
+            return interaction.reply(emoji, { ephemeral: true });
         };
 
         try {
-            const command = await client.commands.findCommand(commandName);
-            return client.commands.runCommand(message, command, args);
+            const command = await interaction.client.commands.findCommand(commandName);
+            return interaction.client.commands.runCommand(interaction, command, args);
         } catch (err) {
             throw new CMError('COMMAND_ERROR', null, `Error finding or running ${commandName}: ${err}`);
         }
