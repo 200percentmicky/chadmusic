@@ -22,7 +22,7 @@
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.4",
     "@distube/yt-dlp": "^2.0.1",
-    "@distube/ytdl-core": "github:ToddyTheNoobDud/ytdl-core-stuff",
+    "@distube/ytdl-core": "^4.16.0",
     "@distube/ytsr": "^2.0.4",
     "array-paginator": "^1.5.2",
     "bot-utils": "^1.4.2",
