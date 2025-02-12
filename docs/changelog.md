@@ -1,5 +1,22 @@
 # Changelog
 
+## 2025.1.3
+This is a maintenance release.
+
+!!! danger "Breaking Changes"
+
+    Node.js 18 is no longer supported in this release. The bot will require Node.js 20 or later to run.
+
+* **Changed:** The bot will now properly set a voice channel status whenever the bot moves to a new voice channel.
+* **Changed:** Arguments for `[p]bindchannel` and `/player bindchannel` are now optional.
+    - Providing no arguments will default to the channel where the command was used.
+    - This was documented as being "optional", but the arguments were required. This was an oversight, and the functions are now implemented.
+* **Fixed:** A potential regression from occuring in `[p]stop`.
+* **Updated:** discord.js to 4.18.0
+* **Updated:** @distube/ytdl-core to 4.16.3
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.1.2...2025.1.3)
+
 ## 2025.1.2
 This is a maintenance release.
 
