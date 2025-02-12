@@ -22,7 +22,9 @@ module.exports = class CommandBindChannel extends Command {
             aliases: ['bindchannel', 'bindto', 'bc'],
             category: '🎶 Music',
             description: {
-                text: 'Changes the player\'s currently binded text or voice channel to a different one.'
+                text: 'Changes the player\'s currently binded text channel to a different one.',
+                usage: 'bindchannel [channel]',
+                details: '`[channel]` The new text channel to bind to. Also supports text-in-voice channels, forum channels, and threads. If nothing was provided or the channel is invalid, binds to the text channel that the command was used in.'
             },
             channel: 'guild',
             args: [
@@ -51,15 +53,20 @@ module.exports = class CommandBindChannel extends Command {
         if (!this.client.player.getQueue(message) || !currentVc) return this.client.ui.sendPrompt(message, 'NOT_PLAYING');
 
         const queue = this.client.player.getQueue(message.guild);
+        let newBindChannel;
 
-        try {
-            const channel = await message.guild.channels.fetch(args.channel.id ?? message.channel.id);
-            queue.textChannel = channel;
-        } catch {
-            // Should return an API error is the channel is invalid.
-            return this.client.ui.reply(message, 'error', `\`${args.channel}\` is not a valid text channel.`);
+        if (args.channel) {
+            try {
+                newBindChannel = await message.guild.channels.fetch(args.channel.id);
+            } catch {
+                newBindChannel = message.channel;
+            }
+        } else {
+            newBindChannel = message.channel;
         }
 
-        return this.client.ui.reply(message, 'ok', `Got it. Now binded to ${args.channel ?? `<#${message.channel.id}>`}`);
+        queue.textChannel = newBindChannel;
+
+        return this.client.ui.reply(message, 'ok', `Now binded to <#${newBindChannel.id}>`);
     }
 };

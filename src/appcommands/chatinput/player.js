@@ -144,13 +144,12 @@ class CommandPlayer extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'bindchannel',
-                    description: 'Changes the player\'s currently binded text or voice channel to a different one.',
+                    description: 'Changes the player\'s currently binded text channel to a different one.',
                     options: [
                         {
                             type: CommandOptionType.CHANNEL,
                             name: 'channel',
-                            description: 'The new text or voice channel to bind to.',
-                            required: true
+                            description: 'The new text or voice channel to bind to.'
                         }
                     ]
                 },
@@ -546,9 +545,20 @@ class CommandPlayer extends SlashCommand {
             else if (!isSameVoiceChannel(this.client, _member, vc)) return this.client.ui.sendPrompt(ctx, 'ALREADY_SUMMONED_ELSEWHERE');
 
             if (dj) {
-                const newBindChannel = await guild.channels.fetch(ctx.options.bindchannel.channel);
+                let newBindChannel;
+
+                if (ctx.options.bindchannel.channel) {
+                    try {
+                        newBindChannel = await guild.channels.fetch(ctx.options.bindchannel.channel);
+                    } catch {
+                        newBindChannel = channel;
+                    }
+                } else {
+                    newBindChannel = channel;
+                }
+
                 queue.textChannel = newBindChannel;
-                return this.client.ui.reply(ctx, 'ok', `Got it. Now binded to <#${newBindChannel.id}>`);
+                return this.client.ui.reply(ctx, 'ok', `Now binded to <#${newBindChannel.id}>`);
             } else {
                 return this.client.ui.sendPrompt(ctx, 'NO_DJ');
             }
