@@ -236,12 +236,12 @@ Adds a track to the queue by using the message's content as a search query.
 ### [p]bindchannel | [p]bindto | /player bindchannel `[channel]`
 <span class="badge-info">:musical_note: Requires DJ permissions</span>
 
-Changes the player's currently binded text or voice channel to a different one.
+Changes the player's currently binded text channel to a different one.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
-| `[channel]` | Text/Voice Channel | The new channel to bind the player to. If nothing was provided, binds to the channel that the command was used in. |
-
+| `[channel]` | Text Channel | The new text channel to bind to. Also supports text-in-voice channels, forum channels, and threads. If nothing was provided or the channel is invalid, binds to the text channel that the command was used in. |
+s
 ### [p]clearqueue | [p]clear | /queue clear
 <span class="badge-info">:notes: DJ permissions required with 2 or more people.</span>
 
