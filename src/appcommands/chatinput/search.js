@@ -140,8 +140,8 @@ class CommandSearch extends SlashCommand {
         try {
             results = await this.client.player.soundcloud.search(ctx.options.query);
         } catch (err) {
-            if (err.name === 'DisTubeError [NO_RESULT]') {
-                return this.client.ui.reply(ctx, 'error', `No results found for ${ctx.options.query}`);
+            if (err.code === 'SOUNDCLOUD_PLUGIN_NO_RESULT') {
+                return this.client.ui.reply(ctx, 'warn', `No results found for \`${ctx.options.query}\`.`);
             } else {
                 return this.client.ui.reply(ctx, 'error', `An error occured while searching for tracks.\n\`\`\`js\n${err}\`\`\``);
             }
