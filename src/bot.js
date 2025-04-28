@@ -35,6 +35,8 @@ const { FilePlugin } = require('@distube/file');
 const { DirectLinkPlugin } = require('@distube/direct-link');
 const { default: SoundCloudPlugin } = require('@distube/soundcloud');
 const { default: DeezerPlugin } = require('@distube/deezer');
+const { ToddysPlugin } = require('toddys-youtube');
+const { YtdlCore } = require('@ybd-project/ytdl-core');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -159,6 +161,8 @@ class ChadMusic extends AkairoClient {
             }
         };
 
+        this.ytdl = YtdlCore;
+
         // Player Plugins
         // Direct Link
         const directLink = new DirectLinkPlugin();
@@ -185,7 +189,7 @@ class ChadMusic extends AkairoClient {
         });
 
         // YouTube
-        const youtube = new YouTubePlugin({
+        const youtube = new ToddysPlugin({
             cookies: this.cookies(),
             ytdlOptions: {
                 quality: 'highestaudio',

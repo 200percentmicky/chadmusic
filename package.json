@@ -57,6 +57,7 @@
     "sodium-native": "^4.1.1",
     "string-progressbar": "^1.0.4",
     "systeminformation": "^5.23.23",
+    "toddys-youtube": "^1.0.7",
     "tslog": "^4.9.2",
     "winston": "^3.3.3",
     "youtube-autocomplete": "^0.0.1",
