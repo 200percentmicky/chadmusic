@@ -24,7 +24,7 @@
     "@distube/soundcloud": "^2.0.4",
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.4",
-    "@distube/yt-dlp": "^2.0.1",
+    "@distube/yt-dlp": "github:200percentmicky/extractor-plugins#yt-dlp",
     "@distube/ytdl-core": "^4.16.9",
     "@distube/ytsr": "^2.0.4",
     "array-paginator": "^1.5.2",
