@@ -105,6 +105,7 @@ class ChadMusic extends AkairoClient {
             emitNewSongOnly: true,
             streamType: 0,
             allowYouTube: false,
+            playerClient: 'WEB',
             emojis: {
                 message: {
                     ok: ':white_check_mark:',
@@ -193,7 +194,7 @@ class ChadMusic extends AkairoClient {
                 dlChunkSize: 25000,
                 highWaterMark: 1024,
                 playerClients: [
-                    'WEB_EMBEDDED' // TODO: Allow for the bot owner to change this.
+                    this.settings.get('global', 'playerClient') // TODO: Allow for the bot owner to change this.
                 ]
             }
         });
