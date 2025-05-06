@@ -200,7 +200,8 @@ class ChadMusic extends AkairoClient {
 
         // yt-dlp
         const ytdlp = new YtDlpPlugin({
-            update: process.env.UPDATE_YTDLP ?? true
+            update: process.env.UPDATE_YTDLP ?? true,
+            cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined
         });
 
         // Music Player.
@@ -211,7 +212,7 @@ class ChadMusic extends AkairoClient {
                 files,
                 soundcloud,
                 spotify,
-                youtube,
+                // youtube,
                 ytdlp
             ],
             emitAddListWhenCreatingQueue: true,
