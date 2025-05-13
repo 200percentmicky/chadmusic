@@ -37,7 +37,7 @@ logger.info('Created by Micky | @200percentmicky');
 logger.info(`Bot Version: ${version}`);
 
 if (version.endsWith('-dev')) {
-    logger.warn('The version is considered unstable. Use caution when running this version in a production environment.');
+    logger.warn('This version is considered unstable. Use caution when running this version in a production environment.');
 }
 
 logger.info('Loading libraries...');
