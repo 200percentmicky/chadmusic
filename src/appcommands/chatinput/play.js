@@ -251,8 +251,6 @@ class CommandPlay extends SlashCommand {
         }
 
         try {
-            this.client.utils.createAgent(this.client);
-
             let radioStation;
             let fileMetadata;
             let isFile = false;

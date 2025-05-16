@@ -129,8 +129,6 @@ class ContextMenuAddToQueue extends SlashCommand {
                 }
             }
 
-            this.client.utils.createAgent(this.client);
-
             /* eslint-disable-next-line no-useless-escape */
             await this.client.player.play(vc, requested.replace(/(^\\<+|\\>+$)/g, ''), {
                 textChannel: channel,

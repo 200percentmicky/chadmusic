@@ -219,8 +219,6 @@ module.exports = class CommandSearch extends Command {
             message.channel.sendTyping();
 
             try {
-                this.client.utils.createAgent(this.client);
-
                 await this.client.player.play(vc, results[parseInt(interaction.values[0])].url, {
                     member: message.member,
                     textChannel: message.channel,

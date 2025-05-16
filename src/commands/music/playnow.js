@@ -107,8 +107,6 @@ module.exports = class CommandPlayNow extends Command {
                     }
                 }
 
-                this.client.utils.createAgent(this.client);
-
                 // eslint-disable-next-line no-useless-escape
                 await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
                     member: message.member,

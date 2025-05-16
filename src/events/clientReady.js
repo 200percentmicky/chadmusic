@@ -43,6 +43,10 @@ module.exports = class SurferReady extends Listener {
         this.client.ownerID = this.client.owner.id;
         this.client.logger.debug(`[Client] Owner fetched. ${this.client.owner.username} (${this.client.owner.id})`);
 
+        // Creating agent...
+        this.client.utils.createAgent(this.client);
+        this.client.logger.debug('[Client] New agent created.');
+
         this.client.logger.info(`Logged in as ${this.client.user.tag.replace(/#0{1,1}$/, '')} (${this.client.user.id})`);
         this.client.logger.info('[Ready!<3♪] Let\'s party!!');
     }

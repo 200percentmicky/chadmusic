@@ -132,8 +132,6 @@ module.exports = class CommandPlay extends Command {
                 }
             }
 
-            this.client.utils.createAgent(this.client);
-
             await this.client.player.play(vc, track ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,

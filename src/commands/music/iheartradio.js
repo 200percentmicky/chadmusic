@@ -201,8 +201,6 @@ module.exports = class CommandIHeartRadio extends Command {
                 const url = await iheart.streamURL(stations[parseInt(interaction.values[0])].id);
 
                 try {
-                    this.client.utils.createAgent(this.client);
-
                     await this.client.player.play(vc, url, {
                         member: message.member,
                         textChannel: message.channel,

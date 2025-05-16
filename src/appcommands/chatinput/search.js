@@ -233,8 +233,6 @@ class CommandSearch extends SlashCommand {
                     selCtx.acknowledge();
                     channel.sendTyping();
 
-                    this.client.utils.createAgent(this.client);
-
                     await this.client.player.play(vc, results[parseInt(selCtx.values[0])].url, {
                         member,
                         textChannel: channel,
