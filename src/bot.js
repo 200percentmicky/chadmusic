@@ -213,7 +213,7 @@ class ChadMusic extends AkairoClient {
                 files,
                 soundcloud,
                 spotify,
-                // youtube,
+                youtube,
                 ytdlp
             ],
             emitAddListWhenCreatingQueue: true,
