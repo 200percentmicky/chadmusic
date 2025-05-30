@@ -63,5 +63,6 @@ nav:
     - '6. Installing Packages': 'setup/install_packages.md'
     - '7. Starting the bot': 'setup/starting_the_bot.md'
   - Configuration:
+    - 'Cookies': 'configuration/cookies.md'
     - 'Customization': 'configuration/customization.md'
     - 'Environment Variables': 'configuration/env_variables.md'

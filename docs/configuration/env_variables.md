@@ -149,10 +149,3 @@ Deletes any slash commands that are no longer valid to the bot. Do not use this 
 
 ### BUG_CHANNEL
 Allows the bot to send any important system messages to the specified channel ID. If no valid channel ID is provided or left blank, system messages will be sent to the application owner instead. If this field is set to `false`, this will disable system messages.
-
-## Adding Cookies
-Starting in 2023.5.0, a new cookie system has been implemented replacing the `YOUTUBE_COOKIE` variable. This method should be easier to implement for your use case, but is completely optional. Also, with the new cookie system, you're not just limited to one cookie. The new system will allow you to use more than one cookie! You can learn more on how to use the new cookie system by following the guide below.
-
-[Using cookies](https://github.com/skick1234/DisTube/wiki/YouTube-Cookies){ .md-button }
-
-By completing the guide for the new cookie system, you should now have the generated cookie, or multiple cookies if you have more than one. You will need to add them all to the `cookies.json` file located within the root directory of your bot.
