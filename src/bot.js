@@ -205,17 +205,23 @@ class ChadMusic extends AkairoClient {
             cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined
         });
 
+        const plugins = [
+            directLink,
+            deezer,
+            files,
+            soundcloud,
+            spotify
+        ];
+
+        if (process.env.USE_YOUTUBE_PLUGIN) {
+            plugins.push(youtube);
+        }
+
+        plugins.push(ytdlp);
+
         // Music Player.
         this.player = new DisTube(this, {
-            plugins: [
-                directLink,
-                deezer,
-                files,
-                soundcloud,
-                spotify,
-                youtube,
-                ytdlp
-            ],
+            plugins,
             emitAddListWhenCreatingQueue: true,
             emitAddSongWhenCreatingQueue: true,
             emitNewSongOnly: this.settings.get('global', 'emitNewSongOnly') ?? true,
