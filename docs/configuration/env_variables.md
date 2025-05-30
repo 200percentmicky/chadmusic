@@ -1,7 +1,7 @@
 # Environment Variables
-ChadMusic utilizes environment variables for certain configurations. Bundled with the bot is a `.env.example` file that you can use set your configurations to. Once you're finished editing the file, you will need to rename it to `.env` so the bot can read and use the configurations you set during boot. Changing any of the values during the bot's runtime will not be applied until the bot has been rebooted.
+This page lists all possible environment variables that you can use to configure how ChadMusic operates globally. Bundled along with the bot is a pre-configured `.env.example` with all avaliable variables for your convenience. After editing the `.env.example` file, you can then rename the file to `.env` so the bot can use the configurations you set. Understand that changing any of the variables in the `.env` file while the bot is online will not immediately apply until the bot is restarted.
 
-In the case where you want to create your own `.env` file instead, provided below are all the variables that the bot uses. Not every single value is listed on this page, such as the variables used to manage the bot's user interface. If you want to change the bot's user interface, please go to **[Configuration > Customization](customization.md)** for more information.
+In the case where you want to create your own `.env` file instead of using the `.env.example` file, provided below are all the variables that are available. The bot's user interface can also be modified to your liking. If you want to change the bot's user interface, please go to **[Configuration > Customization](customization.md)** for all variables associated with the bot's user interface.
 
 ## Client Configuration
 These fields are used to configure the bot.
@@ -106,6 +106,14 @@ For Spotify playlists, this field dictates whether the bot should run player eve
 <span class="badge-danger">:x: This field is deprecated.</span>
 
 For Spotify, this field dictates whether the bot should search for all tracks in parallel or not. This field is enabled by default. If searching in parallel, the bot will search for all tracks at the same time. If this field is disabled, then all tracks will be searched one link at a time.
+
+### USE_YOUTUBE_PLUGIN
+
+Toggles the use of the [YouTube Plugin](https://www.npmjs.com/package/@distube/youtube). This plugin is not needed for YouTube support. This toggle simply changes how YouTube tracks are extracted. If this plugin is set to `false`, any tracks from YouTube will be resolved through yt-dlp instead.
+
+!!! bug
+
+    Tracks will resolve slower and playlists will not work when this variable is set to false. This is a known issue.
 
 ### UPDATE_YTDLP
 <span class="badge-info">:information_source: This field was previously UPDATE_YOUTUBE_DL.</span>
