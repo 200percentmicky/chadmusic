@@ -1,7 +1,7 @@
 # Environment Variables
 This page lists all possible environment variables that you can use to configure how ChadMusic operates globally. Bundled along with the bot is a pre-configured `.env.example` with all avaliable variables for your convenience. After editing the `.env.example` file, you can then rename the file to `.env` so the bot can use the configurations you set. Understand that changing any of the variables in the `.env` file while the bot is online will not immediately apply until the bot is restarted.
 
-In the case where you want to create your own `.env` file instead of using the `.env.example` file, provided below are all the variables that are available. The bot's user interface can also be modified to your liking. If you want to change the bot's user interface, please go to **[Configuration > Customization](customization.md)** for all variables associated with the bot's user interface.
+In the case where you want to create your own `.env` file instead of using the `.env.example` file, provided below are all the variables that are available. The bot's emoji's and the colors in its embeds can be customized to your liking if you prefer. If you want to customize the bot's interface, please go to **[Configuration > Customization](customization.md)** for all variables associated with its customization.
 
 ## Client Configuration
 These fields are used to configure the bot.
