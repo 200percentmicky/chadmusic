@@ -37,7 +37,7 @@
     "discord.js": "^14.19.1",
     "distube": "github:200percentmicky/chadtube#v5",
     "dotenv": "^8.6.0",
-    "enmap": "^5.8.13",
+    "enmap": "^6.0.5",
     "ffprobe": "^1.1.2",
     "ffprobe-static": "^3.0.0",
     "flatted": "^3.2.9",
