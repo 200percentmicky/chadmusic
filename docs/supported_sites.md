@@ -2,7 +2,7 @@
     <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
 </head>
 
-This page lists every site that ChadMusic supports. This page is also a direct mirror of [yt-dlp](https://github.com/yt-dlp/yt-dlp)'s list of [supported sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) since ChadMusic uses yt-dlp as its main extractor.
+This page lists every single source that ChadMusic can play. Since this page is also a mirror of [yt-dlp](https://github.com/yt-dlp/yt-dlp)'s [supported sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) list, expect for changes to this list to happen periodically.
 
 !!! warning "Important"
 
