@@ -130,7 +130,7 @@ module.exports = class ListenerAddSong extends Listener {
             } catch {}
         }
 
-        if (!queue.songs[1]) return; // Don't send to channel if a player was created.
+        // if (!queue.songs[1]) return; // Don't send to channel if a player was created.
         if (queue.songs.indexOf(song) === 0) return;
         const window = new CMPlayerWindow()
             .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
