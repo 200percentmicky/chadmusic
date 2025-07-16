@@ -76,9 +76,11 @@
   },
   "overrides": {
     "@distube/ytsr": "$@distube/ytsr",
+    "axios": "^1.8.4",
     "undici": "^6.21.3",
     "formidable": "^3.5.1",
     "tar": "^6.2.1",
+    "tar-fs": "^2.1.3",
     "ws": "^8.18.0"
   }
 }
