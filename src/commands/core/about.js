@@ -1,4 +1,4 @@
-/// ChadMusic - The Chad Music Bot
+/// ChadMusic
 /// Copyright (C) 2025  Micky | 200percentmicky
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ module.exports = class CommandAbout extends Command {
         const aboutembed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: 'ChadMusic - The Chad Music Bot',
+                name: 'ChadMusic',
                 iconURL: this.client.user.avatarURL({ dynamic: true })
             })
             .setDescription('Self-hostable music bot for chaotic social network. ')

@@ -1,4 +1,4 @@
-/// ChadMusic - The Chad Music Bot
+/// ChadMusic
 /// Copyright (C) 2025  Micky | 200percentmicky
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -50,7 +50,7 @@ module.exports = class LicenseCommand extends Command {
 
         const license = {
             content: stripIndents`
-            This application is running an instance of **[ChadMusic - The Chad Music Bot!](https://github.com/200percentmicky/chadmusic)**
+            This application is running an instance of **[ChadMusic](https://github.com/200percentmicky/chadmusic)**
 
             ChadMusic is licensed under the GNU General Public License version 3.
 

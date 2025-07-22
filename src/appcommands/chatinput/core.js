@@ -1,4 +1,4 @@
-/// ChadMusic - The Chad Music Bot
+/// ChadMusic
 /// Copyright (C) 2025  Micky | 200percentmicky
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -175,7 +175,7 @@ class CommandCore extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'about',
-                    description: `This application is running an instance of ChadMusic - The Chad Music Bot! v${version}`
+                    description: `This application is running an instance of ChadMusic v${version}`
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
@@ -447,7 +447,7 @@ class CommandCore extends SlashCommand {
 
             return ctx.send({
                 content: stripIndents`
-                This application is running an instance of **[ChadMusic - The Chad Music Bot!](https://github.com/200percentmicky/chadmusic)**
+                This application is running an instance of **[ChadMusic](https://github.com/200percentmicky/chadmusic)**
                 
                 ChadMusic is licensed under the GNU General Public License version 3.
     
@@ -479,7 +479,7 @@ class CommandCore extends SlashCommand {
             const aboutembed = new Discord.EmbedBuilder()
                 .setColor(botColor)
                 .setAuthor({
-                    name: 'ChadMusic - The Chad Music Bot',
+                    name: 'ChadMusic',
                     iconURL: this.client.user.avatarURL({ dynamic: true })
                 })
                 .setDescription('Self-hostable music bot for chaotic social network. ')

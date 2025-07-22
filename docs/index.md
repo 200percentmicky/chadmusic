@@ -4,7 +4,7 @@
 
 This is the official documentation for
 
-**ChadMusic - The Chad Music Bot!**
+**ChadMusic**
 
 [:material-tools: Setup Guide](./setup/getting_started.md){ .md-button .md-button--primary }
 
