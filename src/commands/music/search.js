@@ -44,6 +44,16 @@ module.exports = class CommandSearch extends Command {
                 {
                     id: 'query',
                     match: 'rest'
+                },
+                {
+                    id: 'ytsearch',
+                    match: 'option',
+                    flag: 'ytsearch:'
+                },
+                {
+                    id: 'scsearch',
+                    match: 'option',
+                    flag: 'scsearch:'
                 }
             ]
         });
@@ -132,7 +142,11 @@ module.exports = class CommandSearch extends Command {
 
         let results;
         try {
-            results = await this.client.player.soundcloud.search(args.query);
+            if (args.ytsearch) {
+                results = await this.client.player.youtube.search(args.query);
+            } else {
+                results = await this.client.player.soundcloud.search(args.query);
+            }
         } catch (err) {
             if (err.code === 'SOUNDCLOUD_PLUGIN_NO_RESULT') {
                 return this.client.ui.reply(message, 'warn', `No results found for \`${args.query}\`.`);
