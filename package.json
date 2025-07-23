@@ -54,6 +54,8 @@
     "rotating-file-stream": "^3.1.1",
     "slash-create": "^6.3.2",
     "sodium-native": "^5.0.3",
+    "spotify-uri": "^4.1.0",
+    "spotify-web-api-node": "^5.0.2",
     "string-progressbar": "^1.0.4",
     "systeminformation": "^5.23.23",
     "tslog": "^4.9.2",
