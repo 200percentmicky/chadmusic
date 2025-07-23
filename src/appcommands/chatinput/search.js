@@ -30,12 +30,33 @@ class CommandSearch extends SlashCommand {
             description: 'Searches for a track.',
             options: [
                 {
-                    type: CommandOptionType.STRING,
-                    name: 'query',
-                    description: 'The track to search for. Provides the first 10 results.',
-                    required: true,
-                    autocomplete: true
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'soundcloud',
+                    description: 'Searches SoundCloud for a track to play.',
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'query',
+                            description: 'The track to search for.',
+                            required: true
+                        }
+                    ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'youtube',
+                    description: 'Searches YouTube for a track to play.',
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'query',
+                            description: 'The track to search for.',
+                            required: true,
+                            autocomplete: true
+                        }
+                    ]
                 }
+
             ]
         });
 
@@ -43,7 +64,7 @@ class CommandSearch extends SlashCommand {
     }
 
     async autocomplete (ctx) {
-        const query = ctx.options[ctx.focused];
+        const query = ctx.options.youtube[ctx.focused];
         if (this.client.utils.hasURL(query)) return [];
         AutoComplete(query, (err, queries) => {
             if (err) {
@@ -77,7 +98,8 @@ class CommandSearch extends SlashCommand {
         }
 
         const list = await this.client.settings.get(guild.id, 'blockedPhrases');
-        const splitSearch = ctx.options.query.split(/ +/g);
+        const query = ctx.options.soundcloud?.query ?? ctx.options.youtube?.query;
+        const splitSearch = query?.split(/ +/g);
         if (list.length > 0) {
             if (!dj) {
                 for (let i = 0; i < splitSearch.length; i++) {
@@ -138,10 +160,20 @@ class CommandSearch extends SlashCommand {
 
         let results;
         try {
-            results = await this.client.player.soundcloud.search(ctx.options.query);
+            switch (ctx.subcommands[0]) {
+            case 'soundcloud': {
+                results = await this.client.player.soundcloud.search(ctx.options.soundcloud.query);
+                break;
+            }
+
+            case 'youtube': {
+                results = await this.client.player.youtube.search(ctx.options.youtube.query);
+                break;
+            }
+            }
         } catch (err) {
             if (err.code === 'SOUNDCLOUD_PLUGIN_NO_RESULT') {
-                return this.client.ui.reply(ctx, 'warn', `No results found for \`${ctx.options.query}\`.`);
+                return this.client.ui.reply(ctx, 'warn', `No results found for \`${ctx.options.soundcloud.query}\`.`);
             } else {
                 return this.client.ui.reply(ctx, 'error', `An error occured while searching for tracks.\n\`\`\`js\n${err}\`\`\``);
             }
