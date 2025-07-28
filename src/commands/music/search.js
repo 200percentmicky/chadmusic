@@ -27,6 +27,7 @@ const {
 } = require('discord.js');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { CommandContext } = require('slash-create');
+const { stripIndents } = require('common-tags');
 
 module.exports = class CommandSearch extends Command {
     constructor () {
@@ -35,8 +36,11 @@ module.exports = class CommandSearch extends Command {
             category: '🎶 Music',
             description: {
                 text: 'Searches for a track to play.',
-                usage: '<query>',
-                detail: '`<query>` The phrase(s) to search for.'
+                usage: '[provider] <query>',
+                detail: stripIndents`
+                \`[provider]\` The provider to use to search for tracks. Only \`youtube\` or \`soundcloud\` are supported for now. Defaults to \`soundcloud\` if no valid provider is used.
+                \`<query>\` The phrase(s) to search for.
+                `
             },
             channel: 'guild',
             clientPermissions: PermissionsBitField.Flags.EmbedLinks,
@@ -47,13 +51,13 @@ module.exports = class CommandSearch extends Command {
                 },
                 {
                     id: 'ytsearch',
-                    match: 'option',
-                    flag: 'ytsearch:'
+                    match: 'flag',
+                    flag: 'youtube'
                 },
                 {
                     id: 'scsearch',
-                    match: 'option',
-                    flag: 'scsearch:'
+                    match: 'flag',
+                    flag: 'soundcloud'
                 }
             ]
         });
@@ -78,7 +82,7 @@ module.exports = class CommandSearch extends Command {
             }
         }
 
-        if (!args.query) return this.client.ui.usage(message, 'search <query>');
+        if (!args.query) return this.client.ui.usage(message, 'search [provider] <query>');
 
         const list = await this.client.settings.get(message.guild.id, 'blockedPhrases');
         const splitSearch = args.query.split(/ +/g);
@@ -143,6 +147,10 @@ module.exports = class CommandSearch extends Command {
         let results;
         try {
             if (args.ytsearch) {
+                if (!this.client.settings.get('global', 'allowYouTube')) {
+                    return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
+                }
+
                 results = await this.client.player.youtube.search(args.query);
             } else {
                 results = await this.client.player.soundcloud.search(args.query);

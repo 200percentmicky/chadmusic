@@ -167,6 +167,10 @@ class CommandSearch extends SlashCommand {
             }
 
             case 'youtube': {
+                if (!this.client.settings.get('global', 'allowYouTube')) {
+                    return this.client.ui.sendPrompt(ctx, 'YT_NOT_ALLOWED');
+                }
+
                 results = await this.client.player.youtube.search(ctx.options.youtube.query);
                 break;
             }
