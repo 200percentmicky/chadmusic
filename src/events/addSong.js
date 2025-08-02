@@ -138,11 +138,14 @@ module.exports = class ListenerAddSong extends Listener {
             .trackTitle(song.name)
             .trackURL(song.url)
             .trackImage('small', song.thumbnail)
-            .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }))
-            .addFields([{
+            .setFooter(`${song.user.globalName} - ${song.user.tag.replace(/#0{1,1}$/, '')}`, song.user.avatarURL({ dynamic: true }));
+
+        if (queue.songs.indexOf(song) > 0) {
+            window.addFields([{
                 name: ':bookmark_tabs: Position',
-                value: `${queue.songs.length - 1}`
+                value: `${queue.songs.indexOf(song)}`
             }]);
+        }
 
         if (song.metadata?.silent) {
             window.windowTitle(`Added silently to the queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }));
