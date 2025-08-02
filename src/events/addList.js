@@ -91,6 +91,12 @@ module.exports = class ListenerAddList extends Listener {
             playlist.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
             channel.send({ embeds: [window._embed] });
+        } finally {
+            // Assuming a new player was created, continue typing...
+            // ! Might continue to type regardless.
+            if (queue.songs.length === playlist.songs.length) {
+                channel.sendTyping();
+            }
         }
     }
 };

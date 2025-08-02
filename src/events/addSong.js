@@ -130,8 +130,6 @@ module.exports = class ListenerAddSong extends Listener {
             } catch {}
         }
 
-        // if (!queue.songs[1]) return; // Don't send to channel if a player was created.
-        // if (queue.songs.indexOf(song) === 0) return;
         const window = new CMPlayerWindow()
             .color(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
             .windowTitle(`Added to queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }))
@@ -155,6 +153,10 @@ module.exports = class ListenerAddSong extends Listener {
             song.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
             channel.send({ embeds: [window._embed] });
+        } finally {
+            if (queue.songs.indexOf(song) === 0) { // Assuming a new player was created, continue typing...
+                channel.sendTyping();
+            }
         }
     }
 };
