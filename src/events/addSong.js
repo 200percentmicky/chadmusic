@@ -153,10 +153,11 @@ module.exports = class ListenerAddSong extends Listener {
             song.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
             channel.send({ embeds: [window._embed] });
-        } finally {
-            if (queue.songs.indexOf(song) === 0) { // Assuming a new player was created, continue typing...
-                channel.sendTyping();
-            }
+        }
+
+        // Assuming a new player was created, continue typing...
+        if (queue.songs.indexOf(song) === 0) {
+            channel.sendTyping();
         }
     }
 };
