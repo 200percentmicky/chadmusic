@@ -156,7 +156,7 @@ module.exports = class ListenerAddSong extends Listener {
         }
 
         // Assuming a new player was created, continue typing...
-        if (queue.songs.indexOf(song) === 0) {
+        if (!queue.songs[1]) {
             channel.sendTyping();
         }
     }
