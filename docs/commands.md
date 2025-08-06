@@ -795,10 +795,10 @@ Changes the track's thumbnail size of the player's "Now Playing" embeds.
 | --------- | ---- | ----------- |
 | `<size>` | string | The size of the track's image. Either `small` or `large`. Default is `small`. |
 
-### [p]votepercentage | /settings votepercentage `<percentage>`
+### [p]voteratio | /settings voteratio `<percentage>`
 
-Changes the vote-skip percentage requirement for placing votes to skip a track.
+Changes the vote-skip ratio requirement for placing votes to skip a track.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
-| `<percentage>` | float | The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50. |
+| `<percentage>` | float | The ratio to set as a percentage. Set to 0 to disable, or 100 to require everyone to vote. Default is 50. |

@@ -17,15 +17,15 @@
 const { Command } = require('discord-akairo');
 const { PermissionsBitField } = require('discord.js');
 
-module.exports = class CommandVotePercentage extends Command {
+module.exports = class CommandVoteRatio extends Command {
     constructor () {
-        super('votepercentage', {
-            aliases: ['votepercentage'],
+        super('voteratio', {
+            aliases: ['voteratio', 'votepercentage'],
             category: '⚙ Settings',
             description: {
-                text: 'Changes the vote-skip percentage requirement for placing votes to skip a track.',
+                text: 'Changes the vote-skip ratio requirement for placing votes to skip a track.',
                 usage: '<percentage:0-100>',
-                details: '`<percentage:0-100>` The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50.'
+                details: '`<percentage:0-100>` The ratio to set as a percentage. Set to 0 to disable, or 100 to require everyone to vote.'
             },
             userPermissions: [PermissionsBitField.Flags.ManageGuild],
             args: [
@@ -38,23 +38,23 @@ module.exports = class CommandVotePercentage extends Command {
     }
 
     async exec (message, args) {
-        if (!args.percentage) return this.client.ui.usage(message, 'votepercentage <percentage:0-100>');
+        if (!args.percentage) return this.client.ui.usage(message, 'voteratio <percentage:0-100>');
 
         if (isNaN(args.percentage)) {
-            return this.client.ui.reply(message, 'error', 'Percentage must be a number.');
+            return this.client.ui.reply(message, 'error', 'Percentage ratio must be a number.');
         }
 
         if (args.percentage > 100 || args.percentage < 0) {
-            return this.client.ui.reply(message, 'error', 'Percentage must be between 0 to 100.');
+            return this.client.ui.reply(message, 'error', 'Percentage ratio must be between 0 to 100.');
         }
 
         try {
             const newPercentage = parseFloat(args.percentage) / 100;
             await this.client.settings.set(message.guild.id, newPercentage, 'votingPercent');
 
-            return this.client.ui.reply(message, 'ok', `Vote-skip percentage is set to **${args.percentage}%**.`);
+            return this.client.ui.reply(message, 'ok', `Vote-skip ratio is set to **${args.percentage}%**.`);
         } catch (err) {
-            return this.client.ui.reply(message, 'error', `Cannot set vote-skip percentage. ${err}`);
+            return this.client.ui.reply(message, 'error', `Unable to change vote-skip ratio. ${err}`);
         }
     }
 };

@@ -867,10 +867,10 @@ module.exports = class CommandSettings extends SlashCommand {
                 break;
             }
 
-            case 'votepercentage': {
-                const newPercentage = parseFloat(ctx.options.votepercentage.percentage) / 100;
+            case 'voteratio': {
+                const newPercentage = parseFloat(ctx.options.voteratio.percentage) / 100;
                 await settings.set(guild.id, newPercentage, 'votingPercent');
-                this.client.ui.reply(ctx, 'ok', `Vote-skip percentage is set to **${ctx.options.votepercentage.percentage}%**.`);
+                this.client.ui.reply(ctx, 'ok', `Vote-skip ratio is set to **${ctx.options.voteratio.percentage}%**.`);
                 break;
             }
 
