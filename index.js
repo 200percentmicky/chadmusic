@@ -32,15 +32,13 @@ logger.info('  / ____/ /_  ____ _____/ /  |/  /_  _______(_)____');
 logger.info(' / /   / __ \\/ __ `/ __  / /|_/ / / / / ___/ / ___/');
 logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
-logger.info('/////////////// The Chad Music Bot! ///////////////');
 logger.info('Created by Micky | @200percentmicky');
 logger.info(`Bot Version: ${version}`);
+logger.info('Loading libraries...');
 
 if (version.endsWith('-dev')) {
     logger.warn('This version is considered unstable. Use caution when running this version in a production environment.');
 }
-
-logger.info('Loading libraries...');
 
 if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
     logger.warn(`NODE_ENV variable is currently set to ${process.env.NODE_ENV}. Unexpected behavior may occur.`);
