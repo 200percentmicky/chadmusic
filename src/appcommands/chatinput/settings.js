@@ -19,6 +19,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
+const { request } = require('undici');
 const CMError = require('../../lib/CMError');
 
 // TODO: Look into condensing all changes into a single method.
@@ -335,13 +336,13 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
-                    name: 'votepercentage',
-                    description: 'Changes the vote-skip percentage requirement for placing votes to skip a track.',
+                    name: 'voteratio',
+                    description: 'Changes the vote-skip ratio requirement for placing votes to skip a track.',
                     options: [
                         {
                             type: CommandOptionType.INTEGER,
                             name: 'percentage',
-                            description: 'The percentage to set. Set to 0 to disable, or 100 to require everyone to vote. Default is 50.',
+                            description: 'The ratio to set as a percentage. Set to 0 to disable, or 100 to require everyone to vote.',
                             required: true
                         }
                     ]
@@ -368,6 +369,24 @@ module.exports = class CommandSettings extends SlashCommand {
                             type: CommandOptionType.SUB_COMMAND,
                             name: 'current',
                             description: 'Shows the bot\'s current global settings.'
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'export',
+                            description: 'Export all settings data to a file.'
+                        },
+                        {
+                            type: CommandOptionType.SUB_COMMAND,
+                            name: 'import',
+                            description: 'Import all settings data from a file.',
+                            options: [
+                                {
+                                    type: CommandOptionType.ATTACHMENT,
+                                    name: 'file',
+                                    description: 'The settings file to import.',
+                                    required: true
+                                }
+                            ]
                         },
                         {
                             type: CommandOptionType.SUB_COMMAND,
@@ -514,6 +533,39 @@ module.exports = class CommandSettings extends SlashCommand {
 
                 this.client.player.options.streamType = encoderType[encoder];
                 this.client.ui.reply(ctx, 'ok', `Audio encoder has been set to **${encoder}**.`);
+                break;
+            }
+
+            case 'export': {
+                await ctx.defer(true);
+
+                const exportData = this.client.settings.export();
+                const buffer = Buffer.from(exportData);
+                const timestamp = new Date();
+
+                try {
+                    await ctx.send({ files: [{ file: buffer, name: `settings-export_${timestamp}.json` }] });
+                } catch (err) {
+                    await ctx.send(`${process.env.EMOJI_ERROR} Unable to create export file. ${err}`);
+                }
+                break;
+            }
+
+            case 'import': {
+                await ctx.defer(true);
+
+                const file = ctx.attachments.first().url;
+                const response = await request(file);
+                const importData = await response.body.text();
+
+                try {
+                    this.client.settings.import(importData, true, true);
+                } catch (err) {
+                    return ctx.send({ content: `${process.env.EMOJI_ERROR} Unable to import settings file. ${err}` });
+                }
+
+                await ctx.send({ content: `${process.env.EMOJI_OK} Settings imported successfully.` });
+
                 break;
             }
 
