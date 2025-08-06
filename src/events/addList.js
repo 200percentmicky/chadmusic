@@ -88,9 +88,9 @@ module.exports = class ListenerAddList extends Listener {
         window.addFields(embedFields);
 
         try {
-            playlist.metadata?.ctx.send({ embeds: [window._embed] });
+            await playlist.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
-            channel.send({ embeds: [window._embed] });
+            await channel.send({ embeds: [window._embed] });
         }
 
         // Assuming a new player was created, continue typing...

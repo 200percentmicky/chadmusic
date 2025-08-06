@@ -150,9 +150,9 @@ module.exports = class ListenerAddSong extends Listener {
         }
 
         try {
-            song.metadata?.ctx.send({ embeds: [window._embed] });
+            await song.metadata?.ctx.send({ embeds: [window._embed] });
         } catch {
-            channel.send({ embeds: [window._embed] });
+            await channel.send({ embeds: [window._embed] });
         }
 
         // Assuming a new player was created, continue typing...
