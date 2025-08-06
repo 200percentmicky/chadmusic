@@ -14,6 +14,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+/* eslint-disable no-empty */
+
 const { Listener } = require('discord-akairo');
 const prettyms = require('pretty-ms');
 const ffprobe = require('ffprobe');
@@ -149,11 +151,17 @@ module.exports = class ListenerAddSong extends Listener {
             window.windowTitle(`Added silently to the queue - ${member.voice.channel.name}`, guild.iconURL({ dynamic: true }));
         }
 
-        try {
-            await song.metadata?.ctx.send({ embeds: [window._embed] });
-        } catch {
-            await channel.send({ embeds: [window._embed] });
-        }
+        const emitSongAddAlert = channel.client.settings.get(guild.id, 'emitSongAddAlert');
+        if (emitSongAddAlert !== false) {
+            if (emitSongAddAlert === 'nocreate' && !queue.songs[1]) {
+            } else {
+                try {
+                    await song.metadata?.ctx.send({ embeds: [window._embed] });
+                } catch {
+                    await channel.send({ embeds: [window._embed] });
+                }
+            }
+        } else {}
 
         // Assuming a new player was created, continue typing...
         if (!queue.songs[1]) {

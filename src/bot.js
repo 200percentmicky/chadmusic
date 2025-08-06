@@ -80,6 +80,7 @@ class ChadMusic extends AkairoClient {
 
         this.defaultSettings = {
             prefix: process.env.PREFIX,
+            emitSongAddAlert: 'nocreate',
             djRole: null,
             djMode: false,
             maxTime: null,

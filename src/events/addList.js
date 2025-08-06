@@ -14,6 +14,8 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+/* eslint-disable no-empty */
+
 const { Listener } = require('discord-akairo');
 const CMPlayerWindow = require('../lib/CMPlayerWindow');
 const _ = require('lodash');
@@ -87,11 +89,17 @@ module.exports = class ListenerAddList extends Listener {
 
         window.addFields(embedFields);
 
-        try {
-            await playlist.metadata?.ctx.send({ embeds: [window._embed] });
-        } catch {
-            await channel.send({ embeds: [window._embed] });
-        }
+        const emitSongAddAlert = channel.client.settings.get(guild.id, 'emitSongAddAlert');
+        if (emitSongAddAlert !== false) {
+            if (emitSongAddAlert === 'nocreate' && queue.songs.length === playlist.songs.length) {
+            } else {
+                try {
+                    await playlist.metadata?.ctx.send({ embeds: [window._embed] });
+                } catch {
+                    await channel.send({ embeds: [window._embed] });
+                }
+            }
+        } else {}
 
         // Assuming a new player was created, continue typing...
         // ! Might continue to type regardless.

@@ -57,6 +57,7 @@ module.exports = class CommandSettings extends Command {
         const leaveOnStop = settings.get(message.guild.id, 'leaveOnStop'); // Leave on Stop
         const emptyCooldown = settings.get(message.guild.id, 'emptyCooldown'); // Empty Cooldown
         const songVcStatus = settings.get(message.guild.id, 'songVcStatus'); // Track Title as VC Status
+        const emitSongAddAlert = settings.get(message.guild.id, 'emitSongAddAlert'); // Emit Song Add Alert
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -83,6 +84,7 @@ module.exports = class CommandSettings extends Command {
                 **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
                 **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
+                **:speech_left: Emit Song Add Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
                 `
             },
             {

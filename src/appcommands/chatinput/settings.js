@@ -361,6 +361,33 @@ module.exports = class CommandSettings extends SlashCommand {
                     ]
                 },
                 {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'emitsongadd',
+                    description: 'Toggles the ability to send a message when a track is added to the queue.',
+                    options: [
+                        {
+                            type: CommandOptionType.STRING,
+                            name: 'toggle',
+                            description: 'The toggle of the setting.',
+                            required: true,
+                            choices: [
+                                {
+                                    name: 'Enabled',
+                                    value: 'true'
+                                },
+                                {
+                                    name: 'Disabled',
+                                    value: ''
+                                },
+                                {
+                                    name: '[Default] Enabled, but no message is sent when a player is created.',
+                                    value: 'nocreate'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     type: CommandOptionType.SUB_COMMAND_GROUP,
                     name: 'global',
                     description: "[Owner Only] Manages the bot's global settings.",
@@ -488,6 +515,7 @@ module.exports = class CommandSettings extends SlashCommand {
         const leaveOnStop = settings.get(guild.id, 'leaveOnStop'); // Leave on Stop
         const emptyCooldown = settings.get(guild.id, 'emptyCooldown'); // Empty Cooldown
         const songVcStatus = settings.get(guild.id, 'songVcStatus'); // Track Title as VC Status
+        const emitSongAddAlert = settings.get(guild.id, 'emitSongAddAlert'); // Emit Song Add Message
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
@@ -621,7 +649,8 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
                         **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                         **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
-                        **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}       
+                        **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
+                        **:speech_left: Emit Song Add Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
                         `
                     },
                     {
@@ -882,6 +911,17 @@ module.exports = class CommandSettings extends SlashCommand {
                     : 'The bot will no longer set a voice channel status.'
                 );
                 break;
+            }
+
+            case 'emitsongadd': {
+                const toggle = ctx.options.emitsongadd.toggle;
+                await this.client.settings.set(guild.id, toggle !== 'nocreate' ? !!toggle : toggle, 'emitSongAddAlert');
+
+                if (toggle === 'nocreate') {
+                    this.client.ui.reply(ctx, 'ok', 'Enabled song add messages.', null, 'No message will be sent when a player is created.');
+                } else {
+                    this.client.ui.reply(ctx, 'ok', `${toggle === true ? 'Enabled' : 'Disabled'} song add messages.`);
+                }
             }
             }
         }
