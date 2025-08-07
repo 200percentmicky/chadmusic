@@ -84,7 +84,7 @@ module.exports = class CommandSettings extends Command {
                 **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
                 **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
-                **:speech_left: Emit Song Add Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
+                **:speech_left: Emit Song Added Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
                 `
             },
             {
@@ -97,7 +97,7 @@ module.exports = class CommandSettings extends Command {
                 **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                 **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
                 **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-                **:raised_hand: Vote-skip Percentage:** ${parseFloat(votingPercent) * 100}%
+                **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                 `
             })
             .setTimestamp()
