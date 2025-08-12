@@ -18,7 +18,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const ytdl = require('@distube/ytdl-core');
 const _ = require('lodash');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 
 class CommandPlaylist extends SlashCommand {
     constructor (creator) {
@@ -169,7 +169,7 @@ class CommandPlaylist extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);

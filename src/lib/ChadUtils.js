@@ -26,7 +26,7 @@ const {
     ChatInputCommandInteraction
 } = require('discord.js');
 const { CommandContext } = require('slash-create');
-const CMError = require('./CMError.js');
+const ChadError = require('./ChadError.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
 /* eslint-enable no-unused-vars */
@@ -115,7 +115,10 @@ class ChadUtils {
      */
     static async setVcStatus (vc, status = null, reason = null) {
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
+
         const songVcStatus = vc.client.settings.get(vc.guild.id, 'songVcStatus');
+        const queue = vc.client.player.getQueue(vc.guild.id);
+
         if (songVcStatus !== true) return;
 
         try {
@@ -157,7 +160,7 @@ class ChadUtils {
      */
     static async handleCommand (interaction, commandName, args = {}) {
         if (!interaction.deferred) {
-            throw new CMError('NOT_DEFERRED', null, 'Interaction must be deferred.');
+            throw new ChadError('NOT_DEFERRED', null, 'Interaction must be deferred.');
         }
 
         interaction.author = interaction.member;
@@ -169,7 +172,7 @@ class ChadUtils {
             const command = await interaction.client.commands.findCommand(commandName);
             return interaction.client.commands.runCommand(interaction, command, args);
         } catch (err) {
-            throw new CMError('COMMAND_ERROR', null, `Error finding or running ${commandName}: ${err}`);
+            throw new ChadError('COMMAND_ERROR', null, `Error finding or running ${commandName}: ${err}`);
         }
     }
 

@@ -18,7 +18,7 @@ const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create')
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const { pushFormatFilter } = require('../../lib/pushFormatFilter');
 const _ = require('lodash');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 
 class CommandFilter extends SlashCommand {
     constructor (creator) {
@@ -251,7 +251,7 @@ class CommandFilter extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);

@@ -21,7 +21,7 @@ const {
 } = require('discord.js');
 const AutoComplete = require('youtube-autocomplete');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 
 class CommandSearch extends SlashCommand {
     constructor (creator) {
@@ -77,7 +77,7 @@ class CommandSearch extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);

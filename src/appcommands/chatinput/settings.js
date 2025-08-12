@@ -20,7 +20,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsB
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 const { request } = require('undici');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 
 // TODO: Look into condensing all changes into a single method.
 // A majority of this command is nothing but copying and pasting
@@ -474,7 +474,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const settings = this.creator.client.settings;

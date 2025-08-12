@@ -31,7 +31,7 @@ const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const ffprobe = require('ffprobe');
 const ffprobeStatic = require('ffprobe-static');
 const { toColonNotation } = require('colon-notation');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 const ytdl = require('@distube/ytdl-core');
 
 class CommandPlay extends SlashCommand {
@@ -158,7 +158,7 @@ class CommandPlay extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);

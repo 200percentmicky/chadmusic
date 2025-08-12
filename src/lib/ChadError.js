@@ -22,14 +22,14 @@
  * @param {string} [message]
  */
 
-class CMError extends Error {
+class ChadError extends Error {
     constructor (type, metadata, message) {
         super();
-        this.name = `CMError${type ? ` [${type}]` : ''}`;
+        this.name = `ChadError${type ? ` [${type}]` : ''}`;
         this.message = message ?? 'Failed successfully.'; // lol
         this.type = type;
         this.metadata = metadata;
     }
 }
 
-module.exports = CMError;
+module.exports = ChadError;

@@ -19,7 +19,7 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toMilliseconds } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const Genius = require('genius-lyrics');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 const CMPlayerWindow = require('../../lib/CMPlayerWindow');
 
 class CommandPlayer extends SlashCommand {
@@ -171,7 +171,7 @@ class CommandPlayer extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const client = this.creator.client;

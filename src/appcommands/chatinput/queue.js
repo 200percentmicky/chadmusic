@@ -24,7 +24,7 @@ const {
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
-const CMError = require('../../lib/CMError');
+const ChadError = require('../../lib/ChadError');
 
 class CommandQueue extends SlashCommand {
     constructor (creator) {
@@ -111,7 +111,7 @@ class CommandQueue extends SlashCommand {
 
     async run (ctx) {
         if (ctx.channel.type === ChannelType.DM) {
-            throw new CMError('NO_DMS_ALLOWED');
+            throw new ChadError('NO_DMS_ALLOWED');
         }
 
         const guild = this.client.guilds.cache.get(ctx.guildID);
