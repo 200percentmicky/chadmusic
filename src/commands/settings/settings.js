@@ -84,13 +84,13 @@ module.exports = class CommandSettings extends Command {
                 **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
                 **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
                 **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
-                **:speech_left: Emit Song Added Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
+                **:speech_left: Emit Track Added Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
                 `
             },
             {
                 name: ':shield: Moderation',
                 value: stripIndents`
-                **:timer: Max Song Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+                **:timer: Max Track Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
                 **:1234: Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
                 **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
                 **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
