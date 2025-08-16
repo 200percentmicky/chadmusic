@@ -103,23 +103,36 @@ class ChadUtils {
         return permission;
     }
 
+    // TODO: Revert this to just a REST function. For now, this fixes a bug.
     /**
-     * Sets the status for the connected voice channel.
+     * Sets the status for the connected voice channel. If repeat mode is set
+     * to 1 (repeat song), the "status" parameter is ignored and the status is
+     * automatically set to the looped track.
      *
      * ⚠ **Experimental:** Uses an undocumented endpoint in Discord's API
      * and might change in the future.
      *
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
-     * @param {string|null} status The new status to set.
-     * @param {string|null} reason The reason for the change.
+     * @param {string|null} [status] The new status to set.
+     * @param {string|null} [reason] The reason for the change.
      */
     static async setVcStatus (vc, status = null, reason = null) {
+        if (!vc || !(vc instanceof BaseGuildVoiceChannel)) {
+            throw new ChadError(null, null, 'A voice channel must be provided.');
+        }
+
         vc.client.settings.ensure(vc.guild.id, vc.client.defaultSettings);
 
         const songVcStatus = vc.client.settings.get(vc.guild.id, 'songVcStatus');
         const queue = vc.client.player.getQueue(vc.guild.id);
 
         if (songVcStatus !== true) return;
+
+        if (!queue) { // eslint-disable-line no-empty
+        } else if (queue.repeatMode === 1) {
+            const song = queue.songs[0];
+            status = `${process.env.EMOJI_MUSIC} ${song.name} [${song.formattedDuration}] (${song.user.displayName} - ${song.user.username})`;
+        }
 
         try {
             await vc.client.rest.put(`/channels/${vc.id}/voice-status`, {
