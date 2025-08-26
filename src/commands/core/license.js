@@ -52,7 +52,10 @@ module.exports = class LicenseCommand extends Command {
             content: stripIndents`
             This application is running an instance of **[ChadMusic](https://github.com/200percentmicky/chadmusic)**
 
-            ChadMusic is licensed under the GNU General Public License version 3.
+            This program is licensed under the GNU General Public License version 3.
+
+            ChadMusic
+            Copyright (C) 2025  Micky | 200percentmicky
 
             This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU General Public License as published by
