@@ -292,7 +292,6 @@ class ChadUtils {
      * @returns {boolean|undefined}
      */
     static pornPattern = (url) => {
-        // ! TODO: Come up with a better regex lol
         const pornSites = [
             'pornhub',
             'xhamster',
