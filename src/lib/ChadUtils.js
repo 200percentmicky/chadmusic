@@ -260,7 +260,7 @@ class ChadUtils {
      * @returns {boolean|undefined}
      */
     static #matchRegex (regex, string) {
-        return new RegExp(regex).test(string) ?? undefined;
+        return new RegExp(regex, 'g').test(string) ?? undefined;
     }
 
     /**
@@ -293,8 +293,21 @@ class ChadUtils {
      */
     static pornPattern = (url) => {
         // ! TODO: Come up with a better regex lol
+        const pornSites = [
+            'pornhub',
+            'xhamster',
+            'xvideos',
+            'porntube',
+            'xtube',
+            'youporn',
+            'pornerbros',
+            'pornhd',
+            'pornotube',
+            'pornovoisines',
+            'pornoxo'
+        ];
         // eslint-disable-next-line no-useless-escape
-        const pornPattern = /https?:\/\/(www\.)?(pornhub|xhamster|xvideos|porntube|xtube|youporn|pornerbros|pornhd|pornotube|pornovoisines|pornoxo)\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/g;
+        const pornPattern = `https?:\\/\\/(www\\.)?(${pornSites.join('|')})\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
         return this.#matchRegex(pornPattern, url);
     };
 }
