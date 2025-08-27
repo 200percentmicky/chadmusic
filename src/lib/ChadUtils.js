@@ -189,6 +189,66 @@ class ChadUtils {
         }
     }
 
+    /**
+     * Returns a formatted list of all permissions listed in PermissionFlagsBit.
+     *
+     * https://discord-api-types.dev/api/discord-api-types-v10#PermissionFlagsBits
+     */
+    static permissionBits () {
+        return {
+            AddReactions: 'Add Reactions',
+            Administrator: 'Administrator',
+            AttachFiles: 'Attach Files',
+            BanMembers: 'Ban Members',
+            ChangeNickname: 'Change Nickname',
+            Connect: 'Connect',
+            CreateEvents: 'Create Events',
+            CreateGuildExpressions: 'Create Expressions',
+            CreateInstantInvite: 'Create Instant Invite',
+            CreatePrivateThreads: 'Create Private Threads',
+            CreatePublicThreads: 'Create Public Threads',
+            DeafenMembers: 'Deafen Members',
+            EmbedLinks: 'Embed Links',
+            KickMembers: 'Kick Members',
+            ManageChannels: 'Manage Channels',
+            ManageEvents: 'Manage Events',
+            ManageGuild: 'Manage Server',
+            ManageGuildExpressions: 'Manage Expressions',
+            ManageMessages: 'Manage Messages',
+            ManageNicknames: 'Manage Nicknames',
+            ManageRoles: 'Manage Roles',
+            ManageThreads: 'Manage Threads',
+            ManageWebhooks: 'Manage Webhooks',
+            MentionEveryone: 'Mention @everyone, @here, and All Roles',
+            ModerateMembers: 'Timeout Members',
+            MoveMembers: 'Move Members',
+            MuteMembers: 'Mute Members',
+            PinMessages: 'Pin Messages',
+            PrioritySpeaker: 'Priority Speaker',
+            ReadMessageHistory: 'Read Message History',
+            RequestToSpeak: 'Request to Speak',
+            SendMessages: 'Send Messages',
+            SendMessagesInThreads: 'Send Messages in Threads',
+            SendPolls: 'Create Polls',
+            SendTTSMessages: 'Send Text-To-Speech Messages',
+            SendVoiceMessages: 'Send Voice Messages',
+            Speak: 'Speak',
+            Stream: 'Stream',
+            UseApplicationCommands: 'Use Application Commands',
+            UseEmbeddedActivities: 'Use Activities',
+            UseExternalApps: 'Use External Apps',
+            UseExternalEmojis: 'Use External Emojis',
+            UseExternalSounds: 'Use External Sounds',
+            UseExternalStickers: 'Use External Stickers',
+            UseSoundboard: 'Use Soundboard',
+            UseVAD: 'Use Voice Activity Detection',
+            ViewAuditLog: 'View Audit Log',
+            ViewChannels: 'View Channel',
+            ViewCreatorMonetizationAnalytics: 'View Creator Monetization Analytics', // ! Might not be a valid guild permission.
+            ViewGuildInsights: 'View Server Insights'
+        };
+    }
+
     // *******************************************************
     // The rest of the functions below is just regex checking.
     // *******************************************************
