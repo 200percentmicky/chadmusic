@@ -305,7 +305,6 @@ class ChadUtils {
             'pornovoisines',
             'pornoxo'
         ];
-        // eslint-disable-next-line no-useless-escape
         const pornPattern = `https?:\\/\\/(www\\.)?(${pornSites.join('|')})\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
         return this.#matchRegex(pornPattern, url);
     };
