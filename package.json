@@ -34,7 +34,7 @@
     "common-tags": "^1.8.0",
     "discord-akairo": "github:200percentmicky/discord-akairo",
     "discord-hybrid-sharding": "^2.2.0",
-    "discord.js": "^14.21.0",
+    "discord.js": "^14.22.1",
     "distube": "github:200percentmicky/chadtube#v5",
     "dotenv": "^8.6.0",
     "enmap": "^5.9.10",
