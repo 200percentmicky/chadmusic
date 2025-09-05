@@ -79,6 +79,7 @@
   "overrides": {
     "@distube/ytsr": "$@distube/ytsr",
     "axios": "^1.8.4",
+    "better-sqlite3": "^12.2.0",
     "undici": "^6.21.3",
     "formidable": "^3.5.1",
     "tar": "^6.2.1",
