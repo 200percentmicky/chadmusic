@@ -27,6 +27,7 @@
     "@distube/yt-dlp": "github:200percentmicky/extractor-plugins#yt-dlp",
     "@distube/ytdl-core": "^4.16.12",
     "@distube/ytsr": "^2.0.4",
+    "@snazzah/davey": "^0.1.6",
     "array-paginator": "^1.5.2",
     "bot-utils": "^1.4.2",
     "chalk": "^4.1.1",
@@ -78,6 +79,7 @@
   },
   "overrides": {
     "@distube/ytsr": "$@distube/ytsr",
+    "@snazzah/davey": "$@snazzah/davey",
     "axios": "^1.8.4",
     "better-sqlite3": "^12.2.0",
     "undici": "^6.21.3",
