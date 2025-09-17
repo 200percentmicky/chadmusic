@@ -112,7 +112,7 @@ module.exports = class CommandPlayNow extends Command {
                     member: message.member,
                     textChannel: message.channel,
                     message: message instanceof Message ? message : undefined,
-                    skip: true,
+                    position: 1,
                     metadata: {
                         ctx: message instanceof CommandContext ? message : undefined
                     }
