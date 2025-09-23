@@ -61,12 +61,12 @@ Enables sharding the bot. This should only be used for large bots that are in ov
     Sharding the bot isn't necessary until your bot reaches 2500 guilds.
 
 ### SHARDS
-<span class="badge-warn">:warning: Requires [SHARDING](#sharding-1) variable.</span>
+<span class="badge-warn">:warning: Requires [SHARDING](#sharding_1) variable.</span>
 
 The number of shards to use. This splits the bot into multiple processes to ease the load of a single shard. Disable to have the bot spawn shards automatically.
 
 ### SHARDS_PER_CLUSTER
-<span class="badge-warn">:warning: Requires [SHARDING](#sharding-1) variable.</span>
+<span class="badge-warn">:warning: Requires [SHARDING](#sharding_1) variable.</span>
 
 The number of shards that a single cluster will utilize. Clusters are shards that spawn their own internal shards to reduce memory usage. [Learn more](https://github.com/meister03/discord-hybrid-sharding?tab=readme-ov-file#how-does-it-work)
 
@@ -113,7 +113,11 @@ Toggles the use of the [YouTube Plugin](https://www.npmjs.com/package/@distube/y
 
 !!! bug
 
-    Tracks will resolve slower and playlists will not work when this variable is set to false. This is a known issue.
+    Tracks will resolve slower when this variable is set to `false`.
+
+!!! info
+
+    If this variable is set to `false`, it's recommended to install [Deno](https://deno.com/) onto your system if you plan to play YouTube tracks this way. [Learn more](https://github.com/yt-dlp/yt-dlp/issues/14404)
 
 ### UPDATE_YTDLP
 <span class="badge-info">:information_source: This field was previously UPDATE_YOUTUBE_DL.</span>

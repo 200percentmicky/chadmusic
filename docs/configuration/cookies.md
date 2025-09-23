@@ -19,3 +19,7 @@ The first way is if you have `USE_YOUTUBE_PLUGIN` set to `true`. You can follow 
 The second way is if you have `USE_YOUTUBE_PLUGIN` set to `false`. Instead of creating a `cookies.json` file, create a `cookies.txt` file in the bot's root directory and follow the instructions from yt-dlp's wiki.
 
 [Add cookies.txt](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies){ .md-button }
+
+!!! info
+
+    It's recommended to install [Deno](https://deno.com/) onto your system if you plan to play YouTube tracks this way. [Learn more.](https://github.com/yt-dlp/yt-dlp/issues/14404)
