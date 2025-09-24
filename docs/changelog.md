@@ -1,5 +1,62 @@
 # Changelog
 
+## 2025.2.0
+This release mainly includes some quality of life changes. A big one was implementing support for Discord's new DAVE (Discord Audio & Video End-to-end Encryption) protocol.
+
+!!! danger "Breaking Changes"
+
+    Node.js 22.12.0 or later is now required to run the bot.
+
+!!! warning "Important"
+
+    In the near future, if you plan to play tracks from YouTube using yt-dlp, [Deno](https://deno.com/) will need to be installed on your system. [Learn more](https://github.com/yt-dlp/yt-dlp/issues/14404)
+
+* **Added:** New commands
+    - `/settings global import`
+    - `/settings global export`
+    - `/settings emitsongadd`
+    - `[p]emitsongadd`
+* **Added** New subcommands to `/search`.
+    - `/search soundcloud`
+    - `/search youtube`
+* **Added:** An option to toggle Song Added alerts.
+* **Added:** Support for the DAVE (Discord Audio & Video End-to-end Encryption) protocol.
+* **Added:** Support for Node.js 24
+* **Added:** New environment variables
+    - `USE_YOUTUBE_PLUGIN`
+* **Added:** Search providers to `[p]search`. Only `soundcloud` or `youtube` are available. Defaults to `soundcloud` if no valid provider is used.
+* **Added:** New packages.
+    - @snazzah/davey
+    - spotify-uri
+    - spotify-web-api-node
+* **Added:** Additional logs when shutting down the bot.
+* **Added:** Support to provide cookies to yt-dlp.
+* **Changed:** `UPDATE_YTDLP` now defaults to `false`. This is useful if you frequently use nightly builds of yt-dlp.
+* **Changed:** Position field in Song Added alerts no longer shows if there is only 1 track in the queue.
+* **Changed:** Extended duration of the bot's typing indicator.
+* **Changed:** Voting percentage is now "Vote Ratio". `[p]votepercentage` is still available as an alias to `[p]voteratio`.
+* **Changed:** Exceptions are no longer sent in embeds.
+* **Fixed:** Track VC Status not setting properly if Repeat Mode is set to Loop Track.
+* **Fixed:** `[p]playnow` not skipping a track. This also caused the player to break.
+* **Updated:** Permission bits to recognize new permissions.
+* **Updated:** Improved `pornPattern` regex.
+* **Updated:** @discordjs/voice to 0.19.0
+* **Updated:** @distube/yt-dlp to use my fork.
+* **Updated:** @distube/ytdl-core to 4.16.22
+* **Updated:** axios to 1.8.4
+* **Updated:** better-sqlite3 to 12.2.0
+* **Updated:** discord.js to 14.22.1
+* **Updated:** enmap to 5.9.10
+* **Updated:** slash-create to 6.6.3
+* **Updated:** sodium-native to 5.0.3
+* **Updated:** undici to 6.21.3
+* **Updated:** tar-fs to 2.1.3
+* **Removed:** Several instances of the old catchphrase "The Chad Music Bot".
+* **Removed:** Removed packages.
+    - libsodium-wrappers
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.1.3...2025.2.0)
+
 ## 2025.1.3
 This is a maintenance release.
 

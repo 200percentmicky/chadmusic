@@ -401,9 +401,26 @@ Unpauses the player, resuming playback.
 
 Reverses the order of the queue.
 
-### [p]search | /search `<query>`
+### [p]search `[provider]` `<query>`
 
 Searches for a track to play.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `[provider]` | string | The provier to use when searching. Either `soundcloud` or `youtube` are available. Defaults to `soundcloud` if no valid provider is used. |
+| `<query>` | string | The query to search for. |
+
+### /search soundcloud `<query>`
+
+Searches SoundCloud for a track to play.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<query>` | string | The query to search for. |
+
+### /search youtube `<query>`
+
+Searches YouTube for a track to play.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |

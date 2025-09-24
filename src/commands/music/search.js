@@ -38,7 +38,7 @@ module.exports = class CommandSearch extends Command {
                 text: 'Searches for a track to play.',
                 usage: '[provider] <query>',
                 detail: stripIndents`
-                \`[provider]\` The provider to use to search for tracks. Only \`youtube\` or \`soundcloud\` are supported for now. Defaults to \`soundcloud\` if no valid provider is used.
+                \`[provider]\` The provier to use when searching. Either \`soundcloud\` or \`youtube\` are available. Defaults to \`soundcloud\` if no valid provider is used.
                 \`<query>\` The phrase(s) to search for.
                 `
             },
