@@ -26,7 +26,7 @@ module.exports = class CommandEmitSongAdd extends Command {
                 text: 'Toggles the ability to send a message when a track is added to the queue.',
                 usage: '<toggle:on/off/true/false/nocreate>',
                 details: stripIndents`
-                \`<toggle:on/off/true/false>\` The toggle of the setting.
+                \`<toggle:on/off/true/false/nocreate>\` The toggle of the setting.
                 
                 \`on\` / \`true\` - Enabled
                 \`off\` / \`false\` - Disabled
@@ -44,7 +44,7 @@ module.exports = class CommandEmitSongAdd extends Command {
     }
 
     async exec (message, args) {
-        if (!args.toggle) return this.client.ui.usage(message, 'emitsongadd <toggle:on/off/true/false\nocreate>');
+        if (!args.toggle) return this.client.ui.usage(message, 'emitsongadd <toggle:on/off/true/false/nocreate>');
 
         const settings = this.client.settings;
         switch (args.toggle) {

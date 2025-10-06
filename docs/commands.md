@@ -610,15 +610,6 @@ Toggles the ability to silently add tracks to the queue.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-### [p]allowyoutube | /settings global allowyoutube `<toggle>`
-<span class="badge-danger">:no_entry_sign: Bot owner only</span>
-
-Toggles the ability to allow tracks from YouTube to be added to the player.
-
-| Arguments | Type | Description |
-| --------- | ---- | ----------- |
-| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
-
 ### [p]blocksong add/remove/list | /settings blocksong add/remove/list `<phrase>`
 
 Manages the server's list of blocked search phrases.
@@ -653,6 +644,14 @@ Toggles DJ Mode for the server.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `off`. |
 
+### [p]emitsongadd | /setting emitsongadd `<toggle>`
+
+Toggles the ability to send a message when a track is added to the queue.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on`, `off`, or `nocreate`. If set to `nocreate`, no message is sent when a player is created. Otherwise, this enables the setting. Default is `nocreate`. |
+
 ### [p]emptycooldown | /settings emptycooldown `<time>`
 
 Sets how long the bots stays in an empty voice channel.
@@ -672,11 +671,6 @@ Toggles the ability to change the volume past 200%.
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
-
-### [p]globalsettings | /settings global current
-<span class="badge-danger">:no_entry_sign: Bot owner only</span>
-
-Shows the bot's current global settings.
 
 ### [p]leaveonempty | /settings leaveonempty `<toggle>`
 
@@ -761,15 +755,6 @@ Limits the number of entries that members can add to the queue.
 
 Displays the bot's current settings for the server.
 
-### [p]shownewsongonly | /settings global shownewsongonly `<toggle>`
-<span class="badge-danger">:no_entry_sign: Bot owner only<span>
-
-Toggles whether the Now Playing alerts are shown for new songs only.
-
-| Arguments | Type | Description |
-| --------- | ---- | ----------- |
-| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
-
 ### [p]songvcstatus | /settings songvcstatus `<toggle>`
 
 Toggles whether the bot will set the playing track's title as a status for the voice channel.
@@ -781,20 +766,6 @@ Toggles whether the bot will set the playing track's title as a status for the v
 !!! warning "Experimental"
 
     This feature uses an undocumented endpoint in Discord's API and may change at anytime.
-
-### [p]streamtype | /settings global streamtype `<encoder>`
-<span class="badge-danger">:no_entry_sign: Bot owner only<span>
-
-Selects which audio encoder the bot should use during streams.
-
-| Arguments | Type | Description |
-| --------- | ---- | ----------- |
-| `<encoder>` | string | The audio encoder to use.|
-
-| Encoder | Description |
-| ------- | ----------- |
-| opus | Uses the Opus encoder. Better quality, uses more resources. |
-| raw | Uses a RAW encoder. Better performance, uses less resources. |
 
 ### [p]textchannel | /settings textchannel `[channel]`
 
@@ -819,3 +790,59 @@ Changes the vote-skip ratio requirement for placing votes to skip a track.
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
 | `<percentage>` | float | The ratio to set as a percentage. Set to 0 to disable, or 100 to require everyone to vote. Default is 50. |
+
+## Global settings
+These settings affect the bot globally and are only available to the bot owner.
+
+### [p]allowyoutube | /settings global allowyoutube `<toggle>`
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
+
+Toggles the ability to allow tracks from YouTube to be added to the player.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
+
+### [p]globalsettings | /settings global current
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
+
+Shows the bot's current global settings.
+
+### /settings global export
+<span class="badge-info">:information_source: Slash command only</span>
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
+
+Export all settings data to a file.
+
+### /settings global import `<file>`
+<span class="badge-info">:information_source: Slash command only</span>
+<span class="badge-danger">:no_entry_sign: Bot owner only</span>
+
+Import all settings data from a file.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<file>` | Attachment | The settings file to import. |
+
+### [p]shownewsongonly | /settings global shownewsongonly `<toggle>`
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
+
+Toggles whether the Now Playing alerts are shown for new songs only.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
+
+### [p]streamtype | /settings global streamtype `<encoder>`
+<span class="badge-danger">:no_entry_sign: Bot owner only<span>
+
+Selects which audio encoder the bot should use during streams.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<encoder>` | string | The audio encoder to use.|
+
+| Encoder | Description |
+| ------- | ----------- |
+| opus | Uses the Opus encoder. Better quality, uses more resources. |
+| raw | Uses a RAW encoder. Better performance, uses less resources. |
