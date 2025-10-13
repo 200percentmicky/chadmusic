@@ -78,6 +78,7 @@
     "standard": "^17.0.0"
   },
   "overrides": {
+    "@distube/ytdl-core": "$@distube/ytdl-core",
     "@distube/ytsr": "$@distube/ytsr",
     "@snazzah/davey": "$@snazzah/davey",
     "axios": "^1.8.4",
