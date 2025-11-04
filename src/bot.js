@@ -35,6 +35,7 @@ const { FilePlugin } = require('@distube/file');
 const { DirectLinkPlugin } = require('@distube/direct-link');
 const { default: SoundCloudPlugin } = require('@distube/soundcloud');
 const { default: DeezerPlugin } = require('@distube/deezer');
+const downloadNightly = require('./lib/downloadNightly.js');
 
 // Let's boogie!
 class ChadMusic extends AkairoClient {
@@ -205,6 +206,10 @@ class ChadMusic extends AkairoClient {
             update: process.env.UPDATE_YTDLP === 'true' ?? false,
             cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined
         });
+
+        if (process.env.UPDATE_YTDLP === 'nightly') {
+            downloadNightly();
+        }
 
         const plugins = [
             directLink,
