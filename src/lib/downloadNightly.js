@@ -31,7 +31,7 @@ function downloadNightly () {
 
     return exec(cmd, (error, stdout) => {
         if (error) {
-            logger.error(error.stack);
+            return logger.error(error.stack);
         }
 
         logger.info(stdout);
