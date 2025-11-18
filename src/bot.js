@@ -204,7 +204,9 @@ class ChadMusic extends AkairoClient {
         // yt-dlp
         const ytdlp = new YtDlpPlugin({
             update: process.env.UPDATE_YTDLP === 'true' ?? false,
-            cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined
+            cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined,
+            format: process.env.YTDLP_FORMAT ?? 'ba/ba*',
+            jsRuntimes: process.env.JS_RUNTIME === ('deno' || 'node' || 'bun' || 'quickjs') ? process.env.JS_RUNTIME : 'deno'
         });
 
         if (process.env.UPDATE_YTDLP === 'nightly') {

@@ -113,7 +113,7 @@ Toggles the use of the [YouTube Plugin](https://www.npmjs.com/package/@distube/y
 
 !!! bug
 
-    Tracks will resolve slower when this variable is set to `false`.
+    Tracks will resolve slower when this variable is set to `false`. This is a known limitation when using yt-dlp.
 
 !!! info
 
@@ -123,6 +123,18 @@ Toggles the use of the [YouTube Plugin](https://www.npmjs.com/package/@distube/y
 <span class="badge-info">:information_source: This field was previously UPDATE_YOUTUBE_DL.</span>
 
 Allows the bot to download the most recent build of yt-dlp on boot. Defaults to `true`. If you use a custom build of yt-dlp, enabling this variable is not recommended.
+
+### YTDLP_FORMAT
+
+The formats that yt-dlp should use when resolving tracks. To get a better understanding on how this variable works, consider consulting yt-dlp's Format Selection page on its README [here](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#format-selection). Default is `ba/ba*`.
+
+### JS_RUNTIME
+
+The Javascript runtime that yt-dlp should use when resolving tracks. The supported runtimes are `deno`, `node`, `bun`, or `quickjs`. Default is `deno`.
+
+!!! warn
+
+    For this variable to work, you'll need to install the preferred runtime to your system and have the runtime available in `PATH`. yt-dlp will fallback to its previous system to resolve tracks if the selected runtime is not available for some reason. Sources that rely on external runtimes may fail to load if this happens.
 
 ## Development
 This section allows you to enable features of the bot for debugging and development purposes, such as enabling the eval command. If you don't know how to use any of the development tools, you should probably keep them disabled for the time being.
