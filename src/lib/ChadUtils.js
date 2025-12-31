@@ -200,6 +200,7 @@ class ChadUtils {
             Administrator: 'Administrator',
             AttachFiles: 'Attach Files',
             BanMembers: 'Ban Members',
+            BypassSlowmode: 'Bypass Slowmode',
             ChangeNickname: 'Change Nickname',
             Connect: 'Connect',
             CreateEvents: 'Create Events',
