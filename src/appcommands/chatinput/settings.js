@@ -773,7 +773,7 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'allowexplicit': {
-                await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
+                await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowExplicit');
                 return this.client.ui.reply(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
             }
 
