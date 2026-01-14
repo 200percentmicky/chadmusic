@@ -23,7 +23,7 @@ module.exports = class CommandAllowYouTube extends Command {
             aliases: ['allowexplicitsites', 'allowporn'],
             category: '⚙ Settings',
             description: {
-                text: `Toggles the ability to allow tracks from explicit websites to be added to the player.\n\n${process.env.EMOJI_WARN} Partnered servers are forbidden from toggling this setting.`,
+                text: `Toggles the ability to allow tracks from explicit websites to be added to the queue.\n\n${process.env.EMOJI_WARN} Partnered servers are forbidden from toggling this setting.`,
                 usage: '<toggle:on/off/true/false>',
                 details: '`<toggle:on/off/true/false>` The toggle of the setting.'
             },

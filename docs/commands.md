@@ -578,13 +578,25 @@ Toggles the ability to allow age restricted content in the queue.
 | --------- | ---- | ----------- |
 | `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `on`. |
 
-!!! warning
+!!! tip
 
-    This setting only applies to tracks that are marked as explicit. All pornographic websites are blocked regardless if this setting is on or not.
+    This setting only applies to tracks that are marked as explicit on a few sources. To toggle support for explicit sites, use `[p]allowexplicitsites` or `/settings allowexplicitsites` instead.
 
 !!! info "Regarding tracks from YouTube."
 
     If a cookie wasn't provided in `cookies.json`, you'll still be able to use this command. The player won't be able to play any track that's marked explicit without a valid cookie that allows access to age restricted content.
+
+### [p]allowexplicitsites | [p]allowporn | /settings allowexplicitsites
+
+Toggles the ability to add tracks from explicit websites to the queue. To add any track from adult websites after enabling this feature, both of the player's binded text and voice channels must be marked as **Age Restricted**.
+
+| Arguments | Type | Description |
+| --------- | ---- | ----------- |
+| `<toggle>` | string or boolean | Toggles the setting. Either `on` or `off`. Default is `off`. |
+
+!!! danger "Partnered Servers"
+
+    To comply with [Discord's Partnership Code of Conduct](https://support.discord.com/hc/en-us/articles/360024871991-Discord-Partnership-Code-of-Conduct), partnered servers are forbidden from enabling this feature. Brute-forcing this feature will increase the risk of having the server's partnered status revoked.
 
 ### [p]allowfilters | /settings allowfilters `<toggle>`
 
