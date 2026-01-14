@@ -23,9 +23,12 @@ const {
     Message,
     BaseGuildTextChannel,
     Team,
-    ChatInputCommandInteraction
+    ChatInputCommandInteraction,
+    GuildFeature,
+    Guild
 } = require('discord.js');
 const { CommandContext } = require('slash-create');
+const { Queue } = require('distube');
 const ChadError = require('./ChadError.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
@@ -101,6 +104,26 @@ class ChadUtils {
             isOwner();
 
         return permission;
+    }
+
+    /**
+     * Checks whether both text and voice channels are Age Restricted. If the guild is
+     * partnered, this will always return `false`.
+     *
+     * @param {BaseGuildTextChannel} channel Text Channel
+     * @param {BaseGuildVoiceChannel} vc Current member's voice channel
+     * @param {Queue} [queue] Active player queue
+     */
+    static isNSFW (channel, vc, queue) {
+        if (channel.guild.features.includes(GuildFeature.Partnered)) {
+            return false;
+        }
+
+        if (queue) {
+            return queue.textChannel.nsfw && queue.voice.channel.nsfw;
+        } else {
+            return channel.nsfw && vc.nsfw;
+        }
     }
 
     // TODO: Revert this to just a REST function. For now, this fixes a bug.

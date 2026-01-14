@@ -181,14 +181,22 @@ class CommandPlay extends SlashCommand {
         const vc = _member.voice.channel;
         if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
-        if (ctx.subcommands[0] === 'track' || (ctx.subcommands[0] === 'now' && vc.members.size === 3)) {
-            if (this.client.utils.pornPattern(ctx.options.track?.query)) {
-                await ctx.defer(true);
-                return this.client.ui.reply(ctx, 'no', "The URL you're requesting to play is not allowed.");
+        if (ctx.subcommands[0] === 'track' || ctx.subcommands[0] === 'now') {
+            if (this.client.utils.pornPattern(ctx.options[ctx.subcommands[0]]?.query)) {
+                if (this.client.settings.get(ctx.guildID, 'allowPorn')) {
+                    const queue = this.client.player.getQueue(guild);
+                    if (!this.client.utils.isNSFW(channel, vc, queue)) {
+                        await ctx.defer(true);
+                        return this.client.ui.custom(ctx, ':underage:', process.env.COLOR_NO, "This track's URL is considered to be an explicit website. Both text and voice channels must be **Age Restricted** for this track to be added.");
+                    }
+                } else {
+                    await ctx.defer(true);
+                    return this.client.ui.reply(ctx, 'no', 'Explicit websites are not allowed on this server.');
+                }
             }
 
             if (!dj) {
-                if (hasURL(ctx.options.track?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
+                if (hasURL(ctx.options[ctx.subcommands[0]]?.query.replace(/(^\\<+|\\>+$)/g, ''))) {
                     const allowLinks = this.client.settings.get(ctx.guildID, 'allowLinks');
                     if (!allowLinks) {
                         return this.client.ui.reply(ctx, 'no', 'Cannot add your song to the queue because adding URL links is not allowed on this server.');
@@ -196,7 +204,7 @@ class CommandPlay extends SlashCommand {
                 }
 
                 const list = await this.client.settings.get(guild.id, 'blockedPhrases');
-                const splitSearch = ctx.options.track?.query.split(/ +/g);
+                const splitSearch = ctx.options[ctx.subcommands[0]]?.query.split(/ +/g);
                 for (let i = 0; i < splitSearch.length; i++) {
                     /* eslint-disable-next-line no-useless-escape */
                     if (list.includes(splitSearch[i].replace(/(^\\<+|\\>+$)/g, ''))) {

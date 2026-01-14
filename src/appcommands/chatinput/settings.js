@@ -16,7 +16,7 @@
 
 const { stripIndents } = require('common-tags');
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildFeature, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation');
 const { version } = require('../../../package.json');
 const { request } = require('undici');
@@ -137,18 +137,18 @@ module.exports = class CommandSettings extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'allowfilters',
-                    description: 'Allows or denies the ability to add filters to the player.',
+                    description: 'Toggles the ability to add filters to the player.',
                     options: [{
                         type: CommandOptionType.BOOLEAN,
                         name: 'toggle',
-                        description: 'Enables or disables the feature. If set to false, only DJs can use filters.',
+                        description: 'Toggles the feature. If set to false, only DJs can use filters.',
                         required: true
                     }]
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'allowexplicit',
-                    description: 'Allows or denies the ability to add explicit tracks to the queue.',
+                    description: 'Toggles the ability to add explicit tracks to the queue.',
                     options: [{
                         type: CommandOptionType.BOOLEAN,
                         name: 'toggle',
@@ -158,8 +158,19 @@ module.exports = class CommandSettings extends SlashCommand {
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
+                    name: 'allowexplicitsites',
+                    description: 'Toggles the ability to add tracks from explicit websites to the queue.',
+                    options: [{
+                        type: CommandOptionType.BOOLEAN,
+                        name: 'toggle',
+                        description: 'Whether tracks from explicit websites should be added to the queue.',
+                        required: true
+                    }]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
                     name: 'allowlinks',
-                    description: 'Allows or denies the ability to add songs to the queue from a URL link.',
+                    description: 'Toggles the ability to add songs to the queue from a URL link.',
                     options: [{
                         type: CommandOptionType.BOOLEAN,
                         name: 'toggle',
@@ -191,11 +202,11 @@ module.exports = class CommandSettings extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'unlimitedvolume',
-                    description: 'Allows or denies the ability to freely set the player\'s volume to any value.',
+                    description: 'Toggles the ability to freely set the player\'s volume to any value.',
                     options: [{
                         type: CommandOptionType.BOOLEAN,
                         name: 'toggle',
-                        description: 'Enables or disables the feature. If set to false, the player\'s volume will be limited to 200%.',
+                        description: 'Toggles the feature. If set to false, the player\'s volume will be limited to 200%.',
                         required: true
                     }]
                 },
@@ -277,7 +288,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.BOOLEAN,
                             name: 'toggle',
-                            description: 'Enables or disables the feature.',
+                            description: 'Toggles the feature.',
                             required: true
                         }
                     ]
@@ -290,7 +301,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.BOOLEAN,
                             name: 'toggle',
-                            description: 'Enables or disables the feature.',
+                            description: 'Toggles the feature.',
                             required: true
                         }
                     ]
@@ -303,7 +314,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.BOOLEAN,
                             name: 'toggle',
-                            description: 'Enables or disables the feature.',
+                            description: 'Toggles the feature.',
                             required: true
                         }
                     ]
@@ -316,7 +327,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.BOOLEAN,
                             name: 'toggle',
-                            description: 'Enables or disables the feature.',
+                            description: 'Toggles the feature.',
                             required: true
                         }
                     ]
@@ -355,7 +366,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.BOOLEAN,
                             name: 'toggle',
-                            description: 'The toggle of the setting.',
+                            description: 'Toggles the feature.',
                             required: true
                         }
                     ]
@@ -368,7 +379,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         {
                             type: CommandOptionType.STRING,
                             name: 'toggle',
-                            description: 'The toggle of the setting.',
+                            description: 'Toggles the feature.',
                             required: true,
                             choices: [
                                 {
@@ -423,7 +434,7 @@ module.exports = class CommandSettings extends SlashCommand {
                                 {
                                     type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
-                                    description: 'Enables or disables the feature.',
+                                    description: 'Toggles the feature.',
                                     required: true
                                 }
                             ]
@@ -436,7 +447,7 @@ module.exports = class CommandSettings extends SlashCommand {
                                 {
                                     type: CommandOptionType.BOOLEAN,
                                     name: 'toggle',
-                                    description: 'Enables or disables the feature.',
+                                    description: 'Toggles the feature.',
                                     required: true
                                 }
                             ]
@@ -764,6 +775,19 @@ module.exports = class CommandSettings extends SlashCommand {
             case 'allowexplicit': {
                 await settings.set(ctx.guildID, ctx.options.allowexplicit.toggle, 'allowFilters');
                 return this.client.ui.reply(ctx, 'ok', `Age restricted content is ${ctx.options.allowexplicit.toggle ? 'now allowed' : 'no longer allowed'} on this server.`);
+            }
+
+            case 'allowexplicitsites': {
+                if (guild.features.includes(GuildFeature.Partnered)) {
+                    await ctx.defer(true);
+                    return this.client.ui.reply(ctx, 'no', 'Partnered servers are forbidden from toggling this setting.');
+                }
+
+                await settings.set(ctx.guildID, ctx.options.allowexplicitsites.toggle, 'allowPorn');
+                return this.client.ui.reply(ctx, 'ok', ctx.options.allowexplicitsites.toggle === true
+                    ? 'Enabled explicit website support.'
+                    : 'Disabled explicit website support.'
+                );
             }
 
             case 'allowlinks': {

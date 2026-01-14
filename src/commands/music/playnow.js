@@ -61,7 +61,16 @@ module.exports = class CommandPlayNow extends Command {
 
         if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'playnow <url/search/attachment>');
 
-        if (this.client.utils.pornPattern(text)) return this.client.ui.reply(message, 'no', "The URL you're requesting to play is not allowed.");
+        if (this.client.utils.pornPattern(text)) {
+            if (this.client.settings.get(message.guild.id, 'allowPorn')) {
+                const queue = this.client.player.getQueue(message.guild);
+                if (!this.client.utils.isNSFW(message.channel, vc, queue)) {
+                    return this.client.ui.custom(message, ':underage:', process.env.COLOR_NO, "This track's URL is considered to be an explicit website. Both text and voice channels must be **Age Restricted** for this track to be added.");
+                }
+            } else {
+                return this.client.ui.reply(message, 'no', 'Explicit websites are not allowed on this server.');
+            }
+        }
 
         const queue = this.client.player.getQueue(message);
         if (!queue) return this.client.ui.reply(message, 'warn', 'Nothing is currently playing in this server. Use the `play` command instead.');
