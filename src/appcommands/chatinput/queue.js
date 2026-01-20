@@ -24,6 +24,7 @@ const {
 const { Paginator } = require('array-paginator');
 const { toColonNotation } = require('colon-notation');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const _ = require('lodash');
 const ChadError = require('../../lib/ChadError');
 
 class CommandQueue extends SlashCommand {
@@ -79,6 +80,11 @@ class CommandQueue extends SlashCommand {
                             description: 'The end position to remove multiple songs. All songs from start to end will be removed.'
                         }
                     ]
+                },
+                {
+                    type: CommandOptionType.SUB_COMMAND,
+                    name: 'undo',
+                    description: 'Removes the most recent track you added from the queue.'
                 },
                 {
                     type: CommandOptionType.SUB_COMMAND,
@@ -207,6 +213,22 @@ class CommandQueue extends SlashCommand {
             }
 
             break;
+        }
+
+        case 'undo': {
+            const userEntries = queue.songs.filter(x => x.user.id === member.user.id);
+
+            if (userEntries.length === 0) {
+                return this.client.ui.reply(ctx, 'warn', 'You don\'t have any tracks in the queue.');
+            }
+
+            const lastUserEntryName = userEntries[userEntries.length - 1].name;
+
+            _.remove(queue.songs, function (n) {
+                return n === userEntries.at(-1);
+            });
+
+            return this.client.ui.reply(ctx, 'ok', `Removed **${lastUserEntryName}** from the queue.`);
         }
 
         case 'clear': {
