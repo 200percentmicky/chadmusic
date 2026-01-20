@@ -107,6 +107,15 @@ class ChadUtils {
     }
 
     /**
+     * Checks if the user is the only user in the voice channel, excluding bots.
+     * @param {GuildMember} member The guild member
+     */
+    static isSingleUser (member) {
+        const vc = member.voice.channel;
+        return vc.members.filter(m => !m.user.bot).size === 1;
+    }
+
+    /**
      * Checks whether both text and voice channels are Age Restricted. If the guild is
      * partnered, this will always return `false`.
      *
