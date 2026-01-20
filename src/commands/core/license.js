@@ -1,5 +1,5 @@
 /// ChadMusic
-/// Copyright (C) 2025  Micky | 200percentmicky
+/// Copyright (C) 2026  Micky | 200percentmicky
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ module.exports = class LicenseCommand extends Command {
             This program is licensed under the GNU General Public License version 3.
 
             ChadMusic
-            Copyright (C) 2025  Micky | 200percentmicky
+            Copyright (C) 2026  Micky | 200percentmicky
 
             This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU General Public License as published by
