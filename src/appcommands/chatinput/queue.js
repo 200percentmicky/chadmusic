@@ -31,7 +31,7 @@ class CommandQueue extends SlashCommand {
     constructor (creator) {
         super(creator, {
             name: 'queue',
-            description: 'Shows the player\'s current queue on this server.',
+            description: 'Manages the player\'s queue on this server.',
             options: [
                 {
                     type: CommandOptionType.SUB_COMMAND,
