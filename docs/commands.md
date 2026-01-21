@@ -475,6 +475,10 @@ Destroys the player.
 
 Summons the bot to a voice channel.
 
+### [p]undo | [p]cancel | /queue undo
+
+Removes the most recent track you added from the queue.
+
 ### [p]volume | [p]vol | /player volume view/set `[number]`
 
 Views or changes the volume of the player.
