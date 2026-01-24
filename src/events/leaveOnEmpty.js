@@ -62,7 +62,8 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
             const emptyCooldown = queue.emptyCooldown;
             const clientVc = await newState.guild.channels.cache.get(queue.voice?.connection.joinConfig.channelId);
 
-            if (clientVc.members.size === 1) {
+            const vcSize = clientVc.members.filter(x => !x.user.bot).size;
+            if (vcSize > 1) {
                 const leaveOnEmptyTimeout = setTimeout(() => {
                     this.timeoutIds.delete(newState.guild.id);
                     return this.client.vc.leave(newState.guild);
