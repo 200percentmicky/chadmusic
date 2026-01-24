@@ -60,10 +60,10 @@ module.exports = class ListenerLeaveOnEmpty extends Listener {
 
         if (queue && queue.leaveOnEmpty === true) {
             const emptyCooldown = queue.emptyCooldown;
-            const clientVc = await newState.guild.channels.cache.get(queue.voice?.connection.joinConfig.channelId);
+            const clientVc = await newState.guild.members.me.voice.channel;
 
-            const vcSize = clientVc.members.filter(x => !x.user.bot).size;
-            if (vcSize > 1) {
+            const humans = clientVc.members.filter(m => !m.user.bot).size;
+            if (humans === 0) {
                 const leaveOnEmptyTimeout = setTimeout(() => {
                     this.timeoutIds.delete(newState.guild.id);
                     return this.client.vc.leave(newState.guild);
