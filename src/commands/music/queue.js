@@ -85,6 +85,7 @@ module.exports = class CommandQueue extends Command {
         const numOfEntries = songs.length > 0 ? `${songs.length} entr${queue.songs.length === 1 ? 'y' : 'ies'} (${numOfHiddenEntries} hidden)` : '';
         const trueTime = songs.map(x => x.duration).reduce((a, b) => a + b, 0);
         const totalTime = songs.length > 0 ? ` • Total Length: \`${trueTime ? toColonNotation(parseInt(trueTime + '000')) : '00:00'}\`` : '';
+        const activeVc = ` • <#${currentVc.channel.id}>`;
 
         // For tracks added silently...
         const songEntry = (song) => {
@@ -95,19 +96,20 @@ module.exports = class CommandQueue extends Command {
 
         /* Map the array. */
         const queueMap = songs.length > 0
-            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n')
+            ? paginateArray.map(song => `**${songs.indexOf(song) + 1}.** ${songEntry(song)}`).join('\n')
             : '🍃 The queue is empty. Start adding some songs!';
 
         /* Making the embed. */
         const queueEmbed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
-                name: `Queue for ${message.guild.name} - ${currentVc.channel.name}`,
+                name: `${message.guild.name}`,
                 iconURL: message.guild.iconURL({ dynamic: true })
             })
-            .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`)
+            .setTitle(`${process.env.EMOJI_MUSIC} Queue`)
+            .setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}${activeVc}` : ''}`)
             .addFields({
-                name: `${process.env.EMOJI_MUSIC} Currently Playing`,
+                name: 'Currently playing',
                 value: songEntry(song)
             })
             .setTimestamp()
@@ -193,7 +195,7 @@ module.exports = class CommandQueue extends Command {
                 const paginateArray = queuePage;
 
                 /* Map the array. */
-                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}:** ${songEntry(song)}`).join('\n\n');
+                const queueMap = paginateArray.map(song => `**${songs.indexOf(song) + 1}.** ${songEntry(song)}`).join('\n');
 
                 /* Need to make sure all buttons are available */
                 nextPage.setDisabled(false);
@@ -224,7 +226,7 @@ module.exports = class CommandQueue extends Command {
                 const components = songs.length === 0 || songs.length <= 10 ? [cancelRow] : [buttonRow, cancelRow];
 
                 /* Making the embed. */
-                queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}` : ''}`);
+                queueEmbed.setDescription(`${queueMap}${songs.length > 0 ? `\n\n${numOfEntries}${totalTime}${activeVc}` : ''}`);
                 queueEmbed.setFooter({
                     text: `${queue ? `Page ${queuePaginate.current} of ${queuePaginate.total}` : 'Queue is empty.'}`,
                     iconURL: message.member.user.avatarURL({ dynamic: true })
