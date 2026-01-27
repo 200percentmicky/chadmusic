@@ -33,6 +33,8 @@ const {
 } = require('discord.js');
 const { Queue } = require('distube');
 const { CommandContext, Member } = require('slash-create');
+const { stripIndents } = require('common-tags');
+const { toColonNotation } = require('colon-notation');
 
 let baseEmbed = {};
 /**
@@ -316,6 +318,126 @@ class ChadUI {
         };
 
         return this.reply(msg, promptType[prompt], promptMessage[prompt]);
+    }
+
+    /**
+     * Display's the clients settings for a server, or globally.
+     * @param {Message|CommandContext} msg A message or CommandContext
+     * @param {string|"guild"|"global"} type The type of settings to show.
+     */
+    static async settings (msg, type = 'guild') {
+        const client = msg instanceof CommandContext
+            ? msg.creator.client
+            : msg.client;
+
+        const guild = msg instanceof CommandContext
+            ? msg.creator.client.guilds.cache.get(msg.guildID)
+            : msg.guild;
+
+        const settings = client.settings;
+
+        await settings.ensure(guild.id, client.defaultSettings);
+
+        // All Settings
+        const prefix = settings.get(guild.id, 'prefix'); // Server Prefix
+        const djRole = settings.get(guild.id, 'djRole'); // DJ Role
+        const djMode = settings.get(guild.id, 'djMode'); // Toggle DJ Mode
+        const maxTime = settings.get(guild.id, 'maxTime'); // Max Song Duration
+        const maxQueueLimit = settings.get(guild.id, 'maxQueueLimit'); // Max Entries in the Queue
+        const allowFilters = settings.get(guild.id, 'allowFilters'); // Allow the use of Filters
+        const allowFreeVolume = settings.get(guild.id, 'allowFreeVolume'); // Unlimited Volume
+        const allowLinks = settings.get(guild.id, 'allowLinks'); // Allow Links
+        const allowSilent = settings.get(guild.id, 'allowSilent'); // Allow Silent Tracks
+        const defaultVolume = settings.get(guild.id, 'defaultVolume'); // Default Volume
+        const textChannel = settings.get(guild.id, 'textChannel'); // Text Channel
+        const thumbnailSize = settings.get(guild.id, 'thumbnailSize'); // Thumbnail Size
+        const votingPercent = settings.get(guild.id, 'votingPercent'); // Voting Percentage
+        const leaveOnEmpty = settings.get(guild.id, 'leaveOnEmpty'); // Leave on Empty
+        const leaveOnFinish = settings.get(guild.id, 'leaveOnFinish'); // Leave on Finish
+        const leaveOnStop = settings.get(guild.id, 'leaveOnStop'); // Leave on Stop
+        const emptyCooldown = settings.get(guild.id, 'emptyCooldown'); // Empty Cooldown
+        const songVcStatus = settings.get(guild.id, 'songVcStatus'); // Track Title as VC Status
+        const emitSongAddAlert = settings.get(guild.id, 'emitSongAddAlert'); // Emit Song Add Alert
+
+        // ! This setting only affects videos from YouTube.
+        const allowExplicit = settings.get(guild.id, 'allowExplicit', true); // Allow Explicit Content.
+
+        let embed;
+        if (type === 'global') {
+            await settings.ensure('global', client.defaultGlobalSettings);
+
+            // Global Settings
+            const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
+            const streamType = settings.get('global', 'streamType'); // Audio Encoder
+            const allowYouTube = settings.get('global', 'allowYouTube'); // Allow YouTube
+
+            const encoderType = {
+                0: 'Opus',
+                1: 'RAW'
+            };
+
+            embed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                .setTitle(':globe_with_meridians: Global Settings')
+                .setDescription(stripIndents`
+                **Audio Encoder:** ${encoderType[streamType]}
+                **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
+                **Allow YouTube:** ${allowYouTube === true ? 'Yes' : 'No'}
+                `
+                )
+                .setFooter({
+                    text: `ChadMusic v${client.version}`,
+                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                });
+        } else {
+            embed = new EmbedBuilder()
+                .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
+                .setAuthor({
+                    name: `${guild.name}`,
+                    iconURL: guild.iconURL({ dynamic: true })
+                })
+                .setTitle(':gear: Settings')
+                .addFields({
+                    name: ':notes: Player',
+                    value: stripIndents`
+                    **:interrobang: Prefix:** \`${prefix}\`
+                    **:bookmark: DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
+                    **:microphone: DJ Mode:** ${djMode === true ? 'On' : 'Off'}
+                    **:frame_photo: Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
+                    **:loud_sound: Default Volume:** ${defaultVolume}
+                    **:hash: Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
+                    **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
+                    **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
+                    **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
+                    **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
+                    **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
+                    **:speech_left: Emit Track Added Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
+                    `
+                },
+                {
+                    name: ':shield: Moderation',
+                    value: stripIndents`
+                    **:timer: Max Track Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
+                    **:1234: Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
+                    **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
+                    **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
+                    **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
+                    **:underage: Allow Explicit Content:** ${allowExplicit === true ? 'Yes' : 'No'}
+                    **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
+                    **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
+                    `
+                })
+                .setFooter({
+                    text: `ChadMusic v${client.version}`,
+                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
+                });
+        }
+
+        if (msg instanceof CommandContext) {
+            return msg.send({ embeds: [embed] });
+        } else {
+            return msg.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+        }
     }
 
     /**

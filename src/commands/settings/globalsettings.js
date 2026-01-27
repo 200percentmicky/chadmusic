@@ -14,10 +14,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { stripIndents } = require('common-tags');
 const { Command } = require('discord-akairo');
-const { EmbedBuilder } = require('discord.js');
-const { version } = require('../../../package.json');
 
 module.exports = class CommandGlobalSettings extends Command {
     constructor () {
@@ -32,35 +29,6 @@ module.exports = class CommandGlobalSettings extends Command {
     }
 
     async exec (message) {
-        const settings = this.client.settings;
-
-        await settings.ensure('global', this.client.defaultGlobalSettings);
-
-        // Global Settings
-        const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
-        const streamType = settings.get('global', 'streamType'); // Audio Encoder
-        const allowYouTube = settings.get('global', 'allowYouTube'); // Allow YouTube
-
-        const encoderType = {
-            0: 'Opus',
-            1: 'RAW'
-        };
-
-        const embed = new EmbedBuilder()
-            .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
-            .setAuthor({
-                name: `ChadMusic v${version}`,
-                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-            })
-            .setTitle(':globe_with_meridians: Global Settings')
-            .setDescription(stripIndents`
-                **Audio Encoder:** ${encoderType[streamType]}
-                **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
-                **Allow YouTube:** ${allowYouTube === true ? 'Yes' : 'No'}
-                `
-            )
-            .setTimestamp();
-
-        return message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });
+        return this.client.ui.settings(message, 'global');
     }
 };

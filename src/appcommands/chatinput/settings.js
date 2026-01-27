@@ -17,7 +17,7 @@
 const { stripIndents } = require('common-tags');
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildFeature, PermissionsBitField } = require('discord.js');
-const { toColonNotation, toMilliseconds } = require('colon-notation');
+const { toColonNotation, toMilliseconds } = require('colon-notation'); // eslint-disable-line no-unused-vars
 const { version } = require('../../../package.json');
 const { request } = require('undici');
 const ChadError = require('../../lib/ChadError');
@@ -496,6 +496,8 @@ module.exports = class CommandSettings extends SlashCommand {
         await settings.ensure(ctx.guildID, this.client.defaultSettings);
         await settings.ensure('global', this.client.defaultGlobalSettings);
 
+        /* Keeping these here for compatibility reasons. */
+        /* eslint-disable no-unused-vars */
         // Global Settings
         const emitNewSongOnly = settings.get('global', 'emitNewSongOnly'); // Show New Song Only
         const streamType = settings.get('global', 'streamType'); // Audio Encoder
@@ -529,8 +531,8 @@ module.exports = class CommandSettings extends SlashCommand {
         const emitSongAddAlert = settings.get(guild.id, 'emitSongAddAlert'); // Emit Song Add Message
 
         // ! This setting only affects videos from YouTube.
-        // All pornographic websites are blocked.
         const allowExplicit = settings.get(guild.id, 'allowExplicit', true); // Allow Explicit Content.
+        /* eslint-enable no-unused-vars */
 
         if (ctx.subcommands[0] === 'global') {
             if (ctx.user.id !== this.client.ownerID) {
@@ -609,22 +611,7 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             default: { // current
-                const embed = new EmbedBuilder()
-                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                    .setAuthor({
-                        name: `ChadMusic v${version}`,
-                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                    })
-                    .setTitle(':globe_with_meridians: Global Settings')
-                    .setDescription(stripIndents`
-                        **Audio Encoder:** ${encoderType[streamType]}
-                        **Show New Song Only:** ${emitNewSongOnly === true ? 'On' : 'Off'}
-                        **Allow YouTube:** ${allowYouTube === true ? 'Yes' : 'No'}
-                        `
-                    )
-                    .setTimestamp();
-
-                return ctx.send({ embeds: [embed] });
+                return this.client.ui.settings(ctx, 'global');
             }
             }
         } else {
@@ -640,50 +627,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
             switch (ctx.subcommands[0]) {
             case 'current': {
-                const embed = new EmbedBuilder()
-                    .setColor(guild.members.me.displayColor !== 0 ? guild.members.me.displayColor : null)
-                    .setAuthor({
-                        name: `${guild.name}`,
-                        iconURL: guild.iconURL({ dynamic: true })
-                    })
-                    .setTitle(':gear: Settings')
-                    .addFields({
-                        name: ':notes: Player',
-                        value: stripIndents`
-                        **:interrobang: Prefix:** \`${prefix}\`
-                        **:bookmark: DJ Role:** ${djRole ? `<@&${djRole}>` : 'None'}
-                        **:microphone: DJ Mode:** ${djMode === true ? 'On' : 'Off'}
-                        **:frame_photo: Thumbnail Size:** ${thumbnailSize === 'large' ? 'Large' : 'Small'}
-                        **:loud_sound: Default Volume:** ${defaultVolume}
-                        **:hash: Text Channel:** ${textChannel ? `<#${textChannel}>` : 'Any'}
-                        **:mailbox_with_no_mail: Leave On Empty:** ${leaveOnEmpty === true ? 'On' : 'Off'}
-                        **:checkered_flag: Leave On Finish:** ${leaveOnFinish === true ? 'On' : 'Off'}
-                        **:stop_sign: Leave On Stop:** ${leaveOnStop === true ? 'On' : 'Off'}
-                        **:hourglass_flowing_sand: Empty Cooldown:** ${parseInt(emptyCooldown)} seconds
-                        **:speech_balloon: Track Title as VC Status:** ${songVcStatus === true ? 'On' : 'Off'}
-                        **:speech_left: Emit Track Added Message:** ${emitSongAddAlert !== false ? emitSongAddAlert === 'nocreate' ? 'On (New player excluded)' : 'On' : 'Off'}
-                        `
-                    },
-                    {
-                        name: ':shield: Moderation',
-                        value: stripIndents`
-                        **:timer: Max Track Time:** ${maxTime ? toColonNotation(maxTime) : 'Unlimited'}
-                        **:1234: Max Entries in the Queue:** ${maxQueueLimit || 'Unlimited'}
-                        **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
-                        **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
-                        **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                        **:underage: Allow Explicit Content:** ${allowExplicit === true ? 'Yes' : 'No'}
-                        **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
-                        **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
-                        `
-                    })
-                    .setTimestamp()
-                    .setFooter({
-                        text: `ChadMusic v${version}`,
-                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
-                    });
-
-                return ctx.send({ embeds: [embed] });
+                return this.client.ui.settings(ctx);
             }
 
             case 'remove': {
