@@ -361,6 +361,7 @@ class ChadUI {
 
         // ! This setting only affects videos from YouTube.
         const allowExplicit = settings.get(guild.id, 'allowExplicit', true); // Allow Explicit Content.
+        const allowPorn = settings.get(guild.id, 'allowPorn');
 
         let embed;
         if (type === 'global') {
@@ -422,7 +423,8 @@ class ChadUI {
                     **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
                     **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                     **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                    **:underage: Allow Explicit Content:** ${allowExplicit === true ? 'Yes' : 'No'}
+                    **:underage: Allow Explicit Tracks:** ${allowExplicit === true ? 'Yes' : 'No'}
+                    **:underage: Allow Explicit Sites:** ${allowExplicit === true ? 'Yes' : 'No'}
                     **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                     **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                     `
