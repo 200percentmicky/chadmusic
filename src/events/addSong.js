@@ -38,7 +38,7 @@ module.exports = class ListenerAddSong extends Listener {
         const member = guild.members.cache.get(queue.songs[queue.songs.length - 1].user.id);
         const message = song.metadata?.message || song.metadata?.ctx;
 
-        const allowAgeRestricted = await channel.client.settings.get(guild.id, 'allowAgeRestricted');
+        const allowExplicit = await channel.client.settings.get(guild.id, 'allowExplicit');
         const maxTime = await channel.client.settings.get(guild.id, 'maxTime');
         const maxQueueLimit = await channel.client.settings.get(guild.id, 'maxQueueLimit');
         const dj = await this.client.utils.isDJ(channel, member);
@@ -81,7 +81,7 @@ module.exports = class ListenerAddSong extends Listener {
             }
         }
 
-        if (!allowAgeRestricted) {
+        if (!allowExplicit) {
             if (!dj) {
                 if (song.ageRestricted) {
                     if (queue.songs.length === 1) channel.client.player.stop(guild);

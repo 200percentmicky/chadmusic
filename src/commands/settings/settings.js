@@ -61,7 +61,7 @@ module.exports = class CommandSettings extends Command {
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
-        const allowAgeRestricted = settings.get(message.guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
+        const allowExplicit = settings.get(message.guild.id, 'allowExplicit', true); // Allow Explicit Content.
 
         const embed = new EmbedBuilder()
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
@@ -95,7 +95,7 @@ module.exports = class CommandSettings extends Command {
                 **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
                 **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                 **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                **:underage: Allow Explicit Content:** ${allowExplicit === true ? 'Yes' : 'No'}
                 **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                 **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                 `

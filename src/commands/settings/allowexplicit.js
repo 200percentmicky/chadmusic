@@ -43,12 +43,12 @@ module.exports = class CommandAllowExplicit extends Command {
         const settings = this.client.settings;
         switch (args.text) {
         case 'on': {
-            await settings.set(message.guild.id, true, 'allowAgeRestricted');
+            await settings.set(message.guild.id, true, 'allowExplicit');
             this.client.ui.reply(message, 'ok', 'Age restricted content can now be added to the queue.');
             break;
         }
         case 'off': {
-            await settings.set(message.guild.id, false, 'allowAgeRestricted');
+            await settings.set(message.guild.id, false, 'allowExplicit');
             this.client.ui.reply(message, 'ok', 'Age restricted content can no longer be added to the queue.');
             break;
         }

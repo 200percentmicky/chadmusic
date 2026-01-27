@@ -69,7 +69,7 @@ module.exports = class CommandSettings extends SlashCommand {
                             },
                             {
                                 name: 'allowexplicit',
-                                value: 'allowAgeRestricted'
+                                value: 'allowExplicit'
                             },
                             {
                                 name: 'unlimitedvolume',
@@ -530,7 +530,7 @@ module.exports = class CommandSettings extends SlashCommand {
 
         // ! This setting only affects videos from YouTube.
         // All pornographic websites are blocked.
-        const allowAgeRestricted = settings.get(guild.id, 'allowAgeRestricted', true); // Allow Explicit Content.
+        const allowExplicit = settings.get(guild.id, 'allowExplicit', true); // Allow Explicit Content.
 
         if (ctx.subcommands[0] === 'global') {
             if (ctx.user.id !== this.client.ownerID) {
@@ -672,7 +672,7 @@ module.exports = class CommandSettings extends SlashCommand {
                         **:loudspeaker: Allow Filters:** ${allowFilters ? 'Yes' : 'No'}
                         **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                         **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
-                        **:underage: Allow Explicit Content:** ${allowAgeRestricted === true ? 'Yes' : 'No'}
+                        **:underage: Allow Explicit Content:** ${allowExplicit === true ? 'Yes' : 'No'}
                         **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                         **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                         `
