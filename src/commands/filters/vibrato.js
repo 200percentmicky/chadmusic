@@ -76,7 +76,7 @@ module.exports = class CommandVibrato extends Command {
                 try {
                     await queue.filters.set('vibrato', null);
                     pushFormatFilter(queue, 'Vibrato', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Vibrato** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Disabled', 'Vibrato');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
@@ -97,7 +97,7 @@ module.exports = class CommandVibrato extends Command {
                 }
                 await queue.filters.set('vibrato', `vibrato=f=${f}:d=${d}`);
                 pushFormatFilter(queue, 'Vibrato', `Depth \`${d}\` at \`${f}Hz\``);
-                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Vibrato** Depth \`${d}\` at \`${f}Hz\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Depth \`${d}\` at \`${f}Hz\``, 'Vibrato');
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

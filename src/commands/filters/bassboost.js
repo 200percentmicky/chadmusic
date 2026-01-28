@@ -69,7 +69,7 @@ module.exports = class CommandBassBoost extends Command {
                 try {
                     await queue.filters.set('bassboost', null);
                     pushFormatFilter(queue, 'Bass Boost', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Bass Boost** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Disabled', 'Bass Boost');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
@@ -82,7 +82,7 @@ module.exports = class CommandBassBoost extends Command {
 
                 await queue.filters.set('bassboost', `bass=g=${gain}`);
                 pushFormatFilter(queue, 'Bass Boost', `Gain: \`${gain}dB\``);
-                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Bass Boost** Gain \`${gain}dB\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Gain \`${gain}dB\``, 'Bass Boost');
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

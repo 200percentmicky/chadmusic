@@ -69,7 +69,7 @@ module.exports = class CommandPulsator extends Command {
                 try {
                     await queue.filters.set('pulsator', null);
                     pushFormatFilter(queue, 'Pulsator', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Pulsator** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Disabled', 'Pulsator');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Pulsator');
                 }
@@ -82,7 +82,7 @@ module.exports = class CommandPulsator extends Command {
 
                 await queue.filters.set('pulsator', `apulsator=hz=${frequency}`);
                 pushFormatFilter(queue, 'Pulsator', `Frequency: \`${frequency}Hz.\``);
-                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Pulsator** \`${frequency}Hz.\``);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Frequency \`${frequency}Hz.\``, 'Pulsator');
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

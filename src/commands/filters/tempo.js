@@ -73,7 +73,7 @@ module.exports = class CommandTempo extends Command {
                 try {
                     await queue.filters.set('tempo', null);
                     pushFormatFilter(queue, 'Tempo', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Tempo** Reverted');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Reverted', 'Tempo');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Tempo');
                 }
@@ -88,7 +88,7 @@ module.exports = class CommandTempo extends Command {
             }
             await queue.filters.set('tempo', `rubberband=tempo=${rate}`);
             pushFormatFilter(queue, 'Tempo', `Rate: \`${rate}\``);
-            return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Tempo** Rate: \`${rate}\``);
+            return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Rate \`${rate}\``, 'Tempo');
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
         }

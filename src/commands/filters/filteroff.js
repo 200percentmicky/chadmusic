@@ -56,7 +56,7 @@ module.exports = class CommandFilterOff extends Command {
             try {
                 await queue.filters.clear();
                 pushFormatFilter(queue, 'All', 'Off');
-                return this.client.ui.reply(message, 'info', 'Removed all filters from the player.');
+                return this.client.ui.reply(message, 'info', 'Disabled all active filters.');
             } catch {
                 return this.client.ui.reply(message, 'error', 'No filters are currently applied to the player.');
             }

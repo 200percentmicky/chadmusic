@@ -68,14 +68,14 @@ module.exports = class CommandReverse extends Command {
                 try {
                     await queue.filters.set('reverse', null);
                     pushFormatFilter(queue, 'Reverse', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Reverse** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Disabled', 'Reverse');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
             } else {
                 await queue.filters.set('reverse', 'areverse');
                 pushFormatFilter(queue, 'Reverse', 'Enabled');
-                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Reverse** On');
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Enabled', 'Reverse');
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {

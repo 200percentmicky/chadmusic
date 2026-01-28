@@ -326,10 +326,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Bass Boost');
                 }
                 pushFormatFilter(queue, 'Bass Boost', ctx.options.bass.db !== 0 ? `Gain: \`${ctx.options.bass.db}dB\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Bass Boost** ${ctx.options.bass.db === 0
-                    ? 'Off'
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `${ctx.options.bass.db === 0
+                    ? 'Disabled'
                     : `Gain: \`${ctx.options.bass.db}dB\``
-                }`);
+                }`, 'Bass Boost');
             }
 
             case 'tremolo': {
@@ -341,10 +341,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Tremolo');
                 }
                 pushFormatFilter(queue, 'Tremolo', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Tremolo** ${f === 0
-                    ? 'Off'
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `${f === 0
+                    ? 'Disabled'
                     : `Depth \`${d}\` at \`${f}Hz\``
-                }`);
+                }`, 'Tremolo');
             }
 
             case 'vibrato': {
@@ -356,10 +356,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Vibrato');
                 }
                 pushFormatFilter(queue, 'Vibrato', f !== 0 ? `Depth \`${d}\` at \`${f}Hz\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Vibrato** ${f === 0
-                    ? 'Off'
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `${f === 0
+                    ? 'Disabled'
                     : `Depth \`${d}\` at \`${f}Hz\``
-                }`);
+                }`, 'Vibrato');
             }
 
             case 'reverse': {
@@ -380,10 +380,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Reverse');
                 }
                 pushFormatFilter(queue, 'Reverse', !inReverse ? 'Enabled' : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `**Reverse** ${!inReverse
-                    ? 'On'
-                    : 'Off'
-                }`);
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, `${!inReverse
+                    ? 'Enabled'
+                    : 'Disabled'
+                }`, 'Reverse');
             }
 
             case 'tempo': {
@@ -397,8 +397,8 @@ class CommandFilter extends SlashCommand {
                 } catch {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Tempo');
                 }
-                pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, rate !== 0 ? `**Tempo** Rate: \`${rate}\`` : '**Tempo** Off');
+                pushFormatFilter(queue, 'Tempo', rate !== 0 ? `Rate \`${rate}\`` : 'Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, rate !== 0 ? `Rate \`${rate}\`` : 'Reverted', 'Tempo');
             }
 
             case 'pitch': {
@@ -408,8 +408,8 @@ class CommandFilter extends SlashCommand {
                 } catch {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Pitch');
                 }
-                pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate: \`${rate}\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, rate !== 0 ? `**Pitch** Rate: \`${rate}\`` : '**Pitch** Off');
+                pushFormatFilter(queue, 'Pitch', rate !== 0 ? `Rate \`${rate}\`` : 'Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, rate !== 0 ? `Rate \`${rate}\`` : 'Reverted', 'Pitch');
             }
 
             case 'crusher': {
@@ -422,7 +422,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
                 pushFormatFilter(queue, 'Crusher', samples !== 0 ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, samples !== 0 ? `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}` : '**Crusher** Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, samples !== 0
+                    ? `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`
+                    : 'Disabled'
+                , 'Crusher');
             }
 
             case 'crystalize': {
@@ -433,7 +436,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Crystalize');
                 }
                 pushFormatFilter(queue, 'Crystalize', intensity !== 0 ? `Intensity \`${intensity}\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, intensity !== 0 ? `**Crystalize** Intensity \`${intensity}\`` : '**Crystalize** Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, intensity !== 0
+                    ? `Intensity \`${intensity}\``
+                    : 'Disabled'
+                , 'Crystalize');
             }
 
             case 'pulsator': {
@@ -444,10 +450,11 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Pulsator');
                 }
                 pushFormatFilter(queue, 'Pulsator', frequency >= 0.01 ? `\`${frequency}Hz.\`` : 'Off');
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, frequency !== 0 ? `**Pulsator** \`${frequency}Hz.\`` : '**Pulsator** Off');
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, frequency !== 0
+                    ? `Frequency \`${frequency}Hz.\``
+                    : 'Disabled'
+                , 'Pulsator');
             }
-
-            // TODO: Add the rest of the new filters.
 
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
@@ -457,7 +464,10 @@ class CommandFilter extends SlashCommand {
                     return this.client.ui.sendPrompt(ctx, 'FILTER_NOT_APPLIED', 'Custom Filter');
                 }
                 pushFormatFilter(queue, 'Custom Filter', custom === 'OFF'.toLowerCase() ? 'Off' : custom);
-                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase() ? '**Custom Filter** Off' : `**Custom Filter** Argument: \`${custom}\``);
+                return this.client.ui.custom(ctx, ':loudspeaker:', process.env.COLOR_INFO, custom === 'OFF'.toLowerCase()
+                    ? 'Disabled'
+                    : `Argument: \`${custom}\``
+                , 'Custom Filter');
             }
             }
         } else {

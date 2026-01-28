@@ -82,7 +82,7 @@ module.exports = class CommandCrusher extends Command {
                 try {
                     await queue.filters.set('crusher', null);
                     pushFormatFilter(queue, 'Crusher', 'Off');
-                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, '**Crusher** Off');
+                    return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, 'Disabled', 'Crusher');
                 } catch (err) {
                     return this.client.ui.sendPrompt(message, 'FILTER_NOT_APPLIED', 'Crusher');
                 }
@@ -111,7 +111,7 @@ module.exports = class CommandCrusher extends Command {
 
                 await queue.filters.set('crusher', `acrusher=samples=${samples}:bits=${bits}:mode=${mode}`);
                 pushFormatFilter(queue, 'Crusher', `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
-                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `**Crusher** Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`);
+                return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Sample size \`${samples}\` at \`${bits}\` bits. Mode: ${mode}`, 'Crusher');
             }
         } else {
             if (!isSameVoiceChannel(this.client, message.member, vc)) {
