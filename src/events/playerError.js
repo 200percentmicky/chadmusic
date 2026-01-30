@@ -33,7 +33,7 @@ module.exports = class ListenerPlayerError extends Listener {
         // TODO: Add option to allow bot owner to change this number.
         if (queue.totalErrors > 5) {
             queue.stop();
-            return this.client.ui.reply(message, 'error', 'Too many errors occured and the player has been stopped.');
+            return this.client.ui.reply(message, 'error', 'Too many errors occured. Aborting playback...');
         }
 
         const knownErrors = {
