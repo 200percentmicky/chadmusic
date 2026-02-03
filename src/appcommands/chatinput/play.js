@@ -182,7 +182,7 @@ class CommandPlay extends SlashCommand {
         if (!vc) return this.client.ui.sendPrompt(ctx, 'NOT_IN_VC');
 
         if (ctx.subcommands[0] === 'track' || ctx.subcommands[0] === 'now') {
-            if (this.client.utils.pornPattern(ctx.options[ctx.subcommands[0]]?.query)) {
+            if (this.client.utils.hotSingles(ctx.options[ctx.subcommands[0]]?.query)) {
                 if (this.client.settings.get(ctx.guildID, 'allowPorn')) {
                     const queue = this.client.player.getQueue(guild);
                     if (!this.client.utils.isNSFW(channel, vc, queue)) {

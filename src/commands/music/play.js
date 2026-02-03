@@ -69,7 +69,7 @@ module.exports = class CommandPlay extends Command {
 
         if (!track && !message.attachments.first()) return this.client.ui.usage(message, 'play <url/search/attachment>');
 
-        if (this.client.utils.pornPattern(track || message.attachments.first().url)) {
+        if (this.client.utils.hotSingles(track || message.attachments.first().url)) {
             if (this.client.settings.get(message.guild.id, 'allowPorn')) {
                 const queue = this.client.player.getQueue(message.guild);
                 if (!this.client.utils.isNSFW(message.channel, vc, queue)) {

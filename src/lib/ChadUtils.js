@@ -320,26 +320,73 @@ class ChadUtils {
     }
 
     /**
-     * Checks whether the URL provided leads to pornographic content.
+     * Checks whether the URL provided leads to a NSFW website.
      * @param {string} url The URL to parse.
      * @returns {boolean|undefined}
      */
-    static pornPattern = (url) => {
-        const pornSites = [
-            'pornhub',
-            'xhamster',
-            'xvideos',
-            'porntube',
-            'xtube',
-            'youporn',
-            'pornerbros',
+    static hotSingles = (url) => { // lol
+        const sites = [
+            '4tube',
+            '91porn',
+            'alphaporno',
+            'anysex',
+            'beeg',
+            'behindkink',
+            'biqle',
+            'bongacams',
+            'cam4',
+            'cambro',
+            'cammodels',
+            'camsoda',
+            'camtube',
+            'camwithher',
+            'chaturbate',
+            'doubleporn',
+            'drtuber',
+            'empflix',
+            'eporner',
+            'eroprofile',
+            'extremetube',
+            'fux',
+            'hellporno',
+            'hentaistigma',
+            'jable',
+            'keezmovies',
+            'lovehomeporn',
+            'mofosex',
+            'motherless',
+            'nuvid',
+            'playvid',
             'pornhd',
+            'pornhub',
+            'pornerbros',
             'pornotube',
+            'pornotv',
             'pornovoisines',
-            'pornoxo'
+            'porntube',
+            'pornxo',
+            'redtube',
+            'rule34video',
+            'sexu',
+            'sexykarma',
+            'slutload',
+            'spankbang',
+            'sunporno',
+            'tnaflix',
+            'toypics',
+            'tube8',
+            'unporn',
+            'xhamster',
+            'xnxx',
+            'xtube',
+            'xvideos',
+            'xxxmore',
+            'xxxymovies',
+            'youjizz',
+            'youporn'
         ];
-        const pornPattern = `https?:\\/\\/(www\\.)?(${pornSites.join('|')})\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
-        return this.#matchRegex(pornPattern, url);
+        const pattern = `https?:\\/\\/(www\\.)?(${sites.join('|')})\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
+        return this.#matchRegex(pattern, url);
     };
 }
 

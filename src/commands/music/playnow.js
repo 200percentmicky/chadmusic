@@ -61,7 +61,7 @@ module.exports = class CommandPlayNow extends Command {
 
         if (!text && !message.attachments.first()) return this.client.ui.usage(message, 'playnow <url/search/attachment>');
 
-        if (this.client.utils.pornPattern(text)) {
+        if (this.client.utils.hotSingles(text)) {
             if (this.client.settings.get(message.guild.id, 'allowPorn')) {
                 const queue = this.client.player.getQueue(message.guild);
                 if (!this.client.utils.isNSFW(message.channel, vc, queue)) {
