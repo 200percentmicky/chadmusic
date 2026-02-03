@@ -357,6 +357,7 @@ class ChadUtils {
             'motherless',
             'nuvid',
             'playvid',
+            'porn',
             'pornhd',
             'pornhub',
             'pornerbros',
@@ -385,7 +386,7 @@ class ChadUtils {
             'youjizz',
             'youporn'
         ];
-        const pattern = `https?:\\/\\/(www\\.)?(${sites.join('|')})\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
+        const pattern = `https?:\\/\\/(www\\.)?\\w*(${sites.join('|')})\\w*\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=]*)`;
         return this.#matchRegex(pattern, url);
     };
 }
