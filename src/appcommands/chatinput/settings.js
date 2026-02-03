@@ -159,11 +159,11 @@ module.exports = class CommandSettings extends SlashCommand {
                 {
                     type: CommandOptionType.SUB_COMMAND,
                     name: 'allowexplicitsites',
-                    description: 'Toggles the ability to add tracks from explicit websites to the queue.',
+                    description: 'Toggles the ability to add tracks from NSFW websites to the queue.',
                     options: [{
                         type: CommandOptionType.BOOLEAN,
                         name: 'toggle',
-                        description: 'Whether tracks from explicit websites should be added to the queue.',
+                        description: 'Whether tracks from NSFW websites should be added to the queue.',
                         required: true
                     }]
                 },
@@ -729,8 +729,8 @@ module.exports = class CommandSettings extends SlashCommand {
 
                 await settings.set(ctx.guildID, ctx.options.allowexplicitsites.toggle, 'allowPorn');
                 return this.client.ui.reply(ctx, 'ok', ctx.options.allowexplicitsites.toggle === true
-                    ? 'Enabled explicit website support.'
-                    : 'Disabled explicit website support.'
+                    ? 'Enabled NSFW website support.'
+                    : 'Disabled NSFW website support.'
                 );
             }
 

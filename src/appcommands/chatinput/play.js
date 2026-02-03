@@ -187,11 +187,11 @@ class CommandPlay extends SlashCommand {
                     const queue = this.client.player.getQueue(guild);
                     if (!this.client.utils.isNSFW(channel, vc, queue)) {
                         await ctx.defer(true);
-                        return this.client.ui.custom(ctx, ':underage:', process.env.COLOR_NO, "This track's URL is considered to be an explicit website. Both text and voice channels must be **Age Restricted** for this track to be added.");
+                        return this.client.ui.custom(ctx, ':underage:', process.env.COLOR_NO, "This track's URL is marked as **NSFW**. Both connected text and voice channels must be **Age Restricted** to add tracks from this site.");
                     }
                 } else {
                     await ctx.defer(true);
-                    return this.client.ui.reply(ctx, 'no', 'Explicit websites are not allowed on this server.');
+                    return this.client.ui.reply(ctx, 'no', 'NSFW websites are not allowed on this server.');
                 }
             }
 

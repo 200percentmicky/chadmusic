@@ -73,10 +73,10 @@ module.exports = class CommandPlay extends Command {
             if (this.client.settings.get(message.guild.id, 'allowPorn')) {
                 const queue = this.client.player.getQueue(message.guild);
                 if (!this.client.utils.isNSFW(message.channel, vc, queue)) {
-                    return this.client.ui.custom(message, ':underage:', process.env.COLOR_NO, "This track's URL is considered to be an explicit website. Both text and voice channels must be **Age Restricted** for this track to be added.");
+                    return this.client.ui.custom(message, ':underage:', process.env.COLOR_NO, "This track's URL is marked as **NSFW**. Both connected text and voice channels must be **Age Restricted** to add tracks from this site.");
                 }
             } else {
-                return this.client.ui.reply(message, 'no', 'Explicit websites are not allowed on this server.');
+                return this.client.ui.reply(message, 'no', 'NSFW websites are not allowed on this server.');
             }
         }
 

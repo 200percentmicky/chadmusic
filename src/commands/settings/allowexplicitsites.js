@@ -17,13 +17,13 @@
 const { Command } = require('discord-akairo');
 const { PermissionsBitField, GuildFeature } = require('discord.js');
 
-module.exports = class CommandAllowYouTube extends Command {
+module.exports = class CommandAllowNSFW extends Command {
     constructor () {
-        super('allowexplicitsites', {
-            aliases: ['allowexplicitsites', 'allowporn'],
+        super('allownsfw', {
+            aliases: ['allownsfw', 'allowporn'],
             category: '⚙ Settings',
             description: {
-                text: `Toggles the ability to allow tracks from explicit websites to be added to the queue.\n\n${process.env.EMOJI_WARN} Partnered servers are forbidden from toggling this setting.`,
+                text: `Toggles the ability to allow tracks from NSFW websites to be added to the queue.\n\n${process.env.EMOJI_WARN} Partnered servers are forbidden from toggling this setting.`,
                 usage: '<toggle:on/off/true/false>',
                 details: '`<toggle:on/off/true/false>` The toggle of the setting.'
             },
@@ -42,20 +42,20 @@ module.exports = class CommandAllowYouTube extends Command {
             return this.client.ui.reply(message, 'no', 'Partnered servers are forbidden from toggling this setting.');
         }
 
-        if (!args.toggle) return this.client.ui.usage(message, 'allowexplicitsites <toggle:on/off/true/false>');
+        if (!args.toggle) return this.client.ui.usage(message, 'allownsfw <toggle:on/off/true/false>');
 
         const settings = this.client.settings;
         switch (args.toggle) {
         case 'true':
         case 'on': {
             await settings.set(message.guild.id, true, 'allowPorn');
-            this.client.ui.reply(message, 'ok', 'Enabled explicit website support.');
+            this.client.ui.reply(message, 'ok', 'Enabled NSFW website support.');
             break;
         }
         case 'false':
         case 'off': {
             await settings.set(message.guild.id, false, 'allowPorn');
-            this.client.ui.reply(message, 'ok', 'Disabled explicit website support.');
+            this.client.ui.reply(message, 'ok', 'Disabled NSFW website support.');
             break;
         }
         default: {

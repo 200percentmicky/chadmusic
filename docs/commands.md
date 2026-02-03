@@ -592,7 +592,7 @@ Toggles the ability to allow age restricted content in the queue.
 
 ### [p]allowexplicitsites | [p]allowporn | /settings allowexplicitsites
 
-Toggles the ability to add tracks from explicit websites to the queue. To add any track from adult websites after enabling this feature, both of the player's binded text and voice channels must be marked as **Age Restricted**.
+Toggles the ability to add tracks from NSFW websites to the queue. To add any track from adult websites after enabling this feature, both of the player's binded text and voice channels must be marked as **Age Restricted**.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
