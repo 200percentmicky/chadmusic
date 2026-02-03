@@ -424,7 +424,7 @@ class ChadUI {
                     **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                     **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                     **:underage: Allow Explicit Tracks:** ${allowExplicit === true ? 'Yes' : 'No'}
-                    **:underage: Allow Explicit Sites:** ${allowExplicit === true ? 'Yes' : 'No'}
+                    **:underage: Allow Explicit Sites:** ${allowPorn === true ? 'Yes' : 'No'}
                     **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                     **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                     `
