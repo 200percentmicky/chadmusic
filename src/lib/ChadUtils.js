@@ -116,8 +116,8 @@ class ChadUtils {
     }
 
     /**
-     * Checks whether both text and voice channels are Age Restricted. If the guild is
-     * partnered, this will always return `false`.
+     * Checks whether both text and voice channels, or the guild is Age Restricted.
+     * If the guild is partnered, this will always return `false`.
      *
      * @param {BaseGuildTextChannel} channel Text Channel
      * @param {BaseGuildVoiceChannel} vc Current member's voice channel
@@ -128,10 +128,12 @@ class ChadUtils {
             return false;
         }
 
+        const nsfwLevel = channel.guild.nsfwLevel;
+
         if (queue) {
-            return queue.textChannel.nsfw && queue.voice.channel.nsfw;
+            return (queue.textChannel.nsfw && queue.voice.channel.nsfw) || nsfwLevel === 3;
         } else {
-            return channel.nsfw && vc.nsfw;
+            return (channel.nsfw && vc.nsfw) || nsfwLevel === 3;
         }
     }
 
