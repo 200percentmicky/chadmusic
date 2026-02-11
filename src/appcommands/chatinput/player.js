@@ -21,6 +21,7 @@ const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
 const Genius = require('genius-lyrics');
 const ChadError = require('../../lib/ChadError');
 const CMPlayerWindow = require('../../lib/CMPlayerWindow');
+const { RepeatMode } = require('distube');
 
 class CommandPlayer extends SlashCommand {
     constructor (creator) {
@@ -489,6 +490,13 @@ class CommandPlayer extends SlashCommand {
                 };
 
                 await this.client.player.setRepeatMode(guild, mode);
+
+                if (queue.repeatMode === RepeatMode.SONG) {
+                    queue.repeatTrack = queue.songs[0];
+                } else {
+                    queue.repeatTrack = undefined;
+                }
+
                 return this.client.ui.reply(ctx, 'ok', mode !== 0
                     ? `Enabled repeat to **${selectedMode[mode]}**`
                     : 'Repeat mode has been disabled.'

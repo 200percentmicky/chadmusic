@@ -16,6 +16,7 @@
 
 const { Command } = require('discord-akairo');
 const { isSameVoiceChannel } = require('../../lib/isSameVoiceChannel');
+const { RepeatMode } = require('distube');
 
 module.exports = class CommandRepeat extends Command {
     constructor () {
@@ -26,11 +27,16 @@ module.exports = class CommandRepeat extends Command {
                 usage: '[mode]',
                 details: '`[mode]` The mode to apply for repeat mode. Valid options are **off**, **song**, or **queue**. Default is **song**.'
             },
-            category: '🎶 Music'
+            category: '🎶 Music',
+            args: [
+                {
+                    id: 'mode'
+                }
+            ]
         });
     }
 
-    async exec (message) {
+    async exec (message, args) {
         const djMode = this.client.settings.get(message.guild.id, 'djMode');
         const dj = await this.client.utils.isDJ(message.channel, message.member);
         if (djMode) {
@@ -44,7 +50,6 @@ module.exports = class CommandRepeat extends Command {
             }
         }
 
-        const args = message.content.split(/ +/g);
         const player = this.client.player;
         const queue = player.getQueue(message);
 
@@ -57,29 +62,61 @@ module.exports = class CommandRepeat extends Command {
         else if (!isSameVoiceChannel(this.client, message.member, vc)) return this.client.ui.sendPrompt(message, 'ALREADY_SUMMONED_ELSEWHERE');
 
         if (vc.members.size <= 2 || dj) {
+            const mode = {
+                off: RepeatMode.DISABLED,
+                song: RepeatMode.SONG,
+                queue: RepeatMode.QUEUE
+            };
+
+            if (!args.mode) {
+                if (queue.repeatMode !== RepeatMode.DISABLED) {
+                    await queue.setRepeatMode(RepeatMode.DISABLED);
+                } else {
+                    await queue.setRepeatMode(RepeatMode.SONG);
+                }
+            } else {
+                await queue.setRepeatMode(mode[args.mode]);
+            }
+
+            if (queue.repeatMode === RepeatMode.SONG) {
+                queue.repeatTrack = queue.songs[0];
+            } else {
+                queue.repeatTrack = undefined;
+            }
+
+            const selectedMode = {
+                song: '**🔂 Repeat Song**',
+                queue: '**🔁 Repeat Queue**'
+            };
+
+            return this.client.ui.reply(message, 'ok', `${queue.repeatMode === RepeatMode.DISABLED
+                ? 'Repeat has been disabled.'
+                : `Enabled repeat to ${selectedMode[args.mode ?? 'song']}`
+            }`);
+
             switch (args[1]) {
             case 'off': {
-                await player.setRepeatMode(message, 0);
+                await player.setRepeatMode(message, RepeatMode.DISABLED);
                 this.client.ui.reply(message, 'ok', 'Repeat has been disabled.');
                 break;
             }
             case 'song': {
-                await player.setRepeatMode(message, 1);
+                await player.setRepeatMode(message, RepeatMode.SONG);
                 this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
                 break;
             }
             case 'queue': {
-                await player.setRepeatMode(message, 2);
+                await player.setRepeatMode(message, RepeatMode.QUEUE);
                 this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔁 Repeat Queue**');
                 break;
             }
             default: {
                 if (queue.repeatMode !== 0) {
-                    await player.setRepeatMode(message, 0);
+                    await player.setRepeatMode(message, RepeatMode.DISABLED);
                     this.client.ui.reply(message, 'ok', 'Repeat has been disabled.');
                     break;
                 }
-                await player.setRepeatMode(message, 1);
+                await player.setRepeatMode(message, RepeatMode.SONG);
                 this.client.ui.reply(message, 'ok', 'Enabled repeat to **🔂 Repeat Song**');
                 break;
             }

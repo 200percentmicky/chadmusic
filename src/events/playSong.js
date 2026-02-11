@@ -16,7 +16,7 @@
 
 const { Listener } = require('discord-akairo');
 const CMPlayerWindow = require('../lib/CMPlayerWindow.js');
-const { Events } = require('distube');
+const { Events, RepeatMode } = require('distube');
 const ytdl = require('@distube/ytdl-core');
 
 module.exports = class ListenerPlaySong extends Listener {
@@ -118,6 +118,28 @@ module.exports = class ListenerPlaySong extends Listener {
             window
                 .addFields(songNowFields)
                 .timestamp();
+
+            const repeatMode = queue.repeatMode;
+            const emitNewSongOnly = queue.options.emitNewSongOnly;
+
+            // emitNewSongOnly doesn't work for some reason. This is to make sure the next song
+            // doesn't send an embed, if its the exact same track. This might not fully work
+            // if the metadata was changed at any time.
+            if (queue.previousSongs.includes(queue.songs[1]) && emitNewSongOnly) {
+                if (queue.repeatMode === RepeatMode.QUEUE) { // eslint-disable-line no-empty
+                } else {
+                    return;
+                }
+            }
+
+            // emitNewSongOnly also doesn't work when repeat mode is set to SONG.
+            if (repeatMode === RepeatMode.SONG && emitNewSongOnly) {
+                if (queue.repeatTrack === song) {
+                    return;
+                } else {
+                    queue.repeatTrack = song;
+                }
+            }
 
             try {
                 if (channel.id !== song.metadata?.ctx.channelID) {
