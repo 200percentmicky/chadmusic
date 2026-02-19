@@ -44,7 +44,8 @@ class ChadMusic extends AkairoClient {
             ownerID: undefined // Applied after ready event.
         }, {
             allowedMentions: {
-                repliedUser: false
+                repliedUser: false,
+                parse: []
             },
             intents: [
                 GatewayIntentBits.Guilds,
