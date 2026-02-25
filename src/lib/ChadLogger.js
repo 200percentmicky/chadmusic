@@ -14,22 +14,62 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { Logger } = require('tslog');
-const { createStream } = require('rotating-file-stream');
+const { createLogger, format, transports, addColors } = require('winston');
 
-const stream = createStream('console.log', {
-    size: '10M',
-    compress: 'gzip'
-});
+const levels = {
+    fatal: 0,
+    error: 1,
+    warn: 2,
+    info: 3,
+    http: 4,
+    verbose: 5,
+    debug: 6,
+    silly: 7
+};
+
+const colors = {
+    fatal: 'red',
+    error: 'red',
+    warn: 'yellow',
+    info: 'blue',
+    http: 'grey',
+    verbose: 'grey',
+    debug: 'green',
+    silly: 'magenta'
+};
 
 // Winston Logger
-const logger = new Logger({
-    type: 'pretty',
-    minLevel: process.env.DEBUG_LOGGING ? 0 : 3
+addColors(colors);
+const logger = createLogger({
+    levels,
+    format: format.combine(
+        format.splat(),
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.printf(({ timestamp, level, message }) => {
+            return `[${timestamp}] ${level}: ${message}`;
+        })
+    ),
+    transports: [
+        new transports.File({
+            filename: 'console.log',
+            level: process.env.DEBUG_LOGGING === 'true' ? 'silly' : 'info',
+            maxsize: 10 * 1000000
+        })
+    ]
 });
 
-logger.attachTransport((logObj) => {
-    stream.write(`${logObj._meta.date} ${logObj._meta.logLevelName}   ${logObj._meta.path.fileNameWithLine}   ${logObj['0']}\n`);
-});
+if (process.env.USE_CONSOLE === 'true') {
+    logger.add(new transports.Console({
+        format: format.combine(
+            format.colorize(),
+            format.simple(),
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.printf(({ timestamp, level, message }) => {
+                return `[${timestamp}] ${level}: ${message}`;
+            })
+        ),
+        level: process.env.DEBUG_LOGGING === 'true' ? 'silly' : 'info'
+    }));
+}
 
 module.exports = logger;

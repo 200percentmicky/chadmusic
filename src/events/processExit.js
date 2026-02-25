@@ -26,9 +26,9 @@ module.exports = class ListenerProcessExit extends Listener {
 
     async exec (code) {
         if (code !== 0) {
-            this.client.logger.warn("Didn't clean up good... You should set DEBUG_LOGGING to true.");
+            this.client.logger.error(`Exited with a non-zero exit code. (Code: ${code}) ...well, that's embarrassing.`);
         } else {
-            this.client.logger.info('Done... imma head out.');
+            this.client.logger.info('Done. Until next time! 👋');
         }
 
         this.client.logger.debug(`Client process exited with code ${code}`);

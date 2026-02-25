@@ -25,6 +25,21 @@ if (process.versions.node.split('.')[0] < 22 || process.versions.node.split('.')
     process.exit(1);
 }
 
+const quotes = [
+    'Preparing to get it on',
+    'Preparing ship for ludicrous speed',
+    'Loading the next level',
+    'Reticulating splines',
+    'Getting ready to get crackin\' in Round 2',
+    'Getting ready to get jiggy with it',
+    'Gentlemen, start your engines',
+    'Starting Windows',
+    'Coagulating the combobulator',
+    'Entering hyperspace'
+];
+
+const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
 // Say hello!
 const { version } = require('./package.json');
 logger.info('   ________              ____  ___           _');
@@ -34,7 +49,7 @@ logger.info('/ /___/ / / / /_/ / /_/ / /  / / /_/ (__  ) / /__');
 logger.info('\\____/_/ /_/\\__,_/\\__,_/_/  /_/\\__,_/____/_/\\___/');
 logger.info('Created by Micky | @200percentmicky');
 logger.info(`Bot Version: ${version}`);
-logger.info('Loading libraries...');
+logger.info(`${randomQuote}...`);
 
 if (version.endsWith('-dev')) {
     logger.warn('This version is considered unstable. Use caution when running this version in a production environment.');
