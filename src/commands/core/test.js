@@ -35,7 +35,7 @@ module.exports = class CommandTest extends Command {
 
     async exec (message, args) {
         if (args.error === 'error') {
-            const e = new Error('I did an oopsie.');
+            const e = new Error('Oh shit!');
             e.name = 'GuruMeditationTest';
             throw e;
         } else {

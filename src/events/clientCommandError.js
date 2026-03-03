@@ -26,7 +26,13 @@ module.exports = class ListenerClientCommandError extends Listener {
     }
 
     async exec (error, message, command) {
-        await message.channel.send({ content: `:anger: **Bruh moment** - \`${error}\`\n-# Something bad happened. A report was sent to my owner.` });
+        await message.channel.send({
+            content: `:anger: **Bruh moment** - \`${error}\`\n-# Something bad happened. Please report this to the developer.${process.env.BUG_CHANNEL !== 'false'
+                ? ' The bot owner has been notified.'
+                : ''
+            }`
+        });
+
         this.client.ui.systemMessage(this.client, ':x: **Command Error**\nPlease report this to the developer.', command, error);
         this.client.logger.error(`[Client] Error in command "${command}"\n${error.stack}`);
     }

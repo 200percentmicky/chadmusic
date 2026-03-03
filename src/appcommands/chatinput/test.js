@@ -45,7 +45,7 @@ class CommandTest extends SlashCommand {
         }
 
         case 'error': {
-            const e = new Error('I did an oopsie.');
+            const e = new Error('Oh shit!');
             e.name = 'GuruMeditationTest';
             throw e;
         }

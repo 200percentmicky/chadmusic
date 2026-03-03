@@ -32,7 +32,13 @@ module.exports = class ListenerCreatorCommandError extends Listener {
             return this.client.ui.reply(ctx, 'no', 'This command cannot be used in Direct Messages.');
         }
         default: {
-            await ctx.send({ content: `:anger: **Bruh moment** - \`${err}\`\n-# Something bad happened. A report was sent to my owner.` });
+            await ctx.send({
+                content: `:anger: **Bruh moment** - \`${err}\`\n-# Something bad happened. Please report this to the developer.${process.env.BUG_CHANNEL !== 'false'
+                    ? ' The bot owner has been notified.'
+                    : ''
+                }`
+            });
+
             this.client.ui.systemMessage(this.client, ':x: **Slash Command Error**\nPlease report this to the developer.', command.commandName, err);
             this.client.logger.error(`[SlashCreator] Error in slash command "${command.commandName}"\n${err.stack}`);
         }
