@@ -1,5 +1,12 @@
 # Changelog
 
+## 2025.2.1
+This release updates `@snazzah/davey` to fix a security vulnerability.
+
+* **Updated:** @snazzah/davey to 0.1.10
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.2.0...2025.2.1)
+
 ## 2025.2.0
 This release mainly includes some quality of life changes. A big one was implementing support for Discord's new DAVE (Discord Audio & Video End-to-end Encryption) protocol.
 
