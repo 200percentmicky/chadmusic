@@ -80,6 +80,15 @@ class ChadUtils {
     }
 
     /**
+     * Checks if the user is the only user in the voice channel, excluding bots.
+     * @param {GuildMember} member The guild member
+     */
+    static isSingleUser (member) {
+        const vc = member.voice.channel;
+        return vc.members.filter(m => !m.user.bot).size === 1;
+    }
+
+    /**
      * Checks if a user is a DJ in a guild.
      * @param {BaseGuildTextChannel} channel A text channel.
      * @param {GuildMember} member The guild member to check for DJ permissions.
@@ -101,18 +110,10 @@ class ChadUtils {
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
         const permission = member.roles?.cache?.has(djRole) ||
             channel.permissionsFor(member.user?.id).has(PermissionsBitField.Flags.ManageChannels) ||
+            this.isSingleUser(member) ||
             isOwner();
 
         return permission;
-    }
-
-    /**
-     * Checks if the user is the only user in the voice channel, excluding bots.
-     * @param {GuildMember} member The guild member
-     */
-    static isSingleUser (member) {
-        const vc = member.voice.channel;
-        return vc.members.filter(m => !m.user.bot).size === 1;
     }
 
     /**
