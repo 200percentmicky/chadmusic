@@ -55,7 +55,7 @@ module.exports = class CommandSetDJ extends Command {
             return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
         };
 
-        if (role.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
+        if (role.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
             const yesButton = new ButtonBuilder()
                 .setStyle(ButtonStyle.Success)
                 .setLabel('Yes')

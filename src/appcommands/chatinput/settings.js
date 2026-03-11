@@ -644,7 +644,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     return this.client.ui.reply(ctx, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
                 };
 
-                if (role.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
+                if (role.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
                     const yesButton = new ButtonBuilder()
                         .setStyle(ButtonStyle.Success)
                         .setLabel('Yes')
