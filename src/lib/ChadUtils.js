@@ -109,7 +109,7 @@ class ChadUtils {
 
         const djRole = channel.client.settings.get(channel.guild.id, 'djRole');
         const permission = member.roles?.cache?.has(djRole) ||
-            channel.permissionsFor(member.user?.id).has(PermissionsBitField.Flags.ManageChannels) ||
+            channel.permissionsFor(member.user?.id).has(PermissionsBitField.Flags.ManageGuild) ||
             this.isSingleUser(member) ||
             isOwner();
 

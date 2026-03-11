@@ -35,8 +35,7 @@ class ContextMenuAddToQueue extends SlashCommand {
         const _member = await guild.members.fetch(ctx.user.id);
 
         const djMode = this.client.settings.get(ctx.guildID, 'djMode');
-        const djRole = this.client.settings.get(ctx.guildID, 'djRole');
-        const dj = _member.roles.cache.has(djRole) || channel.permissionsFor(_member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+        const dj = this.client.utils.isDJ(channel, _member);
         if (djMode) {
             if (!dj) return this.client.ui.sendPrompt(ctx, 'DJ_MODE');
         }

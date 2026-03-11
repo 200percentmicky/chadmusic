@@ -55,7 +55,7 @@ module.exports = class CommandSetDJ extends Command {
             return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
         };
 
-        if (role.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+        if (role.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
             const yesButton = new ButtonBuilder()
                 .setStyle(ButtonStyle.Success)
                 .setLabel('Yes')
@@ -72,12 +72,11 @@ module.exports = class CommandSetDJ extends Command {
 
             const msg = await this.client.ui.reply(
                 message,
-                'info',
+                'warn',
                 stripIndents`
-                The role you selected is already recognized as a DJ role on this server.
-                This is because the role has the **Manage Channels** permission which
-                automatically grants DJ permissions for members with this role. Do you
-                still want to set this role as the DJ role on this server?`,
+                This role is already considered a DJ role due to the role having the
+                **Manage Messages** permission. Do you still want to set this role
+                as the DJ role?`,
                 null,
                 null,
                 null,

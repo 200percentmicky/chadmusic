@@ -616,8 +616,7 @@ module.exports = class CommandSettings extends SlashCommand {
             }
         } else {
             if (!channel.permissionsFor(ctx.user.id).has(PermissionsBitField.Flags.ManageGuild)) {
-                const djRole = this.client.settings.get(ctx.guildID, 'djRole');
-                const dj = member.roles.cache.has(djRole) || channel.permissionsFor(member.user.id).has(PermissionsBitField.Flags.ManageChannels);
+                const dj = this.client.utils.isDJ(channel, member);
 
                 if (dj && ctx.subcommands[0] === 'djmode') {} // eslint-disable-line no-empty, brace-style
                 else return this.client.ui.sendPrompt(ctx, 'MISSING_PERMISSIONS', 'Manage Guild');
@@ -645,7 +644,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     return this.client.ui.reply(ctx, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
                 };
 
-                if (role.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+                if (role.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
                     const yesButton = new ButtonBuilder()
                         .setStyle(ButtonStyle.Success)
                         .setLabel('Yes')
@@ -662,12 +661,11 @@ module.exports = class CommandSettings extends SlashCommand {
 
                     await this.client.ui.reply(
                         ctx,
-                        'info',
+                        'warn',
                         stripIndents`
-                        The role you selected is already recognized as a DJ role on this server.
-                        This is because the role has the **Manage Channels** permission which
-                        automatically grants DJ permissions for members with this role. Do you
-                        still want to set this role as the DJ role on this server?`,
+                        This role is already considered a DJ role due to the role having the
+                        **Manage Messages** permission. Do you still want to set this role
+                        as the DJ role?`,
                         null,
                         null,
                         null,
