@@ -116,7 +116,6 @@ class ChadMusic extends AkairoClient {
                     warn: ':warning:',
                     err: ':x:',
                     info: ':information_source:',
-                    question: ':question_mark:',
                     no: ':no_entry_sign:',
                     loading: ':watch:',
                     cutie: ':notes:',
@@ -127,7 +126,6 @@ class ChadMusic extends AkairoClient {
                     warn: ':warning:️',
                     err: ':x:',
                     info: ':information_source:',
-                    question: '❓',
                     no: ':no_entry_sign:',
                     loading: '⌚',
                     cutie: '🎶',
@@ -147,7 +145,6 @@ class ChadMusic extends AkairoClient {
                 warn: 16763981,
                 info: 37887,
                 err: 16711680,
-                question: 12020223,
                 no: 14495300,
                 music: 37887
             }
