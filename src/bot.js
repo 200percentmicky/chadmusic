@@ -110,7 +110,7 @@ class ChadMusic extends AkairoClient {
             streamType: 0,
             allowYouTube: false,
             playerClient: 'WEB',
-            emojis: {
+            emojis: { // TODO: Implement in UI. Consider per-server option instead.
                 message: {
                     ok: ':white_check_mark:',
                     warn: ':warning:',
