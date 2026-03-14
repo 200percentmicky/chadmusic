@@ -14,7 +14,6 @@ You can define the bot's colors to use for the embeds in these variables. You ca
 - COLOR_WARN = FFCC4D
 - COLOR_INFO = 0093FF
 - COLOR_ERROR = FF0000
-- COLOR_QUESTION = B769FF
 - COLOR_NO = DD2E44
 - COLOR_MUSIC = 0093FF
 
@@ -25,7 +24,6 @@ You can define the emojis that the bot will use in its messages here. Its genera
 - EMOJI_WARN = `:warning:`
 - EMOJI_ERROR = `:x:`
 - EMOJI_INFO = `:information_source:`
-- EMOJI_QUESTION = `:question_mark:`
 - EMOJI_NO = `:no_entry_sign:`
 - EMOJI_LOADING = `:watch:`
 - EMOJI_CUTIE = `:notes:`
@@ -38,7 +36,6 @@ You can define the emojis that the bot will use for reacting to messages here. I
 - REACTION_WARN = ⚠️
 - REACTION_ERROR = ❌
 - REACTION_INFO = ℹ️
-- REACTION_QUESTION = ❓
 - REACTION_NO = 🚫
 - REACTION_LOADING = ⌚
 - REACTION_CUTIE = 🎶
