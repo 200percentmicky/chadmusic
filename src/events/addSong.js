@@ -50,7 +50,7 @@ module.exports = class ListenerAddSong extends Listener {
             song.name = `${station.name} - ${station.description}`;
             song.isLive = true;
             song.thumbnail = station.logo || station.newlogo;
-            song.station = `${station.frequency} ${station.band} - ${station.callLetters} ${station.city}, ${station.state}`;
+            song.station = `${station.frequency ?? 'N/A'} ${station.band ?? ((station.band.includes('.') ? 'FM' : 'AM') ?? 'N/A')} ${station.callLetters}`;
         }
 
         // Check if ffprobe can find any any additional metadata if none is available.

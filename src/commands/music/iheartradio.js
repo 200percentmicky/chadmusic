@@ -140,7 +140,7 @@ module.exports = class CommandIHeartRadio extends Command {
                 10: '🔟'
             };
 
-            const resultsFormattedList = stations.map(x => `**${emojiNumber[stations.indexOf(x) + 1]}** **${x.name}**\n${x.frequency} ${x.band} ${x.callLetters} - ${x.city} ${x.state}`).join('\n\n');
+            const resultsFormattedList = stations.map(x => `**${emojiNumber[stations.indexOf(x) + 1]}** **${x.name}**\n${x.frequency ?? 'N/A'} ${x.band ?? ((x.frequency?.includes('.') ? 'FM' : 'AM') ?? 'N/A')} ${x.callLetters}`).join('\n\n');
 
             const embed = new EmbedBuilder()
                 .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
@@ -161,7 +161,7 @@ module.exports = class CommandIHeartRadio extends Command {
                         ? stations[i].name.substring(0, 92) + '...'
                         : stations[i].name}
                     `)
-                    .setDescription(`${stations[i].frequency} ${stations[i].band} ${stations[i].callLetters} - ${stations[i].city} ${stations[i].state}`)
+                    .setDescription(`${stations[i].frequency ?? 'N/A'} ${stations[i].band ?? ((stations[i].frequency?.includes('.') ? 'FM' : 'AM') ?? 'N/A')} ${stations[i].callLetters}`)
                     .setValue(`${i}`)
                     .setEmoji({
                         name: emojiNumber[i + 1]
