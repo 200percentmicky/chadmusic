@@ -115,7 +115,7 @@ module.exports = class CommandHelp extends Command {
                     .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
                     .setAuthor({
                         name: `${this.client.user.username} - ChadMusic Help`,
-                        iconURL: this.client.user.avatarURL({ dynamic: true })
+                        iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                     })
                     .setDescription(`\`\`\`\n${prefix}${command.id}${command.description.usage ? ` ${command.description.usage}` : ''}\`\`\`\n**${command.description.text}**\n${command.description.details ?? ''}`)
                     .setTimestamp();
@@ -166,7 +166,7 @@ module.exports = class CommandHelp extends Command {
             .setColor(message.guild.members.me.displayColor !== 0 ? message.guild.members.me.displayColor : null)
             .setAuthor({
                 name: `${this.client.user.username} - ChadMusic Help`,
-                iconURL: this.client.user.avatarURL({ dynamic: true })
+                iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
             })
             .setTimestamp()
             .setFooter({

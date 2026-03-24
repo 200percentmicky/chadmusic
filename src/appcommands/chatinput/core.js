@@ -483,25 +483,10 @@ class CommandCore extends SlashCommand {
                 .setColor(botColor)
                 .setAuthor({
                     name: 'ChadMusic',
-                    iconURL: this.client.user.avatarURL({ dynamic: true })
+                    iconURL: 'https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png'
                 })
-                .setDescription('Self-hostable music bot for chaotic social network. ')
+                .setDescription('giga chad audio playing robot for a chaos social network')
                 .addFields({
-                    name: '🎶 Features',
-                    value: stripIndents`
-                    :white_small_square: Supports up to 700+ websites.
-                    :white_small_square: Add multiple filters to the player.
-                    :white_small_square: Alter filter values during playback.
-                    :white_small_square: Unlimited volume! :joy::ok_hand:
-                    :white_small_square: Hide tracks by silently adding them. 🤫
-                    :white_small_square: DJ commands to control the player.
-                    :white_small_square: Queue and track length limits.
-                    :white_small_square: Advanced queue management.
-                    :white_small_square: Slash commands lol
-                    :white_small_square: ???
-                    :white_small_square: Profit!
-                    `
-                }, {
                     name: `${process.env.EMOJI_INFO} Stats`,
                     value: stripIndents`
                     **Client:** ${this.client.user.tag.replace(/#0{1,1}$/, '')} (\`${this.client.user.id}\`)
@@ -516,7 +501,7 @@ class CommandCore extends SlashCommand {
                     `,
                     inline: true
                 })
-                .setThumbnail('https://media.discordapp.net/attachments/375453081631981568/808626634210410506/deejaytreefiddy.png')
+                .setThumbnail('https://cdn.discordapp.com/attachments/738075742646042673/1486117844151439633/chad_cat_headphones.png?ex=69c45698&is=69c30518&hm=b5835cb9145e58f30b8e6ac77f1278efabf137554691a130fbce96c8a6a4a9be&')
                 .setFooter({
                     text: `The owner of this instance is ${owner}`,
                     iconURL: this.client.owner instanceof Discord.Team ? this.client.owner?.iconURL() : this.client.owner?.avatarURL({ dynamic: true })
