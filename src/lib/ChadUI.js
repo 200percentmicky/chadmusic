@@ -276,13 +276,13 @@ class ChadUI {
      */
     static sendPrompt (msg, prompt, extra) {
         const promptMessage = {
-            DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Channels** permission to use music commands at this time.',
-            NO_DJ: 'You must be a DJ or have the **Manage Channels** permission to use that.',
+            DJ_MODE: 'DJ Mode is currently active. You must have the DJ Role or the **Manage Messages** permission to use music commands at this time.',
+            NO_DJ: 'You must be a DJ or have the **Manage Messages** permission to use that.',
             FEATURE_DISABLED: `You cannot use this command because **${extra}** is disabled on this server.`,
             FILTER_NOT_APPLIED: `**${extra}** is not applied to the player.`,
             FILTERS_NOT_ALLOWED: 'Filters can only be applied by DJs on this server.',
             FULL_CHANNEL: 'The voice channel is full.',
-            NOT_ALONE: 'You must be a DJ or have the **Manage Channels** permission to use that. However, being alone with me in the voice channel will work.',
+            NOT_ALONE: 'You must be a DJ or have the **Manage Messages** permission to use that. However, being alone with me in the voice channel will work.',
             NOT_PLAYING: 'Nothing is currently playing on this server.',
             NOT_IN_VC: 'You\'re not in a voice channel.',
             ALREADY_SUMMONED_ELSEWHERE: 'You must be in the same voice channel that I\'m in to do that.',
