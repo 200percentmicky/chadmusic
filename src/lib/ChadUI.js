@@ -358,10 +358,10 @@ class ChadUI {
         const emptyCooldown = settings.get(guild.id, 'emptyCooldown'); // Empty Cooldown
         const songVcStatus = settings.get(guild.id, 'songVcStatus'); // Track Title as VC Status
         const emitSongAddAlert = settings.get(guild.id, 'emitSongAddAlert'); // Emit Song Add Alert
+        const allowPorn = settings.get(guild.id, 'allowPorn'); // Allow NSFW Websites
 
         // ! This setting only affects videos from YouTube.
         const allowExplicit = settings.get(guild.id, 'allowExplicit', true); // Allow Explicit Content.
-        const allowPorn = settings.get(guild.id, 'allowPorn');
 
         let embed;
         if (type === 'global') {
@@ -424,7 +424,7 @@ class ChadUI {
                     **:joy: Unlimited Volume:** ${allowFreeVolume === true ? 'On' : 'Off'}
                     **:link: Allow Links:** ${allowLinks === true ? 'Yes' : 'No'}
                     **:underage: Allow Explicit Tracks:** ${allowExplicit === true ? 'Yes' : 'No'}
-                    **:underage: Allow Explicit Sites:** ${allowPorn === true ? 'Yes' : 'No'}
+                    **:underage: Allow NSFW Websites:** ${allowPorn === true ? 'Yes' : 'No'}
                     **:shushing_face: Allow Silent Tracks:** ${allowSilent === true ? 'Yes' : 'No'}
                     **:raised_hand: Vote-skip Ratio:** ${parseFloat(votingPercent) * 100}%
                     `
