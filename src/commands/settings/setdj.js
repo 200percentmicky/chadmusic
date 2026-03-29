@@ -48,9 +48,9 @@ module.exports = class CommandSetDJ extends Command {
             message.guild.roles.cache.get(args.role) ||
             message.guild.roles.cache.find(val => val.name === args.role);
 
-        const setDjRole = async (role) => {
-            if (!role) return this.client.ui.reply(message, 'error', `\`${role}\` is not a valid role.`);
+        if (!role) return this.client.ui.reply(message, 'error', `\`${role}\` is not a valid role.`);
 
+        const setDjRole = async (role) => {
             await this.client.settings.set(message.guild.id, role.id, 'djRole');
             return this.client.ui.reply(message, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
         };
