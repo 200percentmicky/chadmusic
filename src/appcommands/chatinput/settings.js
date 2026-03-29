@@ -14,7 +14,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { stripIndents } = require('common-tags');
+const { oneLine } = require('common-tags');
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildFeature, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation'); // eslint-disable-line no-unused-vars
@@ -662,7 +662,7 @@ module.exports = class CommandSettings extends SlashCommand {
                     await this.client.ui.reply(
                         ctx,
                         'warn',
-                        stripIndents`
+                        oneLine`
                         This role is already considered a DJ role due to the role having the
                         **Manage Messages** permission. Do you still want to set this role
                         as the DJ role?`,

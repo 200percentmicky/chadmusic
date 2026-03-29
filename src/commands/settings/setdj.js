@@ -14,7 +14,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-const { stripIndents } = require('common-tags');
+const { oneLine } = require('common-tags');
 const { Command } = require('discord-akairo');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
 
@@ -73,7 +73,7 @@ module.exports = class CommandSetDJ extends Command {
             const msg = await this.client.ui.reply(
                 message,
                 'warn',
-                stripIndents`
+                oneLine`
                 This role is already considered a DJ role due to the role having the
                 **Manage Messages** permission. Do you still want to set this role
                 as the DJ role?`,
