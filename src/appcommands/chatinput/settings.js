@@ -639,6 +639,10 @@ module.exports = class CommandSettings extends SlashCommand {
 
                 const role = await guild.roles.fetch(ctx.options.djrole.role);
 
+                if (role.managed) {
+                    return this.client.ui.reply(ctx, 'error', 'Managed roles cannot be used as a DJ role.');
+                }
+
                 const setDjRole = async (role) => {
                     await this.client.settings.set(guild.id, role.id, 'djRole');
                     return this.client.ui.reply(ctx, 'ok', `<@&${role.id}> has been set as the DJ Role.`);
