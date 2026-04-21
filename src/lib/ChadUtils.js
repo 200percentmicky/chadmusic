@@ -23,7 +23,6 @@ const {
     BaseGuildTextChannel,
     Team,
     ChatInputCommandInteraction,
-    GuildFeature,
     MessageFlags,
     EmbedBuilder
 } = require('discord.js');
@@ -195,7 +194,7 @@ class ChadUtils {
      * @param {Queue} [queue] Active player queue
      */
     static isNSFW (channel, vc, queue) {
-        if (channel.guild.features.includes(GuildFeature.Partnered)) {
+        if (channel.guild.partnered) {
             return false;
         }
 

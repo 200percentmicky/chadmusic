@@ -16,7 +16,7 @@
 
 const { oneLine } = require('common-tags');
 const { SlashCommand, CommandOptionType, ChannelType } = require('slash-create');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildFeature, PermissionsBitField } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { toColonNotation, toMilliseconds } = require('colon-notation'); // eslint-disable-line no-unused-vars
 const { version } = require('../../../package.json');
 const { request } = require('undici');
@@ -724,7 +724,7 @@ module.exports = class CommandSettings extends SlashCommand {
             }
 
             case 'allowexplicitsites': {
-                if (guild.features.includes(GuildFeature.Partnered)) {
+                if (guild.partnered) {
                     await ctx.defer(true);
                     return this.client.ui.reply(ctx, 'no', 'Partnered servers are forbidden from toggling this setting.');
                 }

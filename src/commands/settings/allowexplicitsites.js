@@ -15,7 +15,7 @@
 /// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const { Command } = require('discord-akairo');
-const { PermissionsBitField, GuildFeature } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class CommandAllowNSFW extends Command {
     constructor () {
@@ -38,7 +38,7 @@ module.exports = class CommandAllowNSFW extends Command {
     }
 
     async exec (message, args) {
-        if (message.guild.features.includes(GuildFeature.Partnered)) {
+        if (message.guild.partnered) {
             return this.client.ui.reply(message, 'no', 'Partnered servers are forbidden from toggling this setting.');
         }
 
