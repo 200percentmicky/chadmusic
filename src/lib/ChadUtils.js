@@ -25,10 +25,13 @@ const {
     Team,
     ChatInputCommandInteraction,
     GuildFeature,
-    Guild
+    Guild,
+    MessageFlags,
+    Embed,
+    EmbedBuilder
 } = require('discord.js');
 const { CommandContext } = require('slash-create');
-const { Queue } = require('distube');
+const { Queue, Song, Playlist } = require('distube');
 const ChadError = require('./ChadError.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
@@ -77,6 +80,77 @@ class ChadUtils {
         } catch (err) {
             client.logger.error(`Failed to create an agent.\n${err.stack}`);
         }
+    }
+
+    /**
+     * Logs a specified player event to a channel for moderation purposes, if a channel
+     * was set and it exists.
+     *
+     * Available Events:
+     *
+     * `player` - The player's state was changed.
+     * `queue` - The queue was modified.
+     * `filters` - A filter (or multiple filters) was added or removed.
+     * `settings` - One of the settings was changed.
+     *
+     * @param {GuildMember} member Discord guild member.
+     * @param {string} event A player event.
+     * @param {string} reason A reason to provide in the log.
+     * @param {string} [metadata] Optional metadata to provide in the log.
+     */
+    static logEvent (member, event, reason, metadata) {
+        const logChannelSetting = member.client.settings.get(member.guild.id, `logging.${event}`);
+        const logChannel = member.guild.channels.cache.get(logChannelSetting);
+
+        const embed = new EmbedBuilder()
+            .setColor(member.guild.members.me.displayColor ?? null)
+            .setAuthor({
+                name: `${member.user.username}`,
+                iconURL: member.user.avatarURL()
+            })
+            .setTimestamp()
+            .setFooter({
+                text: `User ID: ${member.user.id}`
+            });
+
+        const fields = [];
+
+        if (metadata instanceof Song) {
+            fields.push({
+                name: 'Track',
+                value: `\`${metadata.formattedDuration}\` [${metadata.name}](${metadata.url})`
+            });
+            embed.setThumbnail(metadata.thumbnail);
+        } else if (metadata instanceof Playlist) {
+            const songList = metadata.songs.slice(0, 5).map(song => `\`${song.formattedDuration}\` [${song.name}](${song.url})`).join('\n');
+            fields.push({
+                name: 'Playlist',
+                value: `[${metadata.name}](${metadata.url})`
+            }, {
+                name: 'Tracks',
+                value: `${songList}${metadata.songs.length > 5 ? `\n...and **${metadata.songs.length - 5}** more.` : ''}`
+            });
+            embed.setThumbnail(metadata.thumbnail);
+        } else if (metadata) {
+            reason += `\n\n${metadata}`;
+        }
+
+        if (event !== 'settings' && member.voice) {
+            fields.push({
+                name: '🔊 Voice Channel',
+                value: `<#${member.voice.channel.id}>`
+            });
+        }
+
+        embed.setDescription(reason);
+        embed.addFields(fields);
+
+        logChannel.send({
+            embeds: [embed],
+            flags: [MessageFlags.SuppressNotifications]
+        }).catch(err => {
+            member.client.logger.error(`Unable to log ${event} event: ${err.stack}`);
+        });
     }
 
     /**
