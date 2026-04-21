@@ -20,14 +20,11 @@ const {
     GuildMember,
     BaseGuildVoiceChannel,
     PermissionsBitField,
-    Message,
     BaseGuildTextChannel,
     Team,
     ChatInputCommandInteraction,
     GuildFeature,
-    Guild,
     MessageFlags,
-    Embed,
     EmbedBuilder
 } = require('discord.js');
 const { CommandContext } = require('slash-create');
