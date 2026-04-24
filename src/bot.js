@@ -102,7 +102,13 @@ class ChadMusic extends AkairoClient {
             emptyCooldown: 60,
             leaveOnStop: true,
             leaveOnEmpty: true,
-            leaveOnFinish: true
+            leaveOnFinish: true,
+            logging: {
+                player: null,
+                queue: null,
+                settings: null,
+                filters: null
+            }
         };
 
         this.defaultGlobalSettings = {
@@ -204,6 +210,7 @@ class ChadMusic extends AkairoClient {
         const ytdlp = new YtDlpPlugin({
             update: process.env.UPDATE_YTDLP === 'true' ?? false,
             cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined,
+            cookiesFromBrowser: process.env.COOKIES_FROM_BROWSER ?? undefined,
             format: process.env.YTDLP_FORMAT ?? 'ba/ba*',
             jsRuntimes: process.env.JS_RUNTIME === ('deno' || 'node' || 'bun' || 'quickjs') ? process.env.JS_RUNTIME : 'deno'
         });
