@@ -25,15 +25,13 @@ module.exports = class CommandCustomFilter extends Command {
             aliases: ['customfilter', 'cfilter', 'cf'],
             category: '📢 Filter',
             description: {
-                text: 'Allows you to add a custom FFMPEG filter to the player.',
+                text: 'Adds a custom Ffmpeg audio filter.',
                 usage: 'customfilter <argument>',
                 details: stripIndents`
-                \`<argument:str>\` The filter argument to provide to FFMPEG.
-                :warning: If the argument is invalid or not supported by FFMPEG, the stream will prematurely end.
+                \`<argument>\` A valid audio filter argument to provide to Ffmpeg.
                 `
             },
             channel: 'guild',
-            ownerOnly: true,
             args: [
                 {
                     id: 'custom',
@@ -73,6 +71,11 @@ module.exports = class CommandCustomFilter extends Command {
                 }
             } else {
                 const custom = args.custom;
+
+                if (!await this.client.utils.isValidAudioFilter(custom)) {
+                    return this.client.ui.reply(message, 'warn', `\`${custom}\` is not a valid audio filter.`);
+                }
+
                 await queue.filters.set('custom', custom);
                 pushFormatFilter(queue, 'Custom Filter', custom);
                 return this.client.ui.custom(message, ':loudspeaker:', process.env.COLOR_INFO, `Argument: \`${custom}\``, 'Custom Filter');

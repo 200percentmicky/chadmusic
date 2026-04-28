@@ -149,14 +149,13 @@ Sharpens or softens the audio quality.
 | --------- | ---- | ----------- |
 | `<intensity>` | float | The intensity of the effect. Must be between `-10` to `10` or `off`. |
 
-### [p]customfilter | [p]cf | /filter customfilter `<argument>`
-<span class="badge-danger">:no_entry_sign: Bot owner only<span>
+### [p]customfilter | [p]cfilter | [p]cf | /filter customfilter `<argument>`
 
-Adds a custom FFMPEG filter to the player.
+Adds a custom Ffmpeg audio filter.
 
 | Arguments | Type | Description |
 | --------- | ---- | ----------- |
-| `<argument>` | string | The filter argument to provide to FFMPEG. |
+| `<argument>` | string | A valid audio filter argument to provide to Ffmpeg. |
 
 !!! warning
 

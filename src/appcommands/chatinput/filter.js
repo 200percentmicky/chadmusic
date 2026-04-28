@@ -236,11 +236,11 @@ class CommandFilter extends SlashCommand {
             {
                 type: CommandOptionType.SUB_COMMAND,
                 name: 'customfilter',
-                description: '[Owner Only] Adds a custom FFMPEG audio filter.',
+                description: 'Adds a custom Ffmpeg audio filter.',
                 options: [{
                     type: CommandOptionType.STRING,
-                    name: 'filter',
-                    description: 'The custom filter to add. Playback will error if the filter is not a valid FFMPEG audio filter.',
+                    name: 'argument',
+                    description: 'A valid audio filter argument to provide to Ffmpeg.',
                     required: true
                 }]
             }]
@@ -458,6 +458,11 @@ class CommandFilter extends SlashCommand {
 
             case 'customfilter': {
                 const custom = ctx.options.customfilter.filter;
+
+                if (!await this.client.utils.isValidAudioFilter(custom)) {
+                    return this.client.ui.reply(ctx, 'warn', `\`${custom}\` is not a valid audio filter.`);
+                }
+
                 try {
                     await queue.filters.set('custom', custom === 'OFF'.toLowerCase() ? false : custom);
                 } catch {
