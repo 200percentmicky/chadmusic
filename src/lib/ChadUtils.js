@@ -31,6 +31,7 @@ const { Queue, Song, Playlist } = require('distube');
 const ChadError = require('./ChadError.js');
 const ytdl = require('@distube/ytdl-core');
 const { getRandomIPv6 } = require('@distube/ytdl-core/lib/utils.js');
+const { execSync } = require('node:child_process');
 /* eslint-enable no-unused-vars */
 
 /**
@@ -205,6 +206,27 @@ class ChadUtils {
         } else {
             return (channel.nsfw && vc.nsfw) || nsfwLevel === 3;
         }
+    }
+
+    /**
+     * Checks if the string is a valid Ffmpeg audio filter.
+     * @param {string} filter Filter string to validate.
+     * @returns {boolean}
+     */
+    static async isValidAudioFilter (filter) {
+        if (!filter) {
+            throw new ChadError(null, null, 'A filter string must be provided.');
+        }
+
+        const cmd = `ffmpeg -f lavfi -i anullsrc -af ${filter} -t 1 -f null -`;
+
+        try {
+            execSync(cmd);
+        } catch (error) {
+            return false;
+        }
+
+        return true;
     }
 
     // TODO: Revert this to just a REST function. For now, this fixes a bug.
