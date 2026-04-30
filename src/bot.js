@@ -207,10 +207,14 @@ class ChadMusic extends AkairoClient {
         });
 
         // yt-dlp
+        const cookiesTxt = path.join(__dirname, '..', 'cookies.txt') ?? undefined;
+        const cookiesFromBrowser = process.env.COOKIES_FROM_BROWSER
+            ? !cookiesTxt ? process.env.COOKIES_FROM_BROWSER : undefined
+            : undefined;
         const ytdlp = new YtDlpPlugin({
             update: process.env.UPDATE_YTDLP === 'true' ?? false,
-            cookies: path.join(__dirname, '..', 'cookies.txt') ?? undefined,
-            cookiesFromBrowser: process.env.COOKIES_FROM_BROWSER ?? undefined,
+            cookies: cookiesTxt,
+            cookiesFromBrowser,
             format: process.env.YTDLP_FORMAT ?? 'ba/ba*',
             jsRuntimes: process.env.JS_RUNTIME === ('deno' || 'node' || 'bun' || 'quickjs') ? process.env.JS_RUNTIME : 'deno'
         });
