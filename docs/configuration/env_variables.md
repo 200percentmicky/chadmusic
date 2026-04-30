@@ -136,6 +136,10 @@ The Javascript runtime that yt-dlp should use when resolving tracks. The support
 
     For this variable to work, you'll need to install the preferred runtime to your system and have the runtime available in `PATH`. yt-dlp will fallback to its previous system to resolve tracks if the selected runtime is not available for some reason. Sources that rely on external runtimes may fail to load if this happens.
 
+### COOKIES_FROM_BROWSER
+
+The web browser to extract cookies from using yt-dlp's `--cookies-from-browser` flag. Supported web browsers are `brave`, `chrome`, `chromium`, `edge`, `firefox`, `opera`, `safari`, `vivaldi`, and `whale`. If a `cookies.txt` file is present in the bot's root directory, this variable is ignored.
+
 ## Development
 This section allows you to enable features of the bot for debugging and development purposes, such as enabling the eval command. If you don't know how to use any of the development tools, you should probably keep them disabled for the time being.
 
