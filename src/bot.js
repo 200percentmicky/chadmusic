@@ -219,6 +219,10 @@ class ChadMusic extends AkairoClient {
             jsRuntimes: process.env.JS_RUNTIME === ('deno' || 'node' || 'bun' || 'quickjs') ? process.env.JS_RUNTIME : 'deno'
         });
 
+        if (process.env.JS_RUNTIME === 'bun') {
+            logger.warn('Support for Bun as a JS runtime on yt-dlp is limited and deprecated. Learn more: https://github.com/yt-dlp/yt-dlp/issues/16766');
+        }
+
         if (process.env.UPDATE_YTDLP === 'nightly') {
             downloadNightly();
         }
