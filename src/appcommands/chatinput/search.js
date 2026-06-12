@@ -160,21 +160,7 @@ class CommandSearch extends SlashCommand {
 
         let results;
         try {
-            switch (ctx.subcommands[0]) {
-            case 'soundcloud': {
-                results = await this.client.player.soundcloud.search(ctx.options.soundcloud.query);
-                break;
-            }
-
-            case 'youtube': {
-                if (!this.client.settings.get('global', 'allowYouTube')) {
-                    return this.client.ui.sendPrompt(ctx, 'YT_NOT_ALLOWED');
-                }
-
-                results = await this.client.player.youtube.search(ctx.options.youtube.query);
-                break;
-            }
-            }
+            results = await this.client.utils.searchTracks(ctx.options[ctx.subcommands[0]].query, ctx.subcommands[0]);
         } catch (err) {
             if (err.code === 'SOUNDCLOUD_PLUGIN_NO_RESULT') {
                 return this.client.ui.reply(ctx, 'warn', `No results found for \`${ctx.options.soundcloud.query}\`.`);

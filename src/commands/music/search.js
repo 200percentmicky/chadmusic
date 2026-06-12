@@ -151,9 +151,9 @@ module.exports = class CommandSearch extends Command {
                     return this.client.ui.sendPrompt(message, 'YT_NOT_ALLOWED');
                 }
 
-                results = await this.client.player.youtube.search(args.query);
+                results = await this.client.utils.searchTracks(args.query, 'youtube');
             } else {
-                results = await this.client.player.soundcloud.search(args.query);
+                results = await this.client.utils.searchTracks(args.query, 'soundcloud');
             }
         } catch (err) {
             if (err.code === 'SOUNDCLOUD_PLUGIN_NO_RESULT') {
