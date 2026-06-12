@@ -391,7 +391,7 @@ module.exports = class CommandSettings extends SlashCommand {
                                     value: ''
                                 },
                                 {
-                                    name: '[Default] Enabled, but no message is sent when a player is created.',
+                                    name: '[Default] Enabled (Ignore on player creation.)',
                                     value: 'nocreate'
                                 }
                             ]
@@ -890,7 +890,7 @@ module.exports = class CommandSettings extends SlashCommand {
                 if (toggle === 'nocreate') {
                     this.client.ui.reply(ctx, 'ok', 'Enabled song add messages.', null, 'No message will be sent when a player is created.');
                 } else {
-                    this.client.ui.reply(ctx, 'ok', `${toggle === true ? 'Enabled' : 'Disabled'} song add messages.`);
+                    this.client.ui.reply(ctx, 'ok', `${toggle === 'true' ? 'Enabled' : 'Disabled'} song add messages.`);
                 }
             }
             }
