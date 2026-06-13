@@ -382,6 +382,7 @@ class ChadUtils {
      *
      * @param {string} query The search query
      * @param {string} provider The provider to search. Defaults to 'soundcloud'.
+     * @returns {Song[]}
      */
     static async searchTracks (query, provider = 'soundcloud') {
         switch (provider) {
@@ -397,27 +398,31 @@ class ChadUtils {
 
             const results = await yt.search(query);
 
-            return results.videos.slice(0, 10).map(i => ({
-                ageRestricted: undefined,
-                dislikes: undefined,
-                duration: i.duration.seconds,
-                formattedDuration: i.duration.text,
-                id: i.video_id,
-                isLive: i.is_live,
-                likes: undefined,
-                name: i.title.text,
-                plugin: [],
-                reposts: undefined,
-                source: 'youtube',
-                stream: [], // I don't know what's provided here. Left for compatibility.
-                thumbnail: i.thumbnails[0].url,
-                uploader: {
-                    name: i.author.name,
-                    url: i.author.url
-                },
-                url: `https://youtu.be/${i.video_id}`,
-                views: i.views
-            }));
+            return results.videos.slice(0, 10).map(i =>
+                new Song(
+                    {
+                        ageRestricted: undefined,
+                        dislikes: undefined,
+                        duration: i.duration.seconds,
+                        formattedDuration: i.duration.text,
+                        id: i.video_id,
+                        isLive: i.is_live,
+                        likes: undefined,
+                        name: i.title.text,
+                        plugin: [],
+                        reposts: undefined,
+                        source: 'youtube',
+                        stream: [], // I don't know what's provided here. Left for compatibility.
+                        thumbnail: i.thumbnails[0].url,
+                        uploader: {
+                            name: i.author.name,
+                            url: i.author.url
+                        },
+                        url: `https://youtu.be/${i.video_id}`,
+                        views: i.views
+                    }
+                )
+            );
         }
         }
     }
