@@ -1,5 +1,21 @@
 # Changelog
 
+## 2025.2.2
+Just a minor security update. Also updates @snazzah/davey to the latest version.
+
+* **Added:** New packages.
+  * minimatch
+  * serialize-javascript
+* **Updated:** Several packages.
+  * @snazzah/davey to 0.1.12
+  * axios to 1.18.1
+  * semistandard to 17.0.0
+  * tar to 7.5.9
+  * tar-fs to 2.1.4
+  * undici to 6.21.3
+
+[**Full Changelog**](https://github.com/200percentmicky/chadmusic/compare/2025.2.1...2025.2.2)
+
 ## 2025.2.1
 This release updates `@snazzah/davey` to fix a security vulnerability.
 
