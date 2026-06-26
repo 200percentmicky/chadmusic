@@ -22,6 +22,7 @@ node_modules
 chadtube
 rewrite
 src_old
+site
 
 # Old configuration files.
 # I haven't removed them yet...
