@@ -287,33 +287,6 @@ class ChadUtils {
     }
 
     /**
-     * Attempts to execute a standard prefix command from a command interaction.
-     *
-     * @param {ChatInputCommandInteraction} interaction The command's interaction.
-     * @param {string} commandName The name of the command.
-     * @param {Object} args Arguments to pass to the command.
-     * @returns The execution of the prefix command.
-     * @throws Command not found.
-     */
-    static async handleCommand (interaction, commandName, args = {}) {
-        if (!interaction.deferred) {
-            throw new ChadError('NOT_DEFERRED', null, 'Interaction must be deferred.');
-        }
-
-        interaction.author = interaction.member;
-        interaction.react = (emoji) => {
-            return interaction.reply(emoji, { ephemeral: true });
-        };
-
-        try {
-            const command = await interaction.client.commands.findCommand(commandName);
-            return interaction.client.commands.runCommand(interaction, command, args);
-        } catch (err) {
-            throw new ChadError('COMMAND_ERROR', null, `Error finding or running ${commandName}: ${err}`);
-        }
-    }
-
-    /**
      * Returns a formatted list of all permissions listed in PermissionFlagsBit.
      *
      * https://discord-api-types.dev/api/discord-api-types-v10#PermissionFlagsBits
