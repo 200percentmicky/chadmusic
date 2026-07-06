@@ -139,6 +139,10 @@ module.exports = class CommandPlay extends Command {
                 }
             }
 
+            if (track?.includes('&list=RD')) {
+                return this.client.ui.reply(message, 'warn', 'Auto-generated playlists such as **My Mix** playlists are not supported.');
+            }
+
             await this.client.player.play(vc, track ?? message.attachments.first().url, {
                 member: message.member,
                 textChannel: message.channel,

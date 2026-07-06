@@ -116,6 +116,10 @@ module.exports = class CommandPlayNow extends Command {
                     }
                 }
 
+                if (text?.includes('&list=RD')) {
+                    return this.client.ui.reply(message, 'warn', 'Auto-generated playlists such as **My Mix** playlists are not supported.');
+                }
+
                 // eslint-disable-next-line no-useless-escape
                 await this.client.player.play(vc, text.replace(/(^\<+|\>+$)/g, '') || message.attachments.first().url, {
                     member: message.member,

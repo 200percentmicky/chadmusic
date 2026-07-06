@@ -270,6 +270,10 @@ class CommandPlay extends SlashCommand {
                     }
                 }
 
+                if (requested.includes('&list=RD')) {
+                    return this.client.ui.reply(ctx, 'warn', 'Auto-generated playlists such as **My Mix** playlists are not supported.');
+                }
+
                 /* eslint-disable-next-line no-useless-escape */
                 await this.client.player.play(vc, requested, {
                     textChannel: channel,
