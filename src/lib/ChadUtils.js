@@ -236,9 +236,6 @@ class ChadUtils {
      * to 1 (repeat song), the "status" parameter is ignored and the status is
      * automatically set to the looped track.
      *
-     * ⚠ **Experimental:** Uses an undocumented endpoint in Discord's API
-     * and might change in the future.
-     *
      * @param {BaseGuildVoiceChannel} vc Guild based voice channel.
      * @param {string|null} [status] The new status to set.
      * @param {string|null} [reason] The reason for the change.
