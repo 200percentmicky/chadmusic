@@ -232,7 +232,7 @@ class ChadMusic extends AkairoClient {
             directLink,
             deezer,
             files,
-            soundcloud,
+            // soundcloud,
             spotify
         ];
 
