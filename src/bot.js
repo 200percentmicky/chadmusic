@@ -215,6 +215,7 @@ class ChadMusic extends AkairoClient {
             update: process.env.UPDATE_YTDLP === 'true' ?? false,
             cookies: cookiesTxt,
             cookiesFromBrowser,
+            extractorArgs: process.env.EXTRACTOR_ARGS ?? undefined,
             format: process.env.YTDLP_FORMAT ?? 'ba/ba*',
             jsRuntimes: process.env.JS_RUNTIME === ('deno' || 'node' || 'bun' || 'quickjs') ? process.env.JS_RUNTIME : 'deno'
         });
