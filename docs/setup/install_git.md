@@ -1,60 +1,44 @@
 # Installing git
-The perferred way of downloading ChadMusic is by cloning the bot's repository to a directory anywhere on your system. By cloning the bot, you'll be able to update the bot when any new updates become available. For this case, you will need to install `git` to the system you'll be running the bot on.
+
+Git allows you to download and update ChadMusic when a new release is available. While git is entirely optional, it's highly recommended to install it.
 
 ## Windows
 You can download the latest version of `git` below.
 
-[:simple-git: Download git](https://git-scm.com/download/win){ .md-button .md-button--primary }
+[:simple-git: Download git](https://git-scm.com/install/windows){ .md-button .md-button--primary }
 
-### Chocolatey
-If you have Chocolatey installed, `git` can be installed this way.
-```
-choco install git
-```
+=== "Chocolatey"
+    If you have Chocolatey installed, git can be installed this way.
 
-### Scoop
-If you have Scoop installed, `git` is available in the `main` bucket.
-```
-scoop install git
-```
+    ```bash
+    choco install git
+    ```
+
+=== "Scoop"
+    If you have Scoop installed, you can install git from the `main` bucket.
+
+    ```bash
+    scoop install git
+    ```
 
 ## Mac
-You can install `git` from either [Homebrew](https://brew.sh/) or from [MacPorts](https://www.macports.org/).
 
-```
-# Homebrew
-brew install git
-```
+Git is available from either [Homebrew](https://brew.sh/) or from [MacPorts](https://www.macports.org/).
 
-```
-# MacPorts
-sudo port install git
-```
+=== "Homebrew"
+
+    ```bash
+    brew install git
+    ```
+
+=== "MacPorts"
+
+    ```bash
+    sudo port install git
+    ```
 
 ## Linux
-**Ubuntu**
 
-`git` is available in Ubuntu's repositories.
+Many distributions have git within their repositories. Check out the full list on their websites for more information.
 
-```
-sudo apt update
-sudo apt install git
-```
-
-**Debian**
-
-`git` is available in Debian's repositories.
-
-```
-sudo apt-get update
-sudo apt-get install git
-```
-
-**Fedora**
-
-`git` is available in Fedora's repositories.
-
-```
-sudo dnf update
-sudo dnf install git
-```
+[:simple-git: Download git](https://git-scm.com/install/linux){ .md-button .md-button--primary }

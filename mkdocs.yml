@@ -30,6 +30,7 @@ theme:
     - navigation.path
     - navigation.indexes
     - navigation.footer
+    - navigation.tabs
 
 markdown_extensions:
   - admonition
@@ -38,6 +39,9 @@ markdown_extensions:
   - abbr
   - attr_list
   - md_in_html
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.snippets
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
@@ -53,13 +57,14 @@ repo_name: 200percentmicky/chadmusic
 repo_url: https://github.com/200percentmicky/chadmusic
 
 nav:
-  - Home: 'index.md'
-  - Changelog: 'changelog.md'
-  - Commands: 'commands.md'
-  - Supported Sites: 'supported_sites.md'
+  - Home:
+    - Welcome: 'index.md'
+    - Changelog: 'changelog.md'
+    - Commands: 'commands.md'
+    - Supported Sites: 'supported_sites.md'
   - Setup:
     - 'Getting Started': 'setup/getting_started.md'
-    - '1. Installing Node.js': 'setup/install_node.md'
+    - '1️. Installing Node.js': 'setup/install_node.md'
     - '2. Installing git': 'setup/install_git.md'
     - '3. Downloading FFmpeg': 'setup/install_ffmpeg.md'
     - '4. Creating your bot': 'setup/creating_app.md'
